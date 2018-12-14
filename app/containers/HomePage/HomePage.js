@@ -4,7 +4,9 @@ import { Helmet } from 'react-helmet';
 import './style.scss';
 
 const playerComponent = player => (
-  <div key={player.jerseyNumber}>{player.person.fullName}</div>
+  <div key={`${player.teamId}-${player.jerseyNumber}`}>
+    {player.person.fullName}
+  </div>
 );
 
 class HomePage extends React.PureComponent {
@@ -15,8 +17,6 @@ class HomePage extends React.PureComponent {
 
   render() {
     const { players } = this.props;
-    console.log('props', this.props);
-
     return (
       <article>
         <Helmet>

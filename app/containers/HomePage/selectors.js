@@ -4,5 +4,5 @@ export const selectHome = state => state.get('home');
 
 export const makeSelectPlayers = () => createSelector(
   selectHome,
-  homeState => (homeState.get('players') ? homeState.get('players').roster : []),
+  homeState => homeState.get('players') || [],
 );

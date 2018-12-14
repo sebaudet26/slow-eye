@@ -3,12 +3,12 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import injectReducer from '../../utils/injectReducer';
 import { makeSelectPlayers } from './selectors';
-import { fetchPlayers } from './actions';
+import { fetchAllTeamsPlayers } from './actions';
 import reducer from './reducer';
 import HomePage from './HomePage';
 
 const mapDispatchToProps = dispatch => ({
-  fetchPlayers: () => dispatch(fetchPlayers()),
+  fetchPlayers: () => dispatch(fetchAllTeamsPlayers()),
 });
 
 const mapStateToProps = createStructuredSelector({
