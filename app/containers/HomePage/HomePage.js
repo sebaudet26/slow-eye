@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import PlayersTable from '../../components/Table/PlayersTable';
-import { Link } from 'react-router-dom';
 import './style.scss';
 
 class HomePage extends React.PureComponent {
@@ -22,7 +21,6 @@ class HomePage extends React.PureComponent {
         </Helmet>
         <div className="home-page">
           <h1>Player Stats</h1>
-          <Link to="/player">Sample Player Page</Link>
         </div>
         <PlayersTable players={players} />
       </article>

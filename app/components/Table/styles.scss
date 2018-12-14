@@ -1,3 +1,55 @@
-.center {
-  text-align: center;
+@import '../../styles/variables.scss';
+
+.ReactTable {
+  box-shadow: $shadow;
+  border: 0px;
+  border-radius: $radius;
+  background: $white;
+
+  .first-col {
+    width: 200px !important;
+    border-right: solid 1px $grey-4 !important;
+    text-align: left !important;
+  }
+
+  .rt-thead {
+    &.-header {
+      box-shadow: none;
+      border-bottom: solid 1px $grey-4;
+    }
+
+    .rt-th {
+      text-align: center;
+      border-right: 0;
+      font-weight: 500;
+      padding: 15px;
+      outline: none;
+
+      &:first-child {
+        width: 200px !important;
+        border-right: solid 1px $grey-4;
+        text-align: left !important;
+      }
+    }
+  }
+
+  .rt-tbody {
+    .rt-tr.-odd {
+      background: $grey-5;
+    }
+
+    .rt-tr:hover {
+      background: #edf0f3 !important;
+    }
+
+    .rt-tr-group {
+      border-bottom: solid 1px $grey-4;
+    }
+
+    .rt-td {
+      text-align: center;
+      padding: 10px 15px;
+      border: 0px;
+    }
+  }
 }

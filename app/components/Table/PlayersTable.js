@@ -20,27 +20,70 @@ class PlayersTable extends React.PureComponent {
               Header: 'Name',
               id: 'fullName',
               accessor: d => d.person.fullName,
+              className: 'first-col',
               Cell: row => (
                 <a href={`/player?id=${123}`}>{row.value}</a>
               ),
             },
             {
+              Header: 'GP',
+              id: 'games',
+              maxWidth: 90,
+              accessor: d => pathOr(0, ['stats', 0, 'stat', 'games'], d),
+            },
+            {
               Header: 'Goals',
               id: 'goals',
+              maxWidth: 90,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'goals'], d),
-              className: 'center',
             },
             {
               Header: 'Assists',
               id: 'assists',
+              maxWidth: 90,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'assists'], d),
-              className: 'center',
             },
             {
               Header: 'Points',
               id: 'points',
+              maxWidth: 90,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'points'], d),
-              className: 'center',
+            },
+            {
+              Header: '+/-',
+              id: 'plusMinus',
+              maxWidth: 90,
+              accessor: d => pathOr(0, ['stats', 0, 'stat', 'plusMinus'], d),
+            },
+            {
+              Header: 'PIM',
+              id: 'penaltyMinutes',
+              maxWidth: 90,
+              accessor: d => pathOr(0, ['stats', 0, 'stat', 'penaltyMinutes'], d),
+            },
+            {
+              Header: 'Hits',
+              id: 'hits',
+              maxWidth: 90,
+              accessor: d => pathOr(0, ['stats', 0, 'stat', 'hits'], d),
+            },
+            {
+              Header: 'Bks',
+              id: 'blocked',
+              maxWidth: 90,
+              accessor: d => pathOr(0, ['stats', 0, 'stat', 'blocked'], d),
+            },
+            {
+              Header: 'SOG',
+              id: 'shots',
+              maxWidth: 90,
+              accessor: d => pathOr(0, ['stats', 0, 'stat', 'shots'], d),
+            },
+            {
+              Header: 'S%',
+              id: 'shotPct',
+              maxWidth: 90,
+              accessor: d => pathOr(0, ['stats', 0, 'stat', 'shotPct'], d),
             },
           ]}
           defaultSorted={[
@@ -49,7 +92,7 @@ class PlayersTable extends React.PureComponent {
               desc: true,
             },
           ]}
-          defaultPageSize={10}
+          defaultPageSize={20}
           className="-striped -highlight"
         />
       </div>
