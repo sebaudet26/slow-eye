@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="20px" viewBox="0 0 30 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>menu-button</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Website" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g className="menu-icon" transform="translate(-968.000000, -34.000000)" fill-rule="nonzero" fill="#000000">
+            <g id="menu-button" transform="translate(968.000000, 34.000000)">
+                <path d="M0,20 L29.6774194,20 L29.6774194,16.6666667 L0,16.6666667 L0,20 Z M0,11.6666667 L29.6774194,11.6666667 L29.6774194,8.33333333 L0,8.33333333 L0,11.6666667 Z M0,0 L0,3.33333333 L29.6774194,3.33333333 L29.6774194,0 L0,0 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

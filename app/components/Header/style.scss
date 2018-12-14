@@ -12,7 +12,7 @@
   }
 
   &-nav {
-    display: flex;
+    display: none;
     flex-basis: auto;
     flex-grow: 1;
     justify-content: flex-end;
@@ -24,4 +24,30 @@
       font-weight: 500;
     }
   }
+
+  &-mobile {
+    flex-basis: auto;
+    flex-grow: 1;
+    justify-content: flex-end;
+
+    &-icon {
+      float: right;
+      cursor: pointer;
+    }
+
+    &-list {
+      display: none;
+      position: absolute;
+    }
+  }
 }
+
+@media (min-width: 600px) {
+    .header-nav {
+      display: flex;
+    }
+
+		.header-mobile {
+			display: none;
+		}
+	}
