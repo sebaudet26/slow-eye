@@ -1,6 +1,9 @@
+/* global window */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
+import { pathOr } from 'ramda';
 import 'react-table/react-table.css';
 import './styles.scss';
 
@@ -11,29 +14,39 @@ class PlayersTable extends React.PureComponent {
       <div>
         <ReactTable
           data={players}
+          noDataText="Loading all dat good data stuff..."
           columns={[
             {
               Header: 'Name',
               id: 'fullName',
               accessor: d => d.person.fullName,
+              Cell: row => (
+                <a href={`/player?id=${123}`}>{row.value}</a>
+              ),
             },
             {
               Header: 'Goals',
               id: 'goals',
-              accessor: d => d.stats[0].stat.goals || 0,
+              accessor: d => pathOr(0, ['stats', 0, 'stat', 'goals'], d),
               className: 'center',
             },
             {
               Header: 'Assists',
               id: 'assists',
-              accessor: d => d.stats[0].stat.assists || 0,
+              accessor: d => pathOr(0, ['stats', 0, 'stat', 'assists'], d),
               className: 'center',
             },
             {
               Header: 'Points',
               id: 'points',
-              accessor: d => d.stats[0].stat.points || 0,
+              accessor: d => pathOr(0, ['stats', 0, 'stat', 'points'], d),
               className: 'center',
+            },
+          ]}
+          defaultSorted={[
+            {
+              id: 'points',
+              desc: true,
             },
           ]}
           defaultPageSize={10}

@@ -10,7 +10,6 @@ export const fetchStatsForPlayerId = async (playerId) => {
   const requestURL = `https://statsapi.web.nhl.com/api/v1/people/${playerId}/stats?stats=statsSingleSeason`;
   const playerStatsResponse = await fetch(requestURL);
   const playerStatsData = await playerStatsResponse.json();
-  console.log(playerStatsData);
   return { [playerId]: path(['stats', 0, 'splits'], playerStatsData) };
 };
 
@@ -38,7 +37,8 @@ export const fetchAllTeams = async () => {
 export const fetchAllTeamsPlayers = () => async (dispatch) => {
   const allTeamsData = await fetchAllTeams();
   const allTeamsIds = map(prop('id'), prop('teams', allTeamsData));
-  const allTeamsRosters = await Promise.all(map(fetchPlayersForTeamId, [1]));
+  console.log(allTeamsIds);
+  const allTeamsRosters = await Promise.all(map(fetchPlayersForTeamId, allTeamsIds));
   return dispatch({
     type: FETCH_PLAYERS,
     payload: flatten(allTeamsRosters),
