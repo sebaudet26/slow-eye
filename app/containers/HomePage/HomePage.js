@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import PlayersTable from '../../components/Table/PlayersTable';
 import { Link } from 'react-router-dom';
+import PlayersTable from '../../components/Table/PlayersTable';
 import './style.scss';
 
 class HomePage extends React.PureComponent {
   componentDidMount() {
-    const { fetchPlayers } = this.props;
-    fetchPlayers();
+    // const { fetchPlayers } = this.props;
+    // fetchPlayers();
   }
 
   render() {

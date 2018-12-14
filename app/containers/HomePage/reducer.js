@@ -14,8 +14,8 @@ function homeReducer(state = initialState, action) {
       // Delete prefixed '@' from the github username
       return state.set('players', sortBy(path(['person', 'fullName']))(action.payload));
     default:
-      // return state.set('players', playersMock);
-      return state;
+      return state.set('players', playersMock);
+      // return state;
   }
 }
 
