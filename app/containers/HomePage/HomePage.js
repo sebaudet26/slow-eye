@@ -1,15 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
+import PlayersTable from '../../components/Table/PlayersTable';
 import './style.scss';
-
-
-// TODO: this is just a placeholder, should be removed into it's own component
-const playerComponent = player => (
-  <div key={`${player.teamId}-${player.jerseyNumber}`}>
-    {`${player.person.fullName}, ${player.stats[0].stat.points}`}
-  </div>
-);
 
 class HomePage extends React.PureComponent {
   componentDidMount() {
@@ -29,11 +22,12 @@ class HomePage extends React.PureComponent {
         <div className="home-page">
           <h1>Player Stats</h1>
         </div>
-        {players ? players.map(playerComponent) : null}
+        <PlayersTable players={players} />
       </article>
     );
   }
 }
+
 HomePage.propTypes = {
   players: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   fetchPlayers: PropTypes.func.isRequired,
