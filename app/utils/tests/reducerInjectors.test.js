@@ -4,7 +4,7 @@
 
 import { memoryHistory } from 'react-router-dom';
 import { fromJS } from 'immutable';
-import { identity } from 'lodash';
+import identity from 'lodash/identity';
 
 import configureStore from '../../configureStore';
 
@@ -35,8 +35,8 @@ describe('reducer injectors', () => {
     it('should return injectors', () => {
       expect(getInjectors(store)).toEqual(
         expect.objectContaining({
-          injectReducer: expect.any(Function),
-        }),
+          injectReducer: expect.any(Function)
+        })
       );
     });
 
@@ -60,8 +60,6 @@ describe('reducer injectors', () => {
     });
 
     it('it should not check a store if the second argument is true', () => {
-      Reflect.deleteProperty(store, 'dispatch');
-
       expect(() => injectReducer('test', reducer)).not.toThrow();
     });
 

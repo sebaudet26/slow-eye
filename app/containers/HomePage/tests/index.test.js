@@ -4,59 +4,49 @@
 
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import { IntlProvider } from 'react-intl';
 
 import ReposList from 'components/ReposList';
-import { HomePage, mapDispatchToProps } from '../index';
+import HomePage from '../HomePage';
+import { mapDispatchToProps } from '../index';
 import { changeUsername } from '../actions';
 import { loadRepos } from '../../App/actions';
 
 describe('<HomePage />', () => {
   it('should render the repos list', () => {
     const renderedComponent = shallow(
-      <HomePage loading error={false} repos={[]} />,
+      <HomePage loading error={false} repos={[]} />
     );
     expect(
-      renderedComponent.contains(
-        <ReposList loading error={false} repos={[]} />,
-      ),
+      renderedComponent.contains(<ReposList loading error={false} repos={[]} />)
     ).toEqual(true);
   });
 
   it('should render fetch the repos on mount if a username exists', () => {
     const submitSpy = jest.fn();
     mount(
-      <IntlProvider locale="en">
-        <HomePage
-          username="Not Empty"
-          onChangeUsername={() => {}}
-          onSubmitForm={submitSpy}
-        />
-      </IntlProvider>,
+      <HomePage
+        username="Not Empty"
+        onChangeUsername={() => {}}
+        onSubmitForm={submitSpy}
+      />
     );
     expect(submitSpy).toHaveBeenCalled();
   });
 
   it('should not call onSubmitForm if username is an empty string', () => {
     const submitSpy = jest.fn();
-    mount(
-      <IntlProvider locale="en">
-        <HomePage onChangeUsername={() => {}} onSubmitForm={submitSpy} />
-      </IntlProvider>,
-    );
+    mount(<HomePage onChangeUsername={() => {}} onSubmitForm={submitSpy} />);
     expect(submitSpy).not.toHaveBeenCalled();
   });
 
   it('should not call onSubmitForm if username is null', () => {
     const submitSpy = jest.fn();
     mount(
-      <IntlProvider locale="en">
-        <HomePage
-          username=""
-          onChangeUsername={() => {}}
-          onSubmitForm={submitSpy}
-        />
-      </IntlProvider>,
+      <HomePage
+        username=""
+        onChangeUsername={() => {}}
+        onSubmitForm={submitSpy}
+      />
     );
     expect(submitSpy).not.toHaveBeenCalled();
   });
@@ -72,7 +62,7 @@ describe('<HomePage />', () => {
       it('should dispatch changeUsername when called', () => {
         const dispatch = jest.fn();
         const result = mapDispatchToProps(dispatch);
-        const username = 'mxstbr';
+        const username = 'flexdinesh';
         result.onChangeUsername({ target: { value: username } });
         expect(dispatch).toHaveBeenCalledWith(changeUsername(username));
       });

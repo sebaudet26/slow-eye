@@ -14,8 +14,8 @@ import { fromJS } from 'immutable';
 import { CHANGE_USERNAME } from './constants';
 
 // The initial state of the App
-export const initialState = fromJS({
-  username: '',
+const initialState = fromJS({
+  username: ''
 });
 
 function homeReducer(state = initialState, action) {

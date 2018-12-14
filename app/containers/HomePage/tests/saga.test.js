@@ -9,7 +9,7 @@ import { reposLoaded, repoLoadingError } from 'containers/App/actions';
 
 import githubData, { getRepos } from '../saga';
 
-const username = 'mxstbr';
+const username = 'flexdinesh';
 
 /* eslint-disable redux-saga/yield-effects */
 describe('getRepos Saga', () => {
@@ -28,14 +28,11 @@ describe('getRepos Saga', () => {
   });
 
   it('should dispatch the reposLoaded action if it requests the data successfully', () => {
-    const response = [
-      {
-        name: 'First repo',
-      },
-      {
-        name: 'Second repo',
-      },
-    ];
+    const response = [{
+      name: 'First repo',
+    }, {
+      name: 'Second repo',
+    }];
     const putDescriptor = getReposGenerator.next(response).value;
     expect(putDescriptor).toEqual(put(reposLoaded(response, username)));
   });

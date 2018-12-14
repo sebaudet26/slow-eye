@@ -8,7 +8,7 @@ describe('Home Actions', () => {
       const fixture = 'Max';
       const expectedResult = {
         type: CHANGE_USERNAME,
-        name: fixture,
+        name: fixture
       };
 
       expect(changeUsername(fixture)).toEqual(expectedResult);

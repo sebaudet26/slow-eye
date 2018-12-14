@@ -4,43 +4,37 @@
 
 import React from 'react';
 import { shallow, render } from 'enzyme';
-import { IntlProvider } from 'react-intl';
 
 import ListItem from 'components/ListItem';
-import { RepoListItem } from '../index';
+import RepoListItem from '../RepoListItem';
 
-const renderComponent = (props = {}) =>
-  render(
-    <IntlProvider locale="en">
-      <RepoListItem {...props} />
-    </IntlProvider>,
-  );
+const renderComponent = (props = {}) => render(<RepoListItem {...props} />);
 
-describe('<RepoListItem />', () => {
+describe.only('<RepoListItem />', () => {
   let item;
 
   // Before each test reset the item data for safety
   beforeEach(() => {
     item = {
       owner: {
-        login: 'mxstbr',
+        login: 'flexdinesh'
       },
-      html_url: 'https://github.com/alexandresobolevski/slow-eye',
-      name: 'react-boilerplate',
+      html_url: 'https://github.com/flexdinesh/react-redux-boilerplate',
+      name: 'react-redux-boilerplate',
       open_issues_count: 20,
-      full_name: 'alexandresobolevski/slow-eye',
+      full_name: 'flexdinesh/react-redux-boilerplate'
     };
   });
 
   it('should render a ListItem', () => {
     const renderedComponent = shallow(<RepoListItem item={item} />);
-    expect(renderedComponent.find(ListItem)).toHaveLength(1);
+    expect(renderedComponent.find(ListItem).length).toBe(1);
   });
 
   it('should not render the current username', () => {
     const renderedComponent = renderComponent({
       item,
-      currentUser: item.owner.login,
+      currentUser: item.owner.login
     });
     expect(renderedComponent.text()).not.toContain(item.owner.login);
   });
@@ -48,7 +42,7 @@ describe('<RepoListItem />', () => {
   it('should render usernames that are not the current one', () => {
     const renderedComponent = renderComponent({
       item,
-      currentUser: 'nikgraf',
+      currentUser: 'nikgraf'
     });
     expect(renderedComponent.text()).toContain(item.owner.login);
   });
@@ -65,6 +59,6 @@ describe('<RepoListItem />', () => {
 
   it('should render the IssueIcon', () => {
     const renderedComponent = renderComponent({ item });
-    expect(renderedComponent.find('svg')).toHaveLength(1);
+    expect(renderedComponent.find('svg').length).toBe(1);
   });
 });

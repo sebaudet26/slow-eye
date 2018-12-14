@@ -22,7 +22,7 @@ describe('selectGlobal', () => {
 describe('makeSelectCurrentUser', () => {
   const currentUserSelector = makeSelectCurrentUser();
   it('should select the current user', () => {
-    const username = 'mxstbr';
+    const username = 'flexdinesh';
     const mockedState = fromJS({
       global: {
         currentUser: username,
@@ -76,11 +76,12 @@ describe('makeSelectRepos', () => {
 describe('makeSelectLocation', () => {
   const locationStateSelector = makeSelectLocation();
   it('should select the location', () => {
-    const mockedState = fromJS({
-      router: { location: { pathname: '/foo' } },
+    const route = fromJS({
+      location: { pathname: '/foo' },
     });
-    expect(locationStateSelector(mockedState)).toEqual(
-      mockedState.getIn(['router', 'location']).toJS(),
-    );
+    const mockedState = fromJS({
+      route,
+    });
+    expect(locationStateSelector(mockedState)).toEqual(route.get('location').toJS());
   });
 });
