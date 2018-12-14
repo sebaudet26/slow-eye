@@ -7,5 +7,6 @@ module.exports = {
       "controlComponents": ["CustomInput"],
       "depth": 3,
     }],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
   }
 };
