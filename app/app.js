@@ -56,7 +56,7 @@ const render = () => {
       </ConnectedRouter>
       {/* </LanguageProvider> */}
     </Provider>,
-    MOUNT_NODE
+    MOUNT_NODE,
   );
 };
 
