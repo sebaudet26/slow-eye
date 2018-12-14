@@ -4,7 +4,7 @@ about: Create a report to help us improve
 
 ---
 
-Before opening a new issue, please take a moment to review our [**community guidelines**](https://github.com/react-boilerplate/react-boilerplate/blob/master/CONTRIBUTING.md) to make the contribution process easy and effective for everyone involved.
+Before opening a new issue, please take a moment to review our [**community guidelines**](https://github.com/alexandresobolevski/slow-eye/blob/master/CONTRIBUTING.md) to make the contribution process easy and effective for everyone involved.
 
 ## Description
 A clear and concise description of what the bug is.
@@ -22,6 +22,6 @@ If applicable, add screenshots to help explain your problem.
 
 ## Versions
 
-- React-Boilerplate:
+- slow-eye:
 - Node/NPM:
 - Browser:
