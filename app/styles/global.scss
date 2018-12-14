@@ -1,5 +1,64 @@
 @import './variables.scss';
 
+@font-face {
+   font-family: 'Avenir Next';
+   src: url(../fonts/AvenirNext/AvenirNextLTPro-Heavy.otf) format('truetype');
+   font-weight: 700;
+}
+
+@font-face {
+   font-family: 'Avenir Next';
+   src: url(../fonts/AvenirNext/AvenirNextLTPro-Bold.otf) format('truetype');
+   font-weight: 600;
+}
+
+@font-face {
+   font-family: 'Avenir Next';
+   src: url(../fonts/AvenirNext/AvenirNextLTPro-BoldItalic.otf) format('truetype');
+   font-weight: 600;
+   font-style: italic;
+}
+
+@font-face {
+   font-family: 'Avenir Next';
+   src: url(../fonts/AvenirNext/AvenirNextLTPro-Demi.otf) format('truetype');
+   font-weight: 500;
+}
+
+@font-face {
+   font-family: 'Avenir Next';
+   src: url(../fonts/AvenirNext/AvenirNextLTPro-DemiIt.otf) format('truetype');
+   font-weight: 500;
+   font-style: italic;
+}
+
+@font-face {
+   font-family: 'Avenir Next';
+   src: url(../fonts/AvenirNext/AvenirNextLTPro-Medium.otf) format('truetype');
+   font-weight: 400;
+}
+
+@font-face {
+   font-family: 'Avenir Next';
+   src: url(../fonts/AvenirNext/AvenirNextLTPro-MediumItalic.otf) format('truetype');
+   font-weight: 400;
+   font-style: italic;
+}
+
+@font-face {
+   font-family: 'Avenir Next';
+   src: url(../fonts/AvenirNext/AvenirNextLTPro-Regular.otf) format('truetype');
+   font-weight: 300;
+}
+
+@font-face {
+   font-family: 'Avenir Next';
+   src: url(../fonts/AvenirNext/AvenirNextLTPro-It.otf) format('truetype');
+   font-weight: 300;
+   font-style: italic;
+}
+
+
 html,
 body {
   height: 100%;
@@ -8,20 +67,16 @@ body {
 
 body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 body.fontLoaded {
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Avenir Next", sans-serif;
 }
 
 #app {
   background-color: #fafafa;
   min-height: 100%;
   min-width: 100%;
-}
-
-p,
-label {
-  font-family: Georgia, Times, 'Times New Roman', serif;
-  line-height: 1.5em;
 }
