@@ -23,6 +23,10 @@
       font-size: $link;
       font-weight: 500;
     }
+
+    .active {
+      color: $main;
+    }
   }
 
   &-mobile {
@@ -33,11 +37,29 @@
     &-icon {
       float: right;
       cursor: pointer;
+      padding: 15px;
+      position: relative;
+      right: -15px;
     }
 
     &-list {
       display: none;
       position: absolute;
+      border-radius: 6px;
+      background: $white;
+      left: 0;
+      top: 75px;
+      width: calc(100% - 30px);
+      margin: 0 15px;
+      box-shadow: $shadow;
+
+      li {
+        padding: 15px;
+
+        &:first-child {
+          border-bottom: solid 1px $grey-4;
+        }
+      }
     }
   }
 }

@@ -11,19 +11,18 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
           Slow Eye
         </a>
         <div className="header-nav">
-          <NavLink className="header-nav-item" to="/">
+          <NavLink activeClassName="active" className="header-nav-item" to="/">
             Player Stats
           </NavLink>
-          <NavLink className="header-nav-item" to="/teams">
+          <NavLink activeClassName="active" className="header-nav-item" to="/teams">
             Team Stats
           </NavLink>
         </div>
         <div className="header-mobile">
           <img className="header-mobile-icon" src={MobileIcon} alt="" onClick={this.burgerToggle} />
           <ul className="header-mobile-list">
-            <li><NavLink to='/' exact onClick={this.burgerToggle}>test</NavLink></li>
-            <li><NavLink to='/features' onClick={this.burgerToggle}>test</NavLink></li>
-            <li><NavLink to='/company' onClick={this.burgerToggle}>test</NavLink></li>
+            <li><NavLink to='/' exact onClick={this.burgerToggle}>Player Stats</NavLink></li>
+            <li><NavLink to='/teams' onClick={this.burgerToggle}>Team Stats</NavLink></li>
           </ul>
         </div>
       </div>
