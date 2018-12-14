@@ -11,7 +11,7 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
           Slow Eye
         </a>
         <div className="header-nav">
-          <NavLink activeClassName="active" className="header-nav-item" to="/">
+          <NavLink activeClassName="active" className="header-nav-item" exact to="/">
             Player Stats
           </NavLink>
           <NavLink activeClassName="active" className="header-nav-item" to="/teams">
