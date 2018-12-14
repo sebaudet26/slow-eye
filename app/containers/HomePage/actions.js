@@ -1,20 +1,22 @@
-/* global fetch */
+/* global fetch window */
+
 import {
   flatten, map, mergeAll, path, prop,
 } from 'ramda';
 import { FETCH_PLAYERS } from './constants';
 
 // TODO: error handling
+const hostname = `${window.location.origin}/api`;
 
 export const fetchStatsForPlayerId = async (playerId) => {
-  const requestURL = `https://statsapi.web.nhl.com/api/v1/people/${playerId}/stats?stats=statsSingleSeason`;
+  const requestURL = `${hostname}/people/${playerId}/stats?stats=statsSingleSeason`;
   const playerStatsResponse = await fetch(requestURL);
   const playerStatsData = await playerStatsResponse.json();
   return { [playerId]: path(['stats', 0, 'splits'], playerStatsData) };
 };
 
 export const fetchPlayersForTeamId = async (teamId) => {
-  const requestURL = `https://statsapi.web.nhl.com/api/v1/teams/${teamId}/roster`;
+  const requestURL = `${hostname}/teams/${teamId}/roster`;
   const apiResponse = await fetch(requestURL);
   const json = await apiResponse.json();
   const allRosterIds = map(path(['person', 'id']), json.roster);
@@ -28,7 +30,7 @@ export const fetchPlayersForTeamId = async (teamId) => {
 };
 
 export const fetchAllTeams = async () => {
-  const allTeamsURL = 'https://statsapi.web.nhl.com/api/v1/teams';
+  const allTeamsURL = `${hostname}/teams`;
   const allTeamsResponse = await fetch(allTeamsURL);
   const allTeamsData = await allTeamsResponse.json();
   return allTeamsData;
@@ -37,7 +39,6 @@ export const fetchAllTeams = async () => {
 export const fetchAllTeamsPlayers = () => async (dispatch) => {
   const allTeamsData = await fetchAllTeams();
   const allTeamsIds = map(prop('id'), prop('teams', allTeamsData));
-  console.log(allTeamsIds);
   const allTeamsRosters = await Promise.all(map(fetchPlayersForTeamId, allTeamsIds));
   return dispatch({
     type: FETCH_PLAYERS,
