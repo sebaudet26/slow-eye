@@ -26,7 +26,7 @@ import '!file-loader?name=[name].[ext]!./images/favicon.ico';
 /* eslint-enable import/no-webpack-loader-syntax */
 
 // Import CSS reset and Global Styles
-import 'styles/theme.scss';
+import 'styles/global.scss';
 
 import configureStore from './configureStore';
 
