@@ -7,8 +7,8 @@ import './style.scss';
 
 class HomePage extends React.PureComponent {
   componentDidMount() {
-    // const { fetchPlayers } = this.props;
-    // fetchPlayers();
+    const { fetchPlayers } = this.props;
+    fetchPlayers();
   }
 
   render() {
