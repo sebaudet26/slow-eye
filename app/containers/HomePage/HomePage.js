@@ -3,20 +3,23 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import './style.scss';
 
+
+// TODO: this is just a placeholder, should be removed into it's own component
 const playerComponent = player => (
   <div key={`${player.teamId}-${player.jerseyNumber}`}>
-    {player.person.fullName}
+    {`${player.person.fullName}, ${player.stats[0].stat.points}`}
   </div>
 );
 
 class HomePage extends React.PureComponent {
   componentDidMount() {
-    const { fetchPlayers } = this.props;
-    fetchPlayers();
+    // const { fetchPlayers } = this.props;
+    // fetchPlayers();
   }
 
   render() {
     const { players } = this.props;
+    console.log(players);
     return (
       <article>
         <Helmet>
