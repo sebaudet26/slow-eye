@@ -1,1 +1,27 @@
+@import '../../styles/variables.scss';
 
+.header {
+  display: flex;
+  height: 80px;
+  align-items: center;
+
+  &-logo {
+    font-size: 20px;
+    font-weight: 600;
+    color: $black;
+  }
+
+  &-nav {
+    display: flex;
+    flex-basis: auto;
+    flex-grow: 1;
+    justify-content: flex-end;
+
+    &-item {
+      margin-left: 25px;
+      color: $black;
+      font-size: $link;
+      font-weight: 500;
+    }
+  }
+}

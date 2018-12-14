@@ -80,3 +80,28 @@ body.fontLoaded {
   min-height: 100%;
   min-width: 100%;
 }
+
+h1 {
+  font-size: $h1;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: $h2;
+  font-weight: 500;
+}
+
+h3 {
+  font-size: $h3;
+  font-weight: 400;
+}
+
+p {
+  font-size: $p;
+  font-weight: 400;
+}
+
+a {
+  text-decoration: none;
+  transition: 0.3s;
+}

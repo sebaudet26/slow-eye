@@ -10,11 +10,11 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
         <a className="header-logo" href="/">
           Slow Eye
         </a>
-        <div className="nav-bar">
-          <Link className="router-link" to="/">
+        <div className="header-nav">
+          <Link className="header-nav-item" to="/">
             Player Stats
           </Link>
-          <Link className="router-link" to="/teams">
+          <Link className="header-nav-item" to="/teams">
             Team Stats
           </Link>
         </div>
