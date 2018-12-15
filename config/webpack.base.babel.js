@@ -7,7 +7,7 @@ const webpack = require('webpack');
 
 process.noDeprecation = true;
 
-module.exports = (options) => ({
+module.exports = options => ({
   mode: options.mode,
   entry: options.entry,
   output: Object.assign({ // Compile into js/build.js
@@ -49,33 +49,33 @@ module.exports = (options) => ({
             options: {
               query: {
                 gifsicle: {
-                  interlaced: true
+                  interlaced: true,
                 },
                 mozjpeg: {
-                  progressive: true
+                  progressive: true,
                 },
                 optipng: {
-                  optimizationLevel: 7
+                  optimizationLevel: 7,
                 },
                 pngquant: {
                   quality: '65-90',
-                  speed: 4
-                }
-              }
+                  speed: 4,
+                },
+              },
             },
           },
         ],
       },
       {
         test: /\.html$/,
-        use: 'html-loader'
+        use: 'html-loader',
       },
       {
         test: /\.(mp4|webm)$/,
         use: {
           loader: 'url-loader',
           options: {
-            limit: 10000
+            limit: 10000,
           },
         },
       },
@@ -84,7 +84,7 @@ module.exports = (options) => ({
   plugins: options.plugins.concat([
     new webpack.ProvidePlugin({
       // make fetch available
-      fetch: 'exports-loader?self.fetch!whatwg-fetch'
+      fetch: 'exports-loader?self.fetch!whatwg-fetch',
     }),
 
     // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
@@ -92,9 +92,9 @@ module.exports = (options) => ({
     // drop any unreachable code.
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
-    })
+    }),
   ]),
   resolve: {
     modules: ['app', 'node_modules'],
@@ -102,13 +102,13 @@ module.exports = (options) => ({
       '.js',
       '.jsx',
       '.scss',
-      '.react.js'
+      '.react.js',
     ],
     mainFields: [
       'browser',
       'jsnext:main',
-      'main'
-    ]
+      'main',
+    ],
   },
   devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window
@@ -117,7 +117,7 @@ module.exports = (options) => ({
     namedModules: true,
     splitChunks: {
       name: 'vendor',
-      minChunks: 2
-    }
-  }
+      minChunks: 2,
+    },
+  },
 });

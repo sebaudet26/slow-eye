@@ -106,4 +106,8 @@ class PlayersTable extends React.PureComponent {
   }
 }
 
+PlayersTable.propTypes = {
+  players: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+};
+
 export default PlayersTable;

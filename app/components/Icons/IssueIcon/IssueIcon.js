@@ -7,8 +7,12 @@ const IssueIcon = ({ className }) => (
   </svg>
 );
 
+IssueIcon.defaultProps = {
+  className: '',
+};
+
 IssueIcon.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default IssueIcon;

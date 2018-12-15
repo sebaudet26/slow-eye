@@ -12,14 +12,12 @@ api.get('*', async (req, res) => {
     if (cache[endpoint]) {
       return res.send(cache[endpoint]);
     }
-    console.log(`fetching ${endpoint}`);
     const response = await fetch(`${nhlApi}${endpoint}`);
     const json = await response.json();
     cache[endpoint] = json;
-    console.log(`cached ${endpoint}`);
     return res.send(json);
   } catch (e) {
-    console.error((e || e.stack).toString());
+    console.error((e || e.stack).toString()); // eslint-disable-line
     return res.send(e.toString());
   }
 });
