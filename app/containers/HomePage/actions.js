@@ -8,17 +8,26 @@ import { FETCH_PLAYERS } from './constants';
 // TODO: error handling
 const hostname = `${window.location.origin}/api`;
 
+window.slowEyeCache = {};
+
+const api = async (url) => {
+  if (window.slowEyeCache[url]) {
+    return window.slowEyeCache[url];
+  }
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+};
+
 export const fetchStatsForPlayerId = async (playerId) => {
   const requestURL = `${hostname}/people/${playerId}/stats?stats=statsSingleSeason`;
-  const playerStatsResponse = await fetch(requestURL);
-  const playerStatsData = await playerStatsResponse.json();
+  const playerStatsData = await api(requestURL);
   return { [playerId]: path(['stats', 0, 'splits'], playerStatsData) };
 };
 
 export const fetchPlayersForTeamId = async (teamId) => {
   const requestURL = `${hostname}/teams/${teamId}/roster`;
-  const apiResponse = await fetch(requestURL);
-  const json = await apiResponse.json();
+  const json = await api(requestURL);
   const allRosterIds = map(path(['person', 'id']), json.roster);
   const playerInfo = mergeAll(json.roster.map(p => ({ [p.person.id]: { ...p } })));
   const playerStats = await Promise.all(map(fetchStatsForPlayerId, allRosterIds));
@@ -31,8 +40,7 @@ export const fetchPlayersForTeamId = async (teamId) => {
 
 export const fetchAllTeams = async () => {
   const allTeamsURL = `${hostname}/teams`;
-  const allTeamsResponse = await fetch(allTeamsURL);
-  const allTeamsData = await allTeamsResponse.json();
+  const allTeamsData = await api(allTeamsURL);
   return allTeamsData;
 };
 
