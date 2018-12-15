@@ -1,5 +1,3 @@
-/* eslint consistent-return:0 */
-
 const express = require('express');
 const { resolve } = require('path');
 
@@ -34,5 +32,5 @@ app.listen(port, host, (err) => {
   if (err) {
     return logger.error(err.message);
   }
-  logger.appStarted(port, prettyHost);
+  return logger.appStarted(port, prettyHost);
 });

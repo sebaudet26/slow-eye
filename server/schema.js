@@ -28,7 +28,13 @@ const nhlAPI = async (resource) => {
 const fetchStatsForPlayerId = async (playerId) => {
   const resource = `/people/${playerId}/stats?stats=statsSingleSeason`;
   const playerStatsData = await nhlAPI(resource);
-  return { [playerId]: path(['stats', 0, 'splits'], playerStatsData) };
+  return path(['stats', 0, 'splits'], playerStatsData);
+};
+
+const fetchInfoForTeamId = async (teamId) => {
+  const resource = `/teams/${teamId}`;
+  const teamInfo = await nhlAPI(resource);
+  return path(['teams', 0], teamInfo);
 };
 
 const fetchPlayersForTeamId = async (teamId) => {
@@ -36,10 +42,8 @@ const fetchPlayersForTeamId = async (teamId) => {
   const json = await nhlAPI(resource);
   const allRosterIds = map(path(['person', 'id']), json.roster);
   const playerInfo = mergeAll(json.roster.map(p => ({ [p.person.id]: { ...p } })));
-  const playerStats = await Promise.all(map(fetchStatsForPlayerId, allRosterIds));
-  const statsObject = mergeAll(playerStats);
   const fullData = allRosterIds.map(id => ({
-    teamId, stats: statsObject[id], id, ...playerInfo[id],
+    teamId, id, ...playerInfo[id],
   }));
   return fullData;
 };
@@ -57,7 +61,89 @@ const fetchAllTeamsPlayers = async () => {
   return flatten(allTeamsRosters);
 };
 
-/*
+/* Team Info
+{
+  "id" : 5,
+  "name" : "Pittsburgh Penguins",
+  "link" : "/api/v1/teams/5",
+  "venue" : {
+    "id" : 5034,
+    "name" : "PPG Paints Arena",
+    "link" : "/api/v1/venues/5034",
+    "city" : "Pittsburgh",
+    "timeZone" : {
+      "id" : "America/New_York",
+      "offset" : -5,
+      "tz" : "EST"
+    }
+  },
+  "abbreviation" : "PIT",
+  "teamName" : "Penguins",
+  "locationName" : "Pittsburgh",
+  "division" : {
+    "id" : 18,
+    "name" : "Metropolitan",
+    "nameShort" : "Metro",
+    "link" : "/api/v1/divisions/18",
+    "abbreviation" : "M"
+  },
+  "conference" : {
+    "id" : 6,
+    "name" : "Eastern",
+    "link" : "/api/v1/conferences/6"
+  },
+  "franchise" : {
+    "franchiseId" : 17,
+    "teamName" : "Penguins",
+    "link" : "/api/v1/franchises/17"
+  },
+  "shortName" : "Pittsburgh",
+  "officialSiteUrl" : "http://pittsburghpenguins.com/",
+  "franchiseId" : 17,
+  "active" : true
+}
+*/
+
+const TeamInfo = new GraphQLObjectType({
+  name: 'TeamInfo',
+  fields: {
+    id: {
+      type: GraphQLInt,
+      resolve: prop('id'),
+    },
+    name: {
+      type: GraphQLString,
+      resolve: prop('name'),
+    },
+    link: {
+      type: GraphQLString,
+      resolve: prop('link'),
+    },
+    abbreviation: {
+      type: GraphQLString,
+      resolve: prop('abbreviation'),
+    },
+    teamName: {
+      type: GraphQLString,
+      resolve: prop('teamName'),
+    },
+    locationName: {
+      type: GraphQLString,
+      resolve: prop('locationName'),
+    },
+    shortName: {
+      type: GraphQLString,
+      resolve: prop('shortName'),
+    },
+    officialSiteUrl: {
+      type: GraphQLString,
+      resolve: prop('officialSiteUrl'),
+    },
+  },
+});
+
+
+/* Player Stats
 {
   "teamId": 1,
   "stats": [
@@ -285,9 +371,10 @@ const Player = new GraphQLObjectType({
       type: GraphQLInt,
       resolve: prop('id'),
     },
-    teamId: {
-      type: GraphQLInt,
-      resolve: prop('teamId'),
+    // Lazy load team info
+    team: {
+      type: TeamInfo,
+      resolve: p => fetchInfoForTeamId(p.teamId),
     },
     jerseyNumber: {
       type: GraphQLInt,
@@ -301,9 +388,10 @@ const Player = new GraphQLObjectType({
       type: Position,
       resolve: prop('position'),
     },
+    // Lazy load player stats
     stats: {
       type: new GraphQLList(Stat),
-      resolve: prop('stats'),
+      resolve: p => fetchStatsForPlayerId(p.id),
     },
   },
 });
