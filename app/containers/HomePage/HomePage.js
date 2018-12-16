@@ -12,7 +12,6 @@ class HomePage extends React.PureComponent {
 
   render() {
     const { players } = this.props;
-    // console.log(players);
     return (
       <article>
         <Helmet>

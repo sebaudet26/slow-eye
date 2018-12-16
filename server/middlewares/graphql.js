@@ -4,9 +4,14 @@ const schema = require('../schema');
 
 const app = express();
 
-app.use('*', graphql({
+app.get('*', graphql({
   schema,
   graphiql: true,
+}));
+
+app.post('*', graphql({
+  schema,
+  graphiql: false,
 }));
 
 module.exports = app;

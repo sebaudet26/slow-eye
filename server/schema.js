@@ -7,6 +7,7 @@ const {
   GraphQLString,
   GraphQLList,
   GraphQLInt,
+  GraphQLFloat,
 } = require('graphql');
 const fetch = require('node-fetch');
 
@@ -15,14 +16,18 @@ const nhlApiUrl = 'https://statsapi.web.nhl.com/api/v1';
 const cache = {};
 
 const nhlAPI = async (resource) => {
-  if (cache[resource]) {
-    return cache[resource];
+  try {
+    if (cache[resource]) {
+      return cache[resource];
+    }
+    const url = `${nhlApiUrl}${resource}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    cache[resource] = data;
+    return data;
+  } catch (e) {
+    return console.log(e.toString());
   }
-  const url = `${nhlApiUrl}${resource}`;
-  const response = await fetch(url);
-  const data = await response.json();
-  cache[resource] = data;
-  return data;
 };
 
 const fetchStatsForPlayerId = async (playerId) => {
@@ -54,10 +59,10 @@ const fetchAllTeams = async () => {
   return allTeamsData;
 };
 
-const fetchAllTeamsPlayers = async () => {
+const fetchAllPlayers = async () => {
   const allTeamsData = await fetchAllTeams();
   const allTeamsIds = map(prop('id'), prop('teams', allTeamsData));
-  const allTeamsRosters = await Promise.all(map(fetchPlayersForTeamId, [1]));
+  const allTeamsRosters = await Promise.all(map(fetchPlayersForTeamId, allTeamsIds));
   return flatten(allTeamsRosters);
 };
 
@@ -268,11 +273,11 @@ const SeasonStat = new GraphQLObjectType({
       resolve: prop('powerPlayPoints'),
     },
     faceOffPct: {
-      type: GraphQLInt,
+      type: GraphQLFloat,
       resolve: prop('faceOffPct'),
     },
     shotPct: {
-      type: GraphQLInt,
+      type: GraphQLFloat,
       resolve: prop('shotPct'),
     },
     gameWinningGoals: {
@@ -403,7 +408,7 @@ const schema = new GraphQLSchema({
       players: {
         type: new GraphQLList(Player),
         resolve() {
-          return fetchAllTeamsPlayers();
+          return fetchAllPlayers();
         },
       },
     },

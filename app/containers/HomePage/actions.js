@@ -1,57 +1,69 @@
 /* global fetch window */
-
-import {
-  flatten, map, mergeAll, path, prop,
-} from 'ramda';
 import { FETCH_PLAYERS } from './constants';
 
-// TODO: error handling
-const hostname = `${window.location.origin}/api`;
+const graphqlApiUrl = `${window.location.origin}/graphql`;
 
-window.slowEyeCache = {};
 
-const api = async (url) => {
-  if (window.slowEyeCache[url]) {
-    return window.slowEyeCache[url];
+const graphqlApi = async (resource) => {
+  try {
+    const query = `
+    {
+      players {
+        id,
+        person {
+          fullName
+        },
+        position {
+          abbreviation
+        },
+        stats {
+          season,
+          stat {
+            games,
+            goals,
+            points,
+            assists,
+            plusMinus,
+            pim,
+            hits,
+            blocked,
+            shots,
+            shotPct
+          }
+        }
+      }
+    }`;
+    const response = await fetch(graphqlApiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        query,
+      }),
+    });
+    const json = await response.json();
+    const { data } = json;
+    return data;
+  } catch (e) {
+    console.error(e.toString());
+    throw new Error(e.toString());
   }
-  const response = await fetch(url);
-  const data = await response.json();
-  return data;
 };
 
-export const fetchStatsForPlayerId = async (playerId) => {
-  const requestURL = `${hostname}/people/${playerId}/stats?stats=statsSingleSeason`;
-  const playerStatsData = await api(requestURL);
-  return { [playerId]: path(['stats', 0, 'splits'], playerStatsData) };
-};
-
-export const fetchPlayersForTeamId = async (teamId) => {
-  const requestURL = `${hostname}/teams/${teamId}/roster`;
-  const json = await api(requestURL);
-  const allRosterIds = map(path(['person', 'id']), json.roster);
-  const playerInfo = mergeAll(json.roster.map(p => ({ [p.person.id]: { ...p } })));
-  const playerStats = await Promise.all(map(fetchStatsForPlayerId, allRosterIds));
-  const statsObject = mergeAll(playerStats);
-  const fullData = allRosterIds.map(id => ({
-    teamId, stats: statsObject[id], id, ...playerInfo[id],
-  }));
-  return fullData;
-};
-
-export const fetchAllTeams = async () => {
-  const allTeamsURL = `${hostname}/teams`;
-  const allTeamsData = await api(allTeamsURL);
-  return allTeamsData;
-};
-
-export const fetchAllTeamsPlayers = () => async (dispatch) => {
-  const allTeamsData = await fetchAllTeams();
-  const allTeamsIds = map(prop('id'), prop('teams', allTeamsData));
-  const allTeamsRosters = await Promise.all(map(fetchPlayersForTeamId, allTeamsIds));
-  return dispatch({
-    type: FETCH_PLAYERS,
-    payload: flatten(allTeamsRosters),
-  });
+export const fetchAllPlayers = () => async (dispatch) => {
+  try {
+    const data = await graphqlApi('players');
+    console.log(data);
+    return dispatch({
+      type: FETCH_PLAYERS,
+      payload: data,
+    });
+  } catch (e) {
+    // TODO: dispatch error to reducer
+    return console.error(e.toString());
+  }
 };
 
 export default null;
