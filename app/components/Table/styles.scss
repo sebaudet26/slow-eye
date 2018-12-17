@@ -7,7 +7,6 @@
   background: $white;
 
   .first-col {
-    width: 200px !important;
     border-right: solid 1px $grey-4 !important;
     text-align: left !important;
   }
@@ -22,11 +21,10 @@
       text-align: center;
       border-right: 0;
       font-weight: 500;
-      padding: 15px;
+      padding: 10px;
       outline: none;
 
       &:first-child {
-        width: 200px !important;
         border-right: solid 1px $grey-4;
         text-align: left !important;
       }
@@ -48,8 +46,28 @@
 
     .rt-td {
       text-align: center;
-      padding: 10px 15px;
+      padding: 10px;
       border: 0px;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .ReactTable {
+    font-size: 12px;
+    box-shadow: none;
+    border-radius: 0px;
+
+    .rt-thead {
+      .rt-th {
+        padding: 15px 0px;
+      }
+    }
+
+    .rt-tbody {
+      .rt-td {
+        padding: 15px 0px;
+      }
     }
   }
 }

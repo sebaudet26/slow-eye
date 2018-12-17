@@ -19,7 +19,7 @@ class HomePage extends React.PureComponent {
           <meta name="description" content="Slow Eye" />
         </Helmet>
         <div className="home-page">
-          <h1>Player Stats</h1>
+          <h2>Player Stats</h2>
         </div>
         <PlayersTable players={players} />
       </article>

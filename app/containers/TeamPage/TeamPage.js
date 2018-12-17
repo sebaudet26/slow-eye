@@ -26,7 +26,7 @@ export default class TeamPage extends React.Component {
             content="Team Stats"
           />
         </Helmet>
-        <h1>Team Stats</h1>
+        <h2>Team Stats</h2>
       </div>
     );
   }

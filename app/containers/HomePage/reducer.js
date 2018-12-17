@@ -1,7 +1,7 @@
 import { fromJS } from 'immutable';
 import { path, sortBy } from 'ramda';
 import { FETCH_PLAYERS } from './constants';
-// import playersMock from './mock';
+import playersMock from './mock';
 
 const initialState = fromJS({
 });
@@ -13,8 +13,8 @@ function homeReducer(state = initialState, action) {
       // Delete prefixed '@' from the github username
       return state.set('players', sortBy(path(['person', 'fullName']))(action.payload.players));
     default:
-      //return state.set('players', playersMock);
-      return state;
+      return state.set('players', playersMock);
+      //return state;
   }
 }
 
