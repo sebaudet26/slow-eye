@@ -35,8 +35,8 @@ describe('reducer injectors', () => {
     it('should return injectors', () => {
       expect(getInjectors(store)).toEqual(
         expect.objectContaining({
-          injectReducer: expect.any(Function)
-        })
+          injectReducer: expect.any(Function),
+        }),
       );
     });
 

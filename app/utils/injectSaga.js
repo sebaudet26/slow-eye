@@ -9,8 +9,10 @@ import getInjectors from './sagaInjectors';
  *
  * @param {string} key A key of the saga
  * @param {function} saga A root saga that will be injected
- * @param {string} [mode] By default (constants.RESTART_ON_REMOUNT) the saga will be started on component mount and
- * cancelled with `task.cancel()` on component un-mount for improved performance. Another two options:
+ * @param {string} [mode] By default (constants.RESTART_ON_REMOUNT) the saga
+ * will be started on component mount and
+ * cancelled with `task.cancel()` on component un-mount for improved performance.
+ * Another two options:
  *   - constants.DAEMON—starts the saga on component mount and never cancels it or starts again,
  *   - constants.ONCE_TILL_UNMOUNT—behaves like 'RESTART_ON_REMOUNT' but never runs it again.
  *
@@ -18,10 +20,15 @@ import getInjectors from './sagaInjectors';
 export default ({ key, saga, mode }) => (WrappedComponent) => {
   class InjectSaga extends React.Component {
     static WrappedComponent = WrappedComponent;
+
     static displayName = `withSaga(${(WrappedComponent.displayName || WrappedComponent.name || 'Component')})`;
+
     static contextTypes = {
-      store: PropTypes.object.isRequired,
+      store: PropTypes.shape({}).isRequired,
     };
+
+    // eslint-disable-next-line
+    injectors = getInjectors(this.context.store);
 
     componentWillMount() {
       const { injectSaga } = this.injectors;
@@ -34,8 +41,6 @@ export default ({ key, saga, mode }) => (WrappedComponent) => {
 
       ejectSaga(key);
     }
-
-    injectors = getInjectors(this.context.store);
 
     render() {
       return <WrappedComponent {...this.props} />;

@@ -10,12 +10,12 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 
-import HomePage from 'containers/HomePage/Loadable';
-import TeamPage from 'containers/TeamPage/Loadable';
-import PlayerPage from 'containers/PlayerPage/Loadable';
-import NotFoundPage from 'containers/NotFoundPage/Loadable';
-import Header from 'components/Header';
-import Footer from 'components/Footer';
+import HomePage from '../HomePage/Loadable';
+import TeamPage from '../TeamPage/Loadable';
+import PlayerPage from '../PlayerPage/Loadable';
+import NotFoundPage from '../NotFoundPage/Loadable';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 import './style.scss';
 
 const App = () => (

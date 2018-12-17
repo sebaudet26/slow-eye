@@ -63,9 +63,9 @@ class PlayersTable extends React.PureComponent {
             },
             {
               Header: 'PIM',
-              id: 'penaltyMinutes',
+              id: 'pim',
               maxWidth: 80,
-              accessor: d => pathOr(0, ['stats', 0, 'stat', 'penaltyMinutes'], d),
+              accessor: d => pathOr(0, ['stats', 0, 'stat', 'pim'], d),
             },
             {
               Header: 'Hits',
@@ -105,5 +105,9 @@ class PlayersTable extends React.PureComponent {
     );
   }
 }
+
+PlayersTable.propTypes = {
+  players: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+};
 
 export default PlayersTable;
