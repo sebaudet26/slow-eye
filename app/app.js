@@ -19,7 +19,7 @@ import App from './containers/App';
 /* eslint-enable import/no-webpack-loader-syntax */
 
 // Import CSS reset and Global Styles
-// import 'styles/global.scss';
+import 'styles/global.scss';
 
 import configureStore from './configureStore';
 
