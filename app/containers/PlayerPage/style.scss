@@ -1,0 +1,59 @@
+@import '../../styles/variables.scss';
+
+.player {
+  &-header {
+    display: flex;
+    margin: 25px 0;
+    position: relative;
+  }
+
+  &-img {
+    &-face {
+      border-radius: 100%;
+      position: relative;
+    }
+
+    &-team {
+      width: 60px;
+      position: absolute;
+      background: $white;
+      padding: 10px;
+      border-radius: 100%;
+      bottom: 10px;
+      left: 220px;
+      box-shadow: $shadow;
+    }
+
+    &-country {
+      width: 60px;
+      position: absolute;
+      background: $white;
+      padding: 10px;
+      border-radius: 100%;
+      bottom: 10px;
+      left: 25px;
+      box-shadow: $shadow;
+    }
+  }
+
+  &-desc {
+    padding: 15px 0;
+    margin-left: 15px;
+
+    h2, p {
+      margin: 0;
+    }
+  }
+
+  &-stats {
+    display: flex;
+    margin-top: 15px;
+
+    &-item {
+      text-align: center;
+      font-size: 24px;
+      margin-right: 50px;
+    }
+  }
+
+}
