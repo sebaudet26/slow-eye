@@ -34,6 +34,13 @@
       border-bottom: solid 1px $grey-4;
     }
 
+    &.-filters {
+
+      .rt-th {
+        border-right: none;
+      }
+    }
+
     .rt-th {
       text-align: center;
       border-right: 0;

@@ -9,9 +9,17 @@
   }
 
   &-img {
+    display: flex;
+    flex-basis: auto;
+    flex-grow: 1;
+    justify-content: flex-end;
+    position: relative;
+    margin-top: 15px;
+
     &-face {
       border-radius: 100%;
-      position: relative;
+      width: auto;
+      max-height: 200px;
     }
 
     &-team {
@@ -20,8 +28,8 @@
       background: $white;
       padding: 10px;
       border-radius: 100%;
-      bottom: 40px;
-      left: 220px;
+      top: 150px;
+      right: 20px;
       box-shadow: $shadow;
     }
 
@@ -31,15 +39,14 @@
       background: $white;
       padding: 10px;
       border-radius: 100%;
-      bottom: 40px;
-      left: 25px;
+      top: 150px;
+      right: 215px;
       box-shadow: $shadow;
     }
   }
 
   &-info {
     padding: 15px 0;
-    margin-left: 15px;
 
     h2, p {
       margin: 0;

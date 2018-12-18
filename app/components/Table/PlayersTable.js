@@ -29,8 +29,6 @@ class PlayersTable extends React.PureComponent {
               className: 'text-left',
               maxWidth: 200,
               minWidth: 125,
-              filterMethod: (filter, row) =>
-                String(row[filter.id]).toLowerCase().match(filter.value.toLowerCase()),
               Cell: row => (
                 <a href={`/player?id=${JSON.stringify(row.original.id)}`}>{row.value}</a>
               ),
@@ -41,7 +39,6 @@ class PlayersTable extends React.PureComponent {
               className: 'text-left',
               maxWidth: 85,
               minWidth: 50,
-              filterable: false,
               accessor: d => pathOr(0, ['team', 'abbreviation'], d),
             },
             {

@@ -22,11 +22,6 @@ export default class PlayerPage extends React.Component {
           />
         </Helmet>
         <div className="player-header">
-          <div className="player-img">
-            <img src={PlayerImg} className="player-img-face"/>
-            <img src={CountryImg} className="player-img-country"/>
-            <img src={TeamImg} className="player-img-team"/>
-          </div>
           <div class="player-info">
             <h2>Mikko Rantanen</h2>
             <p>Colorado Avalanche, RW, Shoots L</p>
@@ -62,6 +57,11 @@ export default class PlayerPage extends React.Component {
                 <div className="bold">18</div>
               </div>
             </div>
+          </div>
+          <div className="player-img">
+            <img src={PlayerImg} className="player-img-face"/>
+            <img src={CountryImg} className="player-img-country"/>
+            <img src={TeamImg} className="player-img-team"/>
           </div>
         </div>
         <h2>Season Stats</h2>
