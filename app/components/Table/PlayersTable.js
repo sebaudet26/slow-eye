@@ -7,18 +7,20 @@ import { pathOr } from 'ramda';
 import 'react-table/react-table.css';
 import './styles.scss';
 
+const toLowerCaseAndMatch = (filter, row) => String(row[filter.id])
+  .toLowerCase()
+  .match(filter.value.toLowerCase());
+
 class PlayersTable extends React.PureComponent {
   render() {
     const { players } = this.props;
-    console.log(players);
     return (
       <div>
         <ReactTable
           data={players}
           noDataText="Loading all dat good data stuff..."
           filterable
-          defaultFilterMethod={(filter, row) =>
-            String(row[filter.id]).toLowerCase().match(filter.value.toLowerCase())}
+          defaultFilterMethod={toLowerCaseAndMatch}
           columns={[
             {
               Header: 'Name',
@@ -28,20 +30,20 @@ class PlayersTable extends React.PureComponent {
               maxWidth: 200,
               minWidth: 125,
               Cell: row => (
-                <a href={`/player?id=${123}`}>{row.value}</a>
+                <a href={`/player?id=${JSON.stringify(row.original.id)}`}>{row.value}</a>
               ),
             },
             {
               Header: 'Team',
-              id: 'abbreviation',
+              id: 'position',
               className: 'text-left',
               maxWidth: 85,
               minWidth: 50,
-              accessor: d => pathOr(0, ['position', 'abbreviation'], d),
+              accessor: d => pathOr(0, ['team', 'abbreviation'], d),
             },
             {
               Header: 'Pos.',
-              id: 'abbreviation',
+              id: 'team',
               className: 'text-left border-right',
               maxWidth: 85,
               minWidth: 50,
