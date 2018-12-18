@@ -19,7 +19,7 @@
       background: $white;
       padding: 10px;
       border-radius: 100%;
-      bottom: 10px;
+      bottom: 40px;
       left: 220px;
       box-shadow: $shadow;
     }
@@ -30,18 +30,33 @@
       background: $white;
       padding: 10px;
       border-radius: 100%;
-      bottom: 10px;
+      bottom: 40px;
       left: 25px;
       box-shadow: $shadow;
     }
   }
 
-  &-desc {
+  &-info {
     padding: 15px 0;
     margin-left: 15px;
 
     h2, p {
       margin: 0;
+    }
+  }
+
+  &-desc {
+    display: flex;
+    margin-top: 15px;
+
+    p {
+      font-size: 14px;
+    }
+
+    &-right {
+      margin-left: 25px;
+      padding-left: 25px;
+      border-left: solid 1px $grey-3;
     }
   }
 

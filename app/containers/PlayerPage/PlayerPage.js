@@ -27,10 +27,19 @@ export default class PlayerPage extends React.Component {
             <img src={CountryImg} className="player-img-country"/>
             <img src={TeamImg} className="player-img-team"/>
           </div>
-          <div class="player-desc">
+          <div class="player-info">
             <h2>Mikko Rantanen</h2>
-            <p>#96, RW, Colorado Avalanche, Shoots L</p>
-            <p>Finland, October 29, 1996 (23 years old)</p>
+            <p>Colorado Avalanche, RW, Shoots L</p>
+            <div className="player-desc">
+              <div>
+                <p><span className="bold">Drafted by</span> Colorado Avalanche</p>
+                <p>1st Round, #10 Overall, 2015 NHL Draft</p>
+              </div>
+              <div className="player-desc-right">
+                <p><span className="bold">Born</span> October 29, 1996 (22 yrs.), <span className="bold">Birthplace</span> Nousiainen, Finland</p>
+                <p><span className="bold">Height</span> 6'4' (193), <span className="bold">Weight</span> 215 (98)</p>
+              </div>
+            </div>
             <div className="player-stats">
               <div className="player-stats-item">
                 <div className="light">GP</div>
