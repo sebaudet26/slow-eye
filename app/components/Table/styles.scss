@@ -60,6 +60,23 @@
       padding: 15px 10px;
     }
   }
+
+  .-pagination {
+    box-shadow: none;
+    border-top: solid 1px $grey-4;
+    padding: 15px 10px;
+
+    .-btn {
+      background: $grey-4;
+      font-weight: bold;
+      color: $grey-1;
+
+      &:hover {
+        background: $grey-3 !important;
+        color: $grey-1 !important;
+      }
+    }
+  }
 }
 
 
