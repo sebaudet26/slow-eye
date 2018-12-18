@@ -1,0 +1,91 @@
+@import '../../styles/variables.scss';
+
+.player {
+  &-header {
+    display: flex;
+    margin: 25px 0;
+    position: relative;
+    border-bottom: solid 1px $grey-4;
+  }
+
+  &-img {
+    display: flex;
+    flex-basis: auto;
+    flex-grow: 1;
+    justify-content: flex-end;
+    position: relative;
+    margin-top: 15px;
+
+    &-face {
+      border-radius: 100%;
+      width: auto;
+      max-height: 200px;
+    }
+
+    &-team {
+      width: 60px;
+      height: 60px;
+      position: absolute;
+      top: 150px;
+      right: 20px;
+
+      img {
+        width: 35px;
+      }
+    }
+
+    &-country {
+      width: 60px;
+      height: 60px;
+      position: absolute;
+      top: 150px;
+      right: 215px;
+
+      img {
+        width: 35px;
+      }
+    }
+  }
+
+  &-info {
+    padding: 15px 0;
+
+    h2, p {
+      margin: 0;
+    }
+  }
+
+  &-desc {
+    display: flex;
+    margin-top: 15px;
+
+    p {
+      font-size: 14px;
+    }
+
+    &-right {
+      margin-left: 25px;
+      padding-left: 25px;
+      border-left: solid 1px $grey-4;
+    }
+  }
+
+  &-stats {
+    display: flex;
+    margin-top: 15px;
+
+    &-item {
+      text-align: center;
+      font-size: 24px;
+      margin-right: 50px;
+    }
+  }
+
+  &-badges {
+    padding-left: 25px;
+    border-left: solid 1px $grey-4;
+    display: flex;
+    align-items: center;
+  }
+
+}

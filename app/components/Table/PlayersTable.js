@@ -39,6 +39,9 @@ class PlayersTable extends React.PureComponent {
               className: 'text-left',
               maxWidth: 85,
               minWidth: 50,
+              Cell: row=> (
+                <a href='./team?id=123'>{row.value}</a>
+              ),
               accessor: d => pathOr(0, ['team', 'abbreviation'], d),
             },
             {
