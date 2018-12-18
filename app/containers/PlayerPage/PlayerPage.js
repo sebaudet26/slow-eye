@@ -5,7 +5,7 @@ import './style.scss';
 import PlayerImg from './images/6752.png';
 import CountryImg from './images/finland.png';
 import TeamImg from '../../images/teams/avalanche.png';
-import RookieIcon from '../../images/pacifier.svg';
+import RookieIcon from '../../images/pacifier2.svg';
 
 export default class PlayerPage extends React.Component {
   shouldComponentUpdate() {
@@ -56,6 +56,11 @@ export default class PlayerPage extends React.Component {
               <div className="player-stats-item">
                 <div className="light">+/-</div>
                 <div className="bold">18</div>
+              </div>
+              <div className="player-badges">
+                <div className="icon-wrapper">
+                  <img src={RookieIcon}/>
+                </div>
               </div>
             </div>
           </div>

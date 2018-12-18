@@ -79,4 +79,11 @@
     }
   }
 
+  &-badges {
+    padding-left: 25px;
+    border-left: solid 1px $grey-4;
+    display: flex;
+    align-items: center;
+  }
+
 }
