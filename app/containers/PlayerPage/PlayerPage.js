@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import CareerStatsTable from '../../components/Table/CareerStatsTable';
 import './style.scss';
 import PlayerImg from './images/6752.png';
-import CountryImg from './images/finland.png';
+import CountryImg from '../../images/country/finland.svg';
 import TeamImg from '../../images/teams/avalanche.png';
 import RookieIcon from '../../images/pacifier2.svg';
 
