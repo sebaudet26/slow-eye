@@ -7,7 +7,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import './style.scss';
 
-export default class TeamPage extends React.Component {
+export default class StandingsPage extends React.Component {
   // eslint-disable-line react/prefer-stateless-function
 
   // Since state and props are static,
@@ -23,10 +23,10 @@ export default class TeamPage extends React.Component {
           <title>Team Stats</title>
           <meta
             name="description"
-            content="Team Stats"
+            content="Standings"
           />
         </Helmet>
-        <h2>Team Stats</h2>
+        <h2>Standings</h2>
       </div>
     );
   }

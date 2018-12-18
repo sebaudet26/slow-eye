@@ -4,7 +4,8 @@ import CareerStatsTable from '../../components/Table/CareerStatsTable';
 import './style.scss';
 import PlayerImg from './images/6752.png';
 import CountryImg from './images/finland.png';
-import TeamImg from './images/avs.png';
+import TeamImg from '../../images/teams/avs.png';
+//import BabyIcon from '../../'
 
 export default class PlayerPage extends React.Component {
   shouldComponentUpdate() {

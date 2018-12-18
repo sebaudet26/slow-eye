@@ -11,7 +11,7 @@ import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 
 import HomePage from '../HomePage/Loadable';
-import TeamPage from '../TeamPage/Loadable';
+import StandingsPage from '../StandingsPage/Loadable';
 import PlayerPage from '../PlayerPage/Loadable';
 import NotFoundPage from '../NotFoundPage/Loadable';
 import Header from '../../components/Header';
@@ -29,7 +29,7 @@ const App = () => (
     <Header />
     <Switch>
       <Route exact path="/" component={HomePage} />
-      <Route path="/teams" component={TeamPage} />
+      <Route path="/standings" component={StandingsPage} />
       <Route path="/player" component={PlayerPage} />
       <Route path="" component={NotFoundPage} />
     </Switch>
