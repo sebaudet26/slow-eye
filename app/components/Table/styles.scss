@@ -6,11 +6,6 @@
   border-radius: $radius;
   background: $white;
 
-  .first-col {
-    border-right: solid 1px $grey-4 !important;
-    text-align: left !important;
-  }
-
   .rt-thead {
     &.-header {
       box-shadow: none;
@@ -24,14 +19,18 @@
       padding: 15px 10px;
       outline: none;
 
-      &:first-child {
+      &:first-child, &:nth-child(2) {
+        text-align: left;
+      }
+
+      &:nth-child(2) {
         border-right: solid 1px $grey-4;
-        text-align: left !important;
       }
     }
   }
 
   .rt-tbody {
+
     .rt-tr.-odd {
       background: $grey-5;
     }
@@ -50,6 +49,26 @@
       border: 0px;
     }
   }
+
+  .rt-tfoot {
+    box-shadow: none;
+    border-top: solid 1px $grey-4;
+
+    .rt-td {
+      border: none;
+      font-weight: 500;
+      padding: 15px 10px;
+    }
+  }
+}
+
+
+.border-right {
+  border-right: solid 1px $grey-4 !important;
+}
+
+.text-left {
+  text-align: left !important;
 }
 
 @media screen and (max-width: 600px) {

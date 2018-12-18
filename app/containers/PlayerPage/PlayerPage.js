@@ -64,6 +64,7 @@ export default class PlayerPage extends React.Component {
             </div>
           </div>
         </div>
+        <h2>Season Stats</h2>
         <CareerStatsTable/>
       </div>
     );

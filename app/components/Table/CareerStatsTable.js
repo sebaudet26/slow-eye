@@ -9,50 +9,96 @@ import './styles.scss';
 
 class CareerStatsTable extends React.PureComponent {
   render() {
-    const { players } = this.props;
     return (
       <div>
         <ReactTable
+          showPagination={false}
+          sortable={false}
           columns={[
             {
               Header: 'Season',
               id: 'fullName',
+              className: 'text-left',
               accessor: 'test',
-              className: 'first-col',
-              Cell: row => (
-                <a href={`/player?id=${123}`}>{row.value}</a>
-              ),
+              maxWidth: 200,
+              minWidth: 125,
+              Footer: 'Total Stats',
+            },
+            {
+              Header: 'Team',
+              id: 'team',
+              className: 'border-right text-left',
+              accessor: 'test',
             },
             {
               Header: 'GP',
               id: 'games',
+              maxWidth: 85,
+              minWidth: 50,
               accessor: 'test',
             },
             {
               Header: 'G',
               id: 'goals',
+              maxWidth: 85,
+              minWidth: 50,
               accessor: 'test',
             },
             {
               Header: 'A',
               id: 'assists',
+              maxWidth: 85,
+              minWidth: 50,
               accessor: 'test',
             },
             {
               Header: 'Pts',
               id: 'points',
+              maxWidth: 85,
+              minWidth: 50,
               accessor: 'test',
             },
             {
               Header: '+/-',
               id: 'plusMinus',
+              maxWidth: 85,
+              minWidth: 50,
               accessor: 'test',
             },
-          ]}
-          defaultSorted={[
             {
-              id: 'points',
-              desc: true,
+              Header: 'PIM',
+              id: 'pim',
+              maxWidth: 85,
+              minWidth: 50,
+              accessor: 'test',
+            },
+            {
+              Header: 'Hits',
+              id: 'hits',
+              maxWidth: 85,
+              minWidth: 50,
+              accessor: 'test',
+            },
+            {
+              Header: 'Bks',
+              id: 'blocked',
+              maxWidth: 85,
+              minWidth: 50,
+              accessor: d => pathOr(0, ['stats', 0, 'stat', 'blocked'], d),
+            },
+            {
+              Header: 'SOG',
+              id: 'shots',
+              maxWidth: 85,
+              minWidth: 50,
+              accessor: d => pathOr(0, ['stats', 0, 'stat', 'shots'], d),
+            },
+            {
+              Header: 'S%',
+              id: 'shotPct',
+              maxWidth: 85,
+              minWidth: 50,
+              accessor: d => pathOr(0, ['stats', 0, 'stat', 'shotPct'], d),
             },
           ]}
           defaultPageSize={5}

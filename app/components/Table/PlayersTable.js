@@ -20,7 +20,7 @@ class PlayersTable extends React.PureComponent {
               Header: 'Name',
               id: 'fullName',
               accessor: d => d.person.fullName,
-              className: 'first-col',
+              className: 'text-left',
               maxWidth: 200,
               minWidth: 125,
               Cell: row => (
@@ -30,6 +30,7 @@ class PlayersTable extends React.PureComponent {
             {
               Header: 'Pos.',
               id: 'abbreviation',
+              className: 'text-left border-right',
               maxWidth: 85,
               minWidth: 50,
               accessor: d => pathOr(0, ['position', 'abbreviation'], d),
