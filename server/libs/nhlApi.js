@@ -1,5 +1,5 @@
 const {
-  flatten, map, mergeAll, path, prop,
+  contains, filter, flatten, map, mergeAll, path, prop,
 } = require('ramda');
 
 const fetch = require('node-fetch');
@@ -24,7 +24,6 @@ const nhlAPI = async (resource) => {
 };
 
 const fetchInfoForPlayerId = async (playerId) => {
-  console.log('fetching player info');
   const resource = `/people/${playerId}`;
   const playerInfoData = await nhlAPI(resource);
   return path(['people', 0], playerInfoData);
@@ -34,6 +33,14 @@ const fetchStatsForPlayerId = async (playerId) => {
   const resource = `/people/${playerId}/stats?stats=statsSingleSeason`;
   const playerStatsData = await nhlAPI(resource);
   return path(['stats', 0, 'splits'], playerStatsData);
+};
+
+const fetchAllYearsStatsForPlayerId = async (playerId) => {
+  const resource = `/people/${playerId}/stats?stats=yearByYear`;
+  const playerStatsData = await nhlAPI(resource);
+  const usefulLeagueIds = [133, 153];
+  const isStatUseful = seasonStat => contains(path(['league', 'id'], seasonStat), usefulLeagueIds);
+  return filter(isStatUseful, path(['stats', 0, 'splits'], playerStatsData));
 };
 
 const fetchInfoForTeamId = async (teamId) => {
@@ -61,7 +68,7 @@ const fetchAllTeams = async () => {
 
 const fetchPlayer = async (playerId) => {
   console.log('fetching player');
-  const stats = await fetchStatsForPlayerId(playerId);
+  const stats = await fetchAllYearsStatsForPlayerId(playerId);
   const info = await fetchInfoForPlayerId(playerId);
   return {
     stats,
@@ -79,6 +86,7 @@ const fetchAllPlayers = async () => {
 module.exports = {
   nhlAPI,
   fetchStatsForPlayerId,
+  fetchAllYearsStatsForPlayerId,
   fetchInfoForPlayerId,
   fetchPlayer,
   fetchInfoForTeamId,

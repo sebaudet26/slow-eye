@@ -1,82 +1,130 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import PropTypes from 'prop-types';
+import moment from 'moment';
+import { isEmpty } from 'ramda';
+
 import CareerStatsTable from '../../components/Table/CareerStatsTable';
-import './style.scss';
 import PlayerImg from './images/6752.png';
 import CountryImg from '../../images/country/finland.svg';
 import TeamImg from '../../images/teams/avalanche.png';
 import RookieIcon from '../../images/pacifier2.svg';
+import CountryImg from './images/finland.png';
+import TeamImg from './images/avs.png';
+import './style.scss';
+
+const urlParams = new URLSearchParams(window.location.search);
 
 export default class PlayerPage extends React.Component {
-  shouldComponentUpdate() {
-    return false;
+  componentDidMount() {
+    const { fetchPlayer } = this.props;
+    fetchPlayer(urlParams.get('id'));
   }
 
   render() {
+    const { player } = this.props;
+    console.log('player', player);
+    if (isEmpty(player)) {
+      return (<div />);
+    }
+    const { stats = [], info = {} } = player;
+    const {
+      primaryPosition = {}, shootsCatches, currentTeamInfo = {}, firstName, lastName,
+    } = info;
+    const lastSeason = stats[stats.length - 1];
+    console.log(`https://assets1.sportsnet.ca/wp-content/uploads/players/nhl/m/${firstName.toLowerCase()}-${lastName.toLowerCase()}.png`);
     return (
       <div>
         <Helmet>
-          <title>Mikko Rantanen</title>
+          <title>{`${info.firstName} ${info.lastName}`}</title>
           <meta
             name="description"
-            content="Mikko Rantanen"
+            content={`${info.firstName} ${info.lastName}`}
           />
         </Helmet>
         <div className="player-header">
-          <div class="player-info">
-            <h2>Mikko Rantanen</h2>
-            <p>Colorado Avalanche, RW, Shoots L</p>
+          <div className="player-img">
+            <img
+              src={PlayerImg}
+              className="player-img-face"
+            />
+            <img src={CountryImg} className="player-img-country" />
+            <img src={TeamImg} className="player-img-team" />
+          </div>
+          <div className="player-info">
+            <h2>{`${info.firstName} ${info.lastName}`}</h2>
+            <p>{`${currentTeamInfo.name}, ${primaryPosition.name}, Shoots ${shootsCatches}`}</p>
             <div className="player-desc">
               <div>
-                <p><span className="bold">Drafted by</span> Colorado Avalanche</p>
+                <p>
+                  <span className="bold">Drafted by</span>
+                  {' Colorado Avalanche'}
+                </p>
                 <p>1st Round, #10 Overall, 2015 NHL Draft</p>
               </div>
               <div className="player-desc-right">
-                <p><span className="bold">Born</span> October 29, 1996 (22 yrs.), <span className="bold">Birthplace</span> Nousiainen, Finland</p>
-                <p><span className="bold">Height</span> 6'4' (193), <span className="bold">Weight</span> 215 (98)</p>
+                <p>
+                  <span className="bold">Born</span>
+                  {` ${moment(info.birthDate).format('LL')} (${info.currentAge} yrs.) `}
+                  <span className="bold">Birthplace</span>
+                  {` ${[info.birthCity, info.birthStateProvince || '', info.birthCountry].filter(Boolean).join(', ')} `}
+                </p>
+                <p>
+                  <span className="bold">Height</span>
+                  {` ${info.height} ft. `}
+                  <span className="bold">Weight</span>
+                  {` ${info.weight} lbs. `}
+                </p>
               </div>
             </div>
             <div className="player-stats">
               <div className="player-stats-item">
                 <div className="light">GP</div>
-                <div className="bold">33</div>
+                <div className="bold">
+                  {lastSeason.stat.games}
+                </div>
               </div>
               <div className="player-stats-item">
                 <div className="light">G</div>
-                <div className="bold">15</div>
+                <div className="bold">{lastSeason.stat.goals}</div>
               </div>
               <div className="player-stats-item">
                 <div className="light">A</div>
-                <div className="bold">41</div>
+                <div className="bold">{lastSeason.stat.assists}</div>
               </div>
               <div className="player-stats-item">
                 <div className="light">Pts</div>
-                <div className="bold">56</div>
+                <div className="bold">{lastSeason.stat.points}</div>
               </div>
               <div className="player-stats-item">
                 <div className="light">+/-</div>
-                <div className="bold">18</div>
+                <div className="bold">{lastSeason.stat.plusMinus}</div>
               </div>
               <div className="player-badges">
                 <div className="icon-wrapper">
-                  <img src={RookieIcon}/>
+                  <img src={RookieIcon} />
                 </div>
               </div>
             </div>
           </div>
           <div className="player-img">
-            <img src={PlayerImg} className="player-img-face"/>
+            <img src={PlayerImg} className="player-img-face" />
             <div className="icon-wrapper player-img-country">
-              <img src={CountryImg} className=""/>
+              <img src={CountryImg} className="" />
             </div>
             <div className="icon-wrapper player-img-team">
-              <img src={TeamImg} className=""/>
+              <img src={TeamImg} className="" />
             </div>
           </div>
         </div>
         <h2>Season Stats</h2>
-        <CareerStatsTable/>
+        <CareerStatsTable stats={stats} />
       </div>
     );
   }
 }
+
+PlayerPage.propTypes = {
+  player: PropTypes.shape({}).isRequired,
+  fetchPlayer: PropTypes.func.isRequired,
+};

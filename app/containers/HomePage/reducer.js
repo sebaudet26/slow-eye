@@ -10,7 +10,6 @@ function homeReducer(state = initialState, action) {
   // console.log(action.type, action.payload);
   switch (action.type) {
     case FETCH_PLAYERS:
-      // Delete prefixed '@' from the github username
       return state.set('players', sortBy(path(['person', 'fullName']))(action.payload.players));
     default:
       return state.set('players', playersMock);

@@ -73,6 +73,7 @@
     "lodash": "^4.17.10",
     "match-sorter": "^2.3.0",
     "minimist": "1.2.0",
+    "moment": "^2.23.0",
     "node-fetch": "^2.3.0",
     "node-plop": "^0.15.0",
     "node-sass": "^4.7.2",

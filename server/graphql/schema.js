@@ -12,6 +12,7 @@ const {
 } = require('ramda');
 const {
   fetchStatsForPlayerId,
+  fetchAllYearsStatsForPlayerId,
   fetchInfoForPlayerId,
   fetchInfoForTeamId,
   fetchAllPlayers,
@@ -25,6 +26,28 @@ const Position = new GraphQLObjectType({
     name: { type: GraphQLString, resolve: prop('name') },
     type: { type: GraphQLString, resolve: prop('type') },
     abbreviation: { type: GraphQLString, resolve: prop('abbreviation') },
+  },
+});
+
+
+/* League Info
+
+*/
+const LeagueInfo = new GraphQLObjectType({
+  name: 'LeagueInfo',
+  fields: {
+    id: {
+      type: GraphQLInt,
+      resolve: prop('id'),
+    },
+    name: {
+      type: GraphQLString,
+      resolve: prop('name'),
+    },
+    link: {
+      type: GraphQLString,
+      resolve: prop('link'),
+    },
   },
 });
 
@@ -352,6 +375,14 @@ const Stat = new GraphQLObjectType({
       type: SeasonStat,
       resolve: prop('stat'),
     },
+    league: {
+      type: LeagueInfo,
+      resolve: prop('league'),
+    },
+    team: {
+      type: TeamInfo,
+      resolve: prop('team'),
+    },
   },
 });
 
@@ -410,6 +441,22 @@ const Player = new GraphQLObjectType({
   },
 });
 
+const PlayerDetails = new GraphQLObjectType({
+  name: 'PlayerDetails',
+  fields: {
+    // Lazy load player info
+    info: {
+      type: PlayerInfo,
+      resolve: p => fetchInfoForPlayerId(p.id),
+    },
+    // Lazy load player stats
+    stats: {
+      type: new GraphQLList(Stat),
+      resolve: p => fetchAllYearsStatsForPlayerId(p.id),
+    },
+  },
+});
+
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
@@ -419,7 +466,7 @@ const schema = new GraphQLSchema({
         resolve: fetchAllPlayers,
       },
       player: {
-        type: Player,
+        type: PlayerDetails,
         args: { id: { type: GraphQLInt } },
         resolve: (root, args) => ({
           id: args.id,
