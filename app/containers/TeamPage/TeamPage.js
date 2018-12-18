@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import CareerStatsTable from '../../components/Table/CareerStatsTable';
 import './style.scss';
 import PlayerImg from './images/6752.png';
-import CountryImg from '../../images/country/finland.svg';
+import CountryImg from '../../images/country/FIN.svg';
 import TeamImg from '../../images/teams/avalanche.png';
 import RookieIcon from '../../images/pacifier2.svg';
 
@@ -23,7 +23,7 @@ export default class TeamPage extends React.Component {
           />
         </Helmet>
         <div className="player-header">
-          <div class="player-info">
+          <div className="player-info">
             <h2>Montreal Canadiens</h2>
             <p>4th Atlantic</p>
             <div className="player-stats">
