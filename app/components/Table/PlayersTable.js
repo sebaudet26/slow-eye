@@ -15,6 +15,9 @@ class PlayersTable extends React.PureComponent {
         <ReactTable
           data={players}
           noDataText="Loading all dat good data stuff..."
+          filterable
+          defaultFilterMethod={(filter, row) =>
+            String(row[filter.id]).toLowerCase().match(filter.value.toLowerCase())}
           columns={[
             {
               Header: 'Name',
@@ -41,6 +44,7 @@ class PlayersTable extends React.PureComponent {
               className: 'text-left border-right',
               maxWidth: 85,
               minWidth: 50,
+              filterable: false,
               accessor: d => pathOr(0, ['position', 'abbreviation'], d),
             },
             {
@@ -48,6 +52,7 @@ class PlayersTable extends React.PureComponent {
               id: 'games',
               maxWidth: 85,
               minWidth: 50,
+              filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'games'], d),
             },
             {
@@ -55,6 +60,7 @@ class PlayersTable extends React.PureComponent {
               id: 'goals',
               maxWidth: 85,
               minWidth: 50,
+              filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'goals'], d),
             },
             {
@@ -62,6 +68,7 @@ class PlayersTable extends React.PureComponent {
               id: 'assists',
               maxWidth: 85,
               minWidth: 50,
+              filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'assists'], d),
             },
             {
@@ -69,6 +76,7 @@ class PlayersTable extends React.PureComponent {
               id: 'points',
               maxWidth: 85,
               minWidth: 50,
+              filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'points'], d),
             },
             {
@@ -76,6 +84,7 @@ class PlayersTable extends React.PureComponent {
               id: 'plusMinus',
               maxWidth: 85,
               minWidth: 50,
+              filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'plusMinus'], d),
             },
             {
@@ -83,6 +92,7 @@ class PlayersTable extends React.PureComponent {
               id: 'pim',
               maxWidth: 85,
               minWidth: 50,
+              filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'pim'], d),
             },
             {
@@ -90,6 +100,7 @@ class PlayersTable extends React.PureComponent {
               id: 'hits',
               maxWidth: 85,
               minWidth: 50,
+              filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'hits'], d),
             },
             {
@@ -97,6 +108,7 @@ class PlayersTable extends React.PureComponent {
               id: 'blocked',
               maxWidth: 85,
               minWidth: 50,
+              filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'blocked'], d),
             },
             {
@@ -104,6 +116,7 @@ class PlayersTable extends React.PureComponent {
               id: 'shots',
               maxWidth: 85,
               minWidth: 50,
+              filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'shots'], d),
             },
             {
@@ -111,6 +124,7 @@ class PlayersTable extends React.PureComponent {
               id: 'shotPct',
               maxWidth: 85,
               minWidth: 50,
+              filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'shotPct'], d),
             },
           ]}
