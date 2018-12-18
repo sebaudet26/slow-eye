@@ -6,11 +6,7 @@ import { isEmpty } from 'ramda';
 
 import CareerStatsTable from '../../components/Table/CareerStatsTable';
 import PlayerImg from './images/6752.png';
-import CountryImg from '../../images/country/finland.svg';
-import TeamImg from '../../images/teams/avalanche.png';
 import RookieIcon from '../../images/pacifier2.svg';
-import CountryImg from './images/finland.png';
-import TeamImg from './images/avs.png';
 import './style.scss';
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -29,9 +25,16 @@ export default class PlayerPage extends React.Component {
     }
     const { stats = [], info = {} } = player;
     const {
-      primaryPosition = {}, shootsCatches, currentTeamInfo = {}, firstName, lastName,
+      primaryPosition = {},
+      currentTeamInfo = {},
+      shootsCatches,
+      firstName,
+      lastName,
+      rookie,
+      nationality,
     } = info;
     const lastSeason = stats[stats.length - 1];
+    console.log(`/images/country/${nationality}.svg`);
     console.log(`https://assets1.sportsnet.ca/wp-content/uploads/players/nhl/m/${firstName.toLowerCase()}-${lastName.toLowerCase()}.png`);
     return (
       <div>
@@ -43,14 +46,6 @@ export default class PlayerPage extends React.Component {
           />
         </Helmet>
         <div className="player-header">
-          <div className="player-img">
-            <img
-              src={PlayerImg}
-              className="player-img-face"
-            />
-            <img src={CountryImg} className="player-img-country" />
-            <img src={TeamImg} className="player-img-team" />
-          </div>
           <div className="player-info">
             <h2>{`${info.firstName} ${info.lastName}`}</h2>
             <p>{`${currentTeamInfo.name}, ${primaryPosition.name}, Shoots ${shootsCatches}`}</p>
@@ -101,19 +96,21 @@ export default class PlayerPage extends React.Component {
                 <div className="bold">{lastSeason.stat.plusMinus}</div>
               </div>
               <div className="player-badges">
-                <div className="icon-wrapper">
-                  <img src={RookieIcon} />
-                </div>
+                { rookie ? (
+                  <div className="icon-wrapper">
+                    <img src={RookieIcon} />
+                  </div>
+                ) : null }
               </div>
             </div>
           </div>
           <div className="player-img">
             <img src={PlayerImg} className="player-img-face" />
             <div className="icon-wrapper player-img-country">
-              <img src={CountryImg} className="" />
+              <img src={`/images/country/${nationality}.svg`} className="" />
             </div>
             <div className="icon-wrapper player-img-team">
-              <img src={TeamImg} className="" />
+              <img src={`/images/teams/${currentTeamInfo.teamName.replace(' ', '-').toLowerCase()}.png`} className="" />
             </div>
           </div>
         </div>

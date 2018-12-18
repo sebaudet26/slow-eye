@@ -3,9 +3,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
-import { pathOr } from 'ramda';
+import {
+  insert, mean, map, path, split, sum, pathOr,
+} from 'ramda';
 import 'react-table/react-table.css';
 import './styles.scss';
+
+const sumByPath = (stats = [], props) => sum(map(pathOr(0, props), stats));
 
 const CareerStatsTable = ({ stats }) => (
   <div>
@@ -18,17 +22,17 @@ const CareerStatsTable = ({ stats }) => (
           Header: 'Season',
           id: 'fullName',
           className: 'text-left',
-          accessor: d => pathOr('-', ['season'], d),
-          maxWidth: 200,
-          minWidth: 125,
+          accessor: d => insert(4, '-', split('', pathOr('-', ['season'], d))),
+          maxWidth: 125,
+          minWidth: 100,
           Footer: 'Total Stats',
         },
         {
           Header: 'League',
           id: 'league',
-          maxWidth: 250,
-          minWidth: 225,
-          className: 'border-right text-left',
+          maxWidth: 200,
+          minWidth: 175,
+          className: 'text-left',
           accessor: d => pathOr('-', ['league', 'name'], d),
         },
         {
@@ -45,6 +49,7 @@ const CareerStatsTable = ({ stats }) => (
           maxWidth: 85,
           minWidth: 50,
           accessor: d => pathOr('-', ['stat', 'games'], d),
+          Footer: sumByPath(stats, ['stat', 'games']),
         },
         {
           Header: 'G',
@@ -52,6 +57,7 @@ const CareerStatsTable = ({ stats }) => (
           maxWidth: 85,
           minWidth: 50,
           accessor: d => pathOr('-', ['stat', 'goals'], d),
+          Footer: sumByPath(stats, ['stat', 'goals']),
         },
         {
           Header: 'A',
@@ -59,6 +65,7 @@ const CareerStatsTable = ({ stats }) => (
           maxWidth: 85,
           minWidth: 50,
           accessor: d => pathOr('-', ['stat', 'assists'], d),
+          Footer: sumByPath(stats, ['stat', 'assists']),
         },
         {
           Header: 'Pts',
@@ -66,6 +73,7 @@ const CareerStatsTable = ({ stats }) => (
           maxWidth: 85,
           minWidth: 50,
           accessor: d => pathOr('-', ['stat', 'points'], d),
+          Footer: sumByPath(stats, ['stat', 'points']),
         },
         {
           Header: '+/-',
@@ -73,6 +81,7 @@ const CareerStatsTable = ({ stats }) => (
           maxWidth: 85,
           minWidth: 50,
           accessor: d => pathOr('-', ['stat', 'plusMinus'], d),
+          Footer: sumByPath(stats, ['stat', 'plusMinus']),
         },
         {
           Header: 'PIM',
@@ -80,6 +89,7 @@ const CareerStatsTable = ({ stats }) => (
           maxWidth: 85,
           minWidth: 50,
           accessor: d => pathOr('-', ['stat', 'pim'], d),
+          Footer: sumByPath(stats, ['stat', 'pim']),
         },
         {
           Header: 'Hits',
@@ -87,6 +97,7 @@ const CareerStatsTable = ({ stats }) => (
           maxWidth: 85,
           minWidth: 50,
           accessor: d => pathOr('-', ['stat', 'hits'], d),
+          Footer: sumByPath(stats, ['stat', 'hits']),
         },
         {
           Header: 'Bks',
@@ -94,6 +105,7 @@ const CareerStatsTable = ({ stats }) => (
           maxWidth: 85,
           minWidth: 50,
           accessor: d => pathOr('-', ['stat', 'blocked'], d),
+          Footer: sumByPath(stats, ['stat', 'blocked']),
         },
         {
           Header: 'SOG',
@@ -101,6 +113,7 @@ const CareerStatsTable = ({ stats }) => (
           maxWidth: 85,
           minWidth: 50,
           accessor: d => pathOr('-', ['stat', 'shots'], d),
+          Footer: sumByPath(stats, ['stat', 'shots']),
         },
         {
           Header: 'S%',
@@ -108,6 +121,11 @@ const CareerStatsTable = ({ stats }) => (
           maxWidth: 85,
           minWidth: 50,
           accessor: d => pathOr('-', ['stat', 'shotPct'], d),
+          Footer: (
+            <span>
+              {mean(map(path(['stat', 'shotPct']), stats)).toFixed(2)}
+            </span>
+          ),
         },
       ]}
       defaultPageSize={stats.length}

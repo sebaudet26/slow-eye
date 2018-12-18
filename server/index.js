@@ -11,6 +11,8 @@ const graphql = require('./middlewares/graphql');
 
 const app = express();
 
+app.use('/images', express.static('app/images'));
+
 app.use(bodyParser.json());
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
 // app.use('/api', myApi);
