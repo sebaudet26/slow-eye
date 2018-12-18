@@ -24,24 +24,26 @@
 
     &-team {
       width: 60px;
+      height: 60px;
       position: absolute;
-      background: $white;
-      padding: 10px;
-      border-radius: 100%;
       top: 150px;
       right: 20px;
-      box-shadow: $shadow;
+
+      img {
+        width: 35px;
+      }
     }
 
     &-country {
       width: 60px;
+      height: 60px;
       position: absolute;
-      background: $white;
-      padding: 10px;
-      border-radius: 100%;
       top: 150px;
       right: 215px;
-      box-shadow: $shadow;
+
+      img {
+        width: 35px;
+      }
     }
   }
 

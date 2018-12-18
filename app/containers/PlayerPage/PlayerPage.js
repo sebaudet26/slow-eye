@@ -66,8 +66,12 @@ export default class PlayerPage extends React.Component {
           </div>
           <div className="player-img">
             <img src={PlayerImg} className="player-img-face"/>
-            <img src={CountryImg} className="player-img-country"/>
-            <img src={TeamImg} className="player-img-team"/>
+            <div className="icon-wrapper player-img-country">
+              <img src={CountryImg} className=""/>
+            </div>
+            <div className="icon-wrapper player-img-team">
+              <img src={TeamImg} className=""/>
+            </div>
           </div>
         </div>
         <h2>Season Stats</h2>
