@@ -13,6 +13,9 @@ const graphqlApi = async (resource) => {
         person {
           fullName
         },
+        team {
+          abbreviation
+        },
         position {
           abbreviation
         },

@@ -10,6 +10,7 @@ import './styles.scss';
 class PlayersTable extends React.PureComponent {
   render() {
     const { players } = this.props;
+    console.log(players);
     return (
       <div>
         <ReactTable

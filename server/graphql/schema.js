@@ -1,5 +1,6 @@
 const {
   GraphQLSchema,
+  GraphQLBoolean,
   GraphQLObjectType,
   GraphQLString,
   GraphQLList,
@@ -11,10 +12,21 @@ const {
 } = require('ramda');
 const {
   fetchStatsForPlayerId,
+  fetchInfoForPlayerId,
   fetchInfoForTeamId,
   fetchAllPlayers,
 } = require('../libs/nhlApi');
 
+
+const Position = new GraphQLObjectType({
+  name: 'Position',
+  fields: {
+    code: { type: GraphQLString, resolve: prop('code') },
+    name: { type: GraphQLString, resolve: prop('name') },
+    type: { type: GraphQLString, resolve: prop('type') },
+    abbreviation: { type: GraphQLString, resolve: prop('abbreviation') },
+  },
+});
 
 /* Team Info
 {
@@ -97,6 +109,70 @@ const TeamInfo = new GraphQLObjectType({
   },
 });
 
+/* Player info
+{
+  "id" : 8476474,
+  "fullName" : "Stefan Noesen",
+  "link" : "/api/v1/people/8476474",
+  "firstName" : "Stefan",
+  "lastName" : "Noesen",
+  "primaryNumber" : "23",
+  "birthDate" : "1993-02-12",
+  "currentAge" : 25,
+  "birthCity" : "Plano",
+  "birthStateProvince" : "TX",
+  "birthCountry" : "USA",
+  "nationality" : "USA",
+  "height" : "6' 1\"",
+  "weight" : 205,
+  "active" : true,
+  "alternateCaptain" : false,
+  "captain" : false,
+  "rookie" : false,
+  "shootsCatches" : "R",
+  "rosterStatus" : "Y",
+  "currentTeam" : {
+    "id" : 1,
+    "name" : "New Jersey Devils",
+    "link" : "/api/v1/teams/1"
+  },
+  "primaryPosition" : {
+    "code" : "R",
+    "name" : "Right Wing",
+    "type" : "Forward",
+    "abbreviation" : "RW"
+  }
+}
+*/
+
+const PlayerInfo = new GraphQLObjectType({
+  name: 'PlayerInfo',
+  fields: {
+    id: { type: GraphQLInt, resolve: prop('id') },
+    fullName: { type: GraphQLString, resolve: prop('fullName') },
+    link: { type: GraphQLString, resolve: prop('link') },
+    firstName: { type: GraphQLString, resolve: prop('firstName') },
+    lastName: { type: GraphQLString, resolve: prop('lastName') },
+    primaryNumber: { type: GraphQLString, resolve: prop('primaryNumber') },
+    birthDate: { type: GraphQLString, resolve: prop('birthDate') },
+    currentAge: { type: GraphQLInt, resolve: prop('currentAge') },
+    birthCity: { type: GraphQLString, resolve: prop('birthCity') },
+    birthStateProvince: { type: GraphQLString, resolve: prop('birthStateProvince') },
+    birthCountry: { type: GraphQLString, resolve: prop('birthCountry') },
+    nationality: { type: GraphQLString, resolve: prop('nationality') },
+    height: { type: GraphQLString, resolve: prop('height') },
+    weight: { type: GraphQLInt, resolve: prop('weight') },
+    active: { type: GraphQLBoolean, resolve: prop('active') },
+    alternateCaptain: { type: GraphQLBoolean, resolve: prop('alternateCaptain') },
+    captain: { type: GraphQLBoolean, resolve: prop('captain') },
+    rookie: { type: GraphQLBoolean, resolve: prop('rookie') },
+    shootsCatches: { type: GraphQLString, resolve: prop('shootsCatches') },
+    rosterStatus: { type: GraphQLString, resolve: prop('rosterStatus') },
+    primaryPosition: { type: Position, resolve: prop('primaryPosition') },
+    // Lazy load current team info
+    currentTeamInfo: { type: TeamInfo, resolve: p => fetchInfoForTeamId(p.currentTeam.id) },
+  },
+});
 
 /* Player Stats
 {
@@ -297,28 +373,6 @@ const Person = new GraphQLObjectType({
   },
 });
 
-const Position = new GraphQLObjectType({
-  name: 'Position',
-  fields: {
-    code: {
-      type: GraphQLString,
-      resolve: prop('code'),
-    },
-    name: {
-      type: GraphQLString,
-      resolve: prop('name'),
-    },
-    type: {
-      type: GraphQLString,
-      resolve: prop('type'),
-    },
-    abbreviation: {
-      type: GraphQLString,
-      resolve: prop('abbreviation'),
-    },
-  },
-});
-
 const Player = new GraphQLObjectType({
   name: 'Player',
   fields: {
@@ -343,6 +397,11 @@ const Player = new GraphQLObjectType({
       type: Position,
       resolve: prop('position'),
     },
+    // Lazy load player info
+    info: {
+      type: PlayerInfo,
+      resolve: p => fetchInfoForPlayerId(p.id),
+    },
     // Lazy load player stats
     stats: {
       type: new GraphQLList(Stat),
@@ -353,13 +412,18 @@ const Player = new GraphQLObjectType({
 
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
-    name: 'RootQueryType',
+    name: 'Query',
     fields: {
       players: {
         type: new GraphQLList(Player),
-        resolve() {
-          return fetchAllPlayers();
-        },
+        resolve: fetchAllPlayers,
+      },
+      player: {
+        type: Player,
+        args: { id: { type: GraphQLInt } },
+        resolve: (root, args) => ({
+          id: args.id,
+        }),
       },
     },
   }),

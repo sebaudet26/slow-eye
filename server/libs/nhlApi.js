@@ -23,6 +23,13 @@ const nhlAPI = async (resource) => {
   }
 };
 
+const fetchInfoForPlayerId = async (playerId) => {
+  console.log('fetching player info');
+  const resource = `/people/${playerId}`;
+  const playerInfoData = await nhlAPI(resource);
+  return path(['people', 0], playerInfoData);
+};
+
 const fetchStatsForPlayerId = async (playerId) => {
   const resource = `/people/${playerId}/stats?stats=statsSingleSeason`;
   const playerStatsData = await nhlAPI(resource);
@@ -52,6 +59,16 @@ const fetchAllTeams = async () => {
   return allTeamsData;
 };
 
+const fetchPlayer = async (playerId) => {
+  console.log('fetching player');
+  const stats = await fetchStatsForPlayerId(playerId);
+  const info = await fetchInfoForPlayerId(playerId);
+  return {
+    stats,
+    info,
+  };
+};
+
 const fetchAllPlayers = async () => {
   const allTeamsData = await fetchAllTeams();
   const allTeamsIds = map(prop('id'), prop('teams', allTeamsData));
@@ -62,6 +79,8 @@ const fetchAllPlayers = async () => {
 module.exports = {
   nhlAPI,
   fetchStatsForPlayerId,
+  fetchInfoForPlayerId,
+  fetchPlayer,
   fetchInfoForTeamId,
   fetchPlayersForTeamId,
   fetchAllTeams,
