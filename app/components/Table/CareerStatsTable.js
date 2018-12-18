@@ -102,7 +102,7 @@ class CareerStatsTable extends React.PureComponent {
             },
           ]}
           defaultPageSize={5}
-          className="-striped -highlight"
+          className="-striped -highlight career-stats"
         />
       </div>
     );

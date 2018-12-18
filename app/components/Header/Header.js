@@ -24,14 +24,14 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
             Player Stats
           </NavLink>
           <NavLink activeClassName="active" className="header-nav-item" to="/teams">
-            Team Stats
+            Standings
           </NavLink>
         </div>
         <div className="header-mobile">
           <img className="header-mobile-icon" src={MobileIcon} alt="" onClick={burgerToggle} />
           <ul className="header-mobile-list">
             <li><NavLink to="/" exact onClick={burgerToggle}>Player Stats</NavLink></li>
-            <li><NavLink to="/teams" onClick={burgerToggle}>Team Stats</NavLink></li>
+            <li><NavLink to="/teams" onClick={burgerToggle}>Standings</NavLink></li>
           </ul>
         </div>
       </div>

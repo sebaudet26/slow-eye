@@ -28,6 +28,14 @@ class PlayersTable extends React.PureComponent {
               ),
             },
             {
+              Header: 'Team',
+              id: 'abbreviation',
+              className: 'text-left',
+              maxWidth: 85,
+              minWidth: 50,
+              accessor: d => pathOr(0, ['position', 'abbreviation'], d),
+            },
+            {
               Header: 'Pos.',
               id: 'abbreviation',
               className: 'text-left border-right',
@@ -113,7 +121,7 @@ class PlayersTable extends React.PureComponent {
             },
           ]}
           defaultPageSize={20}
-          className="-striped -highlight"
+          className="-striped -highlight player-stats"
         />
       </div>
     );

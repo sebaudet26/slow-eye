@@ -6,6 +6,28 @@
   border-radius: $radius;
   background: $white;
 
+  &.player-stats {
+    .rt-thead {
+      .rt-th {
+        &:nth-child(3) {
+          text-align: left;
+          border-right: solid 1px $grey-4;
+        }
+      }
+    }
+  }
+
+  &.career-stats {
+    .rt-thead {
+      .rt-th {
+        &:nth-child(2) {
+          text-align: left;
+          border-right: solid 1px $grey-4;
+        }
+      }
+    }
+  }
+
   .rt-thead {
     &.-header {
       box-shadow: none;
@@ -21,10 +43,6 @@
 
       &:first-child, &:nth-child(2) {
         text-align: left;
-      }
-
-      &:nth-child(2) {
-        border-right: solid 1px $grey-4;
       }
     }
   }
