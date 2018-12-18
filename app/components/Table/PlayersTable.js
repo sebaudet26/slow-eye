@@ -29,26 +29,47 @@ class PlayersTable extends React.PureComponent {
               className: 'text-left',
               maxWidth: 200,
               minWidth: 125,
+              filterMethod: (filter, row) =>
+                String(row[filter.id]).toLowerCase().match(filter.value.toLowerCase()),
               Cell: row => (
                 <a href={`/player?id=${JSON.stringify(row.original.id)}`}>{row.value}</a>
               ),
             },
             {
               Header: 'Team',
-              id: 'position',
+              id: 'team',
               className: 'text-left',
               maxWidth: 85,
               minWidth: 50,
+              filterable: false,
               accessor: d => pathOr(0, ['team', 'abbreviation'], d),
             },
             {
               Header: 'Pos.',
-              id: 'team',
+              id: 'position',
               className: 'text-left border-right',
               maxWidth: 85,
               minWidth: 50,
-              filterable: false,
               accessor: d => pathOr(0, ['position', 'abbreviation'], d),
+              filterMethod: (filter, row) => {
+                if (filter.value === "all") {
+                  return true;
+                }
+                return String(row[filter.id]).toLowerCase().match(filter.value.toLowerCase());
+              },
+              Filter: ({ filter, onChange }) =>
+                <select
+                  onChange={event => onChange(event.target.value)}
+                  style={{ width: "100%" }}
+                  value={filter ? filter.value : "all"}
+                >
+                  <option value="all">All</option>
+                  <option value="C">C</option>
+                  <option value="LW">LW</option>
+                  <option value="RW">RW</option>
+                  <option value="D">D</option>
+                  <option value="G">G</option>
+                </select>
             },
             {
               Header: 'GP',
