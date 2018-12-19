@@ -19,16 +19,16 @@
     &-face {
       border-radius: 100%;
       width: auto;
-      max-height: 200px;
-      margin: auto;
+      max-height: 210px;
+      margin-right: 25px;
     }
 
     &-team {
       width: 60px;
       height: 60px;
       position: absolute;
-      top: 160px;
-      right: 55px;
+      top: 145px;
+      right: 15px;
 
       img {
         width: 35px;
@@ -39,8 +39,8 @@
       width: 60px;
       height: 60px;
       position: absolute;
-      top: 160px;
-      right: 245px;
+      top: 145px;
+      right: 185px;
 
       img {
         width: 35px;

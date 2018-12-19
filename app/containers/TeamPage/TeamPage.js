@@ -73,6 +73,17 @@ export default class TeamPage extends React.Component {
           </div>
         </div>
         <h3>Forwards</h3>
+        <div className="team-chart">
+          <div className="team-chart-lw">
+            Left Wing
+          </div>
+          <div className="team-chart-c">
+            Center
+          </div>
+          <div className="team-chart-rw">
+            Right Wing
+          </div>
+        </div>
         <h3>Defensemen</h3>
         <h3>Goalies</h3>
       </div>
