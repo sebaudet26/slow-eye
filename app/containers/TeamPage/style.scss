@@ -81,7 +81,12 @@
 @media (max-width: 800px) {
   .team {
     &-stats {
+      &-item {
+        margin-right: 25px;
+      }
       &:nth-child(2) {
+        padding-left: 25px;
+
         &:last-child {
           margin-right: 0px;
         }
