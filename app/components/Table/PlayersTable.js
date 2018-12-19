@@ -41,23 +41,23 @@ class PlayersTable extends React.PureComponent {
               className: 'text-left team-cell',
               maxWidth: 85,
               minWidth: 50,
-              Cell: row=> (
-                <a href='./team?id=123'>
+              Cell: row => (
+                <a href="./team?id=123">
                   <img src={`/images/teams/small/${row.value}.png`} />
                 </a>
               ),
               accessor: d => pathOr(0, ['team', 'abbreviation'], d),
               filterMethod: (filter, row) => {
-                if (filter.value === "all") {
+                if (filter.value === 'all') {
                   return true;
                 }
                 return String(row[filter.id]).toLowerCase().match(filter.value.toLowerCase());
               },
-              Filter: ({ filter, onChange }) =>
+              Filter: ({ filter, onChange }) => (
                 <select
                   onChange={event => onChange(event.target.value)}
-                  style={{ width: "100%" }}
-                  value={filter ? filter.value : "all"}
+                  style={{ width: '100%' }}
+                  value={filter ? filter.value : 'all'}
                 >
                   <option value="all">All</option>
                   <option value="ANA">Anaheim Ducks</option>
@@ -92,6 +92,7 @@ class PlayersTable extends React.PureComponent {
                   <option value="WPG">Winnipeg Jets</option>
                   <option value="WSH">Washington Capitals</option>
                 </select>
+              ),
             },
             {
               Header: 'Pos.',
@@ -101,16 +102,16 @@ class PlayersTable extends React.PureComponent {
               minWidth: 50,
               accessor: d => pathOr(0, ['position', 'abbreviation'], d),
               filterMethod: (filter, row) => {
-                if (filter.value === "all") {
+                if (filter.value === 'all') {
                   return true;
                 }
                 return String(row[filter.id]).toLowerCase().match(filter.value.toLowerCase());
               },
-              Filter: ({ filter, onChange }) =>
+              Filter: ({ filter, onChange }) => (
                 <select
                   onChange={event => onChange(event.target.value)}
-                  style={{ width: "100%" }}
-                  value={filter ? filter.value : "all"}
+                  style={{ width: '100%' }}
+                  value={filter ? filter.value : 'all'}
                 >
                   <option value="all">All</option>
                   <option value="C">C</option>
@@ -119,6 +120,7 @@ class PlayersTable extends React.PureComponent {
                   <option value="D">D</option>
                   <option value="G">G</option>
                 </select>
+              ),
             },
             {
               Header: 'GP',
