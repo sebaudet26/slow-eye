@@ -17,7 +17,7 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
     return (
       <div className="header">
         <a className="header-logo" href="/">
-          Slow Eye
+          Quick Stats
         </a>
         <div className="header-nav">
           <NavLink activeClassName="active" className="header-nav-item" exact to="/">

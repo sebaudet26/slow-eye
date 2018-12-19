@@ -22,8 +22,8 @@ import './style.scss';
 const App = () => (
   <div className="app-wrapper">
     <Helmet
-      titleTemplate="%s - Slow Eye"
-      defaultTitle="Slow Eye"
+      titleTemplate="%s - Quick Stats"
+      defaultTitle="Quick Stats"
     >
       <meta name="description" content="Slow Eye Hockey Stats" />
     </Helmet>
