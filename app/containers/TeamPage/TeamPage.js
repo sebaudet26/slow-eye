@@ -3,6 +3,12 @@ import { Helmet } from 'react-helmet';
 import CareerStatsTable from '../../components/Table/CareerStatsTable';
 import './style.scss';
 import PlayerImg from './images/6752.png';
+<<<<<<< HEAD
+=======
+import CountryImg from '../../images/country/FIN.svg';
+import TeamImg from '../../images/teams/avalanche.png';
+import RookieIcon from '../../images/pacifier2.svg';
+>>>>>>> f7fa081326b42ed2e377653607ba2ab5fcbc154e
 
 export default class TeamPage extends React.Component {
   shouldComponentUpdate() {
@@ -19,12 +25,21 @@ export default class TeamPage extends React.Component {
             content="Mikko Rantanen"
           />
         </Helmet>
+<<<<<<< HEAD
         <div className="team-header">
           <h2>Montreal Canadiens</h2>
           <p>4th Atlantic</p>
           <div className="team-info">
             <div className="team-stats">
               <div className="team-stats-item">
+=======
+        <div className="player-header">
+          <div className="player-info">
+            <h2>Montreal Canadiens</h2>
+            <p>4th Atlantic</p>
+            <div className="player-stats">
+              <div className="player-stats-item">
+>>>>>>> f7fa081326b42ed2e377653607ba2ab5fcbc154e
                 <div className="light">GP</div>
                 <div className="bold">33</div>
               </div>
