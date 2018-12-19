@@ -55,7 +55,7 @@ export default class TeamPage extends React.Component {
             </div>
             <div className="team-stats">
               <div className="team-stats-item">
-                <div className="light small-text">Goals</div>
+                <div className="light small-text">GF</div>
                 <div className="bold">33</div>
               </div>
               <div className="team-stats-item">
@@ -68,6 +68,10 @@ export default class TeamPage extends React.Component {
               </div>
               <div className="team-stats-item">
                 <div className="light small-text">PK%</div>
+                <div className="bold">2</div>
+              </div>
+              <div className="team-stats-item">
+                <div className="light small-text">PIM</div>
                 <div className="bold">2</div>
               </div>
             </div>
