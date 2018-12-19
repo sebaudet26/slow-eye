@@ -66,8 +66,37 @@
   }
 }
 
+@media (min-width: 601px) and (max-width: 800px) {
+  .player-card {
+    padding: 10px;
+    &-header {
+      align-items: inherit;
+
+      &-item.status {
+        position: relative;
+
+        img {
+          float: right;
+          margin-bottom: 5px;
+          width: 20px;
+        }
+      }
+    }
+
+    .headshot {
+      margin-right: 10px;
+    }
+  }
+}
+
 @media (max-width: 600px) {
   .player-card {
     margin-bottom: 15px;
+
+    &-header {
+      &-item.status {
+        position: absolute;
+      }
+    }
   }
 }
