@@ -1,6 +1,11 @@
 @import '../../styles/variables.scss';
 
 .team {
+  &-page {
+    h3 {
+      margin-bottom: 0px;
+    }
+  }
 
   &-header {
     margin: 25px 0;
@@ -49,5 +54,26 @@
 
   &-chart {
     display: flex;
+    flex-basis: auto;
+    flex-grow: 1;
+
+    &-col {
+      margin: auto;
+      display: block;
+      width: 32%;
+
+      &-title {
+        font-weight: 400;
+        color: $grey-2;
+      }
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
   }
 }

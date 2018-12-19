@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import CareerStatsTable from '../../components/Table/CareerStatsTable';
+import PlayerCard from '../../components/PlayerCard/PlayerCard';
 import './style.scss';
 import TeamImg from '../../images/teams/canadiens.png';
 
@@ -74,18 +75,38 @@ export default class TeamPage extends React.Component {
         </div>
         <h3>Forwards</h3>
         <div className="team-chart">
-          <div className="team-chart-lw">
-            Left Wing
+          <div className="team-chart-col">
+            <div className="team-chart-col-title">Left Wing</div>
+            <PlayerCard />
           </div>
-          <div className="team-chart-c">
-            Center
+          <div className="team-chart-col">
+            <div className="team-chart-col-title">Center</div>
+            <PlayerCard />
           </div>
-          <div className="team-chart-rw">
-            Right Wing
+          <div className="team-chart-col">
+            <div className="team-chart-col-title">Right Wing</div>
+            <PlayerCard />
           </div>
         </div>
         <h3>Defensemen</h3>
+        <div className="team-chart">
+          <div className="team-chart-col">
+            <div className="team-chart-col-title">Left D</div>
+            <PlayerCard />
+          </div>
+          <div className="team-chart-col">
+            <div className="team-chart-col-title">Right D</div>
+            <PlayerCard />
+          </div>
+          <div className="team-chart-col">
+          </div>
+        </div>
         <h3>Goalies</h3>
+        <div className="team-chart">
+          <div className="team-chart-col">
+            <PlayerCard />
+          </div>
+        </div>
       </div>
     );
   }
