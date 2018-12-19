@@ -94,6 +94,16 @@
   }
 }
 
+@media (max-width: 800px) {
+  .player {
+    &-stats {
+      &-item {
+        margin-right: 25px;
+      }
+    }
+  }
+}
+
 @media (max-width: 600px) {
   .player {
     &-header {
