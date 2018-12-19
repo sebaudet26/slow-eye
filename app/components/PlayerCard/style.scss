@@ -38,10 +38,12 @@
         position: absolute;
         right: 0;
         top:0;
+        //width: 25px;
 
         img {
           margin-left: 10px;
           width: 25px;
+          //margin-bottom: 5px;
         }
       }
     }
@@ -66,25 +68,41 @@
   }
 }
 
-@media (min-width: 601px) and (max-width: 800px) {
+@media (min-width: 701px) and (max-width: 880px) {
   .player-card {
     padding: 10px;
     &-header {
-      align-items: inherit;
 
       &-item.status {
-        position: relative;
+        width: 25px;
 
         img {
           float: right;
           margin-bottom: 5px;
-          width: 20px;
+          width: 25px;
         }
       }
     }
 
     .headshot {
       margin-right: 10px;
+    }
+  }
+}
+
+@media (min-width: 601px) and (max-width: 700px) {
+  .player-card {
+    &-header {
+      &-item.status {
+        width: 25px;
+
+        img {
+          margin-bottom: 5px;
+        }
+      }
+    }
+    .headshot {
+      display: none;
     }
   }
 }
