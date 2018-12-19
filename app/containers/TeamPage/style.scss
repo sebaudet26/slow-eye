@@ -78,6 +78,18 @@
   }
 }
 
+@media (max-width: 800px) {
+  .team {
+    &-stats {
+      &:nth-child(2) {
+        &:last-child {
+          margin-right: 0px;
+        }
+      }
+    }
+  }
+}
+
 @media (max-width: 600px) {
   .team {
     &-header  {
