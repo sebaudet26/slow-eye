@@ -40,8 +40,8 @@ export default class PlayerPage extends React.Component {
       nationality,
     } = info;
     const lastSeason = stats[stats.length - 1];
-    //console.log(`/images/country/${nationality}.svg`);
-    //console.log(`https://assets1.sportsnet.ca/wp-content/uploads/players/nhl/m/${firstName.toLowerCase()}-${lastName.toLowerCase()}.png`);
+    // console.log(`/images/country/${nationality}.svg`);
+    // console.log(`https://assets1.sportsnet.ca/wp-content/uploads/players/nhl/m/${firstName.toLowerCase()}-${lastName.toLowerCase()}.png`);
     return (
       <div>
         <Helmet>
@@ -126,7 +126,7 @@ export default class PlayerPage extends React.Component {
             </div>
           </div>
           <div className="player-img">
-            <img src={PlayerImg} className="player-img-face" />
+            <img src={`https://nhl.bamcontent.com/images/headshots/current/168x168/${urlParams.get('id')}@2x.png`} className="player-img-face" />
             <div className="icon-wrapper player-img-country">
               <img src={`/images/country/${nationality}.svg`} className="" />
             </div>
