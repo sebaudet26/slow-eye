@@ -92,5 +92,43 @@
       margin-right: 15px;
     }
   }
+}
 
+@media (max-width: 600px) {
+  .player {
+    &-header {
+      margin-top: 0px;
+    }
+
+    &-desc {
+      display: block;
+
+      &-right {
+        padding-top: 15px;
+        margin-top: 15px;
+        margin-left: 0px;
+        padding-left: 0px;
+        border-left: 0px;
+        border-top: solid 1px $grey-4;
+      }
+    }
+
+    &-stats {
+      &-item {
+        margin: auto;
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        &:nth-child(5) {
+          margin-right: 0;
+        }
+      }
+    }
+
+    &-badges, &-img {
+      display: none;
+    }
+  }
 }
