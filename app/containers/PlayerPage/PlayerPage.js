@@ -2,14 +2,19 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import {
-  isEmpty, sum, map, pathOr,
-} from 'ramda';
+import { isEmpty } from 'ramda';
 import ReactTooltip from 'react-tooltip';
 import CareerStatsTable from '../../components/Table/CareerStatsTable';
+import {
+  isHot,
+  isCold,
+  isInjured,
+  isVeteran,
+  pointsInLastGames,
+  hotColdGames,
+} from '../../utils/calculations';
 
 // Images
-import PlayerImg from '../../images/avatar.svg';
 import RookieIcon from '../../images/pacifier.svg';
 import VeteranIcon from '../../images/veteran.svg';
 import InjuryIcon from '../../images/bandage.svg';
@@ -33,14 +38,12 @@ export default class PlayerPage extends React.Component {
     if (isEmpty(player)) {
       return (<div />);
     }
-    const { stats = [], info = {} } = player;
+    const { stats = [], info = {}, logs = [] } = player;
     const {
       primaryPosition = {},
       currentTeamInfo = {},
       draftInfo = {},
       shootsCatches,
-      firstName,
-      lastName,
       rookie,
       nationality,
     } = info;
@@ -111,21 +114,25 @@ export default class PlayerPage extends React.Component {
                     <ReactTooltip />
                   </div>
                 ) : null }
-                { info.rosterStatus === 'I' ? (
+                { isInjured(info) ? (
                   <div className="icon-wrapper" data-tip="Injured">
                     <img src={InjuryIcon} />
                     <ReactTooltip />
                   </div>
                 ) : null }
-                <div className="icon-wrapper" data-tip="Hot Streak">
-                  <img src={HotIcon} />
-                  <ReactTooltip />
-                </div>
-                <div className="icon-wrapper" data-tip="Cold Streak">
-                  <img src={ColdIcon} />
-                  <ReactTooltip />
-                </div>
-                { sum(map(pathOr(0, ['stat', 'games']), stats)) > 500 ? (
+                { isHot(logs) ? (
+                  <div className="icon-wrapper" data-tip={`Hot Streak - ${pointsInLastGames(logs)} pts in last ${hotColdGames} games`}>
+                    <img src={HotIcon} />
+                    <ReactTooltip />
+                  </div>
+                ) : null}
+                { isCold(logs) ? (
+                  <div className="icon-wrapper" data-tip={`Cold Streak - ${pointsInLastGames(logs)} pts in last ${hotColdGames} games`}>
+                    <img src={ColdIcon} />
+                    <ReactTooltip />
+                  </div>
+                ) : null}
+                { isVeteran(stats) ? (
                   <div className="icon-wrapper" data-tip="Veteran">
                     <img src={VeteranIcon} />
                     <ReactTooltip />

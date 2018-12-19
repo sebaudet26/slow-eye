@@ -56,7 +56,14 @@ const makePlayerQuery = id => `
         shotPct,
         hits,
         pim,
-        blocked
+        blocked,
+        timeOnIcePerGame
+      }
+    },
+    logs {
+      date,
+      stat {
+        points
       }
     }
   }

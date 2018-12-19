@@ -71,6 +71,70 @@ const findPlayerInDraft = (draftRounds, playerName) => {
   return playerDraftInfo;
 };
 
+/*
+{
+  "copyright" : "NHL and the NHL Shield are registered trademarks
+  of the National Hockey League. NHL and NHL team marks are the property of
+  the NHL and its teams. © NHL 2018. All Rights Reserved.",
+  "stats" : [ {
+    "type" : {
+      "displayName" : "gameLog"
+    },
+    "splits" : [ {
+      "season" : "20182019",
+      "stat" : {
+        "timeOnIce" : "23:10",
+        "assists" : 0,
+        "goals" : 0,
+        "pim" : 2,
+        "shots" : 2,
+        "games" : 1,
+        "hits" : 0,
+        "powerPlayGoals" : 0,
+        "powerPlayPoints" : 0,
+        "powerPlayTimeOnIce" : "07:06",
+        "evenTimeOnIce" : "16:04",
+        "penaltyMinutes" : "2",
+        "shotPct" : 0.0,
+        "gameWinningGoals" : 0,
+        "overTimeGoals" : 0,
+        "shortHandedGoals" : 0,
+        "shortHandedPoints" : 0,
+        "shortHandedTimeOnIce" : "00:00",
+        "blocked" : 0,
+        "plusMinus" : -2,
+        "points" : 0,
+        "shifts" : 26
+      },
+      "team" : {
+        "id" : 21,
+        "name" : "Colorado Avalanche",
+        "link" : "/api/v1/teams/21"
+      },
+      "opponent" : {
+        "id" : 2,
+        "name" : "New York Islanders",
+        "link" : "/api/v1/teams/2"
+      },
+      "date" : "2018-12-17",
+      "isHome" : true,
+      "isWin" : false,
+      "isOT" : false,
+      "game" : {
+        "gamePk" : 2018020516,
+        "link" : "/api/v1/game/2018020516/feed/live",
+        "content" : {
+          "link" : "/api/v1/game/2018020516/content"
+        }
+      }
+    }
+*/
+const fetchCurrentSeasonGameLogsForPlayerId = async (playerId) => {
+  const apiResponse = await nhlAPI(`/people/${playerId}/stats?stats=gameLog`);
+  const gameLogs = path(['stats', 0, 'splits'], apiResponse);
+  return gameLogs;
+};
+
 // https://github.com/dword4/nhlapi#draft
 const fetchDraftInfoForPlayer = async (playerName, year = 2018) => {
   if (draftInfoCache[playerName]) {
@@ -82,11 +146,8 @@ const fetchDraftInfoForPlayer = async (playerName, year = 2018) => {
   }
   // Get a batch of 5 years worth of draft picks
   const apiData = await nhlAPI(`/draft/${year}`);
-  // console.log('apiData', JSON.stringify(apiData, null, 2));
   const draftRounds = path(['drafts', 0, 'rounds'], apiData);
-  // console.log('draftRounds', draftRounds);
   const draftInfoForPlayer = findPlayerInDraft(draftRounds, playerName);
-  // console.log(draftInfoForPlayer);
   if (draftInfoForPlayer) {
     draftInfoCache[playerName] = draftInfoForPlayer;
     return draftInfoForPlayer;
@@ -140,7 +201,6 @@ const fetchAllTeams = async () => {
 };
 
 const fetchPlayer = async (playerId) => {
-  console.log('fetching player');
   const stats = await fetchAllYearsStatsForPlayerId(playerId);
   const info = await fetchInfoForPlayerId(playerId);
   return {
@@ -159,6 +219,7 @@ const fetchAllPlayers = async () => {
 module.exports = {
   nhlAPI,
   fetchStatsForPlayerId,
+  fetchCurrentSeasonGameLogsForPlayerId,
   fetchAllYearsStatsForPlayerId,
   fetchDraftInfoForPlayer,
   fetchInfoForPlayerId,

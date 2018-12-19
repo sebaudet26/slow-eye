@@ -12,6 +12,7 @@ const {
 } = require('ramda');
 const {
   fetchStatsForPlayerId,
+  fetchCurrentSeasonGameLogsForPlayerId,
   fetchAllYearsStatsForPlayerId,
   fetchInfoForPlayerId,
   fetchInfoForTeamId,
@@ -178,6 +179,89 @@ const PlayerInfo = new GraphQLObjectType({
     draftInfo: { type: DraftInfo, resolve: p => fetchDraftInfoForPlayer(p.fullName) },
   },
 });
+
+/* Game Log
+{
+  "timeOnIce" : "23:10",
+  "assists" : 0,
+  "goals" : 0,
+  "pim" : 2,
+  "shots" : 2,
+  "games" : 1,
+  "hits" : 0,
+  "powerPlayGoals" : 0,
+  "powerPlayPoints" : 0,
+  "powerPlayTimeOnIce" : "07:06",
+  "evenTimeOnIce" : "16:04",
+  "penaltyMinutes" : "2",
+  "shotPct" : 0.0,
+  "gameWinningGoals" : 0,
+  "overTimeGoals" : 0,
+  "shortHandedGoals" : 0,
+  "shortHandedPoints" : 0,
+  "shortHandedTimeOnIce" : "00:00",
+  "blocked" : 0,
+  "plusMinus" : -2,
+  "points" : 0,
+  "shifts" : 26
+},
+"team" : {
+  "id" : 21,
+  "name" : "Colorado Avalanche",
+  "link" : "/api/v1/teams/21"
+},
+"opponent" : {
+  "id" : 2,
+  "name" : "New York Islanders",
+  "link" : "/api/v1/teams/2"
+},
+"date" : "2018-12-17",
+"isHome" : true,
+"isWin" : false,
+"isOT" : false,
+"game" : {
+  "gamePk" : 2018020516,
+  "link" : "/api/v1/game/2018020516/feed/live",
+  "content" : {
+    "link" : "/api/v1/game/2018020516/content"
+  }
+}
+*/
+
+const GameLog = new GraphQLObjectType({
+  name: 'GameLog',
+  fields: {
+    timeOnIce: { type: GraphQLString, resolve: prop('timeOnIce') },
+    assists: { type: GraphQLInt, resolve: prop('assists') },
+    goals: { type: GraphQLInt, resolve: prop('goals') },
+    pim: { type: GraphQLInt, resolve: prop('pim') },
+    shots: { type: GraphQLInt, resolve: prop('shots') },
+    games: { type: GraphQLInt, resolve: prop('games') },
+    hits: { type: GraphQLInt, resolve: prop('hits') },
+    powerPlayGoals: { type: GraphQLInt, resolve: prop('powerPlayGoals') },
+    powerPlayPoints: { type: GraphQLInt, resolve: prop('powerPlayPoints') },
+    powerPlayTimeOnIce: { type: GraphQLString, resolve: prop('powerPlayTimeOnIce') },
+    evenTimeOnIce: { type: GraphQLString, resolve: prop('evenTimeOnIce') },
+    penaltyMinutes: { type: GraphQLInt, resolve: prop('penaltyMinutes') },
+    shotPct: { type: GraphQLFloat, resolve: prop('shotPct') },
+    gameWinningGoals: { type: GraphQLInt, resolve: prop('gameWinningGoals') },
+    overTimeGoals: { type: GraphQLInt, resolve: prop('overTimeGoals') },
+    shortHandedGoals: { type: GraphQLInt, resolve: prop('shortHandedGoals') },
+    shortHandedPoints: { type: GraphQLInt, resolve: prop('shortHandedPoints') },
+    shortHandedTimeOnIce: { type: GraphQLString, resolve: prop('shortHandedTimeOnIce') },
+    blocked: { type: GraphQLInt, resolve: prop('blocked') },
+    plusMinus: { type: GraphQLInt, resolve: prop('plusMinus') },
+    points: { type: GraphQLInt, resolve: prop('points') },
+    shifts: { type: GraphQLInt, resolve: prop('shifts') },
+    team: { type: TeamInfo, resolve: prop('team') },
+    opponent: { type: TeamInfo, resolve: prop('opponent') },
+    date: { type: GraphQLString, resolve: prop('date') },
+    isHome: { type: GraphQLBoolean, resolve: prop('isHome') },
+    isWin: { type: GraphQLBoolean, resolve: prop('isWin') },
+    isOT: { type: GraphQLBoolean, resolve: prop('isOT') },
+  },
+});
+
 
 /* Player Stats
 {
@@ -353,6 +437,11 @@ const Stat = new GraphQLObjectType({
     stat: { type: SeasonStat, resolve: prop('stat') },
     league: { type: LeagueInfo, resolve: prop('league') },
     team: { type: TeamInfo, resolve: prop('team') },
+    opponent: { type: TeamInfo, resolve: prop('opponent') },
+    date: { type: GraphQLString, resolve: prop('date') },
+    isHome: { type: GraphQLBoolean, resolve: prop('isHome') },
+    isWin: { type: GraphQLBoolean, resolve: prop('isWin') },
+    isOT: { type: GraphQLBoolean, resolve: prop('isOT') },
   },
 });
 
@@ -414,6 +503,11 @@ const PlayerDetails = new GraphQLObjectType({
     stats: {
       type: new GraphQLList(Stat),
       resolve: p => fetchAllYearsStatsForPlayerId(p.id),
+    },
+    // Lazy load game logs
+    logs: {
+      type: new GraphQLList(Stat),
+      resolve: p => fetchCurrentSeasonGameLogsForPlayerId(p.id),
     },
   },
 });
