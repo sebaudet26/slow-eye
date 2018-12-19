@@ -1,32 +1,39 @@
 @import '../../styles/variables.scss';
 
 .team {
-  &-page {
-    h2 {
-      margin-bottom: 0px;
-    }
-    p {
-      margin-top: 0px;
-    }
-  }
 
   &-header {
     margin: 25px 0;
+    padding: 15px 0;
     position: relative;
     border-bottom: solid 1px $grey-4;
+
+    &-title {
+      display: flex;
+
+      h2 {
+        margin: 0;
+      }
+      p {
+        margin: 0;
+      }
+    }
+  }
+
+  &-img {
+    margin-right: 25px;
   }
 
   &-info {
     display: flex;
-    margin-bottom: 25px;
   }
 
   &-stats {
     display: flex;
-    margin-top: 15px;
+    margin-top: 20px;
 
     &:first-child {
-      border-right: solid 1px $grey-3;
+      border-right: solid 1px $grey-4;
     }
 
     &:nth-child(2) {

@@ -80,25 +80,23 @@ export default class PlayerPage extends React.Component {
             </div>
             <div className="player-stats">
               <div className="player-stats-item">
-                <div className="light">GP</div>
-                <div className="bold">
-                  {lastSeason.stat.games}
-                </div>
+                <div className="light small-text">GP</div>
+                <div className="bold">{lastSeason.stat.games}</div>
               </div>
               <div className="player-stats-item">
-                <div className="light">G</div>
+                <div className="light small-text">G</div>
                 <div className="bold">{lastSeason.stat.goals}</div>
               </div>
               <div className="player-stats-item">
-                <div className="light">A</div>
+                <div className="light small-text">A</div>
                 <div className="bold">{lastSeason.stat.assists}</div>
               </div>
               <div className="player-stats-item">
-                <div className="light">Pts</div>
+                <div className="light small-text">Pts</div>
                 <div className="bold">{lastSeason.stat.points}</div>
               </div>
               <div className="player-stats-item">
-                <div className="light">+/-</div>
+                <div className="light small-text">+/-</div>
                 <div className="bold">{lastSeason.stat.plusMinus}</div>
               </div>
               <div className="player-badges">
@@ -137,7 +135,7 @@ export default class PlayerPage extends React.Component {
             </div>
           </div>
         </div>
-        <h2>Season Stats</h2>
+        <h3>Season Stats</h3>
         <CareerStatsTable stats={stats} />
       </div>
     );
