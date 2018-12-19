@@ -20,12 +20,22 @@ const makePlayerQuery = id => `
       rookie,
       fullName,
       currentAge,
+      rosterStatus,
       currentTeamInfo {
         name,
         teamName
       },
       primaryPosition {
         name
+      },
+      draftInfo {
+        year,
+        round,
+        pickOverall,
+        pickInRound,
+        team {
+          name
+        }
       }
     },
     stats {

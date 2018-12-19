@@ -2,11 +2,13 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { isEmpty } from 'ramda';
+import {
+  isEmpty, sum, map, pathOr,
+} from 'ramda';
 import ReactTooltip from 'react-tooltip';
 import CareerStatsTable from '../../components/Table/CareerStatsTable';
 
-//Images
+// Images
 import PlayerImg from '../../images/avatar.svg';
 import RookieIcon from '../../images/pacifier.svg';
 import VeteranIcon from '../../images/veteran.svg';
@@ -14,6 +16,8 @@ import InjuryIcon from '../../images/bandage.svg';
 import HotIcon from '../../images/fire.svg';
 import ColdIcon from '../../images/snowflake.svg';
 import './style.scss';
+
+const rounds = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th'];
 
 const urlParams = new URLSearchParams(window.location.search);
 
@@ -33,6 +37,7 @@ export default class PlayerPage extends React.Component {
     const {
       primaryPosition = {},
       currentTeamInfo = {},
+      draftInfo = {},
       shootsCatches,
       firstName,
       lastName,
@@ -59,9 +64,9 @@ export default class PlayerPage extends React.Component {
               <div>
                 <p>
                   <span className="bold">Drafted by</span>
-                  {' Colorado Avalanche'}
+                  {` Drafted by ${draftInfo.team.name}`}
                 </p>
-                <p>1st Round, #10 Overall, 2015 NHL Draft</p>
+                <p>{`${rounds[draftInfo.round - 1]} Round, #${draftInfo.pickOverall} Overall, ${draftInfo.year} NHL Draft`}</p>
               </div>
               <div className="player-desc-right">
                 <p>
@@ -106,10 +111,12 @@ export default class PlayerPage extends React.Component {
                     <ReactTooltip />
                   </div>
                 ) : null }
-                <div className="icon-wrapper" data-tip="Injured">
-                  <img src={InjuryIcon} />
-                  <ReactTooltip />
-                </div>
+                { info.rosterStatus === 'I' ? (
+                  <div className="icon-wrapper" data-tip="Injured">
+                    <img src={InjuryIcon} />
+                    <ReactTooltip />
+                  </div>
+                ) : null }
                 <div className="icon-wrapper" data-tip="Hot Streak">
                   <img src={HotIcon} />
                   <ReactTooltip />
@@ -118,10 +125,12 @@ export default class PlayerPage extends React.Component {
                   <img src={ColdIcon} />
                   <ReactTooltip />
                 </div>
-                <div className="icon-wrapper" data-tip="Veteran">
-                  <img src={VeteranIcon} />
-                  <ReactTooltip />
-                </div>
+                { sum(map(pathOr(0, ['stat', 'games']), stats)) > 500 ? (
+                  <div className="icon-wrapper" data-tip="Veteran">
+                    <img src={VeteranIcon} />
+                    <ReactTooltip />
+                  </div>
+                ) : null }
               </div>
             </div>
           </div>

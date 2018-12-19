@@ -15,6 +15,7 @@ const {
   fetchAllYearsStatsForPlayerId,
   fetchInfoForPlayerId,
   fetchInfoForTeamId,
+  fetchDraftInfoForPlayer,
   fetchAllPlayers,
 } = require('../libs/nhlApi');
 
@@ -36,18 +37,9 @@ const Position = new GraphQLObjectType({
 const LeagueInfo = new GraphQLObjectType({
   name: 'LeagueInfo',
   fields: {
-    id: {
-      type: GraphQLInt,
-      resolve: prop('id'),
-    },
-    name: {
-      type: GraphQLString,
-      resolve: prop('name'),
-    },
-    link: {
-      type: GraphQLString,
-      resolve: prop('link'),
-    },
+    id: { type: GraphQLInt, resolve: prop('id') },
+    name: { type: GraphQLString, resolve: prop('name') },
+    link: { type: GraphQLString, resolve: prop('link') },
   },
 });
 
@@ -97,40 +89,28 @@ const LeagueInfo = new GraphQLObjectType({
 const TeamInfo = new GraphQLObjectType({
   name: 'TeamInfo',
   fields: {
-    id: {
-      type: GraphQLInt,
-      resolve: prop('id'),
-    },
-    name: {
-      type: GraphQLString,
-      resolve: prop('name'),
-    },
-    link: {
-      type: GraphQLString,
-      resolve: prop('link'),
-    },
-    abbreviation: {
-      type: GraphQLString,
-      resolve: prop('abbreviation'),
-    },
-    teamName: {
-      type: GraphQLString,
-      resolve: prop('teamName'),
-    },
-    locationName: {
-      type: GraphQLString,
-      resolve: prop('locationName'),
-    },
-    shortName: {
-      type: GraphQLString,
-      resolve: prop('shortName'),
-    },
-    officialSiteUrl: {
-      type: GraphQLString,
-      resolve: prop('officialSiteUrl'),
-    },
+    id: { type: GraphQLInt, resolve: prop('id') },
+    name: { type: GraphQLString, resolve: prop('name') },
+    link: { type: GraphQLString, resolve: prop('link') },
+    abbreviation: { type: GraphQLString, resolve: prop('abbreviation') },
+    teamName: { type: GraphQLString, resolve: prop('teamName') },
+    locationName: { type: GraphQLString, resolve: prop('locationName') },
+    shortName: { type: GraphQLString, resolve: prop('shortName') },
+    officialSiteUrl: { type: GraphQLString, resolve: prop('officialSiteUrl') },
   },
 });
+
+const DraftInfo = new GraphQLObjectType({
+  name: 'DraftInfo',
+  fields: {
+    year: { type: GraphQLInt, resolve: prop('year') },
+    round: { type: GraphQLInt, resolve: pipe(prop('round'), Number) },
+    pickOverall: { type: GraphQLInt, resolve: prop('pickOverall') },
+    pickInRound: { type: GraphQLInt, resolve: prop('pickInRound') },
+    team: { type: TeamInfo, resolve: prop('team') },
+  },
+});
+
 
 /* Player info
 {
@@ -194,6 +174,8 @@ const PlayerInfo = new GraphQLObjectType({
     primaryPosition: { type: Position, resolve: prop('primaryPosition') },
     // Lazy load current team info
     currentTeamInfo: { type: TeamInfo, resolve: p => fetchInfoForTeamId(p.currentTeam.id) },
+    // Lazy load draft info
+    draftInfo: { type: DraftInfo, resolve: p => fetchDraftInfoForPlayer(p.fullName) },
   },
 });
 
@@ -367,40 +349,19 @@ const SeasonStat = new GraphQLObjectType({
 const Stat = new GraphQLObjectType({
   name: 'Stat',
   fields: {
-    season: {
-      type: GraphQLString,
-      resolve: prop('season'),
-    },
-    stat: {
-      type: SeasonStat,
-      resolve: prop('stat'),
-    },
-    league: {
-      type: LeagueInfo,
-      resolve: prop('league'),
-    },
-    team: {
-      type: TeamInfo,
-      resolve: prop('team'),
-    },
+    season: { type: GraphQLString, resolve: prop('season') },
+    stat: { type: SeasonStat, resolve: prop('stat') },
+    league: { type: LeagueInfo, resolve: prop('league') },
+    team: { type: TeamInfo, resolve: prop('team') },
   },
 });
 
 const Person = new GraphQLObjectType({
   name: 'Person',
   fields: {
-    id: {
-      type: GraphQLInt,
-      resolve: prop('id'),
-    },
-    link: {
-      type: GraphQLString,
-      resolve: prop('link'),
-    },
-    fullName: {
-      type: GraphQLString,
-      resolve: prop('fullName'),
-    },
+    id: { type: GraphQLInt, resolve: prop('id') },
+    link: { type: GraphQLString, resolve: prop('link') },
+    fullName: { type: GraphQLString, resolve: prop('fullName') },
   },
 });
 

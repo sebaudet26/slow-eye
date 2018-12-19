@@ -1,5 +1,5 @@
 const {
-  contains, filter, flatten, map, mergeAll, path, prop,
+  contains, filter, flatten, map, mergeAll, path, prop, pipe, equals, toLower,
 } = require('ramda');
 
 const fetch = require('node-fetch');
@@ -7,6 +7,8 @@ const fetch = require('node-fetch');
 const nhlApiUrl = 'https://statsapi.web.nhl.com/api/v1';
 
 const cache = {};
+
+const draftInfoCache = {};
 
 const nhlAPI = async (resource) => {
   try {
@@ -21,6 +23,75 @@ const nhlAPI = async (resource) => {
   } catch (e) {
     return console.error(e.stack || e.toString());
   }
+};
+
+/* draftData
+  {
+    "copyright" : "NHL and the NHL Shield are registered trademarks of
+    the National Hockey League. NHL and NHL team marks are the property of
+    the NHL and its teams. © NHL 2018. All Rights Reserved.",
+    "drafts" : [ {
+      "draftYear" : 2018,
+      "rounds" : [ {
+        "roundNumber" : 1,
+        "round" : "1",
+        "picks" : [ {
+          "year" : 2018,
+          "round" : "1",
+          "pickOverall" : 1,
+          "pickInRound" : 1,
+          "team" : {
+            "id" : 7,
+            "name" : "Buffalo Sabres",
+            "link" : "/api/v1/teams/7"
+          },
+          "prospect" : {
+            "id" : 71988,
+            "fullName" : "Rasmus Dahlin",
+            "link" : "/api/v1/draft/prospects/71988"
+          }
+        }
+      }],
+    }],
+  }
+*/
+
+// TODO: should use a regex to take out special characters
+// or maybe fuzzy matching instead of strict match
+const compareToName = playerName => pipe(path(['prospect', 'fullName']), toLower, equals(toLower(playerName)));
+
+const findPlayerInDraft = (draftRounds, playerName) => {
+  let playerDraftInfo = null;
+  draftRounds.forEach((round) => {
+    const playersFound = filter(compareToName(playerName), round.picks);
+    if (playersFound.length) {
+      [playerDraftInfo] = playersFound;
+    }
+  });
+  return playerDraftInfo;
+};
+
+// https://github.com/dword4/nhlapi#draft
+const fetchDraftInfoForPlayer = async (playerName, year = 2018) => {
+  if (draftInfoCache[playerName]) {
+    return draftInfoCache[playerName];
+  }
+  // Undrafted
+  if (year < 1980) {
+    return {};
+  }
+  // Get a batch of 5 years worth of draft picks
+  const apiData = await nhlAPI(`/draft/${year}`);
+  // console.log('apiData', JSON.stringify(apiData, null, 2));
+  const draftRounds = path(['drafts', 0, 'rounds'], apiData);
+  // console.log('draftRounds', draftRounds);
+  const draftInfoForPlayer = findPlayerInDraft(draftRounds, playerName);
+  // console.log(draftInfoForPlayer);
+  if (draftInfoForPlayer) {
+    draftInfoCache[playerName] = draftInfoForPlayer;
+    return draftInfoForPlayer;
+  }
+  return fetchDraftInfoForPlayer(playerName, year - 1);
 };
 
 const fetchInfoForPlayerId = async (playerId) => {
@@ -89,6 +160,7 @@ module.exports = {
   nhlAPI,
   fetchStatsForPlayerId,
   fetchAllYearsStatsForPlayerId,
+  fetchDraftInfoForPlayer,
   fetchInfoForPlayerId,
   fetchPlayer,
   fetchInfoForTeamId,
