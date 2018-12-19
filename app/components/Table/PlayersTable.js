@@ -76,7 +76,7 @@ class PlayersTable extends React.PureComponent {
                   <option value="LAK">Los Angeles Kings</option>
                   <option value="MIN">Minnestota Wild</option>
                   <option value="MTL">Montreal Canadiens</option>
-                  <option value="NAS">Nashville Predators</option>
+                  <option value="NSH">Nashville Predators</option>
                   <option value="NJD">New Jersey Devils</option>
                   <option value="NYI">New York Islanders</option>
                 </select>
