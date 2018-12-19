@@ -38,7 +38,9 @@ const fetchStatsForPlayerId = async (playerId) => {
 const fetchAllYearsStatsForPlayerId = async (playerId) => {
   const resource = `/people/${playerId}/stats?stats=yearByYear`;
   const playerStatsData = await nhlAPI(resource);
-  const usefulLeagueIds = [133, 153];
+  // NHL = 133
+  // AHL = 153
+  const usefulLeagueIds = [133];
   const isStatUseful = seasonStat => contains(path(['league', 'id'], seasonStat), usefulLeagueIds);
   return filter(isStatUseful, path(['stats', 0, 'splits'], playerStatsData));
 };
