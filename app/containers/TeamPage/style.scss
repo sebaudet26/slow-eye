@@ -117,5 +117,12 @@
         }
       }
     }
+    &-chart {
+      display: block;
+
+      &-col {
+        width: 100%;
+      }
+    }
   }
 }
