@@ -66,15 +66,11 @@ body {
 }
 
 body {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Avenir Next", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   color: $black;
   background-color: $grey-5;
-}
-
-body.fontLoaded {
-  font-family: "Avenir Next", sans-serif;
 }
 
 h1 {
@@ -95,6 +91,11 @@ h3 {
 p {
   font-size: $p;
   font-weight: 400;
+}
+
+button {
+  font-family: "Avenir Next", Arial, sans-serif;
+  font-weight: 500;
 }
 
 a {

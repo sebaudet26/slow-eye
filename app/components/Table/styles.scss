@@ -6,13 +6,15 @@
   border-radius: $radius;
   background: $white;
 
+  input, select {
+    height: 30px;
+  }
+
   &.player-stats {
-    .rt-thead {
-      .rt-th {
-        &:nth-child(3) {
-          text-align: left;
-          border-right: solid 1px $grey-4;
-        }
+    .rt-th {
+      &:nth-child(3) {
+        text-align: left;
+        border-right: solid 1px $grey-4;
       }
     }
   }
@@ -35,9 +37,14 @@
     }
 
     &.-filters {
+      border-bottom: solid 1px $grey-4;
 
       .rt-th {
         border-right: none;
+
+        &:nth-child(3) {
+          border-right: solid 1px $grey-4;
+        }
       }
     }
 
@@ -83,6 +90,7 @@
       border: none;
       font-weight: 500;
       padding: 15px 10px;
+      text-align: center;
     }
   }
 
@@ -93,7 +101,7 @@
 
     .-btn {
       background: $grey-4;
-      font-weight: bold;
+      font-weight: 500;
       color: $grey-1;
 
       &:hover {
@@ -111,6 +119,16 @@
 
 .text-left {
   text-align: left !important;
+}
+
+.team-cell {
+  a {
+    margin: auto;
+  }
+
+  img {
+    width: 25px;
+  }
 }
 
 @media screen and (max-width: 600px) {

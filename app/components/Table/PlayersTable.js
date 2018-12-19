@@ -30,19 +30,56 @@ class PlayersTable extends React.PureComponent {
               maxWidth: 200,
               minWidth: 125,
               Cell: row => (
-                <a href={`/player?id=${JSON.stringify(row.original.id)}`}>{row.value}</a>
+                <a href={`/player?id=${JSON.stringify(row.original.id)}`}>
+                  {row.value}
+                </a>
               ),
             },
             {
               Header: 'Team',
               id: 'team',
-              className: 'text-left',
+              className: 'text-left team-cell',
               maxWidth: 85,
               minWidth: 50,
               Cell: row=> (
-                <a href='./team?id=123'>{row.value}</a>
+                <a href='./team?id=123'>
+                  <img src={`/images/teams/small/${row.value}.png`} />
+                </a>
               ),
               accessor: d => pathOr(0, ['team', 'abbreviation'], d),
+              filterMethod: (filter, row) => {
+                if (filter.value === "all") {
+                  return true;
+                }
+                return String(row[filter.id]).toLowerCase().match(filter.value.toLowerCase());
+              },
+              Filter: ({ filter, onChange }) =>
+                <select
+                  onChange={event => onChange(event.target.value)}
+                  style={{ width: "100%" }}
+                  value={filter ? filter.value : "all"}
+                >
+                  <option value="all">All</option>
+                  <option value="ANA">Anaheim</option>
+                  <option value="ARI">Arizona Coyotes</option>
+                  <option value="BOS">Boston Bruins</option>
+                  <option value="BUF">Buffalo Sabres</option>
+                  <option value="CAR">Carolina Hurricanes</option>
+                  <option value="CBJ">Columbus Blue Jackets</option>
+                  <option value="CGY">Calgary Flames</option>
+                  <option value="CHI">Chicago Blackhawks</option>
+                  <option value="COL">Colorado Avalanche</option>
+                  <option value="DAL">Dallas Stars</option>
+                  <option value="DET">Detroit Red Wings</option>
+                  <option value="EDM">Edmonton Oilers</option>
+                  <option value="FLA">Florida Panthers</option>
+                  <option value="LAK">Los Angeles Kings</option>
+                  <option value="MIN">Minnestota Wild</option>
+                  <option value="MTL">Montreal Canadiens</option>
+                  <option value="NAS">Nashville Predators</option>
+                  <option value="NJD">New Jersey Devils</option>
+                  <option value="NYI">New York Islanders</option>
+                </select>
             },
             {
               Header: 'Pos.',

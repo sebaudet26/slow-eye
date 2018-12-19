@@ -3,10 +3,12 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { isEmpty } from 'ramda';
-
 import CareerStatsTable from '../../components/Table/CareerStatsTable';
-import PlayerImg from './images/6752.png';
-import RookieIcon from '../../images/pacifier2.svg';
+import PlayerImg from '../../images/avatar.svg';
+import RookieIcon from '../../images/pacifier.svg';
+import InjuryIcon from '../../images/bandage.svg';
+import HotIcon from '../../images/fire.svg';
+import ColdIcon from '../../images/snowflake.svg';
 import './style.scss';
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -34,8 +36,8 @@ export default class PlayerPage extends React.Component {
       nationality,
     } = info;
     const lastSeason = stats[stats.length - 1];
-    console.log(`/images/country/${nationality}.svg`);
-    console.log(`https://assets1.sportsnet.ca/wp-content/uploads/players/nhl/m/${firstName.toLowerCase()}-${lastName.toLowerCase()}.png`);
+    //console.log(`/images/country/${nationality}.svg`);
+    //console.log(`https://assets1.sportsnet.ca/wp-content/uploads/players/nhl/m/${firstName.toLowerCase()}-${lastName.toLowerCase()}.png`);
     return (
       <div>
         <Helmet>
@@ -101,6 +103,15 @@ export default class PlayerPage extends React.Component {
                     <img src={RookieIcon} />
                   </div>
                 ) : null }
+                <div className="icon-wrapper">
+                  <img src={InjuryIcon} />
+                </div>
+                <div className="icon-wrapper">
+                  <img src={HotIcon} />
+                </div>
+                <div className="icon-wrapper">
+                  <img src={ColdIcon} />
+                </div>
               </div>
             </div>
           </div>
