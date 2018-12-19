@@ -43,6 +43,7 @@
     }
 
     &-list {
+      z-index: 99;
       display: none;
       position: absolute;
       border-radius: 6px;
