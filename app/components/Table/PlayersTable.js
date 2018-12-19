@@ -60,7 +60,7 @@ class PlayersTable extends React.PureComponent {
                   value={filter ? filter.value : "all"}
                 >
                   <option value="all">All</option>
-                  <option value="ANA">Anaheim</option>
+                  <option value="ANA">Anaheim Ducks</option>
                   <option value="ARI">Arizona Coyotes</option>
                   <option value="BOS">Boston Bruins</option>
                   <option value="BUF">Buffalo Sabres</option>
@@ -79,6 +79,18 @@ class PlayersTable extends React.PureComponent {
                   <option value="NSH">Nashville Predators</option>
                   <option value="NJD">New Jersey Devils</option>
                   <option value="NYI">New York Islanders</option>
+                  <option value="NYR">New York Rangers</option>
+                  <option value="OTT">Ottawa Senators</option>
+                  <option value="PHI">Philadelphia Flyers</option>
+                  <option value="PIT">Pittsburgh Penguins</option>
+                  <option value="SJS">San Jose Sharks</option>
+                  <option value="STL">St.Louis Blues</option>
+                  <option value="TBL">Tampa Bay Lightning</option>
+                  <option value="TOR">Toronto Maple Leafs</option>
+                  <option value="VAN">Vancouver Canucks</option>
+                  <option value="VGK">Vegas Golden Knights</option>
+                  <option value="WPG">Winnipeg Jets</option>
+                  <option value="WSH">Washington Capitals</option>
                 </select>
             },
             {

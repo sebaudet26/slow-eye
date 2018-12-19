@@ -11,7 +11,7 @@ export default class TeamPage extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="team-page">
         <Helmet>
           <title>Mikko Rantanen</title>
           <meta
@@ -19,35 +19,59 @@ export default class TeamPage extends React.Component {
             content="Mikko Rantanen"
           />
         </Helmet>
-        <div className="player-header">
-          <div class="player-info">
-            <h2>Montreal Canadiens</h2>
-            <p>4th Atlantic</p>
-            <div className="player-stats">
-              <div className="player-stats-item">
+        <div className="team-header">
+          <h2>Montreal Canadiens</h2>
+          <p>4th Atlantic</p>
+          <div className="team-info">
+            <div className="team-stats">
+              <div className="team-stats-item">
                 <div className="light">GP</div>
                 <div className="bold">33</div>
               </div>
-              <div className="player-stats-item">
+              <div className="team-stats-item">
                 <div className="light">W</div>
                 <div className="bold">15</div>
               </div>
-              <div className="player-stats-item">
+              <div className="team-stats-item">
                 <div className="light">L</div>
                 <div className="bold">41</div>
               </div>
-              <div className="player-stats-item">
+              <div className="team-stats-item">
                 <div className="light">OTL</div>
                 <div className="bold">2</div>
               </div>
-              <div className="player-stats-item">
+              <div className="team-stats-item">
                 <div className="light">Pts</div>
+                <div className="bold">18</div>
+              </div>
+            </div>
+            <div className="team-stats">
+              <div className="team-stats-item">
+                <div className="light">Goals</div>
+                <div className="bold">33</div>
+              </div>
+              <div className="team-stats-item">
+                <div className="light">GA</div>
+                <div className="bold">15</div>
+              </div>
+              <div className="team-stats-item">
+                <div className="light">PP%</div>
+                <div className="bold">41</div>
+              </div>
+              <div className="team-stats-item">
+                <div className="light">PK%</div>
+                <div className="bold">2</div>
+              </div>
+              <div className="team-stats-item">
+                <div className="light">PIM</div>
                 <div className="bold">18</div>
               </div>
             </div>
           </div>
         </div>
-        <h2>Player Stats</h2>
+        <h2>Forwards</h2>
+        <h2>Defensemen</h2>
+        <h2>Goalies</h2>
       </div>
     );
   }
