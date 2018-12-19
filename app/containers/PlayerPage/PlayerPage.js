@@ -3,9 +3,13 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { isEmpty } from 'ramda';
+import ReactTooltip from 'react-tooltip';
 import CareerStatsTable from '../../components/Table/CareerStatsTable';
+
+//Images
 import PlayerImg from '../../images/avatar.svg';
 import RookieIcon from '../../images/pacifier.svg';
+import VeteranIcon from '../../images/veteran.svg';
 import InjuryIcon from '../../images/bandage.svg';
 import HotIcon from '../../images/fire.svg';
 import ColdIcon from '../../images/snowflake.svg';
@@ -99,18 +103,26 @@ export default class PlayerPage extends React.Component {
               </div>
               <div className="player-badges">
                 { rookie ? (
-                  <div className="icon-wrapper">
+                  <div className="icon-wrapper" data-tip="Rookie">
                     <img src={RookieIcon} />
+                    <ReactTooltip />
                   </div>
                 ) : null }
-                <div className="icon-wrapper">
+                <div className="icon-wrapper" data-tip="Injured">
                   <img src={InjuryIcon} />
+                  <ReactTooltip />
                 </div>
-                <div className="icon-wrapper">
+                <div className="icon-wrapper" data-tip="Hot Streak">
                   <img src={HotIcon} />
+                  <ReactTooltip />
                 </div>
-                <div className="icon-wrapper">
+                <div className="icon-wrapper" data-tip="Cold Streak">
                   <img src={ColdIcon} />
+                  <ReactTooltip />
+                </div>
+                <div className="icon-wrapper" data-tip="Veteran">
+                  <img src={VeteranIcon} />
+                  <ReactTooltip />
                 </div>
               </div>
             </div>
