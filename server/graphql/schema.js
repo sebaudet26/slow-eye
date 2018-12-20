@@ -11,6 +11,7 @@ const {
   pipe, prop,
 } = require('ramda');
 const {
+  fetchStandings,
   fetchStatsForPlayerId,
   fetchCurrentSeasonGameLogsForPlayerId,
   fetchAllYearsStatsForPlayerId,
@@ -98,6 +99,103 @@ const TeamInfo = new GraphQLObjectType({
     locationName: { type: GraphQLString, resolve: prop('locationName') },
     shortName: { type: GraphQLString, resolve: prop('shortName') },
     officialSiteUrl: { type: GraphQLString, resolve: prop('officialSiteUrl') },
+  },
+});
+
+
+/*
+{
+  "team" : {
+    "id" : 6,
+    "name" : "Boston Bruins",
+    "link" : "/api/v1/teams/6"
+  },
+  "leagueRecord" : {
+    "wins" : 18,
+    "losses" : 12,
+    "ot" : 4,
+    "type" : "league"
+  },
+  "goalsAgainst" : 88,
+  "goalsScored" : 94,
+  "points" : 40,
+  "divisionRank" : "4",
+  "conferenceRank" : "5",
+  "leagueRank" : "11",
+  "wildCardRank" : "1",
+  "row" : 17,
+  "gamesPlayed" : 34,
+  "streak" : {
+    "streakType" : "wins",
+    "streakNumber" : 1,
+    "streakCode" : "W1"
+  },
+  "lastUpdated" : "2018-12-20T00:03:12Z"
+}
+*/
+
+const TeamRecord = new GraphQLObjectType({
+  name: 'TeamRecord',
+  fields: {
+    team: { type: TeamInfo, resolve: prop('team') },
+    leagueRecord: { type: LeagueInfo, resolve: prop('league') },
+    goalsAgainst: { type: GraphQLInt, resolve: prop('goalsAgainst') },
+    goalsScored: { type: GraphQLInt, resolve: prop('goalsScored') },
+    points: { type: GraphQLInt, resolve: prop('points') },
+    divisionRank: { type: GraphQLInt, resolve: pipe(prop('divisionRank'), Number) },
+    conferenceRank: { type: GraphQLInt, resolve: pipe(prop('conferenceRank'), Number) },
+    leagueRank: { type: GraphQLInt, resolve: pipe(prop('leagueRank'), Number) },
+    wildCardRank: { type: GraphQLInt, resolve: pipe(prop('wildCardRank'), Number) },
+    row: { type: GraphQLInt, resolve: prop('row') },
+    gamesPlayed: { type: GraphQLInt, resolve: prop('gamesPlayed') },
+    streak: { type: GraphQLInt, resolve: prop('streak') },
+  },
+});
+
+/*
+    "division" : {
+      "id" : 18,
+      "name" : "Metropolitan",
+      "nameShort" : "Metro",
+      "link" : "/api/v1/divisions/18",
+      "abbreviation" : "M"
+    },
+
+    "conference" : {
+      "id" : 6,
+      "name" : "Eastern",
+      "link" : "/api/v1/conferences/6"
+    },
+*/
+
+const ConferenceInfo = new GraphQLObjectType({
+  name: 'ConferenceInfo',
+  fields: {
+    id: { type: GraphQLInt, resolve: prop('id') },
+    name: { type: GraphQLString, resolve: prop('name') },
+    link: { type: GraphQLString, resolve: prop('    link') },
+  },
+});
+
+const DivisionInfo = new GraphQLObjectType({
+  name: 'DivisionInfo',
+  fields: {
+    id: { type: GraphQLInt, resolve: prop('id') },
+    name: { type: GraphQLString, resolve: prop('name') },
+    nameShort: { type: GraphQLString, resolve: prop('nameShort') },
+    abbreviation: { type: GraphQLString, resolve: prop('abbreviation') },
+    link: { type: GraphQLString, resolve: prop('    link') },
+  },
+});
+
+const StandingsRecord = new GraphQLObjectType({
+  name: 'StandingsRecord',
+  fields: {
+    type: { type: GraphQLString, resolve: prop('standingsType') },
+    league: { type: LeagueInfo, resolve: prop('league') },
+    conference: { type: ConferenceInfo, resolve: prop('conference') },
+    division: { type: DivisionInfo, resolve: prop('division') },
+    teamRecords: { type: GraphQLList(TeamRecord), resolve: prop('teamRecords') },
   },
 });
 
@@ -526,6 +624,10 @@ const schema = new GraphQLSchema({
         resolve: (root, args) => ({
           id: args.id,
         }),
+      },
+      standings: {
+        type: GraphQLList(StandingsRecord),
+        resolve: fetchStandings,
       },
     },
   }),

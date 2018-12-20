@@ -216,8 +216,15 @@ const fetchAllPlayers = async () => {
   return flatten(allTeamsRosters);
 };
 
+const fetchStandings = async () => {
+  const standingsResponse = await nhlAPI('/standings/wildCardWithLeaders');
+  const standings = prop('records', standingsResponse);
+  return standings;
+};
+
 module.exports = {
   nhlAPI,
+  fetchStandings,
   fetchStatsForPlayerId,
   fetchCurrentSeasonGameLogsForPlayerId,
   fetchAllYearsStatsForPlayerId,
