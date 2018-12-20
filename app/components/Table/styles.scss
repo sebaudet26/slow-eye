@@ -131,6 +131,37 @@
   }
 }
 
+.filters {
+  margin: 15px 0 25px 0;
+  display: flex;
+
+  &-season {
+    min-width: 400px;
+
+    &-label {
+      margin-bottom: 5px;
+      color: $grey-2;
+    }
+  }
+}
+
+.react-select {
+  &__control {
+    display: flex;
+    align-items: center;
+    min-height: 38px;
+    outline: 0 !important;
+    transition: 0.3s;
+    background: $white;
+    box-shadow: $shadow;
+    border-radius: $radius;
+
+    &:hover, &--is-focused {
+      box-shadow: $shadow-2;
+    }
+  }
+}
+
 @media screen and (max-width: 600px) {
   .ReactTable {
     font-size: 12px;

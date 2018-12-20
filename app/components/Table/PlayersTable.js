@@ -1,8 +1,8 @@
 /* global window */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
+import Select from 'react-select';
 import { pathOr } from 'ramda';
 import 'react-table/react-table.css';
 import './styles.scss';
@@ -11,11 +11,48 @@ const toLowerCaseAndMatch = (filter, row) => String(row[filter.id])
   .toLowerCase()
   .match(filter.value.toLowerCase());
 
+//Seasons Dropdown Options
+const seasons = [
+  { value: '20182019', label: '2018-2019' },
+  { value: '20172018', label: '2017-2018' },
+  { value: '20162017', label: '2016-2017' }
+]
+
+//Seasons Dropdown Styles
+const customStyles = {
+  option: (provided, state) => ({
+    ...provided,
+  }),
+  control: () => ({
+  }),
+}
+
 class PlayersTable extends React.PureComponent {
   render() {
     const { players } = this.props;
     return (
       <div>
+        <div className="filters">
+          <div className="filters-season">
+            <div className="filters-season-label">Season</div>
+            <Select
+              classNamePrefix="react-select"
+              options={seasons}
+              defaultOption="20172018"
+              styles={customStyles}
+              theme={(theme) => ({
+                ...theme,
+                borderRadius: 6,
+                colors: {
+                ...theme.colors,
+                  primary: '#3D5AFE',
+                  primary50: '#CBD1DB',
+                  primary25: '#E2E7EC',
+                },
+              })}
+            />
+          </div>
+        </div>
         <ReactTable
           data={players}
           noDataText="Loading all dat good data stuff..."
