@@ -8,7 +8,7 @@ const {
   GraphQLFloat,
 } = require('graphql');
 const {
-  pipe, prop,
+  pipe, prop, join, drop, path,
 } = require('ramda');
 const {
   fetchStandings,
@@ -19,8 +19,17 @@ const {
   fetchInfoForTeamId,
   fetchDraftInfoForPlayer,
   fetchAllPlayers,
+  nhlAPI,
 } = require('../libs/nhlApi');
 
+const ifNotThereFetchLink = propName => async (d) => {
+  if (d.link) {
+    // FIXME: this is pretty bad
+    const data = await nhlAPI(`/${join('/', drop(3, d.link.split('/')))}`);
+    return path(['teams', 0, propName], data);
+  }
+  return prop(propName, d);
+};
 
 const Position = new GraphQLObjectType({
   name: 'Position',
@@ -94,11 +103,11 @@ const TeamInfo = new GraphQLObjectType({
     id: { type: GraphQLInt, resolve: prop('id') },
     name: { type: GraphQLString, resolve: prop('name') },
     link: { type: GraphQLString, resolve: prop('link') },
-    abbreviation: { type: GraphQLString, resolve: prop('abbreviation') },
-    teamName: { type: GraphQLString, resolve: prop('teamName') },
-    locationName: { type: GraphQLString, resolve: prop('locationName') },
-    shortName: { type: GraphQLString, resolve: prop('shortName') },
-    officialSiteUrl: { type: GraphQLString, resolve: prop('officialSiteUrl') },
+    abbreviation: { type: GraphQLString, resolve: ifNotThereFetchLink('abbreviation') },
+    teamName: { type: GraphQLString, resolve: ifNotThereFetchLink('teamName') },
+    locationName: { type: GraphQLString, resolve: ifNotThereFetchLink('locationName') },
+    shortName: { type: GraphQLString, resolve: ifNotThereFetchLink('shortName') },
+    officialSiteUrl: { type: GraphQLString, resolve: ifNotThereFetchLink('officialSiteUrl') },
   },
 });
 

@@ -34,7 +34,9 @@ const wildCardStandingsQuery = `
       },
       points,
       team {
-        name
+        id,
+        name,
+        abbreviation
       }
     }
   }

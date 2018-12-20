@@ -7,6 +7,8 @@ import {
 import 'react-table/react-table.css';
 import './styles.scss';
 
+
+// TODO: team logo and team link
 const StandingsTable = ({ subStandings, isWildCardTable }) => (
   <ReactTable
     showPagination={false}
@@ -16,7 +18,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
       {
         Header: '',
         id: 'rank',
-        className: 'text-left',
+        className: 'text-center',
         accessor: pathOr(0, [isWildCardTable ? 'wildCardRank' : 'divisionRank']),
         maxWidth: 40,
         minWidth: 40,
@@ -30,100 +32,113 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         minWidth: 200,
       },
       {
+        Header: '',
+        id: 'logo',
+        className: 'text-center',
+        accessor: pathOr(0, ['team']),
+        maxWidth: 70,
+        minWidth: 70,
+        Cell: row => (
+          <a href={`./team?id=${row.value.id}`}>
+            <img src={`/images/teams/small/${row.value.abbreviation.toUpperCase().replace(' ', '-')}.png`} />
+          </a>
+        ),
+      },
+      {
         Header: 'GP',
         id: 'games',
         className: 'text-center',
         accessor: pathOr(0, ['gamesPlayed']),
-        maxWidth: 75,
-        minWidth: 75,
+        maxWidth: 50,
+        minWidth: 50,
       },
       {
         Header: 'W',
         id: 'wins',
         className: 'text-center',
         accessor: pathOr(0, ['leagueRecord', 'wins']),
-        maxWidth: 75,
-        minWidth: 75,
+        maxWidth: 70,
+        minWidth: 70,
       },
       {
         Header: 'L',
         id: 'losses',
         className: 'text-center',
         accessor: pathOr(0, ['leagueRecord', 'losses']),
-        maxWidth: 75,
-        minWidth: 75,
+        maxWidth: 70,
+        minWidth: 70,
       },
       {
         Header: 'OTL',
         id: 'otl',
         className: 'text-center',
         accessor: pathOr(0, ['leagueRecord', 'ot']),
-        maxWidth: 75,
-        minWidth: 75,
+        maxWidth: 70,
+        minWidth: 70,
       },
       {
         Header: 'Pts',
         id: 'points',
         className: 'text-center',
         accessor: pathOr(0, ['points']),
-        maxWidth: 75,
-        minWidth: 75,
+        maxWidth: 70,
+        minWidth: 70,
       },
       {
         Header: 'GF',
         id: 'goalsFor',
         className: 'text-center',
         accessor: pathOr(0, ['goalsScored']),
-        maxWidth: 75,
-        minWidth: 75,
+        maxWidth: 70,
+        minWidth: 70,
       },
       {
         Header: 'GA',
         id: 'goalsAgainst',
         className: 'text-center',
         accessor: pathOr(0, ['goalsAgainst']),
-        maxWidth: 75,
-        minWidth: 75,
+        maxWidth: 70,
+        minWidth: 70,
       },
       {
         Header: 'Home',
         id: 'home',
         className: 'text-center',
         accessor: pipe(pathOr('N/A', ['records', 'overallRecords', 0]), pick(['wins', 'losses', 'ot']), values, join('-')),
-        maxWidth: 75,
-        minWidth: 75,
+        maxWidth: 70,
+        minWidth: 70,
       },
       {
         Header: 'Away',
         id: 'away',
         className: 'text-center',
         accessor: pipe(pathOr('N/A', ['records', 'overallRecords', 1]), pick(['wins', 'losses', 'ot']), values, join('-')),
-        maxWidth: 75,
-        minWidth: 75,
+        maxWidth: 70,
+        minWidth: 70,
       },
       {
         Header: 'S/O',
         id: 'streak',
         className: 'text-center',
         accessor: pipe(pathOr('N/A', ['records', 'overallRecords', 2]), pick(['wins', 'losses']), values, join('-')),
-        maxWidth: 75,
-        minWidth: 75,
+        maxWidth: 70,
+        minWidth: 70,
       },
       {
         Header: 'L10',
         id: 'streak',
         className: 'text-center',
         accessor: pipe(pathOr('N/A', ['records', 'overallRecords', 3]), pick(['wins', 'losses', 'ot']), values, join('-')),
-        maxWidth: 75,
-        minWidth: 75,
+        maxWidth: 70,
+        minWidth: 70,
       },
       {
         Header: 'STRK',
         id: 'streak',
         className: 'text-center',
         accessor: pathOr('N/A', ['streak', 'code']),
-        maxWidth: 75,
-        minWidth: 75,
+        maxWidth: 70,
+        minWidth: 70,
       },
     ]}
     defaultPageSize={subStandings.teamRecords.length}
