@@ -11,6 +11,7 @@ import {
   isInjured,
   isVeteran,
   pointsInLastGames,
+  cumulativePlusMinusInLastGames,
   hotColdGames,
 } from '../../utils/calculations';
 
@@ -25,6 +26,10 @@ import './style.scss';
 const rounds = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th'];
 
 const urlParams = new URLSearchParams(window.location.search);
+
+const getIsHotText = logs => (`Hot Streak - ${pointsInLastGames(logs)} pts in last ${hotColdGames} games`);
+const getPlusMinusText = (logs, pos) => (pos === 'D' ? ` and ${cumulativePlusMinusInLastGames(logs)} ` : '');
+const getIsColdText = (logs, pos) => (`Cold Streak - ${pointsInLastGames(logs)} pts${getPlusMinusText(logs, pos)} in last ${hotColdGames} games`);
 
 export default class PlayerPage extends React.Component {
   componentDidMount() {
@@ -48,8 +53,6 @@ export default class PlayerPage extends React.Component {
       nationality,
     } = info;
     const lastSeason = stats[stats.length - 1];
-    // console.log(`/images/country/${nationality}.svg`);
-    // console.log(`https://assets1.sportsnet.ca/wp-content/uploads/players/nhl/m/${firstName.toLowerCase()}-${lastName.toLowerCase()}.png`);
     return (
       <div>
         <Helmet>
@@ -124,14 +127,14 @@ export default class PlayerPage extends React.Component {
                     <ReactTooltip />
                   </div>
                 ) : null }
-                { isHot(logs) ? (
-                  <div className="icon-wrapper" data-tip={`Hot Streak - ${pointsInLastGames(logs)} pts in last ${hotColdGames} games`}>
+                { isHot(logs, primaryPosition.abbreviation) ? (
+                  <div className="icon-wrapper" data-tip={getIsHotText(logs)}>
                     <img src={HotIcon} />
                     <ReactTooltip />
                   </div>
                 ) : null}
-                { isCold(logs) ? (
-                  <div className="icon-wrapper" data-tip={`Cold Streak - ${pointsInLastGames(logs)} pts in last ${hotColdGames} games`}>
+                { isCold(logs, primaryPosition.abbreviation) ? (
+                  <div className="icon-wrapper" data-tip={getIsColdText(logs, primaryPosition.abbreviation)}>
                     <img src={ColdIcon} />
                     <ReactTooltip />
                   </div>
