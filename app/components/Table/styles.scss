@@ -33,6 +33,14 @@
   &.standings-stats {
     margin-bottom: 25px;
 
+    .rt-thead {
+      .rt-th {
+        &:nth-child(2) {
+          border-right: solid 1px $grey-4;
+        }
+      }
+    }
+
     &:nth-child(4), &:nth-child(8) {
       .rt-tbody {
         .rt-tr-group:nth-child(2) {
@@ -63,7 +71,7 @@
     .rt-th {
       text-align: center;
       border-right: 0;
-      font-weight: 500;
+      font-weight: 600;
       padding: 15px 10px;
       outline: none;
 

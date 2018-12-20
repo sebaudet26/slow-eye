@@ -24,7 +24,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
       {
         Header: isWildCardTable ? 'Wild Card' : subStandings.division.name,
         id: 'name',
-        className: 'text-left',
+        className: 'text-left border-right',
         accessor: pathOr(0, ['team', 'name']),
         maxWidth: 200,
         minWidth: 200,
