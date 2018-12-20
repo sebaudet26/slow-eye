@@ -45,7 +45,6 @@ class PlayersTable extends React.PureComponent {
             <div className="filters-item-label">Season</div>
             <Select
               classNamePrefix="react-select"
-              resizable={false}
               defaultValue={seasons[0]}
               options={seasons}
               styles={customStyles}
@@ -83,6 +82,7 @@ class PlayersTable extends React.PureComponent {
         </div>
         <ReactTable
           data={players}
+          esizable={false}
           noDataText="Loading all dat good data stuff..."
           filterable
           defaultFilterMethod={toLowerCaseAndMatch}
