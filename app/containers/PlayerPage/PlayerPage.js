@@ -68,7 +68,7 @@ export default class PlayerPage extends React.Component {
             <p>{`${currentTeamInfo.name}, ${primaryPosition.name}, Shoots ${shootsCatches}`}</p>
             <div className="player-desc">
               <div>
-                {!draftInfo.team ? <span className="bold">Undrafted</span> : (
+                {!draftInfo.team ? <span>Undrafted</span> : (
                   <div>
                     <p>
                       <span className="bold">Drafted by</span>
@@ -82,7 +82,7 @@ export default class PlayerPage extends React.Component {
                 <p>
                   <span className="bold">Born</span>
                   {` ${moment(info.birthDate).format('LL')} (${info.currentAge} yrs.) `}
-                  <span className="bold">Birthplace</span>
+                  <span className="bold"> Birthplace</span>
                   {` ${[info.birthCity, info.birthStateProvince || '', info.birthCountry].filter(Boolean).join(', ')} `}
                 </p>
                 <p>
