@@ -45,6 +45,7 @@ class PlayersTable extends React.PureComponent {
             <div className="filters-item-label">Season</div>
             <Select
               classNamePrefix="react-select"
+              resizable={false}
               defaultValue={seasons[0]}
               options={seasons}
               styles={customStyles}

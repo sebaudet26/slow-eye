@@ -10,6 +10,7 @@ const StandingsTable = ({ standings }) => (
     <ReactTable
       showPagination={false}
       sortable={false}
+      resizable={false}
       data={isEmpty(standings) ? [] : standings[2].teamRecords}
       columns={[
         {

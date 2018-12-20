@@ -15,6 +15,7 @@ const CareerStatsTable = ({ stats }) => (
   <div>
     <ReactTable
       showPagination={false}
+      resizable={false}
       sortable={false}
       data={stats}
       columns={[
