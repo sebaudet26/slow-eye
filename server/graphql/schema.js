@@ -134,11 +134,29 @@ const TeamInfo = new GraphQLObjectType({
 }
 */
 
+const Streak = new GraphQLObjectType({
+  name: 'Streak',
+  fields: {
+    type: { type: GraphQLString, resolve: prop('streakType') },
+    number: { type: GraphQLString, resolve: prop('streakNumber') },
+    code: { type: GraphQLString, resolve: prop('streakCode') },
+  },
+});
+
+const LeagueRecord = new GraphQLObjectType({
+  name: 'LeagueRecord',
+  fields: {
+    wins: { type: GraphQLInt, resolve: prop('wins') },
+    losses: { type: GraphQLInt, resolve: prop('losses') },
+    ot: { type: GraphQLInt, resolve: prop('ot') },
+  },
+});
+
 const TeamRecord = new GraphQLObjectType({
   name: 'TeamRecord',
   fields: {
     team: { type: TeamInfo, resolve: prop('team') },
-    leagueRecord: { type: LeagueInfo, resolve: prop('league') },
+    leagueRecord: { type: LeagueRecord, resolve: prop('leagueRecord') },
     goalsAgainst: { type: GraphQLInt, resolve: prop('goalsAgainst') },
     goalsScored: { type: GraphQLInt, resolve: prop('goalsScored') },
     points: { type: GraphQLInt, resolve: prop('points') },
@@ -146,9 +164,9 @@ const TeamRecord = new GraphQLObjectType({
     conferenceRank: { type: GraphQLInt, resolve: pipe(prop('conferenceRank'), Number) },
     leagueRank: { type: GraphQLInt, resolve: pipe(prop('leagueRank'), Number) },
     wildCardRank: { type: GraphQLInt, resolve: pipe(prop('wildCardRank'), Number) },
-    row: { type: GraphQLInt, resolve: prop('row') },
+    // row: { type: GraphQLInt, resolve: prop('row') },
     gamesPlayed: { type: GraphQLInt, resolve: prop('gamesPlayed') },
-    streak: { type: GraphQLInt, resolve: prop('streak') },
+    streak: { type: Streak, resolve: prop('streak') },
   },
 });
 

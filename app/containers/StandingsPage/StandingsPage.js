@@ -24,7 +24,6 @@ export default class StandingsPage extends React.Component {
           />
         </Helmet>
         <h2>Standings</h2>
-        <h3 className="no-margin-top">Eastern Conference</h3>
         <StandingsTable standings={standings} />
       </div>
     );

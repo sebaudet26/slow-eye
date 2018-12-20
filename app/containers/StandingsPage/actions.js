@@ -8,8 +8,22 @@ const wildCardStandingsQuery = `
     type,
     conference {
       name
-    }
+    },
+    division {
+      name
+    },
     teamRecords {
+      gamesPlayed,
+      goalsScored,
+      goalsAgainst,
+      divisionRank,
+      wildCardRank,
+      leagueRecord {
+        wins, losses, ot
+      },
+      streak {
+        code
+      },
       points,
       team {
         name
