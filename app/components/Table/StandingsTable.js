@@ -13,6 +13,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
   <ReactTable
     showPagination={false}
     sortable={false}
+    resizable={false}
     data={subStandings.teamRecords}
     columns={[
       {
@@ -24,20 +25,12 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         minWidth: 40,
       },
       {
-        Header: isWildCardTable ? 'Wild Card' : subStandings.division.name,
-        id: 'name',
-        className: 'text-left border-right',
-        accessor: pathOr(0, ['team', 'name']),
-        maxWidth: 200,
-        minWidth: 200,
-      },
-      {
         Header: '',
         id: 'logo',
-        className: 'text-center',
+        className: 'text-center team-cell',
         accessor: pathOr(0, ['team']),
-        maxWidth: 70,
-        minWidth: 70,
+        maxWidth: 50,
+        minWidth: 50,
         Cell: row => (
           <a href={`./team?id=${row.value.id}`}>
             <img src={`/images/teams/small/${row.value.abbreviation.toUpperCase().replace(' ', '-')}.png`} />
@@ -45,11 +38,25 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         ),
       },
       {
+        Header: isWildCardTable ? 'Wild Card' : subStandings.division.name,
+        id: 'name',
+        className: 'text-left border-right',
+        accessor: pathOr(0, ['team', 'name']),
+        maxWidth: 200,
+        minWidth: 200,
+        Cell: row => (
+          <a href={`./team?id=${row.value.id}`}>
+            {row.value}
+          </a>
+        ),
+      },
+
+      {
         Header: 'GP',
         id: 'games',
         className: 'text-center',
         accessor: pathOr(0, ['gamesPlayed']),
-        maxWidth: 50,
+        maxWidth: 85,
         minWidth: 50,
       },
       {
@@ -57,7 +64,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         id: 'wins',
         className: 'text-center',
         accessor: pathOr(0, ['leagueRecord', 'wins']),
-        maxWidth: 70,
+        maxWidth: 85,
         minWidth: 70,
       },
       {
@@ -65,7 +72,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         id: 'losses',
         className: 'text-center',
         accessor: pathOr(0, ['leagueRecord', 'losses']),
-        maxWidth: 70,
+        maxWidth: 85,
         minWidth: 70,
       },
       {
@@ -73,7 +80,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         id: 'otl',
         className: 'text-center',
         accessor: pathOr(0, ['leagueRecord', 'ot']),
-        maxWidth: 70,
+        maxWidth: 85,
         minWidth: 70,
       },
       {
@@ -81,7 +88,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         id: 'points',
         className: 'text-center',
         accessor: pathOr(0, ['points']),
-        maxWidth: 70,
+        maxWidth: 85,
         minWidth: 70,
       },
       {
@@ -89,7 +96,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         id: 'goalsFor',
         className: 'text-center',
         accessor: pathOr(0, ['goalsScored']),
-        maxWidth: 70,
+        maxWidth: 85,
         minWidth: 70,
       },
       {
@@ -97,7 +104,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         id: 'goalsAgainst',
         className: 'text-center',
         accessor: pathOr(0, ['goalsAgainst']),
-        maxWidth: 70,
+        maxWidth: 85,
         minWidth: 70,
       },
       {
@@ -105,7 +112,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         id: 'home',
         className: 'text-center',
         accessor: pipe(pathOr('N/A', ['records', 'overallRecords', 0]), pick(['wins', 'losses', 'ot']), values, join('-')),
-        maxWidth: 70,
+        maxWidth: 85,
         minWidth: 70,
       },
       {
@@ -113,7 +120,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         id: 'away',
         className: 'text-center',
         accessor: pipe(pathOr('N/A', ['records', 'overallRecords', 1]), pick(['wins', 'losses', 'ot']), values, join('-')),
-        maxWidth: 70,
+        maxWidth: 85,
         minWidth: 70,
       },
       {
@@ -121,7 +128,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         id: 'streak',
         className: 'text-center',
         accessor: pipe(pathOr('N/A', ['records', 'overallRecords', 2]), pick(['wins', 'losses']), values, join('-')),
-        maxWidth: 70,
+        maxWidth: 85,
         minWidth: 70,
       },
       {
@@ -129,7 +136,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         id: 'streak',
         className: 'text-center',
         accessor: pipe(pathOr('N/A', ['records', 'overallRecords', 3]), pick(['wins', 'losses', 'ot']), values, join('-')),
-        maxWidth: 70,
+        maxWidth: 85,
         minWidth: 70,
       },
       {
@@ -137,7 +144,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         id: 'streak',
         className: 'text-center',
         accessor: pathOr('N/A', ['streak', 'code']),
-        maxWidth: 70,
+        maxWidth: 85,
         minWidth: 70,
       },
     ]}
