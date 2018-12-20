@@ -82,7 +82,7 @@ class PlayersTable extends React.PureComponent {
         </div>
         <ReactTable
           data={players}
-          esizable={false}
+          esizable={false}d
           noDataText="Loading all dat good data stuff..."
           filterable
           defaultFilterMethod={toLowerCaseAndMatch}
