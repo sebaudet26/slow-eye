@@ -56,9 +56,10 @@
 
       li {
         padding: 15px;
+        border-bottom: solid 1px $grey-4;
 
-        &:first-child {
-          border-bottom: solid 1px $grey-4;
+        &:last-child {
+          border-bottom: 0px;
         }
       }
     }

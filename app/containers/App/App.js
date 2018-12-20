@@ -14,6 +14,7 @@ import HomePage from '../HomePage/Loadable';
 import StandingsPage from '../StandingsPage/Loadable';
 import PlayerPage from '../PlayerPage/Loadable';
 import TeamPage from '../TeamPage/Loadable';
+import ScorePage from '../ScorePage/Loadable';
 import NotFoundPage from '../NotFoundPage/Loadable';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -33,6 +34,7 @@ const App = () => (
       <Route path="/standings" component={StandingsPage} />
       <Route path="/player" component={PlayerPage} />
       <Route path="/team" component={TeamPage} />
+      <Route path="/scores" component={ScorePage} />
       <Route path="" component={NotFoundPage} />
     </Switch>
     <Footer />

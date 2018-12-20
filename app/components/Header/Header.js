@@ -26,12 +26,16 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
           <NavLink activeClassName="active" className="header-nav-item" to="/standings">
             Standings
           </NavLink>
+          <NavLink activeClassName="active" className="header-nav-item" to="/scores">
+            Scores
+          </NavLink>
         </div>
         <div className="header-mobile">
           <img className="header-mobile-icon" src={MobileIcon} alt="" onClick={burgerToggle} />
           <ul className="header-mobile-list">
             <li><NavLink to="/" exact onClick={burgerToggle}>Player Stats</NavLink></li>
             <li><NavLink to="/standings" onClick={burgerToggle}>Standings</NavLink></li>
+            <li><NavLink to="/scores" onClick={burgerToggle}>Scores</NavLink></li>
           </ul>
         </div>
       </div>
