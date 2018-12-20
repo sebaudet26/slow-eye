@@ -65,7 +65,7 @@ export default class PlayerPage extends React.Component {
         <div className="player-header">
           <div className="player-info">
             <h2>{`${info.firstName} ${info.lastName}`}</h2>
-            <p>{`${currentTeamInfo.name}, ${primaryPosition.name}, Shoots ${shootsCatches}`}</p>
+            <p><a href="">{`${currentTeamInfo.name}`}</a>, {`${primaryPosition.name}, Shoots ${shootsCatches}`}</p>
             <div className="player-desc">
               <div>
                 {!draftInfo.team ? <span>Undrafted</span> : (
