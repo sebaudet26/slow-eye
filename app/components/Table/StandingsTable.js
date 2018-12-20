@@ -29,7 +29,7 @@ const StandingsTable = ({ standings }) => (
           minWidth: 125,
         },
       ]}
-      defaultPageSize={standings[2].teamRecords.length}
+      defaultPageSize={3}
       className="-striped -highlight career-stats"
     />
   </div>
