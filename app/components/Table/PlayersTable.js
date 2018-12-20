@@ -37,8 +37,8 @@ class PlayersTable extends React.PureComponent {
             <div className="filters-season-label">Season</div>
             <Select
               classNamePrefix="react-select"
+              defaultValue={seasons[0]}
               options={seasons}
-              defaultOption="20172018"
               styles={customStyles}
               theme={(theme) => ({
                 ...theme,
