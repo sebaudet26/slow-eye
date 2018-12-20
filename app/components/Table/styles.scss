@@ -147,7 +147,9 @@
 }
 
 .react-select {
+
   &__control {
+    cursor: pointer;
     display: flex;
     align-items: center;
     min-height: 38px;
@@ -160,6 +162,10 @@
     &:hover, &--is-focused {
       box-shadow: $shadow-2;
     }
+  }
+
+  &__option {
+    cursor: pointer;
   }
 }
 
