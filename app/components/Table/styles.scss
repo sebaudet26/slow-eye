@@ -30,6 +30,18 @@
     }
   }
 
+  &.standings-stats {
+    margin-bottom: 25px;
+
+    &:nth-child(4), &:nth-child(8) {
+      .rt-tbody {
+        .rt-tr-group:nth-child(2) {
+          border-bottom: solid 5px $grey-4;
+        }
+      }
+    }
+  }
+
   .rt-thead {
     &.-header {
       box-shadow: none;
@@ -64,11 +76,7 @@
   .rt-tbody {
 
     .rt-tr.-odd {
-      background: $grey-5;
-    }
-
-    .rt-tr:hover {
-      background: #edf0f3 !important;
+      background: #f6f9fca3;
     }
 
     .rt-tr-group {

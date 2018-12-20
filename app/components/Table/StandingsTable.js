@@ -86,7 +86,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         minWidth: 75,
       },
       {
-        Header: 'HOME',
+        Header: 'Home',
         id: 'home',
         className: 'text-center',
         accessor: pipe(pathOr('N/A', ['records', 'overallRecords', 0]), pick(['wins', 'losses', 'ot']), values, join('-')),
@@ -94,7 +94,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         minWidth: 75,
       },
       {
-        Header: 'AWAY',
+        Header: 'Away',
         id: 'away',
         className: 'text-center',
         accessor: pipe(pathOr('N/A', ['records', 'overallRecords', 1]), pick(['wins', 'losses', 'ot']), values, join('-')),
@@ -127,7 +127,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
       },
     ]}
     defaultPageSize={subStandings.teamRecords.length}
-    className="-striped -highlight standings-stats"
+    className="-striped standings-stats"
   />
 );
 
@@ -140,10 +140,10 @@ const Standings = ({ standings }) => (
   !isEmpty(standings) ? (
     <div>
       <h3 className="no-margin-top">Eastern Conference</h3>
-      <StandingsTable subStandings={standings[2]} isWildCardTable={false} />
       <StandingsTable subStandings={standings[3]} isWildCardTable={false} />
+      <StandingsTable subStandings={standings[2]} isWildCardTable={false} />
       <StandingsTable subStandings={standings[0]} isWildCardTable />
-      <h3 className="no-margin-top">Western Conference</h3>
+      <h3>Western Conference</h3>
       <StandingsTable subStandings={standings[4]} isWildCardTable={false} />
       <StandingsTable subStandings={standings[5]} isWildCardTable={false} />
       <StandingsTable subStandings={standings[1]} isWildCardTable />

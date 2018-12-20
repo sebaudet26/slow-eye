@@ -275,7 +275,7 @@ class PlayersTable extends React.PureComponent {
             },
           ]}
           defaultPageSize={20}
-          className="-striped -highlight player-stats"
+          className="-striped player-stats"
         />
       </div>
     );

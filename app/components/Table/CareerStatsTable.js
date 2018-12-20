@@ -130,7 +130,7 @@ const CareerStatsTable = ({ stats }) => (
         },
       ]}
       defaultPageSize={stats.length}
-      className="-striped -highlight career-stats"
+      className="-striped career-stats"
     />
   </div>
 );
