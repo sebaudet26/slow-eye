@@ -26,7 +26,8 @@ const makePlayerQuery = id => `
         teamName
       },
       primaryPosition {
-        name
+        name,
+        abbreviation
       },
       draftInfo {
         year,
@@ -63,7 +64,8 @@ const makePlayerQuery = id => `
     logs {
       date,
       stat {
-        points
+        points,
+        plusMinus
       }
     }
   }
