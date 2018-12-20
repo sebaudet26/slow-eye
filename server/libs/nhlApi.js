@@ -217,7 +217,7 @@ const fetchAllPlayers = async () => {
 };
 
 const fetchStandings = async () => {
-  const standingsResponse = await nhlAPI('/standings/wildCardWithLeaders');
+  const standingsResponse = await nhlAPI('/standings/wildCardWithLeaders?expand=standings.record');
   const standings = prop('records', standingsResponse);
   return standings;
 };

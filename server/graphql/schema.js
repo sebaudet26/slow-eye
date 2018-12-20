@@ -149,6 +149,16 @@ const LeagueRecord = new GraphQLObjectType({
     wins: { type: GraphQLInt, resolve: prop('wins') },
     losses: { type: GraphQLInt, resolve: prop('losses') },
     ot: { type: GraphQLInt, resolve: prop('ot') },
+    type: { type: GraphQLString, resolve: prop('type') },
+  },
+});
+
+const Records = new GraphQLObjectType({
+  name: 'Records',
+  fields: {
+    divisionRecords: { type: GraphQLList(LeagueRecord), resolve: prop('divisionRecords') },
+    overallRecords: { type: GraphQLList(LeagueRecord), resolve: prop('overallRecords') },
+    conferenceRecords: { type: GraphQLList(LeagueRecord), resolve: prop('conferenceRecords') },
   },
 });
 
@@ -165,6 +175,7 @@ const TeamRecord = new GraphQLObjectType({
     leagueRank: { type: GraphQLInt, resolve: pipe(prop('leagueRank'), Number) },
     wildCardRank: { type: GraphQLInt, resolve: pipe(prop('wildCardRank'), Number) },
     // row: { type: GraphQLInt, resolve: prop('row') },
+    records: { type: Records, resolve: prop('records') },
     gamesPlayed: { type: GraphQLInt, resolve: prop('gamesPlayed') },
     streak: { type: Streak, resolve: prop('streak') },
   },

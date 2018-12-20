@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
-import { isEmpty, pathOr } from 'ramda';
+import {
+  isEmpty, pathOr, pipe, pick, join, values,
+} from 'ramda';
 import 'react-table/react-table.css';
 import './styles.scss';
 
@@ -28,7 +30,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         minWidth: 200,
       },
       {
-        Header: 'Games',
+        Header: 'GP',
         id: 'games',
         className: 'text-center',
         accessor: pathOr(0, ['gamesPlayed']),
@@ -36,7 +38,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         minWidth: 75,
       },
       {
-        Header: 'Wins',
+        Header: 'W',
         id: 'wins',
         className: 'text-center',
         accessor: pathOr(0, ['leagueRecord', 'wins']),
@@ -44,7 +46,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         minWidth: 75,
       },
       {
-        Header: 'Losses',
+        Header: 'L',
         id: 'losses',
         className: 'text-center',
         accessor: pathOr(0, ['leagueRecord', 'losses']),
@@ -60,7 +62,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         minWidth: 75,
       },
       {
-        Header: 'Points',
+        Header: 'Pts',
         id: 'points',
         className: 'text-center',
         accessor: pathOr(0, ['points']),
@@ -84,7 +86,39 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         minWidth: 75,
       },
       {
-        Header: 'Streak',
+        Header: 'HOME',
+        id: 'home',
+        className: 'text-center',
+        accessor: pipe(pathOr('N/A', ['records', 'overallRecords', 0]), pick(['wins', 'losses', 'ot']), values, join('-')),
+        maxWidth: 75,
+        minWidth: 75,
+      },
+      {
+        Header: 'AWAY',
+        id: 'away',
+        className: 'text-center',
+        accessor: pipe(pathOr('N/A', ['records', 'overallRecords', 1]), pick(['wins', 'losses', 'ot']), values, join('-')),
+        maxWidth: 75,
+        minWidth: 75,
+      },
+      {
+        Header: 'S/O',
+        id: 'streak',
+        className: 'text-center',
+        accessor: pipe(pathOr('N/A', ['records', 'overallRecords', 2]), pick(['wins', 'losses']), values, join('-')),
+        maxWidth: 75,
+        minWidth: 75,
+      },
+      {
+        Header: 'L10',
+        id: 'streak',
+        className: 'text-center',
+        accessor: pipe(pathOr('N/A', ['records', 'overallRecords', 3]), pick(['wins', 'losses', 'ot']), values, join('-')),
+        maxWidth: 75,
+        minWidth: 75,
+      },
+      {
+        Header: 'STRK',
         id: 'streak',
         className: 'text-center',
         accessor: pathOr('N/A', ['streak', 'code']),

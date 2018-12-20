@@ -13,6 +13,14 @@ const wildCardStandingsQuery = `
       name
     },
     teamRecords {
+      records {
+        overallRecords {
+          wins,
+          losses,
+          ot,
+          type
+        }
+      },
       gamesPlayed,
       goalsScored,
       goalsAgainst,
