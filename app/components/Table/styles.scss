@@ -135,9 +135,10 @@
   margin: 15px 0 25px 0;
   display: flex;
 
-  &-season {
-    max-width: 400px;
+  &-item {
+    max-width: 250px;
     width: 100%;
+    margin-right: 25px;
 
     &-label {
       margin-bottom: 5px;
@@ -165,7 +166,7 @@
   }
 
   &__option {
-    cursor: pointer;
+    cursor: pointer !important;
   }
 }
 

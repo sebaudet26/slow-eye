@@ -27,18 +27,45 @@ const customStyles = {
   }),
 }
 
+//Country Dropdown Options
+const countries = [
+  { value: 'ALL', label: 'All' },
+  { value: 'CAN', label: 'Canada' },
+  { value: 'USA', label: 'United States' },
+  { value: 'SWE', label: 'Sweden' }
+]
+
 class PlayersTable extends React.PureComponent {
   render() {
     const { players } = this.props;
     return (
       <div>
         <div className="filters">
-          <div className="filters-season">
-            <div className="filters-season-label">Season</div>
+          <div className="filters-item">
+            <div className="filters-item-label">Season</div>
             <Select
               classNamePrefix="react-select"
               defaultValue={seasons[0]}
               options={seasons}
+              styles={customStyles}
+              theme={(theme) => ({
+                ...theme,
+                borderRadius: 6,
+                colors: {
+                ...theme.colors,
+                  primary: '#3D5AFE',
+                  primary50: '#CBD1DB',
+                  primary25: '#E2E7EC',
+                },
+              })}
+            />
+          </div>
+          <div className="filters-item">
+            <div className="filters-item-label">Country</div>
+            <Select
+              classNamePrefix="react-select"
+              defaultValue={countries[0]}
+              options={countries}
               styles={customStyles}
               theme={(theme) => ({
                 ...theme,
