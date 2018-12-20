@@ -65,11 +65,15 @@ export default class PlayerPage extends React.Component {
             <p>{`${currentTeamInfo.name}, ${primaryPosition.name}, Shoots ${shootsCatches}`}</p>
             <div className="player-desc">
               <div>
-                <p>
-                  <span className="bold">Drafted by</span>
-                  {` Drafted by ${draftInfo.team.name}`}
-                </p>
-                <p>{`${rounds[draftInfo.round - 1]} Round, #${draftInfo.pickOverall} Overall, ${draftInfo.year} NHL Draft`}</p>
+                {!draftInfo.team ? <span className="bold">Undrafted</span> : (
+                  <div>
+                    <p>
+                      <span className="bold">Drafted by</span>
+                      {` Drafted by ${draftInfo.team.name}`}
+                    </p>
+                    <p>{`${rounds[draftInfo.round - 1]} Round, #${draftInfo.pickOverall} Overall, ${draftInfo.year} NHL Draft`}</p>
+                  </div>
+                )}
               </div>
               <div className="player-desc-right">
                 <p>
