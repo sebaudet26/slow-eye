@@ -1,7 +1,8 @@
 const {
-  contains, filter, flatten, map, mergeAll, path, prop, pipe, equals, toLower,
+  contains, filter, flatten, map, mergeAll, path, prop, pipe, equals, toLower, propOr,
 } = require('ramda');
 
+const moment = require('moment');
 const fetch = require('node-fetch');
 
 const nhlApiUrl = 'https://statsapi.web.nhl.com/api/v1';
@@ -222,6 +223,18 @@ const fetchStandings = async () => {
   return standings;
 };
 
+const fetchGames = async (args) => {
+  let resource = '/schedule';
+  if (args.date) {
+    resource += `?date=${args.date}`;
+  } else {
+    resource += `?date=${moment().format('YYYY-MM-DD')}`;
+  }
+  const gamesResponse = await nhlAPI(resource);
+  const games = flatten(map(propOr({}, 'games'), gamesResponse.dates || []));
+  return games;
+};
+
 module.exports = {
   nhlAPI,
   fetchStandings,
@@ -235,4 +248,5 @@ module.exports = {
   fetchPlayersForTeamId,
   fetchAllTeams,
   fetchAllPlayers,
+  fetchGames,
 };

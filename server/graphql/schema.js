@@ -19,6 +19,7 @@ const {
   fetchInfoForTeamId,
   fetchDraftInfoForPlayer,
   fetchAllPlayers,
+  fetchGames,
   nhlAPI,
 } = require('../libs/nhlApi');
 
@@ -648,6 +649,59 @@ const PlayerDetails = new GraphQLObjectType({
   },
 });
 
+const GameStatus = new GraphQLObjectType({
+  name: 'GameStatus',
+  fields: {
+    abstractGameState: {
+      type: GraphQLString,
+      resolve: prop('abstractGameState'),
+    },
+    codedGameState: {
+      type: GraphQLString,
+      resolve: prop('codedGameState'),
+    },
+    detailedState: {
+      type: GraphQLString,
+      resolve: prop('detailedState'),
+    },
+    statusCode: {
+      type: GraphQLString,
+      resolve: prop('statusCode'),
+    },
+  },
+});
+
+const MatchupTeam = new GraphQLObjectType({
+  name: 'MatchupTeam',
+  fields: {
+    leagueRecord: { type: LeagueRecord, resolve: prop('leagueRecord') },
+    score: { type: GraphQLInt, resolve: prop('score') },
+    team: { type: TeamInfo, resolve: o => fetchInfoForTeamId(o.team.id) },
+  },
+});
+
+const Matchup = new GraphQLObjectType({
+  name: 'Matchup',
+  fields: {
+    away: { type: MatchupTeam, resolve: prop('away') },
+    home: { type: MatchupTeam, resolve: prop('home') },
+  },
+});
+
+const Game = new GraphQLObjectType({
+  name: 'Game',
+  fields: {
+    gamePk: { type: GraphQLInt, resolve: prop('gamePk') },
+    link: { type: GraphQLString, resolve: prop('link') },
+    gameType: { type: GraphQLString, resolve: prop('gameType') },
+    season: { type: GraphQLString, resolve: prop('season') },
+    gameDate: { type: GraphQLString, resolve: prop('gameDate') },
+    status: { type: GameStatus, resolve: prop('status') },
+    teams: { type: Matchup, resolve: prop('teams') },
+    // venue: {},
+  },
+});
+
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
@@ -666,6 +720,15 @@ const schema = new GraphQLSchema({
       standings: {
         type: GraphQLList(StandingsRecord),
         resolve: fetchStandings,
+      },
+      games: {
+        args: {
+          startDate: { type: GraphQLString },
+          date: { type: GraphQLString },
+          endDate: { type: GraphQLString },
+        },
+        type: GraphQLList(Game),
+        resolve: (root, args) => fetchGames(args),
       },
     },
   }),
