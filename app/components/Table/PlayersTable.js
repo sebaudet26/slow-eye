@@ -3,12 +3,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import Select from 'react-select';
-import { pathOr } from 'ramda';
+import { find, propEq, pathOr, isEmpty } from 'ramda';
 import 'react-table/react-table.css';
 import './styles.scss';
 
 const toLowerCaseAndMatch = (filter, row) => String(row[filter.id]).toLowerCase().match(filter.value.toLowerCase());
 
+const saveStateToLS = (state) => {
+    window.localStorage.setItem('playersFilters', JSON.stringify(state));
+}
+
+const getSavedState = () => {
+  const savedState = window.localStorage.getItem('playersFilters');
+  return savedState ? JSON.parse(savedState) : {};
+
+}
 
 const positions = [
   { value: "all", label: "All" },
@@ -68,7 +77,7 @@ const nationalities = [
   { value: "SVK", label: "Slovakia" },
   { value: "DEU", label: "Germany" },
   { value: "AUS", label: "Austria" },
-  { value: "DEN", label: "Denmark" },
+  { value: "DNK", label: "Denmark" },
   { value: "FRA", label: "France" },
   { value: "LAT", label: "Latvia" },
   { value: "NOR", label: "Norway" },
@@ -89,11 +98,14 @@ const customStyles = {
 class PlayersTable extends React.PureComponent {
   constructor() {
     super();
-    this.state = {};
+    this.state = getSavedState();
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handlePosChange = this.handlePosChange.bind(this);
     this.handleTeamChange = this.handleTeamChange.bind(this);
     this.handleNatChange = this.handleNatChange.bind(this);
+  }
+  componentDidUpdate (){
+    saveStateToLS(this.state);
   }
   handleNameChange(e) {
     this.setState({ nameSelected: e.target.value });
@@ -114,7 +126,13 @@ class PlayersTable extends React.PureComponent {
         <div className="filters">
           <div className="filters-item">
             <label>Filter By Player Name</label>
-            <input placeholder="e.g. Wayne Gretzky" className="filters-input" type="text" onChange={this.handleNameChange} />
+            <input
+              placeholder="e.g. Wayne Gretzky"
+              className="filters-input"
+              type="text"
+              onChange={this.handleNameChange}
+              value={this.state.nameSelected}
+            />
           </div>
           <div className="filters-item">
             <div className="filters-item-label">Filter By Position</div>
@@ -124,6 +142,7 @@ class PlayersTable extends React.PureComponent {
               defaultValue={positions[0]}
               options={positions}
               styles={customStyles}
+              value={find(propEq('value', this.state.posSelected))(positions)}
               theme={(theme) => ({
                 ...theme,
                 borderRadius: 6,
@@ -144,6 +163,7 @@ class PlayersTable extends React.PureComponent {
               defaultValue={teams[0]}
               options={teams}
               styles={customStyles}
+              value={find(propEq('value', this.state.teamSelected))(teams)}
               theme={(theme) => ({
                 ...theme,
                 borderRadius: 6,
@@ -164,6 +184,7 @@ class PlayersTable extends React.PureComponent {
               defaultValue={teams[0]}
               options={nationalities}
               styles={customStyles}
+              value={find(propEq('value', this.state.natSelected))(nationalities)}
               theme={(theme) => ({
                 ...theme,
                 borderRadius: 6,
@@ -178,6 +199,26 @@ class PlayersTable extends React.PureComponent {
           </div>
         </div>
         <ReactTable
+          getTdProps={(state, rowInfo, column, instance) => {
+            return {
+              onClick: (e, handleOriginal) => {
+                console.log("A Td Element was clicked!");
+                console.log("it produced this event:", e);
+                console.log("It was in this column:", column);
+                console.log("It was in this row:", rowInfo);
+                console.log("It was in this table instance:", instance);
+
+                // IMPORTANT! React-Table uses onClick internally to trigger
+                // events like expanding SubComponents and pivots.
+                // By default a custom 'onClick' handler will override this functionality.
+                // If you want to fire the original onClick handler, call the
+                // 'handleOriginal' function.
+                if (handleOriginal) {
+                  handleOriginal();
+                }
+              }
+            };
+          }}
           filtered={[
             {
               id: 'fullName',
@@ -206,7 +247,7 @@ class PlayersTable extends React.PureComponent {
               Header: '#',
               id: 'rank',
               Cell: (row) => {
-                return <div>{row.viewIndex+1}</div>;
+                return <div>{(row.viewIndex+1)+(row.page * row.pageSize)}</div>;
               },
               className: 'text-left',
               maxWidth: 50,
