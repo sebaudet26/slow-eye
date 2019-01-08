@@ -7,16 +7,74 @@ import { pathOr } from 'ramda';
 import 'react-table/react-table.css';
 import './styles.scss';
 
-const toLowerCaseAndMatch = (filter, row) => String(row[filter.id])
-  .toLowerCase()
-  .match(filter.value.toLowerCase());
+const toLowerCaseAndMatch = (filter, row) => String(row[filter.id]).toLowerCase().match(filter.value.toLowerCase());
+
+
+const positions = [
+  { value: "all", label: "All" },
+  { value: "F", label: "Forward" },
+  { value: "D", label: "Defenseman" },
+  { value: "G", label: "Goalie" },
+  { value: "C", label: "Center" },
+  { value: "LW", label: "Left Wing" },
+  { value: "RW", label: "Right Wing" },
+]
 
 //Team Dropdown Options
 const teams = [
-  { value: 'ALL', label: 'All' },
-  { value: 'ANA', label: 'Anaheim Ducks' },
-  { value: 'ARI', label: 'Arizona Coyotes' },
-  { value: 'BOS', label: 'Boston Bruins' }
+  { value: "all", label: "All" },
+  { value: "ANA", label: "Anaheim Ducks" },
+  { value: "ARI", label: "Arizona Coyotes" },
+  { value: "BOS", label: "Boston Bruins" },
+  { value: "BUF", label: "Buffalo Sabres" },
+  { value: "CAR", label: "Carolina Hurricanes" },
+  { value: "CBJ", label: "Columbus Blue Jackets" },
+  { value: "CGY", label: "Calgary Flames" },
+  { value: "CHI", label: "Chicago Blackhawks" },
+  { value: "COL", label: "Colorado Avalanche" },
+  { value: "DAL", label: "Dallas Stars" },
+  { value: "DET", label: "Detroit Red Wings" },
+  { value: "EDM", label: "Edmonton Oilers" },
+  { value: "FLA", label: "Florida Panthers" },
+  { value: "LAK", label: "Los Angeles Kings" },
+  { value: "MIN", label: "Minnestota Wild" },
+  { value: "MTL", label: "Montreal Canadiens" },
+  { value: "NSH", label: "Nashville Predators" },
+  { value: "NJD", label: "New Jersey Devils" },
+  { value: "NYI", label: "New York Islanders" },
+  { value: "NYR", label: "New York Rangers" },
+  { value: "OTT", label: "Ottawa Senators" },
+  { value: "PHI", label: "Philadelphia Flyers" },
+  { value: "PIT", label: "Pittsburgh Penguins" },
+  { value: "SJS", label: "San Jose Sharks" },
+  { value: "STL", label: "St.Louis Blues" },
+  { value: "TBL", label: "Tampa Bay Lightning" },
+  { value: "TOR", label: "Toronto Maple Leafs" },
+  { value: "VAN", label: "Vancouver Canucks" },
+  { value: "VGK", label: "Vegas Golden Knights" },
+  { value: "WPG", label: "Winnipeg Jets" },
+  { value: "WSH", label: "Washington Capitals" },
+]
+
+const nationalities = [
+  { value: "all", label: "All" },
+  { value: "CAN", label: "Canada" },
+  { value: "USA", label: "United States" },
+  { value: "RUS", label: "Russia" },
+  { value: "SWE", label: "Sweden" },
+  { value: "FIN", label: "Finland" },
+  { value: "CZE", label: "Czech Republic" },
+  { value: "CHE", label: "Switzerland" },
+  { value: "SVK", label: "Slovakia" },
+  { value: "DEU", label: "Germany" },
+  { value: "AUS", label: "Austria" },
+  { value: "DEN", label: "Denmark" },
+  { value: "FRA", label: "France" },
+  { value: "LAT", label: "Latvia" },
+  { value: "NOR", label: "Norway" },
+  { value: "SVN", label: "Slovenia" },
+  { value: "NLD", label: "Netherlands" },
+  { value: "AUS", label: "Australia" },
 ]
 
 //Dropdown Styles
@@ -28,14 +86,26 @@ const customStyles = {
   }),
 }
 
-const makeDefaultState = () => ({
-  filtered: []
-});
-
 class PlayersTable extends React.PureComponent {
   constructor() {
     super();
-    this.state = makeDefaultState();
+    this.state = {};
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handlePosChange = this.handlePosChange.bind(this);
+    this.handleTeamChange = this.handleTeamChange.bind(this);
+    this.handleNatChange = this.handleNatChange.bind(this);
+  }
+  handleNameChange(e) {
+    this.setState({ nameSelected: e.target.value });
+  }
+  handlePosChange(target) {
+    this.setState({ posSelected: target.value });
+  }
+  handleTeamChange(target) {
+    this.setState({ teamSelected: target.value });
+  }
+  handleNatChange(target) {
+    this.setState({ natSelected: target.value });
   }
   render() {
     const { players } = this.props;
@@ -43,8 +113,33 @@ class PlayersTable extends React.PureComponent {
       <div>
         <div className="filters">
           <div className="filters-item">
-            <div className="filters-item-label">Teams</div>
+            <label>Filter By Player Name</label>
+            <input placeholder="e.g. Wayne Gretzky" className="filters-input" type="text" onChange={this.handleNameChange} />
+          </div>
+          <div className="filters-item">
+            <div className="filters-item-label">Filter By Position</div>
             <Select
+              onChange={this.handlePosChange}
+              classNamePrefix="react-select"
+              defaultValue={positions[0]}
+              options={positions}
+              styles={customStyles}
+              theme={(theme) => ({
+                ...theme,
+                borderRadius: 6,
+                colors: {
+                ...theme.colors,
+                  primary: '#3D5AFE',
+                  primary50: '#CBD1DB',
+                  primary25: '#E2E7EC',
+                },
+              })}
+            />
+          </div>
+          <div className="filters-item">
+            <div className="filters-item-label">Filter By Team</div>
+            <Select
+              onChange={this.handleTeamChange}
               classNamePrefix="react-select"
               defaultValue={teams[0]}
               options={teams}
@@ -61,34 +156,46 @@ class PlayersTable extends React.PureComponent {
               })}
             />
           </div>
+          <div className="filters-item">
+            <div className="filters-item-label">Filter By Nationality</div>
+            <Select
+              onChange={this.handleNatChange}
+              classNamePrefix="react-select"
+              defaultValue={teams[0]}
+              options={nationalities}
+              styles={customStyles}
+              theme={(theme) => ({
+                ...theme,
+                borderRadius: 6,
+                colors: {
+                ...theme.colors,
+                  primary: '#3D5AFE',
+                  primary50: '#CBD1DB',
+                  primary25: '#E2E7EC',
+                },
+              })}
+            />
+          </div>
         </div>
-        {this.state.filtered[0] ? JSON.stringify(this.state.filtered[0].value, null, 2): null}
         <ReactTable
-          getTdProps={(state, rowInfo, column, instance) => {
-            return {
-              onClick: (e, handleOriginal) => {
-                console.log("A Td Element was clicked!");
-                console.log("it produced this event:", e);
-                console.log("It was in this column:", column);
-                console.log("It was in this row:", rowInfo);
-                console.log("It was in this table instance:", instance);
-
-                // IMPORTANT! React-Table uses onClick internally to trigger
-                // events like expanding SubComponents and pivots.
-                // By default a custom 'onClick' handler will override this functionality.
-                // If you want to fire the original onClick handler, call the
-                // 'handleOriginal' function.
-                if (handleOriginal) {
-                  handleOriginal();
-                }
-              }
-            };
-          }}
-          filtered={[{
-            id: 'team',
-            value: 'ANA'
-          }]}
-          onFilteredChange={filtered => this.setState({ filtered })}
+          filtered={[
+            {
+              id: 'fullName',
+              value: this.state.nameSelected || ''
+            },
+            {
+              id: 'position',
+              value: this.state.posSelected || 'all'
+            },
+            {
+              id: 'team',
+              value: this.state.teamSelected || 'all'
+            },
+            {
+              id: 'nationality',
+              value: this.state.natSelected || 'all'
+            },
+          ]}
           data={players}
           resizable={false}
           noDataText="Loading all dat good data stuff..."
@@ -121,9 +228,26 @@ class PlayersTable extends React.PureComponent {
               ),
             },
             {
+              Header: 'Pos.',
+              id: 'position',
+              className: 'text-left',
+              maxWidth: 85,
+              minWidth: 50,
+              accessor: d => pathOr(0, ['position', 'abbreviation'], d),
+              filterMethod: (filter, row) => {
+                if (filter.value === 'all') {
+                  return true;
+                }
+                else if (filter.value === 'F') {
+                  return row[filter.id] === 'C' | row[filter.id] === 'LW' | row[filter.id] === 'RW';
+                }
+                return String(row[filter.id]).toLowerCase().match(filter.value.toLowerCase());
+              }
+            },
+            {
               Header: 'Team',
               id: 'team',
-              className: 'text-left team-cell',
+              className: 'text-left team-cell border-right',
               maxWidth: 85,
               minWidth: 50,
               Cell: row => (
@@ -138,74 +262,20 @@ class PlayersTable extends React.PureComponent {
                 }
                 return String(row[filter.id]).toLowerCase().match(filter.value.toLowerCase());
               },
-              Filter: ({ filter, onChange }) => (
-                <select
-                  onChange={event => onChange(event.target.value)}
-                  style={{ width: '100%' }}
-                  value={filter ? filter.value : 'all'}
-                >
-                  <option value="all">All</option>
-                  <option value="ANA">Anaheim Ducks</option>
-                  <option value="ARI">Arizona Coyotes</option>
-                  <option value="BOS">Boston Bruins</option>
-                  <option value="BUF">Buffalo Sabres</option>
-                  <option value="CAR">Carolina Hurricanes</option>
-                  <option value="CBJ">Columbus Blue Jackets</option>
-                  <option value="CGY">Calgary Flames</option>
-                  <option value="CHI">Chicago Blackhawks</option>
-                  <option value="COL">Colorado Avalanche</option>
-                  <option value="DAL">Dallas Stars</option>
-                  <option value="DET">Detroit Red Wings</option>
-                  <option value="EDM">Edmonton Oilers</option>
-                  <option value="FLA">Florida Panthers</option>
-                  <option value="LAK">Los Angeles Kings</option>
-                  <option value="MIN">Minnestota Wild</option>
-                  <option value="MTL">Montreal Canadiens</option>
-                  <option value="NSH">Nashville Predators</option>
-                  <option value="NJD">New Jersey Devils</option>
-                  <option value="NYI">New York Islanders</option>
-                  <option value="NYR">New York Rangers</option>
-                  <option value="OTT">Ottawa Senators</option>
-                  <option value="PHI">Philadelphia Flyers</option>
-                  <option value="PIT">Pittsburgh Penguins</option>
-                  <option value="SJS">San Jose Sharks</option>
-                  <option value="STL">St.Louis Blues</option>
-                  <option value="TBL">Tampa Bay Lightning</option>
-                  <option value="TOR">Toronto Maple Leafs</option>
-                  <option value="VAN">Vancouver Canucks</option>
-                  <option value="VGK">Vegas Golden Knights</option>
-                  <option value="WPG">Winnipeg Jets</option>
-                  <option value="WSH">Washington Capitals</option>
-                </select>
-              ),
             },
             {
-              Header: 'Pos.',
-              id: 'position',
-              className: 'text-left border-right',
+              Header: 'Nat.',
+              id: 'nationality',
+              className: 'text-left team-cell hidden',
               maxWidth: 85,
               minWidth: 50,
-              accessor: d => pathOr(0, ['position', 'abbreviation'], d),
+              accessor: d => pathOr(0, ['info', 'nationality'], d),
               filterMethod: (filter, row) => {
                 if (filter.value === 'all') {
                   return true;
                 }
                 return String(row[filter.id]).toLowerCase().match(filter.value.toLowerCase());
               },
-              Filter: ({ filter, onChange }) => (
-                <select
-                  onChange={event => onChange(event.target.value)}
-                  style={{ width: '100%' }}
-                  value={filter ? filter.value : 'all'}
-                >
-                  <option value="all">All</option>
-                  <option value="C">C</option>
-                  <option value="LW">LW</option>
-                  <option value="RW">RW</option>
-                  <option value="D">D</option>
-                  <option value="G">G</option>
-                </select>
-              ),
             },
             {
               Header: 'GP',

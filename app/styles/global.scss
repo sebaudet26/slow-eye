@@ -93,6 +93,16 @@ p {
   font-weight: 400;
 }
 
+input {
+  font-size: 16px;
+  font-family: "Avenir Next", Arial, sans-serif;
+  color: $black !important;
+
+  &[placeholder] {
+    font-size: 16px;
+  }
+}
+
 button {
   font-family: "Avenir Next", Arial, sans-serif;
   font-weight: 500;

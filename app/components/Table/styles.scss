@@ -1,5 +1,6 @@
 @import '../../styles/variables.scss';
 
+
 .ReactTable {
   box-shadow: $shadow;
   border: 0px;
@@ -15,6 +16,10 @@
       &:nth-child(4) {
         text-align: left;
         border-right: solid 1px $grey-4;
+      }
+
+      &:nth-child(5) {
+        display: none;
       }
     }
   }
@@ -58,15 +63,7 @@
     }
 
     &.-filters {
-      border-bottom: solid 1px $grey-4;
-
-      .rt-th {
-        border-right: none;
-
-        &:nth-child(4) {
-          border-right: solid 1px $grey-4;
-        }
-      }
+      display: none;
     }
 
     .rt-th {
@@ -76,7 +73,7 @@
       padding: 15px 10px;
       outline: none;
 
-      &:first-child, &:nth-child(2) {
+      &:first-child, &:nth-child(2), &:nth-child(3) {
         text-align: left;
       }
     }
@@ -130,6 +127,10 @@
 }
 
 
+.hidden {
+  display: none;
+}
+
 .border-right {
   border-right: solid 1px $grey-4 !important;
 }
@@ -153,12 +154,26 @@
   display: flex;
   //display: none;
 
+  &-input {
+    margin-top: 5px;
+    padding: 2px 8px;
+    width: 250px;
+    display: flex;
+    align-items: center;
+    min-height: 38px;
+    outline: 0 !important;
+    transition: 0.3s;
+    background: #ffffff;
+    box-shadow: 0px 2px 12px 0px rgba(221, 231, 239, 0.75);
+    border-radius: 6px;
+  }
+
   &-item {
     max-width: 250px;
     width: 100%;
     margin-right: 25px;
 
-    &-label {
+    &-label, label {
       margin-bottom: 5px;
       color: $grey-2;
     }
