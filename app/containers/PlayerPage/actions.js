@@ -23,7 +23,8 @@ const makePlayerQuery = id => `
       rosterStatus,
       currentTeamInfo {
         name,
-        teamName
+        teamName,
+        abbreviation
       },
       primaryPosition {
         name,
@@ -43,6 +44,7 @@ const makePlayerQuery = id => `
       season,
       team {
         name
+        abbreviation
       },
       league {
         name

@@ -17,7 +17,7 @@ const useAcronyms = (leagueName) => {
   return leagueName;
 };
 
-const CareerStatsTable = ({ stats }) => (
+const CareerStatsTable = ({ stats , info }) => (
   <div>
     <ReactTable
       showPagination={false}
@@ -37,40 +37,46 @@ const CareerStatsTable = ({ stats }) => (
         {
           Header: 'League',
           id: 'league',
-          maxWidth: 125,
-          minWidth: 75,
+          maxWidth: 85,
+          minWidth: 60,
           className: 'text-left',
           accessor: d => useAcronyms(pathOr('-', ['league', 'name'], d)),
         },
         {
           Header: 'Team',
           id: 'team',
-          maxWidth: 200,
+          maxWidth: 250,
           minWidth: 200,
-          className: 'border-right text-left',
-          accessor: d => pathOr('-', ['team', 'name'], d),
+          className: 'border-right text-left team-cell',
+          accessor: d => `${pathOr('-', ['team', 'name'], d)}+${pathOr('-', ['team', 'abbreviation'], d)}`,
+          Cell: row => (
+            <div>
+              <img src={`/images/teams/small/${row.value.split('+')[1]}.png`} />
+              {row.value.split('+')[0]}
+            </div>
+          ),
         },
         {
           Header: 'GP',
           id: 'games',
-          maxWidth: 100,
-          minWidth: 75,
+          maxWidth: 85,
+          minWidth: 50,
           accessor: d => pathOr('-', ['stat', 'games'], d),
           Footer: sumByPath(stats, ['stat', 'games']),
         },
         {
           Header: 'G',
           id: 'goals',
-          maxWidth: 100,
-          minWidth: 75,
+          maxWidth: 85,
+          minWidth: 50,
           accessor: d => pathOr('-', ['stat', 'goals'], d),
           Footer: sumByPath(stats, ['stat', 'goals']),
         },
         {
           Header: 'A',
           id: 'assists',
-          maxWidth: 100,
-          minWidth: 75,
+          maxWidth: 85,
+          minWidth: 50,
           accessor: d => pathOr('-', ['stat', 'assists'], d),
           Footer: sumByPath(stats, ['stat', 'assists']),
         },
@@ -85,48 +91,48 @@ const CareerStatsTable = ({ stats }) => (
         {
           Header: '+/-',
           id: 'plusMinus',
-          maxWidth: 100,
-          minWidth: 75,
+          maxWidth: 85,
+          minWidth: 50,
           accessor: d => pathOr('-', ['stat', 'plusMinus'], d),
           Footer: sumByPath(stats, ['stat', 'plusMinus']),
         },
         {
           Header: 'PIM',
           id: 'pim',
-          maxWidth: 100,
-          minWidth: 75,
+          maxWidth: 85,
+          minWidth: 50,
           accessor: d => pathOr('-', ['stat', 'pim'], d),
           Footer: sumByPath(stats, ['stat', 'pim']),
         },
         {
           Header: 'Hits',
           id: 'hits',
-          maxWidth: 100,
-          minWidth: 75,
+          maxWidth: 85,
+          minWidth: 50,
           accessor: d => pathOr('-', ['stat', 'hits'], d),
           Footer: sumByPath(stats, ['stat', 'hits']),
         },
         {
           Header: 'Bks',
           id: 'blocked',
-          maxWidth: 100,
-          minWidth: 75,
+          maxWidth: 85,
+          minWidth: 50,
           accessor: d => pathOr('-', ['stat', 'blocked'], d),
           Footer: sumByPath(stats, ['stat', 'blocked']),
         },
         {
           Header: 'SOG',
           id: 'shots',
-          maxWidth: 100,
-          minWidth: 75,
+          maxWidth: 85,
+          minWidth: 50,
           accessor: d => pathOr('-', ['stat', 'shots'], d),
           Footer: sumByPath(stats, ['stat', 'shots']),
         },
         {
           Header: 'S%',
           id: 'shotPct',
-          maxWidth: 100,
-          minWidth: 75,
+          maxWidth: 85,
+          minWidth: 50,
           accessor: d => pathOr('-', ['stat', 'shotPct'], d),
           Footer: (
             <span>
