@@ -27,7 +27,9 @@ const wildCardStandingsQuery = `
       divisionRank,
       wildCardRank,
       leagueRecord {
-        wins, losses, ot
+        wins,
+        losses,
+        ot
       },
       streak {
         code
@@ -37,6 +39,14 @@ const wildCardStandingsQuery = `
         id,
         name,
         abbreviation
+      },
+      records {
+        overallRecords {
+          type,
+          wins,
+          losses,
+          ot
+        }
       }
     }
   }

@@ -125,7 +125,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
       },
       {
         Header: 'S/O',
-        id: 'streak',
+        id: 'so',
         className: 'text-center',
         accessor: pipe(pathOr('N/A', ['records', 'overallRecords', 2]), pick(['wins', 'losses']), values, join('-')),
         maxWidth: 85,
@@ -133,7 +133,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
       },
       {
         Header: 'L10',
-        id: 'streak',
+        id: 'l10',
         className: 'text-center',
         accessor: pipe(pathOr('N/A', ['records', 'overallRecords', 3]), pick(['wins', 'losses', 'ot']), values, join('-')),
         maxWidth: 85,

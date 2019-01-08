@@ -140,7 +140,61 @@ const TeamInfo = new GraphQLObjectType({
     "streakNumber" : 1,
     "streakCode" : "W1"
   },
-  "lastUpdated" : "2018-12-20T00:03:12Z"
+  "lastUpdated" : "2018-12-20T00:03:12Z",
+  "records" : {
+    "divisionRecords" : [ {
+      "wins" : 3,
+      "losses" : 3,
+      "ot" : 2,
+      "type" : "Central"
+    }, {
+      "wins" : 9,
+      "losses" : 2,
+      "ot" : 1,
+      "type" : "Atlantic"
+    }, {
+      "wins" : 5,
+      "losses" : 4,
+      "ot" : 0,
+      "type" : "Pacific"
+    }, {
+      "wins" : 8,
+      "losses" : 3,
+      "ot" : 1,
+      "type" : "Metropolitan"
+    } ],
+    "overallRecords" : [ {
+      "wins" : 12,
+      "losses" : 6,
+      "ot" : 2,
+      "type" : "home"
+    }, {
+      "wins" : 13,
+      "losses" : 6,
+      "ot" : 2,
+      "type" : "away"
+    }, {
+      "wins" : 3,
+      "losses" : 1,
+      "type" : "shootOuts"
+    }, {
+      "wins" : 6,
+      "losses" : 3,
+      "ot" : 1,
+      "type" : "lastTen"
+    } ],
+    "conferenceRecords" : [ {
+      "wins" : 17,
+      "losses" : 5,
+      "ot" : 2,
+      "type" : "Eastern"
+    }, {
+      "wins" : 8,
+      "losses" : 7,
+      "ot" : 2,
+      "type" : "Western"
+    } ]
+  },
 }
 */
 
@@ -153,8 +207,8 @@ const Streak = new GraphQLObjectType({
   },
 });
 
-const LeagueRecord = new GraphQLObjectType({
-  name: 'LeagueRecord',
+const Record = new GraphQLObjectType({
+  name: 'Record',
   fields: {
     wins: { type: GraphQLInt, resolve: prop('wins') },
     losses: { type: GraphQLInt, resolve: prop('losses') },
@@ -166,9 +220,9 @@ const LeagueRecord = new GraphQLObjectType({
 const Records = new GraphQLObjectType({
   name: 'Records',
   fields: {
-    divisionRecords: { type: GraphQLList(LeagueRecord), resolve: prop('divisionRecords') },
-    overallRecords: { type: GraphQLList(LeagueRecord), resolve: prop('overallRecords') },
-    conferenceRecords: { type: GraphQLList(LeagueRecord), resolve: prop('conferenceRecords') },
+    divisionRecords: { type: GraphQLList(Record), resolve: prop('divisionRecords') },
+    overallRecords: { type: GraphQLList(Record), resolve: prop('overallRecords') },
+    conferenceRecords: { type: GraphQLList(Record), resolve: prop('conferenceRecords') },
   },
 });
 
@@ -176,7 +230,7 @@ const TeamRecord = new GraphQLObjectType({
   name: 'TeamRecord',
   fields: {
     team: { type: TeamInfo, resolve: prop('team') },
-    leagueRecord: { type: LeagueRecord, resolve: prop('leagueRecord') },
+    leagueRecord: { type: Record, resolve: prop('leagueRecord') },
     goalsAgainst: { type: GraphQLInt, resolve: prop('goalsAgainst') },
     goalsScored: { type: GraphQLInt, resolve: prop('goalsScored') },
     points: { type: GraphQLInt, resolve: prop('points') },
@@ -674,7 +728,7 @@ const GameStatus = new GraphQLObjectType({
 const MatchupTeam = new GraphQLObjectType({
   name: 'MatchupTeam',
   fields: {
-    leagueRecord: { type: LeagueRecord, resolve: prop('leagueRecord') },
+    leagueRecord: { type: Record, resolve: prop('leagueRecord') },
     score: { type: GraphQLInt, resolve: prop('score') },
     team: { type: TeamInfo, resolve: o => fetchInfoForTeamId(o.team.id) },
   },
