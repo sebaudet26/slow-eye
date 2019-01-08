@@ -119,6 +119,17 @@ class PlayersTable extends React.PureComponent {
           defaultFilterMethod={toLowerCaseAndMatch}
           columns={[
             {
+              Header: 'Rank',
+              id: 'rank',
+              Cell: (row) => {
+                return <div>{row.index+1}</div>;
+              },
+              className: 'text-left',
+              maxWidth: 75,
+              minWidth: 50,
+              filterable: false,
+            },
+            {
               Header: 'Name',
               id: 'fullName',
               accessor: d => d.person.fullName,
@@ -306,6 +317,7 @@ class PlayersTable extends React.PureComponent {
             },
           ]}
           defaultPageSize={20}
+          defaultSortDesc={true}
           className="-striped player-stats"
         />
       </div>
