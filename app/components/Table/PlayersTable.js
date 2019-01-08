@@ -12,7 +12,7 @@ const toLowerCaseAndMatch = (filter, row) => String(row[filter.id])
   .match(filter.value.toLowerCase());
 
 //Team Dropdown Options
-const seasons = [
+const teams = [
   { value: 'ALL', label: 'All' },
   { value: 'ANA', label: 'Anaheim Ducks' },
   { value: 'ARI', label: 'Arizona Coyotes' },
@@ -28,25 +28,6 @@ const customStyles = {
   }),
 }
 
-//Country Dropdown Options
-const positions = [
-  { value: 'ALL', label: 'All' },
-  { value: 'F', label: 'Forward' },
-  { value: 'D', label: 'Defensemen' },
-  { value: 'G', label: 'Goalie' },
-  { value: 'C', label: 'Center' },
-  { value: 'LW', label: 'Left Wing' },
-  { value: 'RW', label: 'Right Wing' }
-]
-
-//Country Dropdown Options
-const countries = [
-  { value: 'ALL', label: 'All' },
-  { value: 'CAN', label: 'Canada' },
-  { value: 'USA', label: 'United States' },
-  { value: 'SWE', label: 'Sweden' }
-]
-
 class PlayersTable extends React.PureComponent {
   render() {
     const { players } = this.props;
@@ -57,46 +38,8 @@ class PlayersTable extends React.PureComponent {
             <div className="filters-item-label">Teams</div>
             <Select
               classNamePrefix="react-select"
-              defaultValue={seasons[0]}
-              options={seasons}
-              styles={customStyles}
-              theme={(theme) => ({
-                ...theme,
-                borderRadius: 6,
-                colors: {
-                ...theme.colors,
-                  primary: '#3D5AFE',
-                  primary50: '#CBD1DB',
-                  primary25: '#E2E7EC',
-                },
-              })}
-            />
-          </div>
-          <div className="filters-item">
-            <div className="filters-item-label">Position</div>
-            <Select
-              classNamePrefix="react-select"
-              defaultValue={positions[0]}
-              options={positions}
-              styles={customStyles}
-              theme={(theme) => ({
-                ...theme,
-                borderRadius: 6,
-                colors: {
-                ...theme.colors,
-                  primary: '#3D5AFE',
-                  primary50: '#CBD1DB',
-                  primary25: '#E2E7EC',
-                },
-              })}
-            />
-          </div>
-          <div className="filters-item">
-            <div className="filters-item-label">Country</div>
-            <Select
-              classNamePrefix="react-select"
-              defaultValue={countries[0]}
-              options={countries}
+              defaultValue={teams[0]}
+              options={teams}
               styles={customStyles}
               theme={(theme) => ({
                 ...theme,
@@ -112,6 +55,26 @@ class PlayersTable extends React.PureComponent {
           </div>
         </div>
         <ReactTable
+          getTdProps={(state, rowInfo, column, instance) => {
+            return {
+              onClick: (e, handleOriginal) => {
+                console.log("A Td Element was clicked!");
+                console.log("it produced this event:", e);
+                console.log("It was in this column:", column);
+                console.log("It was in this row:", rowInfo);
+                console.log("It was in this table instance:", instance);
+
+                // IMPORTANT! React-Table uses onClick internally to trigger
+                // events like expanding SubComponents and pivots.
+                // By default a custom 'onClick' handler will override this functionality.
+                // If you want to fire the original onClick handler, call the
+                // 'handleOriginal' function.
+                if (handleOriginal) {
+                  handleOriginal();
+                }
+              }
+            };
+          }}
           data={players}
           resizable={false}
           noDataText="Loading all dat good data stuff..."
@@ -119,15 +82,16 @@ class PlayersTable extends React.PureComponent {
           defaultFilterMethod={toLowerCaseAndMatch}
           columns={[
             {
-              Header: 'Rank',
+              Header: '#',
               id: 'rank',
               Cell: (row) => {
-                return <div>{row.index+1}</div>;
+                return <div>{row.viewIndex+1}</div>;
               },
               className: 'text-left',
-              maxWidth: 75,
+              maxWidth: 50,
               minWidth: 50,
               filterable: false,
+              sortable: false,
             },
             {
               Header: 'Name',

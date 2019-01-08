@@ -12,7 +12,7 @@
 
   &.player-stats {
     .rt-th {
-      &:nth-child(3) {
+      &:nth-child(4) {
         text-align: left;
         border-right: solid 1px $grey-4;
       }
@@ -63,7 +63,7 @@
       .rt-th {
         border-right: none;
 
-        &:nth-child(3) {
+        &:nth-child(4) {
           border-right: solid 1px $grey-4;
         }
       }
