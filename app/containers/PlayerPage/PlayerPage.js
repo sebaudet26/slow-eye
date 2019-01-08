@@ -30,6 +30,8 @@ const urlParams = new URLSearchParams(window.location.search);
 const getIsHotText = logs => (`Hot Streak - ${pointsInLastGames(logs)} pts in last ${hotColdGames} games`);
 const getPlusMinusText = (logs, pos) => (pos === 'D' ? ` and ${cumulativePlusMinusInLastGames(logs)} ` : '');
 const getIsColdText = (logs, pos) => (`Cold Streak - ${pointsInLastGames(logs)} pts${getPlusMinusText(logs, pos)} in last ${hotColdGames} games`);
+const playerIsActiveThisYear = latestSeason => latestSeason.season === '20182019';
+
 
 export default class PlayerPage extends React.Component {
   componentDidMount() {
@@ -53,6 +55,7 @@ export default class PlayerPage extends React.Component {
       nationality,
     } = info;
     const lastSeason = stats[stats.length - 1];
+    const isActiveThisYear = playerIsActiveThisYear(lastSeason);
     return (
       <div>
         <Helmet>
@@ -65,7 +68,12 @@ export default class PlayerPage extends React.Component {
         <div className="player-header">
           <div className="player-info">
             <h2>{`${info.firstName} ${info.lastName}`}</h2>
-            <p><a href="">{`${currentTeamInfo.name}`}</a>, {`${primaryPosition.name}, Shoots ${shootsCatches}`}</p>
+            <p>
+              <a href="">{`${currentTeamInfo.name}`}</a>
+,
+              {' '}
+              {`${primaryPosition.name}, Shoots ${shootsCatches}`}
+            </p>
             <div className="player-desc">
               <div>
                 {!draftInfo.team ? <span>Undrafted</span> : (
@@ -96,55 +104,55 @@ export default class PlayerPage extends React.Component {
             <div className="player-stats">
               <div className="player-stats-item">
                 <div className="light small-text">GP</div>
-                <div className="bold">{lastSeason.stat.games}</div>
+                <div className="bold">{isActiveThisYear ? lastSeason.stat.games : 0}</div>
               </div>
               <div className="player-stats-item">
                 <div className="light small-text">G</div>
-                <div className="bold">{lastSeason.stat.goals}</div>
+                <div className="bold">{isActiveThisYear ? lastSeason.stat.goals : 0}</div>
               </div>
               <div className="player-stats-item">
                 <div className="light small-text">A</div>
-                <div className="bold">{lastSeason.stat.assists}</div>
+                <div className="bold">{isActiveThisYear ? lastSeason.stat.assists : 0}</div>
               </div>
               <div className="player-stats-item">
                 <div className="light small-text">Pts</div>
-                <div className="bold">{lastSeason.stat.points}</div>
+                <div className="bold">{isActiveThisYear ? lastSeason.stat.points : 0}</div>
               </div>
               <div className="player-stats-item">
                 <div className="light small-text">+/-</div>
-                <div className="bold">{lastSeason.stat.plusMinus}</div>
+                <div className="bold">{isActiveThisYear ? lastSeason.stat.plusMinus : 0}</div>
               </div>
               <div className="player-badges">
-                { rookie ? (
-                  <div className="icon-wrapper" data-tip="Rookie">
-                    <img src={RookieIcon} />
-                    <ReactTooltip />
-                  </div>
-                ) : null }
                 { isInjured(info) ? (
                   <div className="icon-wrapper" data-tip="Injured">
                     <img src={InjuryIcon} />
                     <ReactTooltip />
                   </div>
                 ) : null }
-                { isHot(logs, primaryPosition.abbreviation) ? (
-                  <div className="icon-wrapper" data-tip={getIsHotText(logs)}>
-                    <img src={HotIcon} />
+                { rookie ? (
+                  <div className="icon-wrapper" data-tip="Rookie">
+                    <img src={RookieIcon} />
                     <ReactTooltip />
                   </div>
-                ) : null}
-                { isCold(logs, primaryPosition.abbreviation) ? (
-                  <div className="icon-wrapper" data-tip={getIsColdText(logs, primaryPosition.abbreviation)}>
-                    <img src={ColdIcon} />
-                    <ReactTooltip />
-                  </div>
-                ) : null}
+                ) : null }
                 { isVeteran(stats) ? (
                   <div className="icon-wrapper" data-tip="Veteran">
                     <img src={VeteranIcon} />
                     <ReactTooltip />
                   </div>
                 ) : null }
+                { isActiveThisYear && isHot(logs, primaryPosition.abbreviation) ? (
+                  <div className="icon-wrapper" data-tip={getIsHotText(logs)}>
+                    <img src={HotIcon} />
+                    <ReactTooltip />
+                  </div>
+                ) : null}
+                { isActiveThisYear && isCold(logs, primaryPosition.abbreviation) ? (
+                  <div className="icon-wrapper" data-tip={getIsColdText(logs, primaryPosition.abbreviation)}>
+                    <img src={ColdIcon} />
+                    <ReactTooltip />
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>

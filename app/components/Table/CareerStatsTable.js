@@ -10,6 +10,12 @@ import 'react-table/react-table.css';
 import './styles.scss';
 
 const sumByPath = (stats = [], props) => sum(map(pathOr(0, props), stats));
+const useAcronyms = (leagueName) => {
+  if (leagueName === 'National Hockey League') {
+    return 'NHL';
+  }
+  return leagueName;
+};
 
 const CareerStatsTable = ({ stats }) => (
   <div>
@@ -31,10 +37,10 @@ const CareerStatsTable = ({ stats }) => (
         {
           Header: 'League',
           id: 'league',
-          maxWidth: 200,
-          minWidth: 175,
+          maxWidth: 125,
+          minWidth: 75,
           className: 'text-left',
-          accessor: d => pathOr('-', ['league', 'name'], d),
+          accessor: d => useAcronyms(pathOr('-', ['league', 'name'], d)),
         },
         {
           Header: 'Team',
@@ -47,24 +53,24 @@ const CareerStatsTable = ({ stats }) => (
         {
           Header: 'GP',
           id: 'games',
-          maxWidth: 85,
-          minWidth: 50,
+          maxWidth: 100,
+          minWidth: 75,
           accessor: d => pathOr('-', ['stat', 'games'], d),
           Footer: sumByPath(stats, ['stat', 'games']),
         },
         {
           Header: 'G',
           id: 'goals',
-          maxWidth: 85,
-          minWidth: 50,
+          maxWidth: 100,
+          minWidth: 75,
           accessor: d => pathOr('-', ['stat', 'goals'], d),
           Footer: sumByPath(stats, ['stat', 'goals']),
         },
         {
           Header: 'A',
           id: 'assists',
-          maxWidth: 85,
-          minWidth: 50,
+          maxWidth: 100,
+          minWidth: 75,
           accessor: d => pathOr('-', ['stat', 'assists'], d),
           Footer: sumByPath(stats, ['stat', 'assists']),
         },
@@ -79,52 +85,52 @@ const CareerStatsTable = ({ stats }) => (
         {
           Header: '+/-',
           id: 'plusMinus',
-          maxWidth: 85,
-          minWidth: 50,
+          maxWidth: 100,
+          minWidth: 75,
           accessor: d => pathOr('-', ['stat', 'plusMinus'], d),
           Footer: sumByPath(stats, ['stat', 'plusMinus']),
         },
         {
           Header: 'PIM',
           id: 'pim',
-          maxWidth: 85,
-          minWidth: 50,
+          maxWidth: 100,
+          minWidth: 75,
           accessor: d => pathOr('-', ['stat', 'pim'], d),
           Footer: sumByPath(stats, ['stat', 'pim']),
         },
         {
           Header: 'Hits',
           id: 'hits',
-          maxWidth: 85,
-          minWidth: 50,
+          maxWidth: 100,
+          minWidth: 75,
           accessor: d => pathOr('-', ['stat', 'hits'], d),
           Footer: sumByPath(stats, ['stat', 'hits']),
         },
         {
           Header: 'Bks',
           id: 'blocked',
-          maxWidth: 85,
-          minWidth: 50,
+          maxWidth: 100,
+          minWidth: 75,
           accessor: d => pathOr('-', ['stat', 'blocked'], d),
           Footer: sumByPath(stats, ['stat', 'blocked']),
         },
         {
           Header: 'SOG',
           id: 'shots',
-          maxWidth: 85,
-          minWidth: 50,
+          maxWidth: 100,
+          minWidth: 75,
           accessor: d => pathOr('-', ['stat', 'shots'], d),
           Footer: sumByPath(stats, ['stat', 'shots']),
         },
         {
           Header: 'S%',
           id: 'shotPct',
-          maxWidth: 85,
-          minWidth: 50,
+          maxWidth: 100,
+          minWidth: 75,
           accessor: d => pathOr('-', ['stat', 'shotPct'], d),
           Footer: (
             <span>
-              {mean(map(path(['stat', 'shotPct']), stats)).toFixed(2)}
+              {mean(map(path(['stat', 'shotPct']), stats)).toFixed(1)}
             </span>
           ),
         },
