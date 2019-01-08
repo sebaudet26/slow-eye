@@ -8,7 +8,7 @@ const {
   GraphQLFloat,
 } = require('graphql');
 const {
-  pipe, prop, join, drop, path,
+  pipe, prop, join, drop, path, map,
 } = require('ramda');
 const {
   fetchStandings,
@@ -16,9 +16,11 @@ const {
   fetchCurrentSeasonGameLogsForPlayerId,
   fetchAllYearsStatsForPlayerId,
   fetchInfoForPlayerId,
+  fetchStatsForTeamId,
   fetchInfoForTeamId,
   fetchDraftInfoForPlayer,
   fetchAllPlayers,
+  fetchAllTeams,
   fetchGames,
   nhlAPI,
 } = require('../libs/nhlApi');
@@ -52,6 +54,104 @@ const LeagueInfo = new GraphQLObjectType({
     id: { type: GraphQLInt, resolve: prop('id') },
     name: { type: GraphQLString, resolve: prop('name') },
     link: { type: GraphQLString, resolve: prop('link') },
+  },
+});
+
+const Venue = new GraphQLObjectType({
+  name: 'Venue',
+  fields: {
+    id: { type: GraphQLInt, resolve: prop('id') },
+    name: { type: GraphQLString, resolve: prop('name') },
+    link: { type: GraphQLString, resolve: prop('link') },
+    city: { type: GraphQLString, resolve: prop('city') },
+  },
+});
+
+/* Team Stats
+{
+  "type" : {
+    "displayName" : "statsSingleSeason"
+  },
+  "splits" : [ {
+    "stat" : {
+      "gamesPlayed" : 41,
+      "wins" : 16,
+      "losses" : 18,
+      "ot" : 7,
+      "pts" : 39,
+      "ptPctg" : "47.6",
+      "goalsPerGame" : 2.951,
+      "goalsAgainstPerGame" : 3.293,
+      "evGGARatio" : 0.8901,
+      "powerPlayPercentage" : "18.9",
+      "powerPlayGoals" : 25.0,
+      "powerPlayGoalsAgainst" : 20.0,
+      "powerPlayOpportunities" : 132.0,
+      "penaltyKillPercentage" : "85.2",
+      "shotsPerGame" : 33.1707,
+      "shotsAllowed" : 31.2927,
+      "winScoreFirst" : 0.538,
+      "winOppScoreFirst" : 0.133,
+      "winLeadFirstPer" : 0.643,
+      "winLeadSecondPer" : 0.813,
+      "winOutshootOpp" : 0.455,
+      "winOutshotByOpp" : 0.375,
+      "faceOffsTaken" : 2575.0,
+      "faceOffsWon" : 1226.0,
+      "faceOffsLost" : 1349.0,
+      "faceOffWinPercentage" : "47.6",
+      "shootingPctg" : 8.9,
+      "savePctg" : 0.895
+    },
+    "team" : {
+      "id" : 1,
+      "name" : "New Jersey Devils",
+      "link" : "/api/v1/teams/1"
+    }
+  }]
+}
+*/
+
+
+const TeamStat = new GraphQLObjectType({
+  name: 'TeamStat',
+  fields: {
+    gamesPlayed: { type: GraphQLString, resolve: pipe(prop('gamesPlayed'), String) },
+    wins: { type: GraphQLString, resolve: pipe(prop('wins'), String) },
+    losses: { type: GraphQLString, resolve: pipe(prop('losses'), String) },
+    ot: { type: GraphQLString, resolve: pipe(prop('ot'), String) },
+    pts: { type: GraphQLString, resolve: pipe(prop('pts'), String) },
+    ptPctg: { type: GraphQLString, resolve: pipe(prop('ptPctg'), String) },
+    goalsPerGame: { type: GraphQLString, resolve: pipe(prop('goalsPerGame'), String) },
+    goalsAgainstPerGame: { type: GraphQLString, resolve: pipe(prop('goalsAgainstPerGame'), String) },
+    evGGARatio: { type: GraphQLString, resolve: pipe(prop('evGGARatio'), String) },
+    powerPlayPercentage: { type: GraphQLString, resolve: pipe(prop('powerPlayPercentage'), String) },
+    powerPlayGoals: { type: GraphQLString, resolve: pipe(prop('powerPlayGoals'), String) },
+    powerPlayGoalsAgainst: { type: GraphQLString, resolve: pipe(prop('powerPlayGoalsAgainst'), String) },
+    powerPlayOpportunities: { type: GraphQLString, resolve: pipe(prop('powerPlayOpportunities'), String) },
+    penaltyKillPercentage: { type: GraphQLString, resolve: pipe(prop('penaltyKillPercentage'), String) },
+    shotsPerGame: { type: GraphQLString, resolve: pipe(prop('shotsPerGame'), String) },
+    shotsAllowed: { type: GraphQLString, resolve: pipe(prop('shotsAllowed'), String) },
+    winScoreFirst: { type: GraphQLString, resolve: pipe(prop('winScoreFirst'), String) },
+    winOppScoreFirst: { type: GraphQLString, resolve: pipe(prop('winOppScoreFirst'), String) },
+    winLeadFirstPer: { type: GraphQLString, resolve: pipe(prop('winLeadFirstPer'), String) },
+    winLeadSecondPer: { type: GraphQLString, resolve: pipe(prop('winLeadSecondPer'), String) },
+    winOutshootOpp: { type: GraphQLString, resolve: pipe(prop('winOutshootOpp'), String) },
+    winOutshotByOpp: { type: GraphQLString, resolve: pipe(prop('winOutshotByOpp'), String) },
+    faceOffsTaken: { type: GraphQLString, resolve: pipe(prop('faceOffsTaken'), String) },
+    faceOffsWon: { type: GraphQLString, resolve: pipe(prop('faceOffsWon'), String) },
+    faceOffsLost: { type: GraphQLString, resolve: pipe(prop('faceOffsLost'), String) },
+    faceOffWinPercentage: { type: GraphQLString, resolve: pipe(prop('faceOffWinPercentage'), String) },
+    shootingPctg: { type: GraphQLString, resolve: pipe(prop('shootingPctg'), String) },
+    savePctg: { type: GraphQLString, resolve: pipe(prop('savePctg'), String) },
+  },
+});
+
+const TeamStats = new GraphQLObjectType({
+  name: 'TeamStats',
+  fields: {
+    type: { type: GraphQLString, resolve: path(['type', 'displayName']) },
+    splits: { type: GraphQLList(TeamStat), resolve: pipe(prop('splits'), map(prop('stat'))) },
   },
 });
 
@@ -107,8 +207,10 @@ const TeamInfo = new GraphQLObjectType({
     abbreviation: { type: GraphQLString, resolve: ifNotThereFetchLink('abbreviation') },
     teamName: { type: GraphQLString, resolve: ifNotThereFetchLink('teamName') },
     locationName: { type: GraphQLString, resolve: ifNotThereFetchLink('locationName') },
+    venue: { type: Venue, resolve: prop('venue') },
     shortName: { type: GraphQLString, resolve: ifNotThereFetchLink('shortName') },
     officialSiteUrl: { type: GraphQLString, resolve: ifNotThereFetchLink('officialSiteUrl') },
+    teamStats: { type: TeamStats, resolve: p => fetchStatsForTeamId(p.id) },
   },
 });
 
@@ -418,41 +520,6 @@ const PlayerInfo = new GraphQLObjectType({
   }
 }
 */
-
-const GameLog = new GraphQLObjectType({
-  name: 'GameLog',
-  fields: {
-    timeOnIce: { type: GraphQLString, resolve: prop('timeOnIce') },
-    assists: { type: GraphQLInt, resolve: prop('assists') },
-    goals: { type: GraphQLInt, resolve: prop('goals') },
-    pim: { type: GraphQLInt, resolve: prop('pim') },
-    shots: { type: GraphQLInt, resolve: prop('shots') },
-    games: { type: GraphQLInt, resolve: prop('games') },
-    hits: { type: GraphQLInt, resolve: prop('hits') },
-    powerPlayGoals: { type: GraphQLInt, resolve: prop('powerPlayGoals') },
-    powerPlayPoints: { type: GraphQLInt, resolve: prop('powerPlayPoints') },
-    powerPlayTimeOnIce: { type: GraphQLString, resolve: prop('powerPlayTimeOnIce') },
-    evenTimeOnIce: { type: GraphQLString, resolve: prop('evenTimeOnIce') },
-    penaltyMinutes: { type: GraphQLInt, resolve: prop('penaltyMinutes') },
-    shotPct: { type: GraphQLFloat, resolve: prop('shotPct') },
-    gameWinningGoals: { type: GraphQLInt, resolve: prop('gameWinningGoals') },
-    overTimeGoals: { type: GraphQLInt, resolve: prop('overTimeGoals') },
-    shortHandedGoals: { type: GraphQLInt, resolve: prop('shortHandedGoals') },
-    shortHandedPoints: { type: GraphQLInt, resolve: prop('shortHandedPoints') },
-    shortHandedTimeOnIce: { type: GraphQLString, resolve: prop('shortHandedTimeOnIce') },
-    blocked: { type: GraphQLInt, resolve: prop('blocked') },
-    plusMinus: { type: GraphQLInt, resolve: prop('plusMinus') },
-    points: { type: GraphQLInt, resolve: prop('points') },
-    shifts: { type: GraphQLInt, resolve: prop('shifts') },
-    team: { type: TeamInfo, resolve: prop('team') },
-    opponent: { type: TeamInfo, resolve: prop('opponent') },
-    date: { type: GraphQLString, resolve: prop('date') },
-    isHome: { type: GraphQLBoolean, resolve: prop('isHome') },
-    isWin: { type: GraphQLBoolean, resolve: prop('isWin') },
-    isOT: { type: GraphQLBoolean, resolve: prop('isOT') },
-  },
-});
-
 
 /* Player Stats
 {
@@ -775,6 +842,17 @@ const schema = new GraphQLSchema({
         type: GraphQLList(StandingsRecord),
         resolve: fetchStandings,
       },
+      teams: {
+        type: GraphQLList(TeamInfo),
+        resolve: fetchAllTeams,
+      },
+      team: {
+        type: TeamInfo,
+        args: { id: { type: GraphQLInt } },
+        resolve: (root, agrs) => ({
+          id: agrs.id,
+        }),
+      },
       games: {
         args: {
           startDate: { type: GraphQLString },
@@ -789,3 +867,4 @@ const schema = new GraphQLSchema({
 });
 
 module.exports = schema;
+//
