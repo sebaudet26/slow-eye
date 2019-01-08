@@ -28,7 +28,15 @@ const customStyles = {
   }),
 }
 
+const makeDefaultState = () => ({
+  filtered: []
+});
+
 class PlayersTable extends React.PureComponent {
+  constructor() {
+    super();
+    this.state = makeDefaultState();
+  }
   render() {
     const { players } = this.props;
     return (
@@ -54,6 +62,7 @@ class PlayersTable extends React.PureComponent {
             />
           </div>
         </div>
+        {this.state.filtered[0] ? JSON.stringify(this.state.filtered[0].value, null, 2): null}
         <ReactTable
           getTdProps={(state, rowInfo, column, instance) => {
             return {
@@ -75,6 +84,11 @@ class PlayersTable extends React.PureComponent {
               }
             };
           }}
+          filtered={[{
+            id: 'team',
+            value: 'ANA'
+          }]}
+          onFilteredChange={filtered => this.setState({ filtered })}
           data={players}
           resizable={false}
           noDataText="Loading all dat good data stuff..."
