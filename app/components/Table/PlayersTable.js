@@ -11,14 +11,15 @@ const toLowerCaseAndMatch = (filter, row) => String(row[filter.id])
   .toLowerCase()
   .match(filter.value.toLowerCase());
 
-//Seasons Dropdown Options
+//Team Dropdown Options
 const seasons = [
-  { value: '20182019', label: '2018-2019' },
-  { value: '20172018', label: '2017-2018' },
-  { value: '20162017', label: '2016-2017' }
+  { value: 'ALL', label: 'All' },
+  { value: 'ANA', label: 'Anaheim Ducks' },
+  { value: 'ARI', label: 'Arizona Coyotes' },
+  { value: 'BOS', label: 'Boston Bruins' }
 ]
 
-//Seasons Dropdown Styles
+//Dropdown Styles
 const customStyles = {
   option: (provided, state) => ({
     ...provided,
@@ -26,6 +27,17 @@ const customStyles = {
   control: () => ({
   }),
 }
+
+//Country Dropdown Options
+const positions = [
+  { value: 'ALL', label: 'All' },
+  { value: 'F', label: 'Forward' },
+  { value: 'D', label: 'Defensemen' },
+  { value: 'G', label: 'Goalie' },
+  { value: 'C', label: 'Center' },
+  { value: 'LW', label: 'Left Wing' },
+  { value: 'RW', label: 'Right Wing' }
+]
 
 //Country Dropdown Options
 const countries = [
@@ -42,11 +54,30 @@ class PlayersTable extends React.PureComponent {
       <div>
         <div className="filters">
           <div className="filters-item">
-            <div className="filters-item-label">Season</div>
+            <div className="filters-item-label">Teams</div>
             <Select
               classNamePrefix="react-select"
               defaultValue={seasons[0]}
               options={seasons}
+              styles={customStyles}
+              theme={(theme) => ({
+                ...theme,
+                borderRadius: 6,
+                colors: {
+                ...theme.colors,
+                  primary: '#3D5AFE',
+                  primary50: '#CBD1DB',
+                  primary25: '#E2E7EC',
+                },
+              })}
+            />
+          </div>
+          <div className="filters-item">
+            <div className="filters-item-label">Position</div>
+            <Select
+              classNamePrefix="react-select"
+              defaultValue={positions[0]}
+              options={positions}
               styles={customStyles}
               theme={(theme) => ({
                 ...theme,
