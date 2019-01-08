@@ -15,6 +15,9 @@ const allPlayers = `
     position {
       abbreviation
     },
+    info {
+      nationality
+    },
     stats {
       season,
       stat {
