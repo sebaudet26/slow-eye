@@ -66,6 +66,15 @@ export default class PlayerPage extends React.Component {
           />
         </Helmet>
         <div className="player-header">
+          <div className="player-img">
+            <img src={`https://nhl.bamcontent.com/images/headshots/current/168x168/${urlParams.get('id')}@2x.png`} className="player-img-face" />
+            <div className="icon-wrapper player-img-country">
+              <img src={`/images/country/${nationality}.svg`} className="" />
+            </div>
+            <div className="icon-wrapper player-img-team">
+              <img src={`/images/teams/${currentTeamInfo.teamName.replace(' ', '-').toLowerCase()}.png`} className="" />
+            </div>
+          </div>
           <div className="player-info">
             <h2>{`${info.firstName} ${info.lastName}`}</h2>
             <p>
@@ -156,15 +165,7 @@ export default class PlayerPage extends React.Component {
               </div>
             </div>
           </div>
-          <div className="player-img">
-            <img src={`https://nhl.bamcontent.com/images/headshots/current/168x168/${urlParams.get('id')}@2x.png`} className="player-img-face" />
-            <div className="icon-wrapper player-img-country">
-              <img src={`/images/country/${nationality}.svg`} className="" />
-            </div>
-            <div className="icon-wrapper player-img-team">
-              <img src={`/images/teams/${currentTeamInfo.teamName.replace(' ', '-').toLowerCase()}.png`} className="" />
-            </div>
-          </div>
+
         </div>
         <h3>Season Stats</h3>
         <CareerStatsTable stats={stats} />

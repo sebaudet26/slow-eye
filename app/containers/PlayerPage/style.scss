@@ -10,11 +10,9 @@
 
   &-img {
     display: flex;
-    flex-basis: auto;
-    flex-grow: 1;
-    justify-content: flex-end;
     position: relative;
     margin-top: 15px;
+    margin-right: 25px;
 
     &-face {
       border-radius: 100%;
@@ -27,7 +25,7 @@
       width: 60px;
       height: 60px;
       position: absolute;
-      top: 145px;
+      top: 150px;
       right: 15px;
 
       img {
@@ -39,7 +37,7 @@
       width: 60px;
       height: 60px;
       position: absolute;
-      top: 145px;
+      top: 150px;
       right: 185px;
 
       img {
@@ -107,6 +105,10 @@
   .player {
     &-header {
       margin-top: 0px;
+      display: block;
+    }
+
+    &-info {
     }
 
     &-desc {
@@ -136,7 +138,23 @@
       }
     }
 
-    &-badges, &-img {
+    &-img {
+      margin-right: 0px;
+
+      &-country {
+        left: 15%;
+      }
+
+      &-team {
+        right: 15%;
+      }
+
+      img {
+        margin: auto;
+      }
+    }
+
+    &-badges {
       display: none;
     }
   }
