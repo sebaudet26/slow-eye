@@ -23,6 +23,23 @@ export default class ScorePage extends React.Component {
           />
         </Helmet>
         <h2>Scores</h2>
+        <div className="scoreboard-selector">
+          <a className="scoreboard-selector-item">
+            Sun Jan 6
+          </a>
+          <a className="scoreboard-selector-item">
+            Mon Jan 7
+          </a>
+          <a className="scoreboard-selector-item active">
+            Today's Games
+          </a>
+          <a className="scoreboard-selector-item">
+            Wed Jan 9
+          </a>
+          <a className="scoreboard-selector-item">
+            Thu Jan 10
+          </a>
+        </div>
         <div className="scoreboard">
           {games.map(game => <ScoreCard game={game} />)}
         </div>

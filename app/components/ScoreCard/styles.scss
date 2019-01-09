@@ -2,12 +2,18 @@
 
 .game-card {
   background: $white;
-  width: 100%;
   padding: 0px 20px;
   border-radius: $radius;
   box-shadow: $shadow;
-  margin: 10px;
-  max-width: 350px;
+
+  &-wrapper {
+    padding: 0 25px 25px 0;
+    width: 50%;
+
+    &:nth-child(even) {
+      padding-right: 0px;
+    }
+  }
 
   &-header {
     padding: 10px 0;
@@ -41,5 +47,12 @@
 
   &-links {
     padding: 10px 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .game-card-wrapper {
+    width: 100%;
+    padding-right: 0px;
   }
 }

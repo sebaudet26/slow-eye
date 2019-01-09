@@ -1,6 +1,32 @@
 @import '../../styles/variables.scss';
 
+.score {
+  &-page {
+    h2 {
+      margin-bottom: 5px;
+    }
+  }
+}
+
 .scoreboard {
   display: flex;
   flex-flow: wrap;
+
+  &-selector {
+    margin-bottom: 25px;
+
+    &-item {
+      margin-right: 25px;
+      font-size: 14px;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: $grey-2;
+
+      &.active {
+        font-size: 16px;
+        font-weight: 600;
+        color: $main;
+      }
+    }
+  }
 }
