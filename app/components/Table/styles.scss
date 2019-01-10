@@ -13,6 +13,10 @@
 
   &.player-stats {
     .rt-th {
+      &:nth-child(3) {
+        text-align: left;
+      }
+
       &:nth-child(4) {
         text-align: left;
         border-right: solid 1px $grey-4;
@@ -219,18 +223,26 @@
   .ReactTable {
     font-size: 12px;
     box-shadow: none;
-    border-radius: 0px;
+    border-radius: 6px;
 
     .rt-thead {
       .rt-th {
-        padding: 15px 0px;
+        padding: 5px;
       }
     }
 
     .rt-tbody {
       .rt-td {
-        padding: 15px 0px;
+        padding: 5px;
       }
     }
+  }
+
+  .filters {
+    display: none;
+  }
+
+  .hidden-mobile {
+    display: none;
   }
 }
