@@ -56,7 +56,7 @@ export default class TeamPage extends React.Component {
           <div className="team-header-title">
             <div className="team-img">
               <img
-                src={`../../images/teams/${team.teamName}.png`}
+                src={`../../images/teams/${team.teamName.replace(' ', '-').toLowerCase()}.png`}
                 className="team-img-logo"
               />
             </div>
