@@ -41,12 +41,12 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         Header: isWildCardTable ? 'Wild Card' : subStandings.division.name,
         id: 'name',
         className: 'text-left border-right',
-        accessor: pathOr(0, ['team', 'name']),
+        accessor: pathOr(0, ['team']),
         maxWidth: 200,
         minWidth: 200,
         Cell: row => (
           <a href={`./team?id=${row.value.id}`}>
-            {row.value}
+            {row.value.name}
           </a>
         ),
       },

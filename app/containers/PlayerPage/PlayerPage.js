@@ -47,7 +47,7 @@ export default class PlayerPage extends React.Component {
         </Helmet>
         <div className="player-header">
           <div className="player-img">
-            <img src={`https://nhl.bamcontent.com/images/headshots/current/60x60/${urlParams.get('id')}@2x.png`} className="player-img-face" />
+            <img src={`https://nhl.bamcontent.com/images/headshots/current/168x168/${urlParams.get('id')}@2x.png`} className="player-img-face" />
             <div className="icon-wrapper player-img-country">
               <img src={`/images/country/${nationality}.svg`} className="" />
             </div>
