@@ -19,12 +19,12 @@
       margin-right: 25px;
       font-size: 14px;
       text-transform: uppercase;
-      font-weight: 500;
+      font-weight: 400;
       color: $grey-2;
 
       &.active {
         font-size: 16px;
-        font-weight: 600;
+        font-weight: 500;
         color: $main;
       }
     }

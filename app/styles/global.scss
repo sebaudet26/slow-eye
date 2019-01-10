@@ -142,6 +142,13 @@ li {
   font-size: 16px;
 }
 
+.small-uppercase {
+  font-size: 14px;
+  font-weight: 500;
+  color: $grey-2;
+  text-transform: uppercase;
+}
+
 .icon-wrapper {
   width: 50px;
   height: 50px;

@@ -48,6 +48,11 @@
   &-links {
     padding: 10px 0;
   }
+
+  &-footer {
+    padding: 10px 0;
+    border-top: solid 1px $grey-4;
+  }
 }
 
 @media (max-width: 700px) {

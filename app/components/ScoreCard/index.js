@@ -29,6 +29,9 @@ const ScoreCard = args => (
           {isScheduled(args.game) ? points(args.game.teams.away) : args.game.teams.away.score}
         </div>
       </div>
+      <div className="game-card-footer">
+        <a href="">Game Summary</a>
+      </div>
     </div>
   </div>
 );
