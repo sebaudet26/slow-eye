@@ -11,15 +11,17 @@ const cache = {};
 
 const draftInfoCache = {};
 
-const nhlAPI = async (resource) => {
+const nhlAPI = async (resource, shouldNotCache) => {
   try {
-    if (cache[resource]) {
+    if (!shouldNotCache && cache[resource]) {
       return cache[resource];
     }
     const url = `${nhlApiUrl}${resource}`;
     const response = await fetch(url);
     const data = await response.json();
-    cache[resource] = data;
+    if (!shouldNotCache) {
+      cache[resource] = data;
+    }
     return data;
   } catch (e) {
     return console.error(e.stack || e.toString());
@@ -179,9 +181,15 @@ const fetchAllYearsStatsForPlayerId = async (playerId) => {
 };
 
 const fetchStatsForTeamId = async (teamId) => {
-  const resource = `/teams/${teamId}?expand=team.stats`;
-  const teamInfo = await nhlAPI(resource);
-  return path(['teams', 0, 'teamStats', 0], teamInfo);
+  let resource = `/teams/${teamId}/stats?stats=statsSingleSeason`;
+  const teamInfo = await nhlAPI(resource, true);
+  let stats = path(['stats', 0], teamInfo);
+  if (!stats) {
+    resource = `/teams/${teamId}?expand=team.stats`;
+    await nhlAPI(resource, true);
+    stats = path(['teams', 0, 'teamStats', 0], teamInfo);
+  }
+  return stats;
 };
 
 const fetchInfoForTeamId = async (teamId) => {

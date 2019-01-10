@@ -8,10 +8,10 @@ import './style.scss';
 
 const urlParams = new URLSearchParams(window.location.search);
 
-const pointsInLatestSeason = player => player.stats[player.stats.length - 1].stat.points;
-const gamesPlayedLatestSeason = player => player.stats[player.stats.length - 1].stat.games;
-const positionIs = pos => player => player.info.primaryPosition.abbreviation === pos;
-const shootingSideIs = side => player => player.info.shootsCatches === side;
+const pointsInLatestSeason = player => (player.stats.length ? player.stats[player.stats.length - 1].stat.points : 0);
+const gamesPlayedLatestSeason = player => (player.stats.length ? player.stats[player.stats.length - 1].stat.games : 0);
+const positionIs = pos => player => (player.stats.length ? player.info.primaryPosition.abbreviation === pos : 0);
+const shootingSideIs = side => player => (player.stats.length ? player.info.shootsCatches === side : 0);
 const renderPlayerCard = player => <PlayerCard key={player.id} player={player} />;
 
 const renderTeamStat = (label, stat) => (
@@ -65,22 +65,24 @@ export default class TeamPage extends React.Component {
               <p>8th Eastern Conference, 4th Atlantic</p>
             </div>
           </div>
-          <div className="team-info">
-            <div className="team-stats">
-              {renderTeamStat('GP', team.stats.splits[0].gamesPlayed)}
-              {renderTeamStat('W', team.stats.splits[0].wins)}
-              {renderTeamStat('L', team.stats.splits[0].losses)}
-              {renderTeamStat('OTL', team.stats.splits[0].ot)}
-              {renderTeamStat('Pts', team.stats.splits[0].pts)}
+          { !team.stats ? null : (
+            <div className="team-info">
+              <div className="team-stats">
+                {renderTeamStat('GP', team.stats.splits[0].gamesPlayed)}
+                {renderTeamStat('W', team.stats.splits[0].wins)}
+                {renderTeamStat('L', team.stats.splits[0].losses)}
+                {renderTeamStat('OTL', team.stats.splits[0].ot)}
+                {renderTeamStat('Pts', team.stats.splits[0].pts)}
+              </div>
+              <div className="team-stats">
+                {renderTeamStat('GF', Math.round(Number(team.stats.splits[0].gamesPlayed) * Number(team.stats.splits[0].goalsPerGame)))}
+                {renderTeamStat('GA', Math.round(Number(team.stats.splits[0].gamesPlayed) * Number(team.stats.splits[0].goalsAgainstPerGame)))}
+                {renderTeamStat('PP%', team.stats.splits[0].powerPlayPercentage)}
+                {renderTeamStat('PK%', team.stats.splits[0].penaltyKillPercentage)}
+                {renderTeamStat('EVGGAR', Number(team.stats.splits[0].evGGARatio).toFixed(2))}
+              </div>
             </div>
-            <div className="team-stats">
-              {renderTeamStat('GF', Math.round(Number(team.stats.splits[0].gamesPlayed) * Number(team.stats.splits[0].goalsPerGame)))}
-              {renderTeamStat('GA', Math.round(Number(team.stats.splits[0].gamesPlayed) * Number(team.stats.splits[0].goalsAgainstPerGame)))}
-              {renderTeamStat('PP%', team.stats.splits[0].powerPlayPercentage)}
-              {renderTeamStat('PK%', team.stats.splits[0].penaltyKillPercentage)}
-              {renderTeamStat('EVGGAR', Number(team.stats.splits[0].evGGARatio).toFixed(2))}
-            </div>
-          </div>
+          )}
         </div>
         {
           isEmpty(roster) ? null : (

@@ -4,7 +4,7 @@ import { FETCH_TODAYS_GAMES } from './constants';
 
 const getTodaysGamesQuery = `
 {
-  games (date: "${moment().format('YYYY-MM-DD')}"){
+  games (date: "${moment().subtract(12, 'hours').format('YYYY-MM-DD')}"){
     gameDate,
     status {
       abstractGameState,

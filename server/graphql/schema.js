@@ -338,6 +338,7 @@ const Records = new GraphQLObjectType({
 const TeamRecord = new GraphQLObjectType({
   name: 'TeamRecord',
   fields: {
+    id: { type: GraphQLInt, resolve: prop('id') },
     team: { type: TeamInfo, resolve: prop('team') },
     leagueRecord: { type: Record, resolve: prop('leagueRecord') },
     goalsAgainst: { type: GraphQLInt, resolve: prop('goalsAgainst') },

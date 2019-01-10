@@ -3,35 +3,16 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { isEmpty } from 'ramda';
-import ReactTooltip from 'react-tooltip';
 import CareerStatsTable from '../../components/Table/CareerStatsTable';
-import {
-  isHot,
-  isCold,
-  isInjured,
-  isVeteran,
-  pointsInLastGames,
-  cumulativePlusMinusInLastGames,
-  hotColdGames,
-} from '../../utils/calculations';
+import PlayerBadges from '../../components/PlayerBadges/PlayerBadges';
 
-// Images
-import RookieIcon from '../../images/pacifier.svg';
-import VeteranIcon from '../../images/veteran.svg';
-import InjuryIcon from '../../images/bandage.svg';
-import HotIcon from '../../images/fire.svg';
-import ColdIcon from '../../images/snowflake.svg';
 import './style.scss';
 
 const rounds = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th'];
 
 const urlParams = new URLSearchParams(window.location.search);
 
-const getIsHotText = logs => (`Hot Streak - ${pointsInLastGames(logs)} pts in last ${hotColdGames} games`);
-const getPlusMinusText = (logs, pos) => (pos === 'D' ? ` and ${cumulativePlusMinusInLastGames(logs)} ` : '');
-const getIsColdText = (logs, pos) => (`Cold Streak - ${pointsInLastGames(logs)} pts${getPlusMinusText(logs, pos)} in last ${hotColdGames} games`);
 const playerIsActiveThisYear = latestSeason => latestSeason.season === '20182019';
-
 
 export default class PlayerPage extends React.Component {
   componentDidMount() {
@@ -51,7 +32,6 @@ export default class PlayerPage extends React.Component {
       currentTeamInfo = {},
       draftInfo = {},
       shootsCatches,
-      rookie,
       nationality,
     } = info;
     const lastSeason = stats[stats.length - 1];
@@ -78,7 +58,7 @@ export default class PlayerPage extends React.Component {
           <div className="player-info">
             <h2>{`${info.firstName} ${info.lastName}`}</h2>
             <p>
-              <a href="">{`${currentTeamInfo.name}`}</a>
+              <a href={`/team?id=${currentTeamInfo.id}`}>{`${currentTeamInfo.name}`}</a>
 ,
               {' '}
               {`${primaryPosition.name}, Shoots ${shootsCatches}`}
@@ -131,38 +111,7 @@ export default class PlayerPage extends React.Component {
                 <div className="light small-text">+/-</div>
                 <div className="bold">{isActiveThisYear ? lastSeason.stat.plusMinus : 0}</div>
               </div>
-              <div className="player-badges">
-                { isInjured(info) ? (
-                  <div className="icon-wrapper" data-tip="Injured">
-                    <img src={InjuryIcon} />
-                    <ReactTooltip />
-                  </div>
-                ) : null }
-                { rookie ? (
-                  <div className="icon-wrapper" data-tip="Rookie">
-                    <img src={RookieIcon} />
-                    <ReactTooltip />
-                  </div>
-                ) : null }
-                { isVeteran(stats) ? (
-                  <div className="icon-wrapper" data-tip="Veteran">
-                    <img src={VeteranIcon} />
-                    <ReactTooltip />
-                  </div>
-                ) : null }
-                { isActiveThisYear && isHot(logs, primaryPosition.abbreviation) ? (
-                  <div className="icon-wrapper" data-tip={getIsHotText(logs)}>
-                    <img src={HotIcon} />
-                    <ReactTooltip />
-                  </div>
-                ) : null}
-                { isActiveThisYear && isCold(logs, primaryPosition.abbreviation) ? (
-                  <div className="icon-wrapper" data-tip={getIsColdText(logs, primaryPosition.abbreviation)}>
-                    <img src={ColdIcon} />
-                    <ReactTooltip />
-                  </div>
-                ) : null}
-              </div>
+              <PlayerBadges info={info} stats={stats} logs={logs} />
             </div>
           </div>
 

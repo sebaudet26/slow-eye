@@ -306,7 +306,7 @@ class PlayersTable extends React.PureComponent {
                 if (filter.value === 'all') {
                   return true;
                 }
-                return String(row[filter.id]).toLowerCase().match(filter.value.toLowerCase());
+                return String(row[filter.id].abbreviation).toLowerCase().match(filter.value.toLowerCase());
               },
             },
             {
