@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import PlayersTable from '../../components/Table/PlayersTable';
 import './style.scss';
 
-class HomePage extends React.PureComponent {
+class PlayerStatsPage extends React.PureComponent {
   componentDidMount() {
     const { fetchPlayers } = this.props;
     fetchPlayers();
@@ -18,7 +18,7 @@ class HomePage extends React.PureComponent {
           <title>Home Page</title>
           <meta name="description" content="Slow Eye" />
         </Helmet>
-        <div className="home-page">
+        <div className="playerStats-page">
           <h2>Player Stats</h2>
         </div>
         <PlayersTable players={players} />
@@ -27,9 +27,9 @@ class HomePage extends React.PureComponent {
   }
 }
 
-HomePage.propTypes = {
+PlayerStatsPage.propTypes = {
   players: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   fetchPlayers: PropTypes.func.isRequired,
 };
 
-export default HomePage;
+export default PlayerStatsPage;

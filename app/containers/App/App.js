@@ -10,10 +10,11 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Switch, Route } from 'react-router-dom';
 
-import HomePage from '../HomePage/Loadable';
+import PlayerStatsPage from '../PlayerStatsPage/Loadable';
 import StandingsPage from '../StandingsPage/Loadable';
 import PlayerPage from '../PlayerPage/Loadable';
 import TeamPage from '../TeamPage/Loadable';
+import TeamStatsPage from '../TeamStatsPage/Loadable';
 import ScorePage from '../ScorePage/Loadable';
 import NotFoundPage from '../NotFoundPage/Loadable';
 import Header from '../../components/Header';
@@ -26,14 +27,15 @@ const App = () => (
       titleTemplate="%s - Quick Stats"
       defaultTitle="Quick Stats"
     >
-      <meta name="description" content="Slow Eye Hockey Stats" />
+      <meta name="description" content="Quick Stats - Hockey Stats" />
     </Helmet>
     <Header />
     <Switch>
-      <Route exact path="/" component={HomePage} />
+      <Route exact path="/" component={PlayerStatsPage} />
       <Route path="/standings" component={StandingsPage} />
       <Route path="/player" component={PlayerPage} />
       <Route path="/team" component={TeamPage} />
+      <Route path="/teamstats" component={TeamStatsPage} />
       <Route path="/scores" component={ScorePage} />
       <Route path="" component={NotFoundPage} />
     </Switch>

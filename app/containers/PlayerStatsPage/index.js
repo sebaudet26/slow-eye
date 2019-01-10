@@ -5,7 +5,7 @@ import injectReducer from '../../utils/injectReducer';
 import { makeSelectPlayers } from './selectors';
 import { fetchAllPlayers } from './actions';
 import reducer from './reducer';
-import HomePage from './HomePage';
+import PlayerStatsPage from './PlayerStatsPage';
 
 const mapDispatchToProps = dispatch => ({
   fetchPlayers: () => dispatch(fetchAllPlayers()),
@@ -19,5 +19,5 @@ const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 const withReducer = injectReducer({ key: 'home', reducer });
 
-export default compose(withReducer, withConnect)(HomePage);
+export default compose(withReducer, withConnect)(PlayerStatsPage);
 export { mapDispatchToProps };

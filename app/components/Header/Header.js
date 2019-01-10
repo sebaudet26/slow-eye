@@ -23,6 +23,9 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
           <NavLink activeClassName="active" className="header-nav-item" exact to="/">
             Player Stats
           </NavLink>
+          <NavLink activeClassName="active" className="header-nav-item" to="/teamstats">
+            Team Stats
+          </NavLink>
           <NavLink activeClassName="active" className="header-nav-item" to="/standings">
             Standings
           </NavLink>
@@ -34,6 +37,7 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
           <img className="header-mobile-icon" src={MobileIcon} alt="" onClick={burgerToggle} />
           <ul className="header-mobile-list">
             <li><NavLink to="/" exact onClick={burgerToggle}>Player Stats</NavLink></li>
+            <li><NavLink to="/teamstats" onClick={burgerToggle}>Team Stats</NavLink></li>
             <li><NavLink to="/standings" onClick={burgerToggle}>Standings</NavLink></li>
             <li><NavLink to="/scores" onClick={burgerToggle}>Scores</NavLink></li>
           </ul>
