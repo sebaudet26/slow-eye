@@ -692,6 +692,86 @@ const SeasonStat = new GraphQLObjectType({
       type: GraphQLInt,
       resolve: prop('shifts'),
     },
+    ot: {
+      type: GraphQLInt,
+      resolve: prop('ot'),
+    },
+    shutouts: {
+      type: GraphQLInt,
+      resolve: prop('shutouts'),
+    },
+    ties: {
+      type: GraphQLInt,
+      resolve: prop('ties'),
+    },
+    wins: {
+      type: GraphQLInt,
+      resolve: prop('wins'),
+    },
+    losses: {
+      type: GraphQLInt,
+      resolve: prop('losses'),
+    },
+    saves: {
+      type: GraphQLInt,
+      resolve: prop('saves'),
+    },
+    powerPlaySaves: {
+      type: GraphQLInt,
+      resolve: prop('powerPlaySaves'),
+    },
+    shortHandedSaves: {
+      type: GraphQLInt,
+      resolve: prop('shortHandedSaves'),
+    },
+    evenSaves: {
+      type: GraphQLInt,
+      resolve: prop('evenSaves'),
+    },
+    shortHandedShots: {
+      type: GraphQLInt,
+      resolve: prop('shortHandedShots'),
+    },
+    evenShots: {
+      type: GraphQLInt,
+      resolve: prop('evenShots'),
+    },
+    powerPlayShots: {
+      type: GraphQLInt,
+      resolve: prop('powerPlayShots'),
+    },
+    savePercentage: {
+      type: GraphQLFloat,
+      resolve: prop('savePercentage'),
+    },
+    goalAgainstAverage: {
+      type: GraphQLFloat,
+      resolve: prop('goalAgainstAverage'),
+    },
+    gamesStarted: {
+      type: GraphQLInt,
+      resolve: prop('gamesStarted'),
+    },
+    shotsAgainst: {
+      type: GraphQLInt,
+      resolve: prop('shotsAgainst'),
+    },
+    goalsAgainst: {
+      type: GraphQLInt,
+      resolve: prop('goalsAgainst'),
+    },
+    powerPlaySavePercentage: {
+      type: GraphQLFloat,
+      resolve: prop('powerPlaySavePercentage'),
+    },
+    shortHandedSavePercentage: {
+      type: GraphQLFloat,
+      resolve: prop('shortHandedSavePercentage'),
+    },
+    evenStrengthSavePercentage: {
+      type: GraphQLFloat,
+      resolve: prop('evenStrengthSavePercentage'),
+    },
   },
 });
 
@@ -759,6 +839,10 @@ const Player = new GraphQLObjectType({
 const PlayerDetails = new GraphQLObjectType({
   name: 'PlayerDetails',
   fields: {
+    id: {
+      type: GraphQLString,
+      resolve: prop('id'),
+    },
     // Lazy load player info
     info: {
       type: PlayerInfo,

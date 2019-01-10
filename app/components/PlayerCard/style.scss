@@ -40,10 +40,16 @@
         top:0;
         //width: 25px;
 
-        img {
-          margin-left: 10px;
-          width: 25px;
-          //margin-bottom: 5px;
+        .player-badges {
+          .icon-wrapper {
+            width: 40px;
+            height: 40px;
+            img {
+              margin-left: 10px;
+              width: 20px;
+              //margin-bottom: 5px;
+            }
+          }
         }
       }
     }

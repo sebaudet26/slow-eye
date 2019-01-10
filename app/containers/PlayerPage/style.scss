@@ -78,17 +78,6 @@
       margin-right: 50px;
     }
   }
-
-  &-badges {
-    padding-left: 25px;
-    border-left: solid 1px $grey-4;
-    display: flex;
-    align-items: center;
-
-    .icon-wrapper {
-      margin-right: 15px;
-    }
-  }
 }
 
 @media (max-width: 800px) {

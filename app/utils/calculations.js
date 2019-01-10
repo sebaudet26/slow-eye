@@ -25,12 +25,8 @@ export const pointsInLastGames = gameLogs => sum(map(path(['stat', 'points']), t
 export const cumulativePlusMinusInLastGames = gameLogs => sum(map(path(['stat', 'plusMinus']), take(hotColdGames, gameLogs)));
 
 export const isHot = (gameLogs, pos) => pointsInLastGames(gameLogs) >= pointsToBeHot(pos);
-export const isCold = (gameLogs, pos) => {
-  console.log(pointsInLastGames(gameLogs) <= pointsToBeCold(pos));
-  console.log(cumulativePlusMinusInLastGames(gameLogs));
-  console.log((pos === 'D' ? cumulativePlusMinusInLastGames(gameLogs) < plusMinusColdThreshold : true));
-  return (pointsInLastGames(gameLogs) <= pointsToBeCold(pos)
+export const isCold = (gameLogs, pos) => (pointsInLastGames(gameLogs) <= pointsToBeCold(pos)
   && (pos === 'D' ? cumulativePlusMinusInLastGames(gameLogs) < plusMinusColdThreshold : true));
-};
+
 export const isInjured = info => info.rosterStatus === 'I';
 export const isVeteran = stats => sum(map(pathOr(0, ['stat', 'games']), stats)) > veteranGames;
