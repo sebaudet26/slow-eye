@@ -10,6 +10,7 @@ const allPlayers = `
       fullName
     },
     team {
+      id
       abbreviation
     },
     position {

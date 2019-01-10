@@ -8,7 +8,7 @@ const {
   GraphQLFloat,
 } = require('graphql');
 const {
-  pipe, prop, join, drop, path, map,
+  pipe, prop, path, map,
 } = require('ramda');
 const {
   fetchStandings,
@@ -19,17 +19,16 @@ const {
   fetchStatsForTeamId,
   fetchInfoForTeamId,
   fetchDraftInfoForPlayer,
+  fetchPlayersForTeamId,
   fetchAllPlayers,
   fetchAllTeams,
   fetchGames,
-  nhlAPI,
 } = require('../libs/nhlApi');
 
-const ifNotThereFetchLink = propName => async (d) => {
-  if (d.link) {
-    // FIXME: this is pretty bad
-    const data = await nhlAPI(`/${join('/', drop(3, d.link.split('/')))}`);
-    return path(['teams', 0, propName], data);
+const ifNotThereFetchId = propName => async (d) => {
+  if (d.id) {
+    const data = await fetchInfoForTeamId(d.id);
+    return prop(propName, data);
   }
   return prop(propName, d);
 };
@@ -198,19 +197,27 @@ const TeamStats = new GraphQLObjectType({
 }
 */
 
+const TeamRosterPlayer = new GraphQLObjectType({
+  name: 'TeamRosterPlayer',
+  fields: {
+    id: { type: GraphQLInt, resolve: prop('id') },
+  },
+});
+
 const TeamInfo = new GraphQLObjectType({
   name: 'TeamInfo',
   fields: {
     id: { type: GraphQLInt, resolve: prop('id') },
-    name: { type: GraphQLString, resolve: prop('name') },
-    link: { type: GraphQLString, resolve: prop('link') },
-    abbreviation: { type: GraphQLString, resolve: ifNotThereFetchLink('abbreviation') },
-    teamName: { type: GraphQLString, resolve: ifNotThereFetchLink('teamName') },
-    locationName: { type: GraphQLString, resolve: ifNotThereFetchLink('locationName') },
-    venue: { type: Venue, resolve: prop('venue') },
-    shortName: { type: GraphQLString, resolve: ifNotThereFetchLink('shortName') },
-    officialSiteUrl: { type: GraphQLString, resolve: ifNotThereFetchLink('officialSiteUrl') },
-    teamStats: { type: TeamStats, resolve: p => fetchStatsForTeamId(p.id) },
+    name: { type: GraphQLString, resolve: ifNotThereFetchId('name') },
+    link: { type: GraphQLString, resolve: ifNotThereFetchId('link') },
+    abbreviation: { type: GraphQLString, resolve: ifNotThereFetchId('abbreviation') },
+    teamName: { type: GraphQLString, resolve: ifNotThereFetchId('teamName') },
+    locationName: { type: GraphQLString, resolve: ifNotThereFetchId('locationName') },
+    venue: { type: Venue, resolve: ifNotThereFetchId('venue') },
+    shortName: { type: GraphQLString, resolve: ifNotThereFetchId('shortName') },
+    officialSiteUrl: { type: GraphQLString, resolve: ifNotThereFetchId('officialSiteUrl') },
+    stats: { type: TeamStats, resolve: p => fetchStatsForTeamId(p.id) },
+    roster: { type: GraphQLList(TeamRosterPlayer), resolve: p => fetchPlayersForTeamId(p.id) },
   },
 });
 

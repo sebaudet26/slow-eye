@@ -1,32 +1,39 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import CareerStatsTable from '../../components/Table/CareerStatsTable';
+import { isEmpty } from 'ramda';
 import PlayerCard from '../../components/PlayerCard/PlayerCard';
 import './style.scss';
-import TeamImg from '../../images/teams/canadiens.png';
+
+const urlParams = new URLSearchParams(window.location.search);
 
 export default class TeamPage extends React.Component {
-  shouldComponentUpdate() {
-    return false;
+  componentDidMount() {
+    const { fetchTeamById } = this.props;
+    fetchTeamById((urlParams.get('id')));
   }
 
   render() {
-    return (
+    const team = this.props.teams[urlParams.get('id')] || {};
+    console.log('team', team);
+    return (isEmpty(team) ? null : (
       <div className="team-page">
         <Helmet>
-          <title>Montreal Canadiens</title>
+          <title />
           <meta
             name="description"
-            content="Montreal Canadiens"
+            content={team.name}
           />
         </Helmet>
         <div className="team-header">
           <div className="team-header-title">
             <div className="team-img">
-              <img src={TeamImg} className="team-img-logo" />
+              <img
+                src={`../../images/teams/${team.teamName}.png`}
+                className="team-img-logo"
+              />
             </div>
             <div>
-              <h2>Montreal Canadiens</h2>
+              <h2>{team.name}</h2>
               <p>8th Eastern Conference, 4th Atlantic</p>
             </div>
           </div>
@@ -34,45 +41,81 @@ export default class TeamPage extends React.Component {
             <div className="team-stats">
               <div className="team-stats-item">
                 <div className="light small-text">GP</div>
-                <div className="bold">33</div>
+                <div className="bold">{team.stats.splits[0].gamesPlayed}</div>
               </div>
               <div className="team-stats-item">
                 <div className="light small-text">W</div>
-                <div className="bold">15</div>
+                <div className="bold">{team.stats.splits[0].wins}</div>
               </div>
               <div className="team-stats-item">
                 <div className="light small-text">L</div>
-                <div className="bold">41</div>
+                <div className="bold">{team.stats.splits[0].losses}</div>
               </div>
               <div className="team-stats-item">
                 <div className="light small-text">OTL</div>
-                <div className="bold">2</div>
+                <div className="bold">{team.stats.splits[0].ot}</div>
               </div>
               <div className="team-stats-item">
                 <div className="light small-text">Pts</div>
-                <div className="bold">18</div>
+                <div className="bold">{team.stats.splits[0].pts}</div>
               </div>
             </div>
             <div className="team-stats">
               <div className="team-stats-item">
                 <div className="light small-text">GF</div>
-                <div className="bold">33</div>
+                <div className="bold">{Math.round(Number(team.stats.splits[0].gamesPlayed) * Number(team.stats.splits[0].goalsPerGame))}</div>
               </div>
               <div className="team-stats-item">
                 <div className="light small-text">GA</div>
-                <div className="bold">15</div>
+                <div className="bold">{Math.round(Number(team.stats.splits[0].gamesPlayed) * Number(team.stats.splits[0].goalsAgainstPerGame))}</div>
               </div>
               <div className="team-stats-item">
                 <div className="light small-text">PP%</div>
-                <div className="bold">41</div>
+                <div className="bold">{team.stats.splits[0].powerPlayPercentage}</div>
               </div>
               <div className="team-stats-item">
                 <div className="light small-text">PK%</div>
-                <div className="bold">2</div>
+                <div className="bold">{team.stats.splits[0].penaltyKillPercentage}</div>
               </div>
               <div className="team-stats-item">
-                <div className="light small-text">PIM</div>
-                <div className="bold">2</div>
+                <div className="light small-text">EVGGAR</div>
+                <div className="bold">{Number(team.stats.splits[0].evGGARatio).toFixed(2)}</div>
+              </div>
+            </div>
+          </div>
+          <div className="team-info">
+            <div className="team-stats">
+              <div className="team-stats-item hidden">
+                <div className="bold">00</div>
+              </div>
+              <div className="team-stats-item">
+                <div className="bold">{team.stats.splits[1].wins}</div>
+              </div>
+              <div className="team-stats-item">
+                <div className="bold">{team.stats.splits[1].losses}</div>
+              </div>
+              <div className="team-stats-item">
+                <div className="bold">{team.stats.splits[1].ot}</div>
+              </div>
+              <div className="team-stats-item">
+                <div className="bold">{team.stats.splits[1].pts}</div>
+              </div>
+            </div>
+            <div className="team-stats">
+              <div className="team-stats-item">
+                <div className="bold">{team.stats.splits[1].goalsPerGame}</div>
+              </div>
+              <div className="team-stats-item">
+                <div className="bold">{team.stats.splits[1].goalsAgainstPerGame}</div>
+              </div>
+              <div className="team-stats-item">
+                <div className="bold">{team.stats.splits[1].powerPlayPercentage}</div>
+              </div>
+              <div className="team-stats-item">
+                <div className="bold">{team.stats.splits[1].penaltyKillPercentage}</div>
+              </div>
+              <div className="team-stats-item">
+                <div className="bold">{team.stats.splits[1].evGGARatio}</div>
               </div>
             </div>
           </div>
@@ -102,8 +145,7 @@ export default class TeamPage extends React.Component {
             <div className="team-chart-col-title">Right D</div>
             <PlayerCard />
           </div>
-          <div className="team-chart-col">
-          </div>
+          <div className="team-chart-col" />
         </div>
         <h3>Goalies</h3>
         <div className="team-chart">
@@ -112,6 +154,6 @@ export default class TeamPage extends React.Component {
           </div>
         </div>
       </div>
-    );
+    ));
   }
 }
