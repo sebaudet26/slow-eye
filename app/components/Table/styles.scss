@@ -56,6 +56,17 @@
     }
   }
 
+  &.boxscore {
+    .rt-thead {
+      .rt-th {
+        &:nth-child(2) {
+          text-align: left;
+          border-right: solid 1px $grey-4;
+        }
+      }
+    }
+  }
+
   .rt-thead {
     &.-header {
       box-shadow: none;
@@ -73,7 +84,7 @@
       padding: 10px;
       outline: none;
 
-      &:first-child, &:nth-child(2), &:nth-child(3) {
+      &:first-child, &:nth-child(2) {
         text-align: left;
       }
     }

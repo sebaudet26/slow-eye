@@ -7,7 +7,7 @@ import './style.scss';
 export default class TeamStatsPage extends React.Component {
   render() {
     return (
-      <div className="teamStats-page">
+      <div>
         <Helmet>
           <title>Team Stats</title>
           <meta name="description" content="Quick Stats" />

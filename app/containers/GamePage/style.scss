@@ -1,0 +1,143 @@
+@import '../../styles/variables.scss';
+
+.summary {
+  &-header {
+    padding: 15px 20px;
+    display: flex;
+    max-width: 800px;
+    margin: 0 auto 15px auto;
+    align-items: center;
+
+    &-team {
+      display: flex;
+      align-items: center;
+      margin: auto;
+
+      &-name {
+        .city {
+        }
+
+        .team {
+          font-weight: 500;
+          font-size: $h3;
+        }
+
+        .record {
+          font-size: 14px;
+          color: $grey-2;
+        }
+      }
+
+      &:first-child {
+        img {
+          margin-right: 25px;
+        }
+      }
+
+      &:last-child {
+        text-align: right;
+
+        img {
+          margin-left: 25px;
+        }
+      }
+
+      &-score {
+        font-size: $h1;
+        font-weight: 500;
+        margin: 0 25px;
+      }
+    }
+
+    &-result {
+      font-weight: 500;
+    }
+  }
+
+  &-period {
+    display: flex;
+
+    &-card {
+      border-radius: 6px;
+      margin: auto;
+      padding: 15px 20px;
+      background: $white;
+      box-shadow: $shadow;
+
+      &-wrapper {
+        width: 50%;
+
+        &:first-child {
+          padding-right: 15px;
+        }
+      }
+    }
+  }
+
+  &-body {
+    //padding: 15px 20px;
+    margin-top: 15px;
+    background: $white;
+    box-shadow: $shadow;
+    border-radius: 6px;
+
+    &-title {
+      padding: 15px 20px;
+      font-size: $h3;
+    }
+  }
+}
+
+.period-table {
+  width: 100%;
+
+  thead {
+    border-bottom: solid 1px $grey-4;
+
+    th {
+      text-align: center;
+      font-weight: 400;
+      padding: 10px 5px;
+
+      &:first-child {
+        text-align: left;
+        padding-left: 0px;
+      }
+
+      &:last-child {
+        padding-right: 0px;
+        font-weight: 600;
+      }
+    }
+  }
+
+  tbody {
+    img {
+      height: 25px;
+      margin-right: 10px;
+    }
+
+    tr {
+      border-bottom: solid 1px $grey-4;
+
+      &:last-child {
+        border-bottom: 0px;
+      }
+
+      td {
+        padding: 10px 5px;
+        text-align: center;
+
+        &:first-child {
+          padding-left: 0px;
+          text-align: left;
+        }
+
+        &:last-child {
+          padding-right: 0px;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}

@@ -30,7 +30,7 @@ const ScoreCard = args => (
         </div>
       </div>
       <div className="game-card-footer">
-        <a href="">Game Summary</a>
+        <a href="/game?id=123">Game Summary</a>
       </div>
     </div>
   </div>
