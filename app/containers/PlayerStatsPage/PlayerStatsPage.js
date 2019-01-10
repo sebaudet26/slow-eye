@@ -15,8 +15,8 @@ class PlayerStatsPage extends React.PureComponent {
     return (
       <article>
         <Helmet>
-          <title>Home Page</title>
-          <meta name="description" content="Slow Eye" />
+          <title>Player Stats</title>
+          <meta name="description" content="Quick Stats" />
         </Helmet>
         <div className="playerStats-page">
           <h2>Player Stats</h2>
