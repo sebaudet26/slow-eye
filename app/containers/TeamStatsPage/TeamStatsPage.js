@@ -12,7 +12,6 @@ export default class TeamStatsPage extends React.Component {
 
   render() {
     const { teamsStats } = this.props;
-    console.log('teamsStats', teamsStats);
     return (
       <div>
         <Helmet>
