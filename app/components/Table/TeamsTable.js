@@ -23,10 +23,12 @@ class TeamsTable extends React.PureComponent {
     saveStateToLS(this.state);
   }
   render() {
+    const { teams } = this.props;
     return (
       <div>
         <ReactTable
           resizable={false}
+          data={teams}
           noDataText="Loading all dat good data stuff..."
           columns={[
             {
