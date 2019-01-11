@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import PropTypes from 'prop-types';
 import {
   isEmpty, sortBy, pipe, filter, map, prop, reverse,
 } from 'ramda';
@@ -8,10 +9,26 @@ import './style.scss';
 
 const urlParams = new URLSearchParams(window.location.search);
 
-const pointsInLatestSeason = player => (player.stats.length ? player.stats[player.stats.length - 1].stat.points : 0);
-const gamesPlayedLatestSeason = player => (player.stats.length ? player.stats[player.stats.length - 1].stat.games : 0);
-const positionIs = pos => player => (player.stats.length ? player.info.primaryPosition.abbreviation === pos : 0);
-const shootingSideIs = side => player => (player.stats.length ? player.info.shootsCatches === side : 0);
+const pointsInLatestSeason = player => (
+  player.stats.length
+    ? player.stats[player.stats.length - 1].stat.points
+    : 0
+);
+const gamesPlayedLatestSeason = player => (
+  player.stats.length
+    ? player.stats[player.stats.length - 1].stat.games
+    : 0
+);
+const positionIs = pos => player => (
+  player.stats.length
+    ? player.info.primaryPosition.abbreviation === pos
+    : 0
+);
+const shootingSideIs = side => player => (
+  player.stats.length
+    ? player.info.shootsCatches === side
+    : 0
+);
 const renderPlayerCard = player => <PlayerCard key={player.id} player={player} />;
 
 const renderTeamStat = (label, stat) => (
@@ -28,19 +45,21 @@ export default class TeamPage extends React.Component {
   }
 
   componentDidUpdate() {
+    const { teams, rosters } = this.props;
     if (
-      this.props.teams[urlParams.get('id')]
-      && this.props.teams[urlParams.get('id')].roster
-      && !this.props.rosters[urlParams.get('id')]
+      teams[urlParams.get('id')]
+      && teams[urlParams.get('id')].roster
+      && !rosters[urlParams.get('id')]
     ) {
       const { fetchTeamRosterDetails } = this.props;
-      fetchTeamRosterDetails(urlParams.get('id'), this.props.teams[urlParams.get('id')].roster);
+      fetchTeamRosterDetails(urlParams.get('id'), teams[urlParams.get('id')].roster);
     }
   }
 
   render() {
-    const team = this.props.teams[urlParams.get('id')] || {};
-    const roster = this.props.rosters[urlParams.get('id')] || {};
+    const { teams, rosters } = this.props;
+    const team = teams[urlParams.get('id')] || {};
+    const roster = rosters[urlParams.get('id')] || {};
     console.log('team', team);
     console.log('roster', roster);
     return (isEmpty(team) ? null : (
@@ -177,3 +196,10 @@ export default class TeamPage extends React.Component {
     ));
   }
 }
+
+TeamPage.propTypes = {
+  teams: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  rosters: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  fetchTeamById: PropTypes.func.isRequired,
+  fetchTeamRosterDetails: PropTypes.func.isRequired,
+};
