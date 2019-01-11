@@ -8,6 +8,11 @@ import './styles.scss';
 class TeamsTable extends React.PureComponent {
   render() {
     const { teams } = this.props;
+    console.log('teams', teams);
+    let data = [];
+    if (teams.length) {
+      data = teams;
+    }
     return (
       <div>
         <ReactTable
@@ -109,6 +114,14 @@ class TeamsTable extends React.PureComponent {
               minWidth: 50,
             },
             {
+              Header: 'Diff.',
+              id: 'goaldiff',
+              accessor: d => Number(d.stats.splits[0].goalsPerGame - d.stats.splits[0].goalsAgainstPerGame).toFixed(2),
+              maxWidth: 85,
+              minWidth: 50,
+              sortMethod: (a, b) => (Number(a) > Number(b) ? 1 : -1),
+            },
+            {
               Header: 'PP%',
               id: 'powerPlayPercentage',
               accessor: d => d.stats.splits[0].powerPlayPercentage,
@@ -123,15 +136,8 @@ class TeamsTable extends React.PureComponent {
               minWidth: 50,
             },
           ]}
-          defaultSorted={[
-            {
-              id: 'points',
-              desc: true,
-            },
-          ]}
-          defaultPageSize={20}
           defaultSortDesc
-          defaultPageSize={teams.length}
+          defaultPageSize={31}
           showPagination={false}
           defaultSorted={[
             {

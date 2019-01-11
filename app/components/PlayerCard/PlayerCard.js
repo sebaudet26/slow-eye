@@ -11,7 +11,7 @@ const PlayerCard = ({ player }) => (
         <img className="headshot" src={`https://nhl.bamcontent.com/images/headshots/current/60x60/${player.id}@2x.png`} />
       </div>
       <div className="player-card-header-item">
-        <a className="semibold" href={`/player?id=${player.id}`}>
+        <a href={`/player?id=${player.id}`}>
           {player.info.fullName}
         </a>
         <div className="country">
