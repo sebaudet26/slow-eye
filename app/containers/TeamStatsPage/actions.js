@@ -1,5 +1,4 @@
 /* global fetch */
-
 import { FETCH_TEAMS } from './constants';
 import graphqlApi from '../../utils/api';
 
@@ -53,8 +52,7 @@ const allTeams = `
 
 export const fetchAllTeams = () => async (dispatch) => {
   try {
-
-    const data = await graphqlApi(allTeams, 'allTeams');
+    const data = await graphqlApi(allTeams);
     console.log(data);
     return dispatch({
       type: FETCH_TEAMS,
@@ -64,6 +62,5 @@ export const fetchAllTeams = () => async (dispatch) => {
     return console.error(e.toString());
   }
 };
-console.log('actions');
 
 export default null;

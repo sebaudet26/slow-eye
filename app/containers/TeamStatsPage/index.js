@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import injectReducer from '../../utils/injectReducer';
-import { makeSelectTeams } from './selectors';
+import { makeSelectTeamsStats } from './selectors';
 import { fetchAllTeams } from './actions';
 import reducer from './reducer';
 import TeamStatsPage from './TeamStatsPage';
@@ -12,7 +12,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = createStructuredSelector({
-  teamsStats: makeSelectTeamsStats()
+  teamsStats: makeSelectTeamsStats(),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
