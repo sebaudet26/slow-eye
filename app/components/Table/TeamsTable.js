@@ -27,12 +27,12 @@ class TeamsTable extends React.PureComponent {
             {
               Header: 'Team',
               id: 'name',
-              accessor: d => `${d.name}+${d.abbreviation}`,
+              accessor: d => `${d.name}+${d.abbreviation}+${d.id}`,
               className: 'text-left border-right team-cell',
               maxWidth: 250,
               minWidth: 200,
               Cell: row => (
-                <a href="#">
+                <a href={`./team?id=${row.value.split('+')[2]}`}>
                   <img src={`/images/teams/small/${row.value.split('+')[1]}.png`} />
                   {row.value.split('+')[0]}
                 </a>
