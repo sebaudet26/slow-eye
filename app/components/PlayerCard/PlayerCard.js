@@ -11,7 +11,9 @@ const PlayerCard = ({ player }) => (
         <img className="headshot" src={`https://nhl.bamcontent.com/images/headshots/current/60x60/${player.id}@2x.png`} />
       </div>
       <div className="player-card-header-item">
-        <div className="semibold">{player.info.fullName}</div>
+        <a className="semibold" href={`/player?id=${player.id}`}>
+          {player.info.fullName}
+        </a>
         <div className="country">
           <img src={`/images/country/${player.info.nationality}.svg`} />
           {` ${player.info.birthCountry}`}
@@ -48,7 +50,10 @@ const PlayerCard = ({ player }) => (
         <div className="bold">
           {
             isGoalie(player)
-              ? Number(player.stats[player.stats.length - 1].stat.losses) + Number(player.stats[player.stats.length - 1].stat.ot)
+              ? (
+                Number(player.stats[player.stats.length - 1].stat.losses)
+                + Number(player.stats[player.stats.length - 1].stat.ot)
+              )
               : player.stats[player.stats.length - 1].stat.assists
           }
         </div>
