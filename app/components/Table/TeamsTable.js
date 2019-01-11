@@ -5,23 +5,7 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import './styles.scss';
 
-const saveStateToLS = (state) => {
-    window.localStorage.setItem('playersFilters', JSON.stringify(state));
-}
-
-const getSavedState = () => {
-  const savedState = window.localStorage.getItem('playersFilters');
-  return savedState ? JSON.parse(savedState) : {};
-}
-
 class TeamsTable extends React.PureComponent {
-  constructor() {
-    super();
-    this.state = getSavedState();
-  }
-  componentDidUpdate (){
-    saveStateToLS(this.state);
-  }
   render() {
     const { teams } = this.props;
     return (
@@ -34,96 +18,110 @@ class TeamsTable extends React.PureComponent {
             {
               Header: '#',
               id: 'rank',
-              className: '',
+              Cell: row => <div>{(row.viewIndex + 1)}</div>,
+              className: 'text-left',
               maxWidth: 50,
               minWidth: 50,
               sortable: false,
             },
             {
               Header: 'Team',
-              id: 'teamName',
-              className: '',
-              maxWidth: 200,
-              minWidth: 125,
+              id: 'name',
+              accessor: d => `${d.name}+${d.abbreviation}`,
+              className: 'text-left border-right team-cell',
+              maxWidth: 250,
+              minWidth: 200,
+              Cell: row => (
+                <a href="#">
+                  <img src={`/images/teams/small/${row.value.split('+')[1]}.png`} />
+                  {row.value.split('+')[0]}
+                </a>
+              ),
             },
             {
               Header: 'GP',
               id: 'gamesPlayed',
+              accessor: d => d.stats.splits[0].gamesPlayed,
               maxWidth: 85,
               minWidth: 50,
             },
             {
               Header: 'W',
               id: 'wins',
+              accessor: d => d.stats.splits[0].wins,
               maxWidth: 85,
               minWidth: 50,
             },
             {
               Header: 'L',
               id: 'losses',
+              accessor: d => d.stats.splits[0].losses,
               maxWidth: 85,
               minWidth: 50,
             },
             {
               Header: 'OT',
               id: 'ot',
+              accessor: d => d.stats.splits[0].ot,
               maxWidth: 85,
               minWidth: 50,
             },
             {
               Header: 'Pts',
-              id: 'pts',
+              id: 'points',
+              accessor: d => d.stats.splits[0].pts,
               maxWidth: 85,
               minWidth: 50,
             },
             {
               Header: 'P%',
               id: 'ptsPctg',
+              accessor: d => d.stats.splits[0].ptPctg,
               maxWidth: 85,
               minWidth: 50,
             },
             {
               Header: 'GF',
               id: 'goalsfor',
+              accessor: d => Math.round(d.stats.splits[0].gamesPlayed * d.stats.splits[0].goalsPerGame),
               maxWidth: 85,
               minWidth: 50,
             },
             {
               Header: 'GA',
               id: 'goalsagainst',
-              maxWidth: 85,
-              minWidth: 50,
-            },
-            {
-              Header: 'SOW',
-              id: 'sowin',
+              accessor: d => Math.round(d.stats.splits[0].gamesPlayed * d.stats.splits[0].goalsAgainstPerGame),
               maxWidth: 85,
               minWidth: 50,
             },
             {
               Header: 'GF/GP',
               id: 'goalsPerGame',
+              accessor: d => parseFloat(d.stats.splits[0].goalsPerGame).toFixed(2),
               maxWidth: 85,
               minWidth: 50,
             },
             {
               Header: 'GA/GP',
               id: 'goalsAgainstPerGame',
+              accessor: d => parseFloat(d.stats.splits[0].goalsAgainstPerGame).toFixed(2),
               maxWidth: 85,
               minWidth: 50,
             },
             {
               Header: 'PP%',
               id: 'powerPlayPercentage',
+              accessor: d => d.stats.splits[0].powerPlayPercentage,
               maxWidth: 85,
               minWidth: 50,
             },
             {
               Header: 'PK%',
               id: 'penaltyKillPercentage',
+              accessor: d => d.stats.splits[0].penaltyKillPercentage,
               maxWidth: 85,
               minWidth: 50,
-            }
+            },
           ]}
           defaultSorted={[
             {
@@ -132,12 +130,24 @@ class TeamsTable extends React.PureComponent {
             },
           ]}
           defaultPageSize={20}
-          defaultSortDesc={true}
+          defaultSortDesc
+          defaultPageSize={teams.length}
+          showPagination={false}
+          defaultSorted={[
+            {
+              id: 'points',
+              desc: true,
+            },
+          ]}
           className="-striped team-stats"
         />
       </div>
     );
   }
 }
+
+TeamsTable.propTypes = {
+  teams: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+};
 
 export default TeamsTable;

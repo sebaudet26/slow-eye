@@ -11,7 +11,7 @@ export default class TeamStatsPage extends React.Component {
   }
 
   render() {
-    const { teamsStats } = this.props;
+    const { teams } = this.props;
     return (
       <div>
         <Helmet>
@@ -20,7 +20,7 @@ export default class TeamStatsPage extends React.Component {
         </Helmet>
         <div className="teamStats-page">
           <h2>Team Stats</h2>
-          <TeamsTable teams={teamsStats} />
+          <TeamsTable teams={teams} />
         </div>
       </div>
     );
@@ -28,6 +28,6 @@ export default class TeamStatsPage extends React.Component {
 }
 
 TeamStatsPage.propTypes = {
-  teamsStats: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  teams: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   fetchAllTeams: PropTypes.func.isRequired,
 };

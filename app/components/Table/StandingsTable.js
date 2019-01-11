@@ -33,7 +33,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         minWidth: 50,
         Cell: row => (
           <a href={`./team?id=${row.value.id}`}>
-            <img src={`/images/teams/small/${row.value.abbreviation.toUpperCase().replace(' ', '-')}.png`} />
+            <img alt="" src={`/images/teams/small/${row.value.abbreviation.toUpperCase().replace(' ', '-')}.png`} />
           </a>
         ),
       },

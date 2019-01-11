@@ -12,7 +12,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = createStructuredSelector({
-  teamsStats: makeSelectTeamsStats(),
+  teams: makeSelectTeamsStats(),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
