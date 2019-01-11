@@ -31,7 +31,17 @@ const allPlayers = `
         hits,
         blocked,
         shots,
-        shotPct
+        shotPct,
+        saves,
+        shutouts,
+        gamesStarted,
+        timeOnIce,
+        savePercentage,
+        goalAgainstAverage,
+        gamesStarted,
+        wins,
+        losses,
+        ot
       }
     }
   }
