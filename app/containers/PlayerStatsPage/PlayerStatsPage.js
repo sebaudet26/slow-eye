@@ -7,7 +7,7 @@ import './style.scss';
 class PlayerStatsPage extends React.PureComponent {
   componentDidMount() {
     const { fetchPlayers } = this.props;
-    fetchPlayers('20162017');
+    fetchPlayers('20172018');
   }
 
   render() {
