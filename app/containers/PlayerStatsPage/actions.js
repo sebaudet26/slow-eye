@@ -38,10 +38,12 @@ const makeQuery = season => `
         timeOnIce,
         savePercentage,
         goalAgainstAverage,
-        gamesStarted,
         wins,
         losses,
-        ot
+        ot,
+        evenStrengthSavePercentage,
+        powerPlaySavePercentage,
+        shortHandedSavePercentage
       }
     }
   }

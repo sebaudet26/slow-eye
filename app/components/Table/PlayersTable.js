@@ -23,10 +23,10 @@ const getSavedState = () => {
 };
 
 const positions = [
-  { value: 'all', label: 'All' },
-  { value: 'F', label: 'Forward' },
-  { value: 'D', label: 'Defenseman' },
-  { value: 'G', label: 'Goalie' },
+  { value: 'S', label: 'Skaters' },
+  { value: 'F', label: 'Forwards' },
+  { value: 'D', label: 'Defensemen' },
+  { value: 'G', label: 'Goalies' },
   { value: 'C', label: 'Center' },
   { value: 'LW', label: 'Left Wing' },
   { value: 'RW', label: 'Right Wing' },
@@ -281,8 +281,9 @@ class PlayersTable extends React.PureComponent {
               minWidth: 50,
               accessor: d => pathOr(0, ['position', 'abbreviation'], d),
               filterMethod: (filter, row) => {
-                if (filter.value === 'all') {
-                  return true;
+                if (filter.value === 'S') {
+                  return row[filter.id] !== 'G';
+                  // return true;
                 }
                 if (filter.value === 'F') {
                   return row[filter.id] === 'C' | row[filter.id] === 'LW' | row[filter.id] === 'RW';
@@ -328,7 +329,6 @@ class PlayersTable extends React.PureComponent {
               id: 'games',
               maxWidth: 85,
               minWidth: 50,
-              show: this.state.posSelected !== 'G',
               filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'games'], d),
             },
@@ -413,16 +413,6 @@ class PlayersTable extends React.PureComponent {
               filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'shotPct'], d),
             },
-            // Goalies only
-            {
-              Header: 'GS',
-              id: 'gamesStarted',
-              maxWidth: 85,
-              minWidth: 50,
-              show: this.state.posSelected === 'G',
-              filterable: false,
-              accessor: d => pathOr(0, ['stats', 0, 'stat', 'gamesStarted'], d),
-            },
             {
               Header: 'W',
               id: 'wins',
@@ -451,22 +441,13 @@ class PlayersTable extends React.PureComponent {
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'shutouts'], d),
             },
             {
-              Header: 'TOI',
-              id: 'timeOnIce',
-              maxWidth: 100,
-              minWidth: 75,
-              show: this.state.posSelected === 'G',
-              filterable: false,
-              accessor: d => pathOr(0, ['stats', 0, 'stat', 'timeOnIce'], d),
-            },
-            {
               Header: 'Sv%',
               id: 'savePercentage',
-              maxWidth: 100,
-              minWidth: 75,
+              maxWidth: 85,
+              minWidth: 50,
               show: this.state.posSelected === 'G',
               filterable: false,
-              accessor: d => pathOr(0, ['stats', 0, 'stat', 'savePercentage'], d),
+              accessor: d => pathOr(0, ['stats', 0, 'stat', 'savePercentage'], d).toFixed(3),
             },
             {
               Header: 'GAA',
@@ -475,7 +456,7 @@ class PlayersTable extends React.PureComponent {
               minWidth: 50,
               show: this.state.posSelected === 'G',
               filterable: false,
-              accessor: d => pathOr(0, ['stats', 0, 'stat', 'goalAgainstAverage'], d),
+              accessor: d => parseFloat(pathOr(0, ['stats', 0, 'stat', 'goalAgainstAverage'], d)).toFixed(2),
             },
             {
               Header: 'SV',
@@ -485,6 +466,33 @@ class PlayersTable extends React.PureComponent {
               show: this.state.posSelected === 'G',
               filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'saves'], d),
+            },
+            {
+              Header: 'EV SV%',
+              id: 'evensv',
+              maxWidth: 85,
+              minWidth: 50,
+              show: this.state.posSelected === 'G',
+              filterable: false,
+              accessor: d => parseFloat((pathOr(0, ['stats', 0, 'stat', 'evenStrengthSavePercentage'], d)) / 100).toFixed(3),
+            },
+            {
+              Header: 'PP SV%',
+              id: 'shsv',
+              maxWidth: 85,
+              minWidth: 50,
+              show: this.state.posSelected === 'G',
+              filterable: false,
+              accessor: d => parseFloat((pathOr(0, ['stats', 0, 'stat', 'shortHandedSavePercentage'], d)) / 100).toFixed(3),
+            },
+            {
+              Header: 'SH SV%',
+              id: 'ppsv',
+              maxWidth: 85,
+              minWidth: 50,
+              show: this.state.posSelected === 'G',
+              filterable: false,
+              accessor: d => parseFloat((pathOr(0, ['stats', 0, 'stat', 'powerPlaySavePercentage'], d)) / 100).toFixed(3),
             },
           ]}
           defaultSorted={[
