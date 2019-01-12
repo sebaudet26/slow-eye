@@ -17,7 +17,7 @@ const useAcronyms = (leagueName) => {
   return leagueName;
 };
 
-const CareerStatsTable = ({ stats , info }) => (
+const CareerStatsTable = ({ stats, info }) => (
   <div>
     <ReactTable
       showPagination={false}
@@ -69,6 +69,7 @@ const CareerStatsTable = ({ stats , info }) => (
           id: 'goals',
           maxWidth: 85,
           minWidth: 50,
+          show: info.primaryPosition.name !== 'Goalie',
           accessor: d => pathOr('-', ['stat', 'goals'], d),
           Footer: sumByPath(stats, ['stat', 'goals']),
         },
@@ -77,6 +78,7 @@ const CareerStatsTable = ({ stats , info }) => (
           id: 'assists',
           maxWidth: 85,
           minWidth: 50,
+          show: info.primaryPosition.name !== 'Goalie',
           accessor: d => pathOr('-', ['stat', 'assists'], d),
           Footer: sumByPath(stats, ['stat', 'assists']),
         },
@@ -85,6 +87,7 @@ const CareerStatsTable = ({ stats , info }) => (
           id: 'points',
           maxWidth: 85,
           minWidth: 50,
+          show: info.primaryPosition.name !== 'Goalie',
           accessor: d => pathOr('-', ['stat', 'points'], d),
           Footer: sumByPath(stats, ['stat', 'points']),
         },
@@ -93,6 +96,7 @@ const CareerStatsTable = ({ stats , info }) => (
           id: 'plusMinus',
           maxWidth: 85,
           minWidth: 50,
+          show: info.primaryPosition.name !== 'Goalie',
           accessor: d => pathOr('-', ['stat', 'plusMinus'], d),
           Footer: sumByPath(stats, ['stat', 'plusMinus']),
         },
@@ -101,6 +105,7 @@ const CareerStatsTable = ({ stats , info }) => (
           id: 'pim',
           maxWidth: 85,
           minWidth: 50,
+          show: info.primaryPosition.name !== 'Goalie',
           accessor: d => pathOr('-', ['stat', 'pim'], d),
           Footer: sumByPath(stats, ['stat', 'pim']),
         },
@@ -109,6 +114,7 @@ const CareerStatsTable = ({ stats , info }) => (
           id: 'hits',
           maxWidth: 85,
           minWidth: 50,
+          show: info.primaryPosition.name !== 'Goalie',
           accessor: d => pathOr('-', ['stat', 'hits'], d),
           Footer: sumByPath(stats, ['stat', 'hits']),
         },
@@ -117,6 +123,7 @@ const CareerStatsTable = ({ stats , info }) => (
           id: 'blocked',
           maxWidth: 85,
           minWidth: 50,
+          show: info.primaryPosition.name !== 'Goalie',
           accessor: d => pathOr('-', ['stat', 'blocked'], d),
           Footer: sumByPath(stats, ['stat', 'blocked']),
         },
@@ -125,6 +132,7 @@ const CareerStatsTable = ({ stats , info }) => (
           id: 'shots',
           maxWidth: 85,
           minWidth: 50,
+          show: info.primaryPosition.name !== 'Goalie',
           accessor: d => pathOr('-', ['stat', 'shots'], d),
           Footer: sumByPath(stats, ['stat', 'shots']),
         },
@@ -133,12 +141,94 @@ const CareerStatsTable = ({ stats , info }) => (
           id: 'shotPct',
           maxWidth: 85,
           minWidth: 50,
-          accessor: d => pathOr('-', ['stat', 'shotPct'], d),
-          Footer: (
+          show: info.primaryPosition.name !== 'Goalie',
+          accessor: d => `${pathOr('-', ['stat', 'shotPct'], d)}+${pathOr('-', ['stat', 'goals'], d)}+${pathOr('-', ['stat', 'shots'], d)}`,
+          Cell: row => (
             <span>
-              {mean(map(path(['stat', 'shotPct']), stats)).toFixed(1)}
+              {row.value.split('+')[0]}
             </span>
           ),
+          Footer: ((sumByPath(stats, ['stat', 'goals']) / sumByPath(stats, ['stat', 'shots'])) * 100).toFixed(1),
+        },
+        {
+          Header: 'W',
+          id: 'wins',
+          maxWidth: 85,
+          minWidth: 50,
+          show: info.primaryPosition.name === 'Goalie',
+          filterable: false,
+          accessor: d => pathOr('-', ['stat', 'wins'], d),
+          Footer: sumByPath(stats, ['stat', 'wins']),
+        },
+        {
+          Header: 'L',
+          id: 'losses',
+          maxWidth: 85,
+          minWidth: 50,
+          show: info.primaryPosition.name === 'Goalie',
+          filterable: false,
+          accessor: d => pathOr('-', ['stat', 'losses'], d),
+          Footer: sumByPath(stats, ['stat', 'losses']),
+        },
+        {
+          Header: 'OT',
+          id: 'ot',
+          maxWidth: 85,
+          minWidth: 50,
+          show: info.primaryPosition.name === 'Goalie',
+          filterable: false,
+          accessor: d => pathOr('-', ['stat', 'ot'], d),
+          Footer: sumByPath(stats, ['stat', 'ot']),
+        },
+        {
+          Header: 'SO',
+          id: 'shutouts',
+          maxWidth: 85,
+          minWidth: 50,
+          show: info.primaryPosition.name === 'Goalie',
+          filterable: false,
+          accessor: d => pathOr('-', ['stat', 'shutouts'], d),
+          Footer: sumByPath(stats, ['stat', 'shutouts']),
+        },
+        {
+          Header: 'SV %',
+          id: 'savePercentage',
+          maxWidth: 85,
+          minWidth: 50,
+          show: info.primaryPosition.name === 'Goalie',
+          filterable: false,
+          accessor: d => `${pathOr('-', ['stat', 'savePercentage'], d)}+${pathOr('-', ['stat', 'saves'], d)}+${pathOr('-', ['stat', 'goalsAgainst'], d)}`,
+          Cell: row => (
+            <span>
+              {row.value.split('+')[0]}
+            </span>
+          ),
+          Footer: (sumByPath(stats, ['stat', 'saves']) / (sumByPath(stats, ['stat', 'saves']) + sumByPath(stats, ['stat', 'goalsAgainst']))).toFixed(3),
+        },
+        {
+          Header: 'GAA',
+          id: 'goalAgainstAverage',
+          maxWidth: 85,
+          minWidth: 50,
+          show: info.primaryPosition.name === 'Goalie',
+          filterable: false,
+          accessor: d => `${pathOr('-', ['stat', 'goalAgainstAverage'], d)}+${pathOr('-', ['stat', 'goalsAgainst'], d)}+${pathOr('-', ['stat', 'games'], d)}`,
+          Cell: row => (
+            <span>
+              {row.value.split('+')[0]}
+            </span>
+          ),
+          Footer: (sumByPath(stats, ['stat', 'goalsAgainst']) / sumByPath(stats, ['stat', 'games'])).toFixed(2),
+        },
+        {
+          Header: 'SV',
+          id: 'saves',
+          maxWidth: 85,
+          minWidth: 50,
+          show: info.primaryPosition.name === 'Goalie',
+          filterable: false,
+          accessor: d => pathOr('-', ['stat', 'saves'], d),
+          Footer: sumByPath(stats, ['stat', 'saves']),
         },
       ]}
       defaultPageSize={stats.length}

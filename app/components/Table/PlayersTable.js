@@ -283,7 +283,6 @@ class PlayersTable extends React.PureComponent {
               filterMethod: (filter, row) => {
                 if (filter.value === 'S') {
                   return row[filter.id] !== 'G';
-                  // return true;
                 }
                 if (filter.value === 'F') {
                   return row[filter.id] === 'C' | row[filter.id] === 'LW' | row[filter.id] === 'RW';
@@ -414,6 +413,15 @@ class PlayersTable extends React.PureComponent {
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'shotPct'], d),
             },
             {
+              Header: 'TOI/GP',
+              id: 'TOIGP',
+              maxWidth: 85,
+              minWidth: 50,
+              show: this.state.posSelected !== 'G',
+              filterable: false,
+              accessor: d => pathOr(0, ['stats', 0, 'stat', 'timeOnIcePerGame'], d),
+            },
+            {
               Header: 'W',
               id: 'wins',
               maxWidth: 85,
@@ -468,31 +476,13 @@ class PlayersTable extends React.PureComponent {
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'saves'], d),
             },
             {
-              Header: 'EV SV%',
-              id: 'evensv',
+              Header: 'GA',
+              id: 'goalsAgainst',
               maxWidth: 85,
               minWidth: 50,
               show: this.state.posSelected === 'G',
               filterable: false,
-              accessor: d => parseFloat((pathOr(0, ['stats', 0, 'stat', 'evenStrengthSavePercentage'], d)) / 100).toFixed(3),
-            },
-            {
-              Header: 'PP SV%',
-              id: 'shsv',
-              maxWidth: 85,
-              minWidth: 50,
-              show: this.state.posSelected === 'G',
-              filterable: false,
-              accessor: d => parseFloat((pathOr(0, ['stats', 0, 'stat', 'shortHandedSavePercentage'], d)) / 100).toFixed(3),
-            },
-            {
-              Header: 'SH SV%',
-              id: 'ppsv',
-              maxWidth: 85,
-              minWidth: 50,
-              show: this.state.posSelected === 'G',
-              filterable: false,
-              accessor: d => parseFloat((pathOr(0, ['stats', 0, 'stat', 'powerPlaySavePercentage'], d)) / 100).toFixed(3),
+              accessor: d => pathOr(0, ['stats', 0, 'stat', 'goalsAgainst'], d),
             },
           ]}
           defaultSorted={[
