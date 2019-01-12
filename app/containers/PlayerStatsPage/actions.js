@@ -2,9 +2,9 @@
 import { FETCH_PLAYERS } from './constants';
 import graphqlApi from '../../utils/api';
 
-const allPlayers = `
+const makeQuery = season => `
 {
-  players {
+  players ${season ? `(season: "${season}")` : ''} {
     id,
     person {
       fullName
@@ -19,7 +19,7 @@ const allPlayers = `
     info {
       nationality
     },
-    stats {
+    stats ${season ? `(season: "${season}")` : ''}{
       season,
       stat {
         games,
@@ -47,9 +47,9 @@ const allPlayers = `
   }
 }`;
 
-export const fetchAllPlayers = () => async (dispatch) => {
+export const fetchAllPlayers = season => async (dispatch) => {
   try {
-    const data = await graphqlApi(allPlayers, 'allPlayers');
+    const data = await graphqlApi(makeQuery(season || '20182019'));
     console.log(data);
     return dispatch({
       type: FETCH_PLAYERS,

@@ -164,8 +164,11 @@ const fetchInfoForPlayerId = async (playerId) => {
   return path(['people', 0], playerInfoData);
 };
 
-const fetchStatsForPlayerId = async (playerId) => {
-  const resource = `/people/${playerId}/stats?stats=statsSingleSeason`;
+const fetchStatsForPlayerId = async (playerId, args) => {
+  let resource = `/people/${playerId}/stats?stats=statsSingleSeason`;
+  if (args && args.season) {
+    resource += `&season=${args.season}`;
+  }
   const playerStatsData = await nhlAPI(resource);
   return path(['stats', 0, 'splits'], playerStatsData);
 };
@@ -198,8 +201,11 @@ const fetchInfoForTeamId = async (teamId) => {
   return path(['teams', 0], teamInfo);
 };
 
-const fetchPlayersForTeamId = async (teamId) => {
-  const resource = `/teams/${teamId}/roster`;
+const fetchPlayersForTeamId = async (teamId, args) => {
+  let resource = `/teams/${teamId}/roster`;
+  if (args && args.season) {
+    resource += `?season=${args.season}`;
+  }
   const json = await nhlAPI(resource);
   const allRosterIds = map(path(['person', 'id']), json.roster);
   const playerInfo = mergeAll(json.roster.map(p => ({ [p.person.id]: { ...p } })));
@@ -209,8 +215,11 @@ const fetchPlayersForTeamId = async (teamId) => {
   return fullData;
 };
 
-const fetchAllTeams = async () => {
-  const resource = '/teams';
+const fetchAllTeams = async (args) => {
+  let resource = '/teams';
+  if (args && args.season) {
+    resource += `?season=${args.season}`;
+  }
   const allTeamsData = await nhlAPI(resource);
   return prop('teams', allTeamsData);
 };
@@ -224,10 +233,11 @@ const fetchPlayer = async (playerId) => {
   };
 };
 
-const fetchAllPlayers = async () => {
-  const allTeamsData = await fetchAllTeams();
+const fetchAllPlayers = async (args) => {
+  const allTeamsData = await fetchAllTeams(args);
   const allTeamsIds = map(prop('id'), allTeamsData);
-  const allTeamsRosters = await Promise.all(map(fetchPlayersForTeamId, allTeamsIds));
+  const promises = map(id => fetchPlayersForTeamId(id, args), allTeamsIds);
+  const allTeamsRosters = await Promise.all(promises);
   return flatten(allTeamsRosters);
 };
 

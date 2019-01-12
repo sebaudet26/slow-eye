@@ -8,7 +8,7 @@ import reducer from './reducer';
 import PlayerStatsPage from './PlayerStatsPage';
 
 const mapDispatchToProps = dispatch => ({
-  fetchPlayers: () => dispatch(fetchAllPlayers()),
+  fetchPlayers: season => dispatch(fetchAllPlayers(season)),
 });
 
 const mapStateToProps = createStructuredSelector({

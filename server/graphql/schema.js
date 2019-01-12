@@ -582,8 +582,8 @@ const PlayerInfo = new GraphQLObjectType({
 },
 */
 
-const SeasonStat = new GraphQLObjectType({
-  name: 'SeasonStat',
+const Stat = new GraphQLObjectType({
+  name: 'Stat',
   fields: {
     timeOnIce: {
       type: GraphQLString,
@@ -776,11 +776,11 @@ const SeasonStat = new GraphQLObjectType({
   },
 });
 
-const Stat = new GraphQLObjectType({
-  name: 'Stat',
+const SeasonStat = new GraphQLObjectType({
+  name: 'SeasonStat',
   fields: {
     season: { type: GraphQLString, resolve: prop('season') },
-    stat: { type: SeasonStat, resolve: prop('stat') },
+    stat: { type: Stat, resolve: prop('stat') },
     league: { type: LeagueInfo, resolve: prop('league') },
     team: { type: TeamInfo, resolve: prop('team') },
     opponent: { type: TeamInfo, resolve: prop('opponent') },
@@ -831,8 +831,11 @@ const Player = new GraphQLObjectType({
     },
     // Lazy load player stats
     stats: {
-      type: new GraphQLList(Stat),
-      resolve: p => fetchStatsForPlayerId(p.id),
+      args: {
+        season: { type: GraphQLString },
+      },
+      type: new GraphQLList(SeasonStat),
+      resolve: (p, args) => fetchStatsForPlayerId(p.id, args),
     },
   },
 });
@@ -851,12 +854,12 @@ const PlayerDetails = new GraphQLObjectType({
     },
     // Lazy load player stats
     stats: {
-      type: new GraphQLList(Stat),
+      type: new GraphQLList(SeasonStat),
       resolve: p => fetchAllYearsStatsForPlayerId(p.id),
     },
     // Lazy load game logs
     logs: {
-      type: new GraphQLList(Stat),
+      type: new GraphQLList(SeasonStat),
       resolve: p => fetchCurrentSeasonGameLogsForPlayerId(p.id),
     },
   },
@@ -920,6 +923,7 @@ const schema = new GraphQLSchema({
     name: 'Query',
     fields: {
       players: {
+        args: { season: { type: GraphQLString } },
         type: new GraphQLList(Player),
         resolve: fetchAllPlayers,
       },
