@@ -61,7 +61,7 @@ export default class PlayerPage extends React.Component {
               <a href={`/team?id=${currentTeamInfo.id}`}>{`${currentTeamInfo.name}`}</a>
 ,
               {' '}
-              {`${primaryPosition.name}, Shoots ${shootsCatches}`}
+              {`${primaryPosition.abbreviation}, Shoots ${shootsCatches}`}
             </p>
             <div className="player-desc">
               <div>
@@ -95,22 +95,58 @@ export default class PlayerPage extends React.Component {
                 <div className="light small-text">GP</div>
                 <div className="bold">{isActiveThisYear ? lastSeason.stat.games : 0}</div>
               </div>
-              <div className="player-stats-item">
-                <div className="light small-text">G</div>
-                <div className="bold">{isActiveThisYear ? lastSeason.stat.goals : 0}</div>
-              </div>
-              <div className="player-stats-item">
-                <div className="light small-text">A</div>
-                <div className="bold">{isActiveThisYear ? lastSeason.stat.assists : 0}</div>
-              </div>
-              <div className="player-stats-item">
-                <div className="light small-text">Pts</div>
-                <div className="bold">{isActiveThisYear ? lastSeason.stat.points : 0}</div>
-              </div>
-              <div className="player-stats-item">
-                <div className="light small-text">+/-</div>
-                <div className="bold">{isActiveThisYear ? lastSeason.stat.plusMinus : 0}</div>
-              </div>
+              {primaryPosition.abbreviation === 'G'
+                ? (
+                  <div className="player-stats-item">
+                    <div className="light small-text">W</div>
+                    <div className="bold">{isActiveThisYear ? lastSeason.stat.wins : 0}</div>
+                  </div>
+                ) : (
+                  <div className="player-stats-item">
+                    <div className="light small-text">G</div>
+                    <div className="bold">{isActiveThisYear ? lastSeason.stat.goals : 0}</div>
+                  </div>
+                )
+              }
+              {primaryPosition.abbreviation === 'G'
+                ? (
+                  <div className="player-stats-item">
+                    <div className="light small-text">L</div>
+                    <div className="bold">{isActiveThisYear ? lastSeason.stat.losses : 0}</div>
+                  </div>
+                ) : (
+                  <div className="player-stats-item">
+                    <div className="light small-text">A</div>
+                    <div className="bold">{isActiveThisYear ? lastSeason.stat.assists : 0}</div>
+                  </div>
+                )
+              }
+              {primaryPosition.abbreviation === 'G'
+                ? (
+                  <div className="player-stats-item">
+                    <div className="light small-text">OT</div>
+                    <div className="bold">{isActiveThisYear ? lastSeason.stat.ot : 0}</div>
+                  </div>
+                ) : (
+                  <div className="player-stats-item">
+                    <div className="light small-text">Pts</div>
+                    <div className="bold">{isActiveThisYear ? lastSeason.stat.points : 0}</div>
+                  </div>
+                )
+              }
+              {primaryPosition.abbreviation === 'G'
+                ? (
+                  <div className="player-stats-item">
+                    <div className="light small-text">SO</div>
+                    <div className="bold">{isActiveThisYear ? lastSeason.stat.shutouts : 0}</div>
+                  </div>
+                ) : (
+                  <div className="player-stats-item">
+                    <div className="light small-text">+/-</div>
+                    <div className="bold">{isActiveThisYear ? lastSeason.stat.plusMinus : 0}</div>
+                  </div>
+                )
+              }
               <PlayerBadges info={info} stats={stats} logs={logs} />
             </div>
           </div>
