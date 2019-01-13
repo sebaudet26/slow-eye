@@ -27,14 +27,14 @@ const positions = [
   { value: 'F', label: 'Forwards' },
   { value: 'D', label: 'Defensemen' },
   { value: 'G', label: 'Goalies' },
-  { value: 'C', label: 'Center' },
-  { value: 'LW', label: 'Left Wing' },
-  { value: 'RW', label: 'Right Wing' },
+  { value: 'C', label: 'Centers' },
+  { value: 'LW', label: 'Left Wings' },
+  { value: 'RW', label: 'Right Wings' },
 ];
 
 // Team Dropdown Options
 const teams = [
-  { value: 'all', label: 'All' },
+  { value: 'all', label: 'All Teams' },
   { value: 'ANA', label: 'Anaheim Ducks' },
   { value: 'ARI', label: 'Arizona Coyotes' },
   { value: 'BOS', label: 'Boston Bruins' },
@@ -89,6 +89,12 @@ const nationalities = [
   { value: 'AUS', label: 'Australia' },
 ];
 
+const experience = [
+  { value: 'all', label: 'All' },
+  { value: 'true', label: 'Rookie' },
+  { value: 'false', label: 'Veteran' },
+];
+
 // Dropdown Styles
 const customStyles = {
   option: (provided, state) => ({
@@ -106,6 +112,7 @@ class PlayersTable extends React.PureComponent {
     this.handlePosChange = this.handlePosChange.bind(this);
     this.handleTeamChange = this.handleTeamChange.bind(this);
     this.handleNatChange = this.handleNatChange.bind(this);
+    this.handleXPChange = this.handleXPChange.bind(this);
   }
 
   componentDidUpdate() {
@@ -126,6 +133,10 @@ class PlayersTable extends React.PureComponent {
 
   handleNatChange(target) {
     this.setState({ natSelected: target.value });
+  }
+
+  handleXPChange(target) {
+    this.setState({ XPSelected: target.value });
   }
 
   render() {
@@ -206,26 +217,29 @@ class PlayersTable extends React.PureComponent {
               })}
             />
           </div>
+          <div className="filters-item">
+            <div className="filters-item-label">Filter By Experience</div>
+            <Select
+              onChange={this.handleXPChange}
+              classNamePrefix="react-select"
+              defaultValue={experience[0]}
+              options={experience}
+              styles={customStyles}
+              value={find(propEq('value', this.state.XPSelected))(experience)}
+              theme={theme => ({
+                ...theme,
+                borderRadius: 6,
+                colors: {
+                  ...theme.colors,
+                  primary: '#3D5AFE',
+                  primary50: '#CBD1DB',
+                  primary25: '#E2E7EC',
+                },
+              })}
+            />
+          </div>
         </div>
         <ReactTable
-          getTdProps={(state, rowInfo, column, instance) => ({
-            onClick: (e, handleOriginal) => {
-              console.log('A Td Element was clicked!');
-              console.log('it produced this event:', e);
-              console.log('It was in this column:', column);
-              console.log('It was in this row:', rowInfo);
-              console.log('It was in this table instance:', instance);
-
-              // IMPORTANT! React-Table uses onClick internally to trigger
-              // events like expanding SubComponents and pivots.
-              // By default a custom 'onClick' handler will override this functionality.
-              // If you want to fire the original onClick handler, call the
-              // 'handleOriginal' function.
-              if (handleOriginal) {
-                handleOriginal();
-              }
-            },
-          })}
           filtered={[
             {
               id: 'fullName',
@@ -243,20 +257,32 @@ class PlayersTable extends React.PureComponent {
               id: 'nationality',
               value: this.state.natSelected || 'all',
             },
+            {
+              id: 'experience',
+              value: this.state.XPSelected || 'all',
+            },
           ]}
           data={players}
           resizable={false}
           noDataText="Loading all dat good data stuff..."
           filterable
           defaultFilterMethod={toLowerCaseAndMatch}
+          getTdProps={(state, rowInfo, column, instance) => ({
+            onClick: (e, handleOriginal) => {
+              console.log('It was in this row:', rowInfo);
+              if (handleOriginal) {
+                handleOriginal();
+              }
+            },
+          })}
           columns={[
             {
               Header: '#',
               id: 'rank',
               Cell: row => <div>{(row.viewIndex + 1) + (row.page * row.pageSize)}</div>,
               className: 'text-left',
-              maxWidth: 50,
-              minWidth: 50,
+              maxWidth: 40,
+              minWidth: 40,
               filterable: false,
               sortable: false,
             },
@@ -321,6 +347,20 @@ class PlayersTable extends React.PureComponent {
                   return true;
                 }
                 return String(row[filter.id]).toLowerCase().match(filter.value.toLowerCase());
+              },
+            },
+            {
+              Header: 'XP',
+              id: 'experience',
+              className: 'text-left team-cell hidden',
+              maxWidth: 85,
+              minWidth: 50,
+              accessor: d => pathOr(0, ['info', 'rookie'], d),
+              filterMethod: (filter, row) => {
+                if (filter.value === 'all') {
+                  return true;
+                }
+                return String(row[filter.id]).match(filter.value);
               },
             },
             {

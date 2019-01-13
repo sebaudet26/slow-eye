@@ -18,6 +18,7 @@ const makeQuery = season => `
     },
     info {
       nationality
+      rookie
     },
     stats ${season ? `(season: "${season}")` : ''}{
       season,

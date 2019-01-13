@@ -22,7 +22,7 @@
         border-right: solid 1px $grey-4;
       }
 
-      &:nth-child(5) {
+      &:nth-child(5), &:nth-child(6) {
         display: none;
       }
     }
@@ -184,7 +184,7 @@
   &-input {
     margin-top: 5px;
     padding: 2px 8px;
-    width: 250px;
+    width: 100%;
     display: flex;
     align-items: center;
     min-height: 38px;
@@ -196,13 +196,19 @@
   }
 
   &-item {
-    max-width: 250px;
+    max-width: 200px;
     width: 100%;
-    margin-right: 25px;
+    margin-right: 15px;
+
+    &:first-child {
+      position: relative;
+      top: -3px;
+    }
 
     &-label, label {
       margin-bottom: 5px;
       color: $grey-2;
+      font-size: 14px;
     }
   }
 }
