@@ -300,10 +300,10 @@ class PlayersTable extends React.PureComponent {
               ),
             },
             {
-              Header: 'Pos.',
+              Header: 'Pos',
               id: 'position',
               className: 'text-left',
-              maxWidth: 85,
+              maxWidth: 75,
               minWidth: 50,
               accessor: d => pathOr(0, ['position', 'abbreviation'], d),
               filterMethod: (filter, row) => {
