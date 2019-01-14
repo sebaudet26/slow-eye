@@ -7,6 +7,7 @@ import {
   Tab, Tabs, TabList, TabPanel,
 } from 'react-tabs';
 import CareerStatsTable from '../../components/Table/CareerStatsTable';
+import GameLogTable from '../../components/Table/GameLogTable';
 import PlayerBadges from '../../components/PlayerBadges/PlayerBadges';
 import './style.scss';
 import '../../styles/tabs.scss';
@@ -179,6 +180,7 @@ export default class PlayerPage extends React.Component {
           </TabPanel>
           <TabPanel>
             <h3>Game Logs</h3>
+            <GameLogTable logs={logs} />
           </TabPanel>
         </Tabs>
       </div>

@@ -77,9 +77,27 @@ const makePlayerQuery = id => `
     },
     logs {
       date,
+      isWin,
+      opponent {
+        shortName
+        teamName
+        id
+        abbreviation
+      },
       stat {
+        goals,
+        assists,
         points,
-        plusMinus
+        plusMinus,
+        hits,
+        blocked,
+        powerPlayGoals,
+        shortHandedGoals,
+        gameWinningGoals,
+        pim,
+        shots,
+        timeOnIce,
+        shifts
       }
     }
   }

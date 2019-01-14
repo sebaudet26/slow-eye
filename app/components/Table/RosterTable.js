@@ -15,14 +15,6 @@ class RosterTable extends React.PureComponent {
     return (
       <div>
         <ReactTable
-          getTdProps={(state, rowInfo, column, instance) => ({
-            onClick: (e, handleOriginal) => {
-              console.log('It was in this row:', rowInfo);
-              if (handleOriginal) {
-                handleOriginal();
-              }
-            },
-          })}
           data={players}
           resizable={false}
           noDataText="Loading all dat good data stuff..."
