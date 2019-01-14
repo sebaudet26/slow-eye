@@ -41,7 +41,7 @@ const makePlayerQuery = id => `
         }
       }
     },
-    stats {
+    careerStats {
       season,
       team {
         name

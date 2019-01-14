@@ -8,7 +8,7 @@ const {
   GraphQLFloat,
 } = require('graphql');
 const {
-  pipe, prop, path, map,
+  pipe, prop, path, map, values,
 } = require('ramda');
 const {
   fetchStandings,
@@ -23,6 +23,7 @@ const {
   fetchAllPlayers,
   fetchAllTeams,
   fetchGames,
+  fetchBoxscore,
 } = require('../libs/nhlApi');
 
 const ifNotThereFetchId = propName => async (d) => {
@@ -43,10 +44,6 @@ const Position = new GraphQLObjectType({
   },
 });
 
-
-/* League Info
-
-*/
 const LeagueInfo = new GraphQLObjectType({
   name: 'LeagueInfo',
   fields: {
@@ -65,52 +62,6 @@ const Venue = new GraphQLObjectType({
     city: { type: GraphQLString, resolve: prop('city') },
   },
 });
-
-/* Team Stats
-{
-  "type" : {
-    "displayName" : "statsSingleSeason"
-  },
-  "splits" : [ {
-    "stat" : {
-      "gamesPlayed" : 41,
-      "wins" : 16,
-      "losses" : 18,
-      "ot" : 7,
-      "pts" : 39,
-      "ptPctg" : "47.6",
-      "goalsPerGame" : 2.951,
-      "goalsAgainstPerGame" : 3.293,
-      "evGGARatio" : 0.8901,
-      "powerPlayPercentage" : "18.9",
-      "powerPlayGoals" : 25.0,
-      "powerPlayGoalsAgainst" : 20.0,
-      "powerPlayOpportunities" : 132.0,
-      "penaltyKillPercentage" : "85.2",
-      "shotsPerGame" : 33.1707,
-      "shotsAllowed" : 31.2927,
-      "winScoreFirst" : 0.538,
-      "winOppScoreFirst" : 0.133,
-      "winLeadFirstPer" : 0.643,
-      "winLeadSecondPer" : 0.813,
-      "winOutshootOpp" : 0.455,
-      "winOutshotByOpp" : 0.375,
-      "faceOffsTaken" : 2575.0,
-      "faceOffsWon" : 1226.0,
-      "faceOffsLost" : 1349.0,
-      "faceOffWinPercentage" : "47.6",
-      "shootingPctg" : 8.9,
-      "savePctg" : 0.895
-    },
-    "team" : {
-      "id" : 1,
-      "name" : "New Jersey Devils",
-      "link" : "/api/v1/teams/1"
-    }
-  }]
-}
-*/
-
 
 const TeamStat = new GraphQLObjectType({
   name: 'TeamStat',
@@ -154,49 +105,6 @@ const TeamStats = new GraphQLObjectType({
   },
 });
 
-/* Team Info
-{
-  "id" : 5,
-  "name" : "Pittsburgh Penguins",
-  "link" : "/api/v1/teams/5",
-  "venue" : {
-    "id" : 5034,
-    "name" : "PPG Paints Arena",
-    "link" : "/api/v1/venues/5034",
-    "city" : "Pittsburgh",
-    "timeZone" : {
-      "id" : "America/New_York",
-      "offset" : -5,
-      "tz" : "EST"
-    }
-  },
-  "abbreviation" : "PIT",
-  "teamName" : "Penguins",
-  "locationName" : "Pittsburgh",
-  "division" : {
-    "id" : 18,
-    "name" : "Metropolitan",
-    "nameShort" : "Metro",
-    "link" : "/api/v1/divisions/18",
-    "abbreviation" : "M"
-  },
-  "conference" : {
-    "id" : 6,
-    "name" : "Eastern",
-    "link" : "/api/v1/conferences/6"
-  },
-  "franchise" : {
-    "franchiseId" : 17,
-    "teamName" : "Penguins",
-    "link" : "/api/v1/franchises/17"
-  },
-  "shortName" : "Pittsburgh",
-  "officialSiteUrl" : "http://pittsburghpenguins.com/",
-  "franchiseId" : 17,
-  "active" : true
-}
-*/
-
 const TeamRosterPlayer = new GraphQLObjectType({
   name: 'TeamRosterPlayer',
   fields: {
@@ -220,92 +128,6 @@ const TeamInfo = new GraphQLObjectType({
     roster: { type: GraphQLList(TeamRosterPlayer), resolve: p => fetchPlayersForTeamId(p.id) },
   },
 });
-
-
-/*
-{
-  "team" : {
-    "id" : 6,
-    "name" : "Boston Bruins",
-    "link" : "/api/v1/teams/6"
-  },
-  "leagueRecord" : {
-    "wins" : 18,
-    "losses" : 12,
-    "ot" : 4,
-    "type" : "league"
-  },
-  "goalsAgainst" : 88,
-  "goalsScored" : 94,
-  "points" : 40,
-  "divisionRank" : "4",
-  "conferenceRank" : "5",
-  "leagueRank" : "11",
-  "wildCardRank" : "1",
-  "row" : 17,
-  "gamesPlayed" : 34,
-  "streak" : {
-    "streakType" : "wins",
-    "streakNumber" : 1,
-    "streakCode" : "W1"
-  },
-  "lastUpdated" : "2018-12-20T00:03:12Z",
-  "records" : {
-    "divisionRecords" : [ {
-      "wins" : 3,
-      "losses" : 3,
-      "ot" : 2,
-      "type" : "Central"
-    }, {
-      "wins" : 9,
-      "losses" : 2,
-      "ot" : 1,
-      "type" : "Atlantic"
-    }, {
-      "wins" : 5,
-      "losses" : 4,
-      "ot" : 0,
-      "type" : "Pacific"
-    }, {
-      "wins" : 8,
-      "losses" : 3,
-      "ot" : 1,
-      "type" : "Metropolitan"
-    } ],
-    "overallRecords" : [ {
-      "wins" : 12,
-      "losses" : 6,
-      "ot" : 2,
-      "type" : "home"
-    }, {
-      "wins" : 13,
-      "losses" : 6,
-      "ot" : 2,
-      "type" : "away"
-    }, {
-      "wins" : 3,
-      "losses" : 1,
-      "type" : "shootOuts"
-    }, {
-      "wins" : 6,
-      "losses" : 3,
-      "ot" : 1,
-      "type" : "lastTen"
-    } ],
-    "conferenceRecords" : [ {
-      "wins" : 17,
-      "losses" : 5,
-      "ot" : 2,
-      "type" : "Eastern"
-    }, {
-      "wins" : 8,
-      "losses" : 7,
-      "ot" : 2,
-      "type" : "Western"
-    } ]
-  },
-}
-*/
 
 const Streak = new GraphQLObjectType({
   name: 'Streak',
@@ -355,22 +177,6 @@ const TeamRecord = new GraphQLObjectType({
   },
 });
 
-/*
-    "division" : {
-      "id" : 18,
-      "name" : "Metropolitan",
-      "nameShort" : "Metro",
-      "link" : "/api/v1/divisions/18",
-      "abbreviation" : "M"
-    },
-
-    "conference" : {
-      "id" : 6,
-      "name" : "Eastern",
-      "link" : "/api/v1/conferences/6"
-    },
-*/
-
 const ConferenceInfo = new GraphQLObjectType({
   name: 'ConferenceInfo',
   fields: {
@@ -413,43 +219,6 @@ const DraftInfo = new GraphQLObjectType({
   },
 });
 
-
-/* Player info
-{
-  "id" : 8476474,
-  "fullName" : "Stefan Noesen",
-  "link" : "/api/v1/people/8476474",
-  "firstName" : "Stefan",
-  "lastName" : "Noesen",
-  "primaryNumber" : "23",
-  "birthDate" : "1993-02-12",
-  "currentAge" : 25,
-  "birthCity" : "Plano",
-  "birthStateProvince" : "TX",
-  "birthCountry" : "USA",
-  "nationality" : "USA",
-  "height" : "6' 1\"",
-  "weight" : 205,
-  "active" : true,
-  "alternateCaptain" : false,
-  "captain" : false,
-  "rookie" : false,
-  "shootsCatches" : "R",
-  "rosterStatus" : "Y",
-  "currentTeam" : {
-    "id" : 1,
-    "name" : "New Jersey Devils",
-    "link" : "/api/v1/teams/1"
-  },
-  "primaryPosition" : {
-    "code" : "R",
-    "name" : "Right Wing",
-    "type" : "Forward",
-    "abbreviation" : "RW"
-  }
-}
-*/
-
 const PlayerInfo = new GraphQLObjectType({
   name: 'PlayerInfo',
   fields: {
@@ -480,107 +249,6 @@ const PlayerInfo = new GraphQLObjectType({
     draftInfo: { type: DraftInfo, resolve: p => fetchDraftInfoForPlayer(p.fullName) },
   },
 });
-
-/* Game Log
-{
-  "timeOnIce" : "23:10",
-  "assists" : 0,
-  "goals" : 0,
-  "pim" : 2,
-  "shots" : 2,
-  "games" : 1,
-  "hits" : 0,
-  "powerPlayGoals" : 0,
-  "powerPlayPoints" : 0,
-  "powerPlayTimeOnIce" : "07:06",
-  "evenTimeOnIce" : "16:04",
-  "penaltyMinutes" : "2",
-  "shotPct" : 0.0,
-  "gameWinningGoals" : 0,
-  "overTimeGoals" : 0,
-  "shortHandedGoals" : 0,
-  "shortHandedPoints" : 0,
-  "shortHandedTimeOnIce" : "00:00",
-  "blocked" : 0,
-  "plusMinus" : -2,
-  "points" : 0,
-  "shifts" : 26
-},
-"team" : {
-  "id" : 21,
-  "name" : "Colorado Avalanche",
-  "link" : "/api/v1/teams/21"
-},
-"opponent" : {
-  "id" : 2,
-  "name" : "New York Islanders",
-  "link" : "/api/v1/teams/2"
-},
-"date" : "2018-12-17",
-"isHome" : true,
-"isWin" : false,
-"isOT" : false,
-"game" : {
-  "gamePk" : 2018020516,
-  "link" : "/api/v1/game/2018020516/feed/live",
-  "content" : {
-    "link" : "/api/v1/game/2018020516/content"
-  }
-}
-*/
-
-/* Player Stats
-{
-  "teamId": 1,
-  "stats": [
-    {
-      "season": "20182019",
-      "stat": {
-        "timeOnIce": "247:46",
-        "assists": 3,
-        "goals": 2,
-        "pim": 16,
-        "shots": 28,
-        "games": 20,
-        "hits": 43,
-        "powerPlayGoals": 0,
-        "powerPlayPoints": 0,
-        "powerPlayTimeOnIce": "24:27",
-        "evenTimeOnIce": "222:38",
-        "penaltyMinutes": "16",
-        "faceOffPct": 41.46,
-        "shotPct": 7.1,
-        "gameWinningGoals": 0,
-        "overTimeGoals": 0,
-        "shortHandedGoals": 0,
-        "shortHandedPoints": 0,
-        "shortHandedTimeOnIce": "00:41",
-        "blocked": 12,
-        "plusMinus": -4,
-        "points": 5,
-        "shifts": 329,
-        "timeOnIcePerGame": "12:23",
-        "evenTimeOnIcePerGame": "11:07",
-        "shortHandedTimeOnIcePerGame": "00:02",
-        "powerPlayTimeOnIcePerGame": "01:13"
-      }
-    }
-  ],
-  "id": 8476474,
-  "person": {
-    "id": 8476474,
-    "fullName": "Stefan Noesen",
-    "link": "/api/v1/people/8476474"
-  },
-  "jerseyNumber": "23",
-  "position": {
-    "code": "R",
-    "name": "Right Wing",
-    "type": "Forward",
-    "abbreviation": "RW"
-  }
-},
-*/
 
 const Stat = new GraphQLObjectType({
   name: 'Stat',
@@ -803,26 +471,20 @@ const Person = new GraphQLObjectType({
 const Player = new GraphQLObjectType({
   name: 'Player',
   fields: {
-    id: {
-      type: GraphQLInt,
-      resolve: prop('id'),
-    },
-    // Lazy load team info
-    team: {
-      type: TeamInfo,
-      resolve: p => fetchInfoForTeamId(p.teamId),
-    },
+    id: { type: GraphQLInt, resolve: prop('id') },
+    person: { type: Person, resolve: prop('person') },
     jerseyNumber: {
       type: GraphQLInt,
       resolve: pipe(prop('jerseyNumber'), Number),
     },
-    person: {
-      type: Person,
-      resolve: prop('person'),
-    },
     position: {
       type: Position,
       resolve: prop('position'),
+    },
+    // Lazy load team info
+    team: {
+      type: TeamInfo,
+      resolve: p => p.team || fetchInfoForTeamId(p.teamId),
     },
     // Lazy load player info
     info: {
@@ -837,25 +499,18 @@ const Player = new GraphQLObjectType({
       type: new GraphQLList(SeasonStat),
       resolve: (p, args) => fetchStatsForPlayerId(p.id, args),
     },
-  },
-});
-
-const PlayerDetails = new GraphQLObjectType({
-  name: 'PlayerDetails',
-  fields: {
-    id: {
-      type: GraphQLString,
-      resolve: prop('id'),
-    },
-    // Lazy load player info
-    info: {
-      type: PlayerInfo,
-      resolve: p => fetchInfoForPlayerId(p.id),
-    },
     // Lazy load player stats
-    stats: {
+    careerStats: {
       type: new GraphQLList(SeasonStat),
       resolve: p => fetchAllYearsStatsForPlayerId(p.id),
+    },
+    // Lazy load player stats
+    boxscore: {
+      args: {
+        season: { type: GraphQLString },
+      },
+      type: Stat,
+      resolve: p => p.stats.skaterStats || p.stats.goalieStats,
     },
     // Lazy load game logs
     logs: {
@@ -884,6 +539,40 @@ const GameStatus = new GraphQLObjectType({
       type: GraphQLString,
       resolve: prop('statusCode'),
     },
+  },
+});
+
+const GameTeamStat = new GraphQLObjectType({
+  name: 'GameTeamStat',
+  fields: {
+    goals: { type: GraphQLInt, resolve: prop('goals') },
+    pim: { type: GraphQLInt, resolve: prop('pim') },
+    shots: { type: GraphQLInt, resolve: prop('shots') },
+    powerPlayPercentage: { type: GraphQLFloat, resolve: pipe(prop('powerPlayPercentage'), Number) },
+    powerPlayGoals: { type: GraphQLFloat, resolve: prop('powerPlayGoals') },
+    powerPlayOpportunities: { type: GraphQLFloat, resolve: prop('powerPlayOpportunities') },
+    faceOffWinPercentage: { type: GraphQLFloat, resolve: pipe(prop('faceOffWinPercentage'), Number) },
+    blocked: { type: GraphQLInt, resolve: prop('blocked') },
+    takeaways: { type: GraphQLInt, resolve: prop('takeaways') },
+    giveaways: { type: GraphQLInt, resolve: prop('giveaways') },
+    hits: { type: GraphQLInt, resolve: prop('hits') },
+  },
+});
+
+const TeamBoxscore = new GraphQLObjectType({
+  name: 'TeamBoxscore',
+  fields: {
+    team: { type: TeamInfo, resolve: prop('team') },
+    teamStats: { type: GameTeamStat, resolve: path(['teamStats', 'teamSkaterStats']) },
+    players: { type: GraphQLList(Player), resolve: pipe(prop('players'), values) },
+  },
+});
+
+const Boxscore = new GraphQLObjectType({
+  name: 'Boxscore',
+  fields: {
+    away: { type: TeamBoxscore, resolve: prop('away') },
+    home: { type: TeamBoxscore, resolve: prop('home') },
   },
 });
 
@@ -928,7 +617,7 @@ const schema = new GraphQLSchema({
         resolve: fetchAllPlayers,
       },
       player: {
-        type: PlayerDetails,
+        type: Player,
         args: { id: { type: GraphQLInt } },
         resolve: (root, args) => ({
           id: args.id,
@@ -957,6 +646,13 @@ const schema = new GraphQLSchema({
         },
         type: GraphQLList(Game),
         resolve: (root, args) => fetchGames(args),
+      },
+      game: {
+        args: {
+          id: { type: GraphQLString },
+        },
+        type: Boxscore,
+        resolve: (root, args) => fetchBoxscore(args.id),
       },
     },
   }),

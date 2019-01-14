@@ -259,6 +259,12 @@ const fetchGames = async (args) => {
   return games;
 };
 
+const fetchBoxscore = async (gameId) => {
+  const resource = `/game/${gameId}/boxscore`;
+  const boxscoreResponse = await nhlAPI(resource);
+  return prop('teams', boxscoreResponse);
+};
+
 module.exports = {
   nhlAPI,
   fetchStandings,
@@ -274,4 +280,5 @@ module.exports = {
   fetchAllTeams,
   fetchAllPlayers,
   fetchGames,
+  fetchBoxscore,
 };

@@ -43,7 +43,7 @@ export default class PlayerPage extends React.Component {
     if (isEmpty(player)) {
       return (<div />);
     }
-    const { stats = [], info = {}, logs = [] } = player;
+    const { careerStats = [], info = {}, logs = [] } = player;
     const {
       primaryPosition = {},
       currentTeamInfo = {},
@@ -51,7 +51,7 @@ export default class PlayerPage extends React.Component {
       shootsCatches,
       nationality,
     } = info;
-    const lastSeason = stats[stats.length - 1];
+    const lastSeason = careerStats[careerStats.length - 1];
     const isActiveThisYear = playerIsActiveThisYear(lastSeason);
     return (
       <div>
@@ -164,7 +164,7 @@ export default class PlayerPage extends React.Component {
                   </div>
                 )
               }
-              <PlayerBadges info={info} stats={stats} logs={logs} />
+              <PlayerBadges info={info} stats={careerStats} logs={logs} />
             </div>
           </div>
 
@@ -176,7 +176,7 @@ export default class PlayerPage extends React.Component {
           </TabList>
           <TabPanel>
             <h3>Season Stats</h3>
-            <CareerStatsTable stats={stats} info={info} />
+            <CareerStatsTable stats={careerStats} info={info} />
           </TabPanel>
           <TabPanel>
             <h3>Game Logs</h3>
