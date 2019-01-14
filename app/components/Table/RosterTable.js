@@ -7,6 +7,7 @@ import {
 } from 'ramda';
 import 'react-table/react-table.css';
 import './styles.scss';
+import '../../styles/tabs.scss';
 
 class RosterTable extends React.PureComponent {
   render() {

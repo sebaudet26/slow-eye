@@ -2,8 +2,10 @@
 
 .team {
   &-page {
-    h3 {
-      margin-bottom: 0px;
+    .depth-chart {
+      h3 {
+        margin-bottom: 0px;
+      }
     }
   }
 
@@ -24,6 +26,8 @@
       }
     }
   }
+
+
 
   &-img {
     margin-right: 25px;

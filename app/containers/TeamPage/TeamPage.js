@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import {
   isEmpty, sortBy, pipe, filter, map, prop, reverse,
 } from 'ramda';
+import {
+  Tab, Tabs, TabList, TabPanel,
+} from 'react-tabs';
 import PlayerCard from '../../components/PlayerCard/PlayerCard';
 import RosterTable from '../../components/Table/RosterTable';
 import './style.scss';
@@ -104,14 +107,15 @@ export default class TeamPage extends React.Component {
             </div>
           )}
         </div>
-        {
+        <Tabs>
+          <TabList>
+            <Tab>Depth Chart</Tab>
+            <Tab>Roster</Tab>
+          </TabList>
+          <TabPanel>
+            {
           isEmpty(roster) ? null : (
-            <RosterTable players={roster} />
-          )
-        }
-        {
-          isEmpty(roster) ? null : (
-            <div>
+            <div className="depth-chart">
               <h3>Forwards</h3>
               <div className="team-chart">
                 <div className="team-chart-col">
@@ -197,7 +201,17 @@ export default class TeamPage extends React.Component {
               </div>
             </div>
           )
-        }
+          }
+          </TabPanel>
+          <TabPanel>
+            <h3>Roster</h3>
+            {
+            isEmpty(roster) ? null : (
+              <RosterTable players={roster} />
+            )
+            }
+          </TabPanel>
+        </Tabs>
       </div>
     ));
   }
