@@ -1,13 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
+import moment from 'moment';
 import ScoreCard from '../../components/ScoreCard';
 import './style.scss';
 
+const dayLabelFormat = 'ddd MMM D';
+const apiDateFormat = 'YYYY-MM-DD';
+
+const daysOptions = [
+  { value: moment().subtract(2, 'days').format(apiDateFormat), label: moment().subtract(2, 'days').format(dayLabelFormat) },
+  { value: moment().subtract(1, 'days').format(apiDateFormat), label: moment().subtract(2, 'days').format(dayLabelFormat) },
+  { value: moment().format(apiDateFormat), label: 'Today\'s Games' },
+  { value: moment().add(1, 'days').format(apiDateFormat), label: moment().add(1, 'days').format(dayLabelFormat) },
+  { value: moment().add(2, 'days').format(apiDateFormat), label: moment().add(2, 'days').format(dayLabelFormat) },
+];
+
 export default class ScorePage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dateSelected: moment().format(apiDateFormat),
+    };
+    this.handleChangeDate = this.handleChangeDate.bind(this);
+  }
+
   componentDidMount() {
-    const { fetchTodaysGames } = this.props;
-    fetchTodaysGames();
+    const { dateSelected } = this.state;
+    const { fetchGames } = this.props;
+    fetchGames(dateSelected);
+  }
+
+  handleChangeDate(newDate) {
+    console.log(newDate);
+    this.setState({ dateSelected: newDate });
+    const { fetchGames } = this.props;
+    fetchGames(newDate);
   }
 
   render() {
@@ -24,21 +52,16 @@ export default class ScorePage extends React.Component {
         </Helmet>
         <h2>Scores</h2>
         <div className="scoreboard-selector">
-          <a href="#" className="scoreboard-selector-item">
-            Sun Jan 6
-          </a>
-          <a href="#" className="scoreboard-selector-item">
-            Mon Jan 7
-          </a>
-          <a href="#" className="scoreboard-selector-item active">
-            Today's Games
-          </a>
-          <a href="#" className="scoreboard-selector-item">
-            Wed Jan 9
-          </a>
-          <a href="#" className="scoreboard-selector-item">
-            Thu Jan 10
-          </a>
+          { daysOptions.map(option => (
+            <a
+              key={option.value}
+              href="#"
+              className={this.state.dateSelected === option.value ? 'scoreboard-selector-item active' : 'scoreboard-selector-item'}
+              onClick={() => this.handleChangeDate(option.value)}
+            >
+              {option.label}
+            </a>
+          ))}
         </div>
         <div className="scoreboard">
           {games.map(game => <ScoreCard game={game} />)}
@@ -49,5 +72,6 @@ export default class ScorePage extends React.Component {
 }
 
 ScorePage.propTypes = {
-  fetchTodaysGames: PropTypes.func.isRequired,
+  games: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  fetchGames: PropTypes.func.isRequired,
 };

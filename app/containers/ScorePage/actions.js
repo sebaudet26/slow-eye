@@ -1,10 +1,9 @@
-import moment from 'moment';
 import graphqlApi from '../../utils/api';
-import { FETCH_TODAYS_GAMES } from './constants';
+import { FETCH_GAMES } from './constants';
 
-const getTodaysGamesQuery = `
+const makeScoresQuery = date => `
 {
-  games (date: "${moment().subtract(12, 'hours').format('YYYY-MM-DD')}"){
+  games (date: "${date}"){
     gameDate,
     status {
       abstractGameState,
@@ -43,12 +42,12 @@ const getTodaysGamesQuery = `
   }
 }
 `;
-export const fetchTodaysGames = () => async (dispatch) => {
+export const fetchGames = date => async (dispatch) => {
   try {
-    const data = await graphqlApi(getTodaysGamesQuery, 'todays-games');
+    const data = await graphqlApi(makeScoresQuery(date));
     console.log('data', data);
     return dispatch({
-      type: FETCH_TODAYS_GAMES,
+      type: FETCH_GAMES,
       payload: data,
     });
   } catch (e) {

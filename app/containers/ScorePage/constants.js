@@ -1,3 +1,3 @@
-export const FETCH_TODAYS_GAMES = 'FETCH_TODAYS_GAMES';
+export const FETCH_GAMES = 'FETCH_GAMES';
 
 export default null;
