@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import {
-  find, propEq, pathOr,
+  find, propEq, pathOr, isEmpty,
 } from 'ramda';
 import 'react-table/react-table.css';
 import './styles.scss';
@@ -38,7 +38,6 @@ class RosterTable extends React.PureComponent {
             {
               Header: 'Name',
               id: 'fullName',
-              accessor: d => d.player.info.fullName,
               accessor: d => `${d.player.info.fullName}+${d.player.id}`,
               className: 'text-left',
               maxWidth: 200,
@@ -53,7 +52,7 @@ class RosterTable extends React.PureComponent {
               Header: 'Pos',
               id: 'position',
               className: 'text-left',
-              maxWidth: 85,
+              maxWidth: 65,
               minWidth: 50,
               accessor: d => d.player.info.primaryPosition.abbreviation,
             },
@@ -61,7 +60,7 @@ class RosterTable extends React.PureComponent {
               Header: 'Shoots',
               id: 'shootsCatches',
               className: 'text-left',
-              maxWidth: 85,
+              maxWidth: 75,
               minWidth: 50,
               accessor: d => d.player.info.shootsCatches,
             },
@@ -69,9 +68,17 @@ class RosterTable extends React.PureComponent {
               Header: 'Age',
               id: 'age',
               className: 'text-left',
-              maxWidth: 85,
+              maxWidth: 65,
               minWidth: 50,
               accessor: d => d.player.info.currentAge,
+            },
+            {
+              Header: 'Birthday',
+              id: 'birthDate',
+              className: 'text-left',
+              maxWidth: 145,
+              minWidth: 50,
+              accessor: d => d.player.info.birthDate,
             },
             {
               Header: 'Height',
@@ -90,6 +97,14 @@ class RosterTable extends React.PureComponent {
               accessor: d => d.player.info.weight,
             },
             {
+              Header: 'Birthplace',
+              id: 'birthCity',
+              className: 'text-left team-cell',
+              maxWidth: 175,
+              minWidth: 75,
+              accessor: d => ` ${[d.player.info.birthCity, d.player.info.birthStateProvince || ''].filter(Boolean).join(', ')} `,
+            },
+            {
               Header: 'Country',
               id: 'nationality',
               className: 'text-left team-cell',
@@ -103,12 +118,8 @@ class RosterTable extends React.PureComponent {
           ]}
           defaultSorted={[
             {
-              id: 'points',
-              desc: true,
-            },
-            {
-              id: 'wins',
-              desc: true,
+              id: 'fullName',
+              desc: false,
             },
           ]}
           defaultSortDesc

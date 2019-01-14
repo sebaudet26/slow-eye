@@ -71,6 +71,14 @@
     }
   }
 
+  &.roster {
+    .rt-thead {
+      .rt-th {
+        text-align: left;
+      }
+    }
+  }
+
   &.boxscore {
     .rt-thead {
       .rt-th {
