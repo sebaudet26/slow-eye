@@ -1,0 +1,124 @@
+/* global window */
+import React from 'react';
+import PropTypes from 'prop-types';
+import ReactTable from 'react-table';
+import {
+  find, propEq, pathOr,
+} from 'ramda';
+import 'react-table/react-table.css';
+import './styles.scss';
+
+class RosterTable extends React.PureComponent {
+  render() {
+    const { players } = this.props;
+    return (
+      <div>
+        <ReactTable
+          getTdProps={(state, rowInfo, column, instance) => ({
+            onClick: (e, handleOriginal) => {
+              console.log('It was in this row:', rowInfo);
+              if (handleOriginal) {
+                handleOriginal();
+              }
+            },
+          })}
+          data={players}
+          resizable={false}
+          noDataText="Loading all dat good data stuff..."
+          columns={[
+            {
+              Header: '#',
+              id: 'rank',
+              Cell: row => <div>{(row.viewIndex + 1) + (row.page * row.pageSize)}</div>,
+              className: 'text-left',
+              maxWidth: 40,
+              minWidth: 40,
+              sortable: false,
+            },
+            {
+              Header: 'Name',
+              id: 'fullName',
+              accessor: d => d.player.info.fullName,
+              accessor: d => `${d.player.info.fullName}+${d.player.id}`,
+              className: 'text-left',
+              maxWidth: 200,
+              minWidth: 150,
+              Cell: row => (
+                <a href={`./player?id=${row.value.split('+')[1]}`}>
+                  {row.value.split('+')[0]}
+                </a>
+              ),
+            },
+            {
+              Header: 'Pos',
+              id: 'position',
+              className: 'text-left',
+              maxWidth: 85,
+              minWidth: 50,
+              accessor: d => d.player.info.primaryPosition.abbreviation,
+            },
+            {
+              Header: 'Shoots',
+              id: 'shootsCatches',
+              className: 'text-left',
+              maxWidth: 85,
+              minWidth: 50,
+              accessor: d => d.player.info.shootsCatches,
+            },
+            {
+              Header: 'Age',
+              id: 'age',
+              className: 'text-left',
+              maxWidth: 85,
+              minWidth: 50,
+              accessor: d => d.player.info.currentAge,
+            },
+            {
+              Header: 'Height',
+              id: 'height',
+              className: 'text-left',
+              maxWidth: 85,
+              minWidth: 50,
+              accessor: d => d.player.info.height,
+            },
+            {
+              Header: 'Weight',
+              id: 'weight',
+              className: 'text-left',
+              maxWidth: 85,
+              minWidth: 50,
+              accessor: d => d.player.info.weight,
+            },
+            {
+              Header: 'Country',
+              id: 'nationality',
+              className: 'text-left team-cell',
+              maxWidth: 85,
+              minWidth: 50,
+              accessor: d => d.player.info.nationality,
+              Cell: row => (
+                <img src={`/images/country/${row.value}.svg`} />
+              ),
+            },
+          ]}
+          defaultSorted={[
+            {
+              id: 'points',
+              desc: true,
+            },
+            {
+              id: 'wins',
+              desc: true,
+            },
+          ]}
+          defaultSortDesc
+          showPagination={false}
+          className="-striped roster"
+          defaultPageSize={players.length}
+        />
+      </div>
+    );
+  }
+}
+
+export default RosterTable;

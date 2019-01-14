@@ -5,6 +5,7 @@ import {
   isEmpty, sortBy, pipe, filter, map, prop, reverse,
 } from 'ramda';
 import PlayerCard from '../../components/PlayerCard/PlayerCard';
+import RosterTable from '../../components/Table/RosterTable';
 import './style.scss';
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -105,6 +106,11 @@ export default class TeamPage extends React.Component {
         </div>
         {
           isEmpty(roster) ? null : (
+            <RosterTable players={roster} />
+          )
+        }
+        {
+          isEmpty(roster) ? null : (
             <div>
               <h3>Forwards</h3>
               <div className="team-chart">
@@ -199,7 +205,7 @@ export default class TeamPage extends React.Component {
 
 TeamPage.propTypes = {
   teams: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  rosters: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  roster: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   fetchTeamById: PropTypes.func.isRequired,
   fetchTeamRosterDetails: PropTypes.func.isRequired,
 };
