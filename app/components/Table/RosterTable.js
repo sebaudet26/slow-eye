@@ -29,12 +29,11 @@ class RosterTable extends React.PureComponent {
           columns={[
             {
               Header: '#',
-              id: 'rank',
-              Cell: row => <div>{(row.viewIndex + 1) + (row.page * row.pageSize)}</div>,
+              id: 'primaryNumber',
+              accessor: d => Number(d.player.info.primaryNumber),
               className: 'text-left',
               maxWidth: 40,
               minWidth: 40,
-              sortable: false,
             },
             {
               Header: 'Name',
@@ -126,11 +125,11 @@ class RosterTable extends React.PureComponent {
           ]}
           defaultSorted={[
             {
-              id: 'fullName',
+              id: 'primaryNumber',
               desc: false,
             },
           ]}
-          defaultSortDesc
+          defaultSortAsc
           showPagination={false}
           className="-striped roster"
           defaultPageSize={players.length}

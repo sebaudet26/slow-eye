@@ -70,6 +70,7 @@ const makePlayerQuery = id => `
       fullName,
       currentAge,
       rosterStatus,
+      primaryNumber
       currentTeamInfo {
         name,
         teamName,

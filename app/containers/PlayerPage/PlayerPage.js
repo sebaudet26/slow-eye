@@ -69,7 +69,7 @@ export default class PlayerPage extends React.Component {
                   <div>
                     <p>
                       <span className="bold">Drafted by</span>
-                      {` Drafted by ${draftInfo.team.name}`}
+                      {` ${draftInfo.team.name}`}
                     </p>
                     <p>{`${rounds[draftInfo.round - 1]} Round, #${draftInfo.pickOverall} Overall, ${draftInfo.year} NHL Draft`}</p>
                   </div>
