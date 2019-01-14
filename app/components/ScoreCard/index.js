@@ -12,25 +12,25 @@ const ScoreCard = args => (
         {isScheduled(args.game) ? `${moment(args.game.gameDate).format('LLL')}` : `${args.game.status.detailedState}`}
       </div>
       <div className="game-card-team">
-        <img src={`../../images/teams/small/${args.game.teams.home.team.abbreviation}.png`} />
-        <a href={`team?id=${args.game.teams.home.team.id}`} className="game-card-team-name">
-          {args.game.teams.home.team.name}
-        </a>
-        <div className="game-card-team-score">
-          {isScheduled(args.game) ? points(args.game.teams.home) : args.game.teams.home.score}
-        </div>
-      </div>
-      <div className="game-card-team">
         <img src={`../../images/teams/small/${args.game.teams.away.team.abbreviation}.png`} />
-        <a href={`team?id=${args.game.teams.away.team.id}`} className="game-card-team-name">
+        <a className="game-card-team-name" href={`/team?id=${args.game.teams.away.team.id}`}>
           {args.game.teams.away.team.name}
         </a>
         <div className="game-card-team-score">
           {isScheduled(args.game) ? points(args.game.teams.away) : args.game.teams.away.score}
         </div>
       </div>
+      <div className="game-card-team">
+        <img src={`../../images/teams/small/${args.game.teams.home.team.abbreviation}.png`} />
+        <a className="game-card-team-name" href={`/team?id=${args.game.teams.home.team.id}`}>
+          {args.game.teams.home.team.name}
+        </a>
+        <div className="game-card-team-score">
+          {isScheduled(args.game) ? points(args.game.teams.home) : args.game.teams.home.score}
+        </div>
+      </div>
       <div className="game-card-footer">
-        {args.game.status.detailedState === 'Scheduled' ? 'Preview' : <a href="/game?id=123">Game Summary</a>}
+        {args.game.status.detailedState === 'Scheduled' ? null : <a href="/game?id=123">Game Summary</a>}
       </div>
     </div>
   </div>

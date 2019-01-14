@@ -252,9 +252,8 @@ const fetchGames = async (args) => {
   if (args.date) {
     resource += `?date=${args.date}`;
   } else {
-    resource += `?date=${moment().subtract(12, 'hours').format('YYYY-MM-DD')}`;
+    resource += `?date=${moment().format('YYYY-MM-DD')}`;
   }
-  console.log(resource);
   const gamesResponse = await nhlAPI(resource);
   const games = flatten(map(propOr({}, 'games'), gamesResponse.dates || []));
   return games;
