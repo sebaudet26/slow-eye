@@ -86,6 +86,7 @@ const makePlayerQuery = id => `
         pickInRound,
         team {
           name
+          abbreviation
         }
       }
     },

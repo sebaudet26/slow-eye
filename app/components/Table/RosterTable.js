@@ -50,14 +50,6 @@ class RosterTable extends React.PureComponent {
               ),
             },
             {
-              Header: 'Pos',
-              id: 'position',
-              className: 'text-left',
-              maxWidth: 65,
-              minWidth: 50,
-              accessor: d => d.player.info.primaryPosition.abbreviation,
-            },
-            {
               Header: 'Shoots',
               id: 'shootsCatches',
               className: 'text-left',
@@ -77,7 +69,7 @@ class RosterTable extends React.PureComponent {
               Header: 'Birthday',
               id: 'birthDate',
               className: 'text-left',
-              maxWidth: 145,
+              maxWidth: 130,
               minWidth: 50,
               accessor: d => d.player.info.birthDate,
             },
@@ -103,7 +95,7 @@ class RosterTable extends React.PureComponent {
               className: 'text-left team-cell',
               maxWidth: 175,
               minWidth: 75,
-              accessor: d => ` ${[d.player.info.birthCity, d.player.info.birthStateProvince || ''].filter(Boolean).join(', ')} `,
+              accessor: d => `${[d.player.info.birthCity, d.player.info.birthStateProvince || ''].filter(Boolean).join(', ')} `,
             },
             {
               Header: 'Country',
@@ -114,6 +106,21 @@ class RosterTable extends React.PureComponent {
               accessor: d => d.player.info.nationality,
               Cell: row => (
                 <img src={`/images/country/${row.value}.svg`} />
+              ),
+            },
+            {
+              Header: 'Draft',
+              id: 'draftInfo',
+              className: 'text-left team-cell',
+              maxWidth: 185,
+              minWidth: 150,
+              accessor: d => `${d.player.info.draftInfo.year || ''}+${pathOr('Undrafted', ['player', 'info', 'draftInfo', 'team', 'abbreviation'], d)}+${d.player.info.draftInfo.pickOverall || ''}`,
+              Cell: row => (
+                <span>
+                  {row.value.split('+')[0]}
+                  {' '}
+                  {row.value.split('+')[1]}
+                </span>
               ),
             },
           ]}

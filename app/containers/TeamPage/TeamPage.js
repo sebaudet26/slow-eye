@@ -12,6 +12,7 @@ import RosterTable from '../../components/Table/RosterTable';
 import './style.scss';
 
 const urlParams = new URLSearchParams(window.location.search);
+const forwardsAbbreviations = ['LW', 'C', 'RW'];
 
 const pointsInLatestSeason = player => (
   player.stats.length
@@ -217,10 +218,17 @@ export default class TeamPage extends React.Component {
           }
           </TabPanel>
           <TabPanel>
-            <h3>Roster</h3>
+
             {
             isEmpty(roster) ? null : (
-              <RosterTable players={roster} />
+              <div>
+                <h3>Forwards</h3>
+                <RosterTable players={roster.filter(p => forwardsAbbreviations.includes(p.player.info.primaryPosition.abbreviation))} />
+                <h3>Defensemen</h3>
+                <RosterTable players={roster.filter(p => p.player.info.primaryPosition.abbreviation === 'D')} />
+                <h3>Goalies</h3>
+                <RosterTable players={roster.filter(p => p.player.info.primaryPosition.abbreviation === 'G')} />
+              </div>
             )
             }
           </TabPanel>
