@@ -13,18 +13,18 @@ const ScoreCard = args => (
       </div>
       <div className="game-card-team">
         <img src={`../../images/teams/small/${args.game.teams.home.team.abbreviation}.png`} />
-        <div className="game-card-team-name">
+        <a href={`team?id=${args.game.teams.home.team.id}`} className="game-card-team-name">
           {args.game.teams.home.team.name}
-        </div>
+        </a>
         <div className="game-card-team-score">
           {isScheduled(args.game) ? points(args.game.teams.home) : args.game.teams.home.score}
         </div>
       </div>
       <div className="game-card-team">
         <img src={`../../images/teams/small/${args.game.teams.away.team.abbreviation}.png`} />
-        <div className="game-card-team-name">
+        <a href={`team?id=${args.game.teams.away.team.id}`} className="game-card-team-name">
           {args.game.teams.away.team.name}
-        </div>
+        </a>
         <div className="game-card-team-score">
           {isScheduled(args.game) ? points(args.game.teams.away) : args.game.teams.away.score}
         </div>
