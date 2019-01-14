@@ -43,6 +43,14 @@ const renderTeamStat = (label, stat) => (
 );
 
 export default class TeamPage extends React.Component {
+  constructor() {
+    super();
+    this.onTabSelect = this.onTabSelect.bind(this);
+    this.state = {
+      tabIndex: Number(window.localStorage.getItem('teamTab') || 0),
+    };
+  }
+
   componentDidMount() {
     const { fetchTeamById } = this.props;
     fetchTeamById((urlParams.get('id')));
@@ -60,6 +68,11 @@ export default class TeamPage extends React.Component {
     }
   }
 
+  onTabSelect(tabIndex) {
+    window.localStorage.setItem('teamTab', tabIndex);
+    this.setState({ tabIndex });
+  }
+
   render() {
     const { teams, rosters } = this.props;
     const team = teams[urlParams.get('id')] || {};
@@ -69,7 +82,7 @@ export default class TeamPage extends React.Component {
     return (isEmpty(team) ? null : (
       <div className="team-page">
         <Helmet>
-          <title />
+          <title>{team.name}</title>
           <meta
             name="description"
             content={team.name}
@@ -107,7 +120,7 @@ export default class TeamPage extends React.Component {
             </div>
           )}
         </div>
-        <Tabs>
+        <Tabs selectedIndex={this.state.tabIndex} onSelect={this.onTabSelect}>
           <TabList>
             <Tab>Depth Chart</Tab>
             <Tab>Roster</Tab>
