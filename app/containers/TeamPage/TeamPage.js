@@ -10,6 +10,7 @@ import {
 import PlayerCard from '../../components/PlayerCard/PlayerCard';
 import RosterTable from '../../components/Table/RosterTable';
 import './style.scss';
+import '../../styles/tabs.scss';
 
 const urlParams = new URLSearchParams(window.location.search);
 const forwardsAbbreviations = ['LW', 'C', 'RW'];
@@ -218,7 +219,6 @@ export default class TeamPage extends React.Component {
           }
           </TabPanel>
           <TabPanel>
-
             {
             isEmpty(roster) ? null : (
               <div>

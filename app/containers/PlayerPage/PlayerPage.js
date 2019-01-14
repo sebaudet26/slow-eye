@@ -3,10 +3,13 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { isEmpty } from 'ramda';
+import {
+  Tab, Tabs, TabList, TabPanel,
+} from 'react-tabs';
 import CareerStatsTable from '../../components/Table/CareerStatsTable';
 import PlayerBadges from '../../components/PlayerBadges/PlayerBadges';
-
 import './style.scss';
+import '../../styles/tabs.scss';
 
 const rounds = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th'];
 
@@ -15,9 +18,22 @@ const urlParams = new URLSearchParams(window.location.search);
 const playerIsActiveThisYear = latestSeason => latestSeason.season === '20182019';
 
 export default class PlayerPage extends React.Component {
+  constructor() {
+    super();
+    this.onTabSelect = this.onTabSelect.bind(this);
+    this.state = {
+      tabIndex: Number(window.localStorage.getItem('teamTab') || 0),
+    };
+  }
+
   componentDidMount() {
     const { fetchPlayer } = this.props;
     fetchPlayer(urlParams.get('id'));
+  }
+
+  onTabSelect(tabIndex) {
+    window.localStorage.setItem('teamTab', tabIndex);
+    this.setState({ tabIndex });
   }
 
   render() {
@@ -152,8 +168,19 @@ export default class PlayerPage extends React.Component {
           </div>
 
         </div>
-        <h3>Season Stats</h3>
-        <CareerStatsTable stats={stats} info={info} />
+        <Tabs selectedIndex={this.state.tabIndex} onSelect={this.onTabSelect}>
+          <TabList>
+            <Tab>Career Stats</Tab>
+            <Tab>Game Logs</Tab>
+          </TabList>
+          <TabPanel>
+            <h3>Season Stats</h3>
+            <CareerStatsTable stats={stats} info={info} />
+          </TabPanel>
+          <TabPanel>
+            <h3>Game Logs</h3>
+          </TabPanel>
+        </Tabs>
       </div>
     );
   }
