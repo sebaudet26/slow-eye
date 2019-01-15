@@ -15,6 +15,8 @@ import '../../styles/tabs.scss';
 
 const urlParams = new URLSearchParams(window.location.search);
 const forwardsAbbreviations = ['LW', 'C', 'RW'];
+const saveToLS = (name, value) => window.localStorage.setItem(name, value);
+const getFromLS = name => window.localStorage.getItem(name);
 
 const pointsInLatestSeason = player => (
   player.stats.length
@@ -46,14 +48,6 @@ const renderTeamStat = (label, stat) => (
 );
 
 export default class TeamPage extends React.Component {
-  constructor() {
-    super();
-    this.onTabSelect = this.onTabSelect.bind(this);
-    this.state = {
-      tabIndex: Number(window.localStorage.getItem('teamTab') || 0),
-    };
-  }
-
   componentDidMount() {
     const { fetchTeamById } = this.props;
     fetchTeamById((urlParams.get('id')));
@@ -69,11 +63,6 @@ export default class TeamPage extends React.Component {
       const { fetchTeamRosterDetails } = this.props;
       fetchTeamRosterDetails(urlParams.get('id'), teams[urlParams.get('id')].roster);
     }
-  }
-
-  onTabSelect(tabIndex) {
-    window.localStorage.setItem('teamTab', tabIndex);
-    this.setState({ tabIndex });
   }
 
   render() {
@@ -123,7 +112,10 @@ export default class TeamPage extends React.Component {
             </div>
           )}
         </div>
-        <Tabs defaultIndex={getFromLS('tabIndex') || 0} onSelect={this.onTabSelect}>
+        <Tabs
+          defaultIndex={getFromLS('tabIndex') || 0}
+          onSelect={i => saveToLS('tabIndex', i)}
+        >
           <TabList>
             <Tab>Depth Chart</Tab>
             <Tab>Roster</Tab>
