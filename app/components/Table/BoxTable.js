@@ -1,18 +1,17 @@
-/* global window */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { pathOr, pipe, sum } from 'ramda';
+import { pathOr } from 'ramda';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import './styles.scss';
 
-const BoxTable = args => (
+const BoxTable = ({ players }) => (
   <div>
     <ReactTable
       resizable={false}
       noDataText="Loading all dat good data stuff..."
       sortable
-      data={args.players}
+      data={players}
       columns={[
         {
           Header: '#',
@@ -134,5 +133,9 @@ const BoxTable = args => (
     />
   </div>
 );
+
+BoxTable.propTypes = {
+  players: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+};
 
 export default BoxTable;

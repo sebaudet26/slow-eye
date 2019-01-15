@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import './style.scss';
-import AvsImg from '../../images/teams/avalanche.png';
-import FlamesImg from '../../images/teams/flames.png';
 import BoxTable from '../../components/Table/BoxTable';
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -17,6 +15,18 @@ class GamePage extends React.Component {
   render() {
     const { gameBoxscore } = this.props;
     console.log(gameBoxscore);
+    const awayTeamImage = (
+      <img
+        src={`../../images/teams/${gameBoxscore.away.team.teamName.replace(' ', '-').toLowerCase()}.png`}
+        alt=""
+      />
+    );
+    const homeTeamImage = (
+      <img
+        src={`../../images/teams/${gameBoxscore.home.team.teamName.replace(' ', '-').toLowerCase()}.png`}
+        alt=""
+      />
+    );
     return (gameBoxscore.away && gameBoxscore.home ? (
       <div>
         <Helmet>
@@ -26,7 +36,7 @@ class GamePage extends React.Component {
         <div className="summary">
           <div className="summary-header">
             <div className="summary-header-team">
-              <img src={`../../images/teams/${gameBoxscore.away.team.teamName.replace(' ', '-').toLowerCase()}.png`} />
+              {awayTeamImage}
               <div className="summary-header-team-name">
                 <div className="city">{gameBoxscore.away.team.location}</div>
                 <div className="team">{gameBoxscore.away.team.teamName}</div>
@@ -48,7 +58,7 @@ class GamePage extends React.Component {
                 <div className="team">{gameBoxscore.home.team.teamName}</div>
                 <div className="record">(28-13-4 60pts)</div>
               </div>
-              <img src={`../../images/teams/${gameBoxscore.home.team.teamName.replace(' ', '-').toLowerCase()}.png`} />
+              {homeTeamImage}
             </div>
           </div>
           <div className="summary-period">
@@ -65,7 +75,7 @@ class GamePage extends React.Component {
                   <tbody>
                     <tr>
                       <td>
-                        <img src={AvsImg} />
+                        {awayTeamImage}
                         {gameBoxscore.away.team.name}
                       </td>
                       <td>2</td>
@@ -75,7 +85,7 @@ class GamePage extends React.Component {
                     </tr>
                     <tr>
                       <td>
-                        <img src={FlamesImg} />
+                        {homeTeamImage}
                         {gameBoxscore.home.team.name}
                       </td>
                       <td>2</td>
@@ -100,7 +110,7 @@ class GamePage extends React.Component {
                   <tbody>
                     <tr>
                       <td>
-                        <img src={`../../images/teams/${gameBoxscore.away.team.teamName.replace(' ', '-').toLowerCase()}.png`} />
+                        {awayTeamImage}
                         {gameBoxscore.away.team.name}
                       </td>
                       <td>11</td>
@@ -110,7 +120,7 @@ class GamePage extends React.Component {
                     </tr>
                     <tr>
                       <td>
-                        <img src={`../../images/teams/${gameBoxscore.home.team.teamName.replace(' ', '-').toLowerCase()}.png`} />
+                        {homeTeamImage}
                         {gameBoxscore.home.team.name}
                       </td>
                       <td>5</td>
@@ -123,9 +133,9 @@ class GamePage extends React.Component {
               </div>
             </div>
           </div>
-          <h3>Colorado Avalanche</h3>
+          <h3>{gameBoxscore.away.team.name}</h3>
           { gameBoxscore.away ? <BoxTable players={gameBoxscore.away.players} /> : null }
-          <h3>Calgary Flames</h3>
+          <h3>{gameBoxscore.home.team.name}</h3>
           { gameBoxscore.home ? <BoxTable players={gameBoxscore.home.players} /> : null }
         </div>
       </div>
@@ -135,6 +145,7 @@ class GamePage extends React.Component {
 
 GamePage.propTypes = {
   fetchGameBoxscore: PropTypes.func.isRequired,
+  gameBoxscore: PropTypes.shape({}).isRequired,
 };
 
 export default GamePage;
