@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import Select from 'react-select';
 import {
-  find, propEq, pathOr,
+  find, propEq, pathOr, pipe, prop, match, toLower, toString,
 } from 'ramda';
 import 'react-table/react-table.css';
+import { sortTimeOnIce } from '../../utils/sort';
 import './styles.scss';
 
 const toLowerCaseAndMatch = (filter, row) => String(row[filter.id])
@@ -143,6 +144,9 @@ class PlayersTable extends React.PureComponent {
     const { players } = this.props;
     console.log('players', players);
     console.log(this.state);
+    const {
+      nameSelected, posSelected, natSelected, teamSelected, XPSelected,
+    } = this.state;
     return (
       <div>
         <div className="filters">
@@ -153,7 +157,7 @@ class PlayersTable extends React.PureComponent {
               className="filters-input"
               type="text"
               onChange={this.handleNameChange}
-              value={this.state.nameSelected}
+              value={nameSelected}
             />
           </div>
           <div className="filters-item">
@@ -164,7 +168,7 @@ class PlayersTable extends React.PureComponent {
               defaultValue={positions[0]}
               options={positions}
               styles={customStyles}
-              value={find(propEq('value', this.state.posSelected))(positions)}
+              value={find(propEq('value', posSelected))(positions)}
               theme={theme => ({
                 ...theme,
                 borderRadius: 6,
@@ -185,7 +189,7 @@ class PlayersTable extends React.PureComponent {
               defaultValue={teams[0]}
               options={teams}
               styles={customStyles}
-              value={find(propEq('value', this.state.teamSelected))(teams)}
+              value={find(propEq('value', teamSelected))(teams)}
               theme={theme => ({
                 ...theme,
                 borderRadius: 6,
@@ -206,7 +210,7 @@ class PlayersTable extends React.PureComponent {
               defaultValue={teams[0]}
               options={nationalities}
               styles={customStyles}
-              value={find(propEq('value', this.state.natSelected))(nationalities)}
+              value={find(propEq('value', natSelected))(nationalities)}
               theme={theme => ({
                 ...theme,
                 borderRadius: 6,
@@ -227,7 +231,7 @@ class PlayersTable extends React.PureComponent {
               defaultValue={experience[0]}
               options={experience}
               styles={customStyles}
-              value={find(propEq('value', this.state.XPSelected))(experience)}
+              value={find(propEq('value', XPSelected))(experience)}
               theme={theme => ({
                 ...theme,
                 borderRadius: 6,
@@ -245,23 +249,23 @@ class PlayersTable extends React.PureComponent {
           filtered={[
             {
               id: 'fullName',
-              value: this.state.nameSelected || '',
+              value: nameSelected || '',
             },
             {
               id: 'position',
-              value: this.state.posSelected || 'all',
+              value: posSelected || 'all',
             },
             {
               id: 'team',
-              value: this.state.teamSelected || 'all',
+              value: teamSelected || 'all',
             },
             {
               id: 'nationality',
-              value: this.state.natSelected || 'all',
+              value: natSelected || 'all',
             },
             {
               id: 'experience',
-              value: this.state.XPSelected || 'all',
+              value: XPSelected || 'all',
             },
           ]}
           data={players}
@@ -313,9 +317,14 @@ class PlayersTable extends React.PureComponent {
                   return row[filter.id] !== 'G';
                 }
                 if (filter.value === 'F') {
-                  return row[filter.id] === 'C' | row[filter.id] === 'LW' | row[filter.id] === 'RW';
+                  return row[filter.id] === 'C' || row[filter.id] === 'LW' || row[filter.id] === 'RW';
                 }
-                return String(row[filter.id]).toLowerCase().match(filter.value.toLowerCase());
+                return pipe(
+                  prop(filter.id),
+                  toString,
+                  toLower,
+                  match(toLower(prop('value', filter))),
+                )(row);
               },
             },
             {
@@ -326,7 +335,7 @@ class PlayersTable extends React.PureComponent {
               minWidth: 50,
               Cell: row => (
                 <a href={`./team?id=${row.value.id}`}>
-                  <img src={`/images/teams/small/${row.value.abbreviation}.png`} />
+                  <img src={`/images/teams/small/${row.value.abbreviation}.png`} alt="" />
                 </a>
               ),
               accessor: d => pathOr(0, ['team'], d),
@@ -334,7 +343,13 @@ class PlayersTable extends React.PureComponent {
                 if (filter.value === 'all') {
                   return true;
                 }
-                return String(row[filter.id].abbreviation).toLowerCase().match(filter.value.toLowerCase());
+                return pipe(
+                  prop(filter.id),
+                  prop('abbreviation'),
+                  toString,
+                  toLower,
+                  match(toLower(prop('value', filter))),
+                )(row);
               },
             },
             {
@@ -348,7 +363,12 @@ class PlayersTable extends React.PureComponent {
                 if (filter.value === 'all') {
                   return true;
                 }
-                return String(row[filter.id]).toLowerCase().match(filter.value.toLowerCase());
+                return pipe(
+                  prop(filter.id),
+                  toString,
+                  toLower,
+                  match(toLower(prop('value', filter))),
+                )(row);
               },
             },
             {
@@ -378,7 +398,7 @@ class PlayersTable extends React.PureComponent {
               id: 'goals',
               maxWidth: 85,
               minWidth: 50,
-              show: this.state.posSelected !== 'G',
+              show: posSelected !== 'G',
               filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'goals'], d),
             },
@@ -387,7 +407,7 @@ class PlayersTable extends React.PureComponent {
               id: 'assists',
               maxWidth: 85,
               minWidth: 50,
-              show: this.state.posSelected !== 'G',
+              show: posSelected !== 'G',
               filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'assists'], d),
             },
@@ -396,7 +416,7 @@ class PlayersTable extends React.PureComponent {
               id: 'points',
               maxWidth: 85,
               minWidth: 50,
-              show: this.state.posSelected !== 'G',
+              show: posSelected !== 'G',
               filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'points'], d),
             },
@@ -405,7 +425,7 @@ class PlayersTable extends React.PureComponent {
               id: 'plusMinus',
               maxWidth: 85,
               minWidth: 50,
-              show: this.state.posSelected !== 'G',
+              show: posSelected !== 'G',
               filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'plusMinus'], d),
             },
@@ -414,7 +434,7 @@ class PlayersTable extends React.PureComponent {
               id: 'pim',
               maxWidth: 85,
               minWidth: 50,
-              show: this.state.posSelected !== 'G',
+              show: posSelected !== 'G',
               filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'pim'], d),
             },
@@ -423,7 +443,7 @@ class PlayersTable extends React.PureComponent {
               id: 'hits',
               maxWidth: 85,
               minWidth: 50,
-              show: this.state.posSelected !== 'G',
+              show: posSelected !== 'G',
               filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'hits'], d),
             },
@@ -432,7 +452,7 @@ class PlayersTable extends React.PureComponent {
               id: 'blocked',
               maxWidth: 85,
               minWidth: 50,
-              show: this.state.posSelected !== 'G',
+              show: posSelected !== 'G',
               filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'blocked'], d),
             },
@@ -441,7 +461,7 @@ class PlayersTable extends React.PureComponent {
               id: 'shots',
               maxWidth: 85,
               minWidth: 50,
-              show: this.state.posSelected !== 'G',
+              show: posSelected !== 'G',
               filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'shots'], d),
             },
@@ -450,7 +470,7 @@ class PlayersTable extends React.PureComponent {
               id: 'shotPct',
               maxWidth: 85,
               minWidth: 50,
-              show: this.state.posSelected !== 'G',
+              show: posSelected !== 'G',
               filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'shotPct'], d),
             },
@@ -459,16 +479,17 @@ class PlayersTable extends React.PureComponent {
               id: 'TOIGP',
               maxWidth: 85,
               minWidth: 50,
-              show: this.state.posSelected !== 'G',
+              show: posSelected !== 'G',
               filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'timeOnIcePerGame'], d),
+              sortMethod: sortTimeOnIce,
             },
             {
               Header: 'W',
               id: 'wins',
               maxWidth: 85,
               minWidth: 50,
-              show: this.state.posSelected === 'G',
+              show: posSelected === 'G',
               filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'wins'], d),
             },
@@ -477,7 +498,7 @@ class PlayersTable extends React.PureComponent {
               id: 'losses',
               maxWidth: 85,
               minWidth: 50,
-              show: this.state.posSelected === 'G',
+              show: posSelected === 'G',
               filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'losses'], d),
             },
@@ -486,7 +507,7 @@ class PlayersTable extends React.PureComponent {
               id: 'shutouts',
               maxWidth: 85,
               minWidth: 50,
-              show: this.state.posSelected === 'G',
+              show: posSelected === 'G',
               filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'shutouts'], d),
             },
@@ -495,7 +516,7 @@ class PlayersTable extends React.PureComponent {
               id: 'savePercentage',
               maxWidth: 85,
               minWidth: 50,
-              show: this.state.posSelected === 'G',
+              show: posSelected === 'G',
               filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'savePercentage'], d).toFixed(3),
             },
@@ -504,7 +525,7 @@ class PlayersTable extends React.PureComponent {
               id: 'goalAgainstAverage',
               maxWidth: 85,
               minWidth: 50,
-              show: this.state.posSelected === 'G',
+              show: posSelected === 'G',
               filterable: false,
               accessor: d => parseFloat(pathOr(0, ['stats', 0, 'stat', 'goalAgainstAverage'], d)).toFixed(2),
             },
@@ -513,7 +534,7 @@ class PlayersTable extends React.PureComponent {
               id: 'saves',
               maxWidth: 85,
               minWidth: 50,
-              show: this.state.posSelected === 'G',
+              show: posSelected === 'G',
               filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'saves'], d),
             },
@@ -522,7 +543,7 @@ class PlayersTable extends React.PureComponent {
               id: 'goalsAgainst',
               maxWidth: 85,
               minWidth: 50,
-              show: this.state.posSelected === 'G',
+              show: posSelected === 'G',
               filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'goalsAgainst'], d),
             },

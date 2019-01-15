@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import { pathOr } from 'ramda';
+import { sortTimeOnIce } from '../../utils/sort';
 import 'react-table/react-table.css';
 import './styles.scss';
 
@@ -192,19 +193,20 @@ class GameLogTable extends React.PureComponent {
               minWidth: 50,
             },
             {
-              Header: 'TOI',
-              id: 'toi',
-              accessor: d => d.stat.timeOnIce,
-              maxWidth: 65,
-              minWidth: 60,
-            },
-            {
               Header: 'Shifts',
               id: 'shifts',
               show: info.primaryPosition.name !== 'Goalie',
               accessor: d => d.stat.shifts,
               maxWidth: 65,
               minWidth: 50,
+            },
+            {
+              Header: 'TOI',
+              id: 'toi',
+              accessor: d => d.stat.timeOnIce,
+              maxWidth: 65,
+              minWidth: 60,
+              sortMethod: sortTimeOnIce,
             },
           ]}
           defaultSortDesc

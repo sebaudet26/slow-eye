@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { pathOr } from 'ramda';
 import ReactTable from 'react-table';
+import { sortTimeOnIce } from '../../utils/sort';
 import 'react-table/react-table.css';
 import './styles.scss';
 
@@ -136,13 +137,6 @@ const BoxTable = ({ players, goalieMode }) => (
           minWidth: 50,
         },
         {
-          Header: 'TOI',
-          id: 'timeonice',
-          accessor: pathOr('-', ['boxscore', 'timeOnIce']),
-          maxWidth: 85,
-          minWidth: 50,
-        },
-        {
           Header: 'GA',
           id: 'goalsAgainst',
           show: goalieMode,
@@ -189,6 +183,14 @@ const BoxTable = ({ players, goalieMode }) => (
           accessor: d => pathOr(0, ['boxscore', 'shortHandedSavePercentage'], d).toFixed(1),
           maxWidth: 85,
           minWidth: 50,
+        },
+        {
+          Header: 'TOI',
+          id: 'timeonice',
+          accessor: pathOr('-', ['boxscore', 'timeOnIce']),
+          maxWidth: 85,
+          minWidth: 50,
+          sortMethod: sortTimeOnIce,
         },
       ]}
       defaultSorted={[
