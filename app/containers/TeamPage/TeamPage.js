@@ -86,6 +86,7 @@ export default class TeamPage extends React.Component {
               <img
                 src={`../../images/teams/${team.teamName.replace(' ', '-').toLowerCase()}.png`}
                 className="team-img-logo"
+                alt=""
               />
             </div>
             <div>

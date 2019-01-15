@@ -26,6 +26,11 @@ const BoxTable = ({ players, goalieMode }) => (
           id: 'name',
           className: 'text-left border-right',
           accessor: pathOr('-', ['person', 'fullName']),
+          Cell: row => (
+            <a href={`/player?id=${JSON.stringify(row.original.person.id)}`}>
+              {row.value}
+            </a>
+          ),
           maxWidth: 200,
           minWidth: 200,
         },

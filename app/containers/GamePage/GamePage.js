@@ -12,6 +12,10 @@ const isScratched = pipe(prop('boxscore'), isNil);
 const isGoalie = pipe(path(['position', 'abbreviation']), equals('G'));
 const isScratchedOrGoalie = p => or(isGoalie(p), isScratched(p));
 
+const intoLink = player => (
+  <a className="scratches-player" href={`/player?id=${player.person.id}`}>{player.person.fullName}</a>
+);
+
 class GamePage extends React.Component {
   componentDidMount() {
     const { fetchGameBoxscore } = this.props;
@@ -75,67 +79,51 @@ class GamePage extends React.Component {
               <div className="summary-period-card">
                 <table className="period-table">
                   <thead>
-                    <th><span className="small-uppercase">Goals Per Period</span></th>
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3</th>
-                    <th>Total</th>
+                    <th />
+                    <th>PIM</th>
+                    <th>PP</th>
+                    <th>Hits</th>
+                    <th>Fo%</th>
+                    <th>TK</th>
+                    <th>GV</th>
+                    <th>BK</th>
+                    <th>Shots</th>
+                    <th>Goals</th>
                   </thead>
                   <tbody>
                     <tr>
                       <td>
-                        {awayTeamImage}
-                        {gameBoxscore.away.team.name}
+                        <a href={`/team?id=${gameBoxscore.away.team.id}`}>
+                          {awayTeamImage}
+                          {gameBoxscore.away.team.name}
+                        </a>
                       </td>
-                      <td>2</td>
-                      <td>0</td>
-                      <td>1</td>
+                      <td>{gameBoxscore.away.teamStats.pim}</td>
+                      <td>{`${gameBoxscore.away.teamStats.powerPlayGoals}/${gameBoxscore.away.teamStats.powerPlayOpportunities}`}</td>
+                      <td>{gameBoxscore.away.teamStats.hits}</td>
+                      <td>{gameBoxscore.away.teamStats.faceOffWinPercentage.toFixed()}</td>
+                      <td>{gameBoxscore.away.teamStats.takeaways}</td>
+                      <td>{gameBoxscore.away.teamStats.giveaways}</td>
+                      <td>{gameBoxscore.away.teamStats.blocked}</td>
+                      <td>{gameBoxscore.away.teamStats.shots}</td>
                       <td>{gameBoxscore.away.teamStats.goals}</td>
                     </tr>
                     <tr>
                       <td>
-                        {homeTeamImage}
-                        {gameBoxscore.home.team.name}
+                        <a href={`/team?id=${gameBoxscore.home.team.id}`}>
+                          {homeTeamImage}
+                          {gameBoxscore.home.team.name}
+                        </a>
                       </td>
-                      <td>2</td>
-                      <td>1</td>
-                      <td>2</td>
-                      <td>{gameBoxscore.home.teamStats.goals}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div className="summary-period-card-wrapper">
-              <div className="summary-period-card">
-                <table className="period-table">
-                  <thead>
-                    <th><span className="small-uppercase">Shots Per Period</span></th>
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3</th>
-                    <th>Total</th>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        {awayTeamImage}
-                        {gameBoxscore.away.team.name}
-                      </td>
-                      <td>11</td>
-                      <td>10</td>
-                      <td>14</td>
-                      <td>{gameBoxscore.away.teamStats.shots}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        {homeTeamImage}
-                        {gameBoxscore.home.team.name}
-                      </td>
-                      <td>5</td>
-                      <td>6</td>
-                      <td>5</td>
+                      <td>{gameBoxscore.home.teamStats.pim}</td>
+                      <td>{`${gameBoxscore.home.teamStats.powerPlayGoals}/${gameBoxscore.away.teamStats.powerPlayOpportunities}`}</td>
+                      <td>{gameBoxscore.home.teamStats.hits}</td>
+                      <td>{gameBoxscore.home.teamStats.faceOffWinPercentage.toFixed()}</td>
+                      <td>{gameBoxscore.home.teamStats.takeaways}</td>
+                      <td>{gameBoxscore.home.teamStats.giveaways}</td>
+                      <td>{gameBoxscore.home.teamStats.blocked}</td>
                       <td>{gameBoxscore.home.teamStats.shots}</td>
+                      <td>{gameBoxscore.home.teamStats.goals}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -153,13 +141,11 @@ class GamePage extends React.Component {
             goalieMode
           />
           <div className="scratches">
-            {
-              `Scratches: ${pipe(
-                filter(isScratched),
-                map(pathOr('blah', ['person', 'fullName'])),
-                join(', '),
-              )(gameBoxscore.away.players)}`
-            }
+            <span>Scratches: </span>
+            {pipe(
+              filter(isScratched),
+              map(intoLink),
+            )(gameBoxscore.away.players)}
           </div>
 
           <h3>{gameBoxscore.home.team.name}</h3>
@@ -172,13 +158,11 @@ class GamePage extends React.Component {
             goalieMode
           />
           <div className="scratches">
-            {
-              `Scratches: ${pipe(
-                filter(isScratched),
-                map(pathOr('blah', ['person', 'fullName'])),
-                join(', '),
-              )(gameBoxscore.home.players)}`
-            }
+            <span>Scratches: </span>
+            {pipe(
+              filter(isScratched),
+              map(intoLink),
+            )(gameBoxscore.home.players)}
           </div>
         </div>
       </div>

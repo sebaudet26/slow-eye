@@ -7,6 +7,7 @@ const makeGameBoxscoreQuery = id => `
   game (id: "${id}") {
     away {
       team {
+        id
         name
         teamName
         abbreviation
@@ -15,9 +16,18 @@ const makeGameBoxscoreQuery = id => `
       teamStats {
         goals
         shots
+        pim
+        powerPlayGoals
+        powerPlayOpportunities
+        faceOffWinPercentage
+        blocked
+        takeaways
+        giveaways
+        hits
       }
       players {
         person {
+          id
           fullName
         }
         jerseyNumber
@@ -48,6 +58,7 @@ const makeGameBoxscoreQuery = id => `
     }
     home {
       team {
+        id
         name
         teamName
         abbreviation
@@ -56,9 +67,18 @@ const makeGameBoxscoreQuery = id => `
       teamStats {
         goals
         shots
+        pim
+        powerPlayGoals
+        powerPlayOpportunities
+        faceOffWinPercentage
+        blocked
+        takeaways
+        giveaways
+        hits
       }
       players {
         person {
+          id
           fullName
         }
         position {

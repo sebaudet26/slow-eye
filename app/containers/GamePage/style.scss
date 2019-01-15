@@ -65,10 +65,11 @@
       box-shadow: $shadow;
 
       &-wrapper {
-        width: 50%;
+        width: 80%;
 
         &:first-child {
           padding-right: 15px;
+          margin: auto;
         }
       }
     }
@@ -143,5 +144,8 @@
 }
 
 .scratches {
-  margin: 10px; 
+  margin: 10px;
+  &-player {
+    margin: 7.5px;
+  }
 }
