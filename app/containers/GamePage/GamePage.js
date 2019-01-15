@@ -116,7 +116,7 @@ class GamePage extends React.Component {
                         </a>
                       </td>
                       <td>{gameBoxscore.home.teamStats.pim}</td>
-                      <td>{`${gameBoxscore.home.teamStats.powerPlayGoals}/${gameBoxscore.away.teamStats.powerPlayOpportunities}`}</td>
+                      <td>{`${gameBoxscore.home.teamStats.powerPlayGoals}/${gameBoxscore.home.teamStats.powerPlayOpportunities}`}</td>
                       <td>{gameBoxscore.home.teamStats.hits}</td>
                       <td>{gameBoxscore.home.teamStats.faceOffWinPercentage.toFixed()}</td>
                       <td>{gameBoxscore.home.teamStats.takeaways}</td>
