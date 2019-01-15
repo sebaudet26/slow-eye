@@ -156,7 +156,7 @@ const BoxTable = ({ players, goalieMode }) => (
           Header: 'PPSv%',
           id: 'powerPlaySavePercentage',
           show: goalieMode,
-          accessor: d => (pathOr(0, ['boxscore', 'powerPlaySavePercentage'], d) / 100).toFixed(1),
+          accessor: d => (pathOr(0, ['boxscore', 'powerPlaySavePercentage'], d) / 100).toFixed(3),
           maxWidth: 85,
           minWidth: 50,
         },
