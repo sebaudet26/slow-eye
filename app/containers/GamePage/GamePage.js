@@ -1,10 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
+import {
+  equals, filter, isNil, join, map, or, pathOr, path, pipe, prop, reject,
+} from 'ramda';
 import './style.scss';
 import BoxTable from '../../components/Table/BoxTable';
 
 const urlParams = new URLSearchParams(window.location.search);
+const isScratched = pipe(prop('boxscore'), isNil);
+const isGoalie = pipe(path(['position', 'abbreviation']), equals('G'));
+const isScratchedOrGoalie = p => or(isGoalie(p), isScratched(p));
 
 class GamePage extends React.Component {
   componentDidMount() {
@@ -15,6 +21,9 @@ class GamePage extends React.Component {
   render() {
     const { gameBoxscore } = this.props;
     console.log(gameBoxscore);
+    if (!gameBoxscore.away || !gameBoxscore.home) {
+      return null;
+    }
     const awayTeamImage = (
       <img
         src={`../../images/teams/${gameBoxscore.away.team.teamName.replace(' ', '-').toLowerCase()}.png`}
@@ -27,7 +36,7 @@ class GamePage extends React.Component {
         alt=""
       />
     );
-    return (gameBoxscore.away && gameBoxscore.home ? (
+    return (
       <div>
         <Helmet>
           <title>Game Page</title>
@@ -133,13 +142,47 @@ class GamePage extends React.Component {
               </div>
             </div>
           </div>
+
           <h3>{gameBoxscore.away.team.name}</h3>
-          { gameBoxscore.away ? <BoxTable players={gameBoxscore.away.players} /> : null }
+          <BoxTable
+            players={reject(isScratchedOrGoalie, gameBoxscore.away.players)}
+            goalieMode={false}
+          />
+          <BoxTable
+            players={filter(isGoalie, gameBoxscore.away.players)}
+            goalieMode
+          />
+          <div className="scratches">
+            {
+              `Scratches: ${pipe(
+                filter(isScratched),
+                map(pathOr('blah', ['person', 'fullName'])),
+                join(', '),
+              )(gameBoxscore.away.players)}`
+            }
+          </div>
+
           <h3>{gameBoxscore.home.team.name}</h3>
-          { gameBoxscore.home ? <BoxTable players={gameBoxscore.home.players} /> : null }
+          <BoxTable
+            players={reject(isScratchedOrGoalie, gameBoxscore.home.players)}
+            goalieMode={false}
+          />
+          <BoxTable
+            players={filter(isGoalie, gameBoxscore.home.players)}
+            goalieMode
+          />
+          <div className="scratches">
+            {
+              `Scratches: ${pipe(
+                filter(isScratched),
+                map(pathOr('blah', ['person', 'fullName'])),
+                join(', '),
+              )(gameBoxscore.home.players)}`
+            }
+          </div>
         </div>
       </div>
-    ) : null);
+    );
   }
 }
 

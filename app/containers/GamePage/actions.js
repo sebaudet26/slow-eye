@@ -21,6 +21,9 @@ const makeGameBoxscoreQuery = id => `
           fullName
         }
         jerseyNumber
+        position {
+          abbreviation
+        }
         boxscore {
           goals
           assists
@@ -32,8 +35,14 @@ const makeGameBoxscoreQuery = id => `
           giveaways
           timeOnIce
           penaltyMinutes
+          pim
           faceOffWins
           faceOffTaken
+          powerPlaySavePercentage
+          evenStrengthSavePercentage
+          shortHandedSavePercentage
+          savePercentage
+          saves
         }
       }
     }
@@ -52,6 +61,9 @@ const makeGameBoxscoreQuery = id => `
         person {
           fullName
         }
+        position {
+          abbreviation
+        }
         jerseyNumber
         boxscore {
           goals
@@ -64,8 +76,14 @@ const makeGameBoxscoreQuery = id => `
           giveaways
           timeOnIce
           penaltyMinutes
+          pim
           faceOffWins
           faceOffTaken
+          powerPlaySavePercentage
+          evenStrengthSavePercentage
+          shortHandedSavePercentage
+          savePercentage
+          saves
         }
       }
     }

@@ -2,9 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
-import {
-  find, propEq, pathOr, isEmpty,
-} from 'ramda';
+import { pathOr } from 'ramda';
 import 'react-table/react-table.css';
 import './styles.scss';
 
