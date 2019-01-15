@@ -76,10 +76,10 @@ const BoxTable = ({ players, goalieMode }) => (
           minWidth: 50,
         },
         {
-          Header: 'PIM',
-          id: 'penaltyminutesGoalie',
+          Header: 'GA',
+          id: 'goalsAgainst',
           show: goalieMode,
-          accessor: pathOr('-', ['boxscore', 'pim']),
+          accessor: d => pathOr(0, ['boxscore', 'shots'], d) - pathOr(0, ['boxscore', 'saves'], d),
           maxWidth: 85,
           minWidth: 50,
         },
@@ -137,14 +137,6 @@ const BoxTable = ({ players, goalieMode }) => (
           minWidth: 50,
         },
         {
-          Header: 'GA',
-          id: 'goalsAgainst',
-          show: goalieMode,
-          accessor: d => pathOr(0, ['boxscore', 'shots'], d) - pathOr(0, ['boxscore', 'saves'], d),
-          maxWidth: 85,
-          minWidth: 50,
-        },
-        {
           Header: 'SV',
           id: 'saves',
           show: goalieMode,
@@ -156,7 +148,7 @@ const BoxTable = ({ players, goalieMode }) => (
           Header: 'SV%',
           id: 'savePercentage',
           show: goalieMode,
-          accessor: d => pathOr(0, ['boxscore', 'savePercentage'], d).toFixed(1),
+          accessor: d => (pathOr(0, ['boxscore', 'savePercentage'], d) / 100).toFixed(3),
           maxWidth: 85,
           minWidth: 50,
         },
@@ -164,7 +156,7 @@ const BoxTable = ({ players, goalieMode }) => (
           Header: 'PPSv%',
           id: 'powerPlaySavePercentage',
           show: goalieMode,
-          accessor: d => pathOr(0, ['boxscore', 'powerPlaySavePercentage'], d).toFixed(1),
+          accessor: d => (pathOr(0, ['boxscore', 'powerPlaySavePercentage'], d) / 100).toFixed(1),
           maxWidth: 85,
           minWidth: 50,
         },
@@ -172,7 +164,7 @@ const BoxTable = ({ players, goalieMode }) => (
           Header: 'EVSv%',
           id: 'evenStrengthSavePercentage',
           show: goalieMode,
-          accessor: d => pathOr(0, ['boxscore', 'evenStrengthSavePercentage'], d).toFixed(1),
+          accessor: d => (pathOr(0, ['boxscore', 'evenStrengthSavePercentage'], d) / 100).toFixed(3),
           maxWidth: 85,
           minWidth: 50,
         },
@@ -180,7 +172,15 @@ const BoxTable = ({ players, goalieMode }) => (
           Header: 'SHSv%',
           id: 'shortHandedSavePercentage',
           show: goalieMode,
-          accessor: d => pathOr(0, ['boxscore', 'shortHandedSavePercentage'], d).toFixed(1),
+          accessor: d => (pathOr(0, ['boxscore', 'shortHandedSavePercentage'], d) / 100).toFixed(3),
+          maxWidth: 85,
+          minWidth: 50,
+        },
+        {
+          Header: 'PIM',
+          id: 'penaltyminutesGoalie',
+          show: goalieMode,
+          accessor: pathOr('-', ['boxscore', 'pim']),
           maxWidth: 85,
           minWidth: 50,
         },
@@ -195,8 +195,8 @@ const BoxTable = ({ players, goalieMode }) => (
       ]}
       defaultSorted={[
         {
-          id: 'number',
-          desc: false,
+          id: 'points',
+          desc: true,
         },
       ]}
       defaultPageSize={players.length}
