@@ -232,11 +232,11 @@ export default class TeamPage extends React.Component {
             isEmpty(roster) ? null : (
               <div>
                 <h3>Forwards</h3>
-                <RosterStatsTable players={roster.filter(p => forwardsAbbreviations.includes(p.player.info.primaryPosition.abbreviation))} />
+                <RosterStatsTable players={roster.filter(p => forwardsAbbreviations.includes(p.player.info.primaryPosition.abbreviation))} position="F" />
                 <h3>Defensemen</h3>
-                <RosterStatsTable players={roster.filter(p => p.player.info.primaryPosition.abbreviation === 'D')} />
+                <RosterStatsTable players={roster.filter(p => p.player.info.primaryPosition.abbreviation === 'D')} position="D" />
                 <h3>Goalies</h3>
-                <RosterStatsTable players={roster.filter(p => p.player.info.primaryPosition.abbreviation === 'G')} />
+                <RosterStatsTable players={roster.filter(p => p.player.info.primaryPosition.abbreviation === 'G')} position="G" />
               </div>
             )
             }

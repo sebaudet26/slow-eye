@@ -503,13 +503,13 @@ class PlayersTable extends React.PureComponent {
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'losses'], d),
             },
             {
-              Header: 'SO',
-              id: 'shutouts',
+              Header: 'OT',
+              id: 'ot',
               maxWidth: 85,
               minWidth: 50,
               show: posSelected === 'G',
               filterable: false,
-              accessor: d => pathOr(0, ['stats', 0, 'stat', 'shutouts'], d),
+              accessor: d => pathOr(0, ['stats', 0, 'stat', 'ot'], d),
             },
             {
               Header: 'Sv%',
@@ -528,6 +528,15 @@ class PlayersTable extends React.PureComponent {
               show: posSelected === 'G',
               filterable: false,
               accessor: d => parseFloat(pathOr(0, ['stats', 0, 'stat', 'goalAgainstAverage'], d)).toFixed(2),
+            },
+            {
+              Header: 'SO',
+              id: 'shutouts',
+              maxWidth: 85,
+              minWidth: 50,
+              show: this.state.posSelected === 'G',
+              filterable: false,
+              accessor: d => pathOr(0, ['stats', 0, 'stat', 'shutouts'], d),
             },
             {
               Header: 'SV',
