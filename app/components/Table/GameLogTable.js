@@ -113,7 +113,7 @@ class GameLogTable extends React.PureComponent {
             {
               Header: 'SV%',
               id: 'savePercentage',
-              accessor: d => (d.stat.savePercentage).toFixed(3),
+              accessor: d => d.stat.savePercentage,
               maxWidth: 65,
               minWidth: 50,
             },
