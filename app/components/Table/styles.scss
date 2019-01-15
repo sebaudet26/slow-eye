@@ -79,6 +79,17 @@
     }
   }
 
+  &.rosterStats {
+    .rt-thead {
+      .rt-th {
+        &:nth-child(3) {
+          text-align: left;
+          border-right: solid 1px $grey-4;
+        }
+      }
+    }
+  }
+
   &.boxscore {
     .rt-thead {
       .rt-th {

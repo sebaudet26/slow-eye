@@ -61,7 +61,7 @@ class RosterTable extends React.PureComponent {
               id: 'birthDate',
               className: 'text-left',
               maxWidth: 130,
-              minWidth: 50,
+              minWidth: 100,
               accessor: d => d.player.info.birthDate,
             },
             {

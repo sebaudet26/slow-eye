@@ -291,7 +291,7 @@ class PlayersTable extends React.PureComponent {
             {
               Header: 'Name',
               id: 'fullName',
-              accessor: d => d.person.fullName,
+              accessor: d => d.info.fullName,
               className: 'text-left',
               maxWidth: 200,
               minWidth: 125,

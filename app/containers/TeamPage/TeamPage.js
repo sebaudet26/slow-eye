@@ -9,6 +9,7 @@ import {
 } from 'react-tabs';
 import PlayerCard from '../../components/PlayerCard/PlayerCard';
 import RosterTable from '../../components/Table/RosterTable';
+import RosterStatsTable from '../../components/Table/RosterStatsTable';
 import './style.scss';
 import '../../styles/tabs.scss';
 
@@ -126,6 +127,7 @@ export default class TeamPage extends React.Component {
           <TabList>
             <Tab>Depth Chart</Tab>
             <Tab>Roster</Tab>
+            <Tab>Player Stats</Tab>
           </TabList>
           <TabPanel>
             {
@@ -228,6 +230,20 @@ export default class TeamPage extends React.Component {
                 <RosterTable players={roster.filter(p => p.player.info.primaryPosition.abbreviation === 'D')} />
                 <h3>Goalies</h3>
                 <RosterTable players={roster.filter(p => p.player.info.primaryPosition.abbreviation === 'G')} />
+              </div>
+            )
+            }
+          </TabPanel>
+          <TabPanel>
+            {
+            isEmpty(roster) ? null : (
+              <div>
+                <h3>Forwards</h3>
+                <RosterStatsTable players={roster.filter(p => forwardsAbbreviations.includes(p.player.info.primaryPosition.abbreviation))} />
+                <h3>Defensemen</h3>
+                <RosterStatsTable players={roster.filter(p => p.player.info.primaryPosition.abbreviation === 'D')} />
+                <h3>Goalies</h3>
+                <RosterStatsTable players={roster.filter(p => p.player.info.primaryPosition.abbreviation === 'G')} />
               </div>
             )
             }
