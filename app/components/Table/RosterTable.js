@@ -2,9 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
-import {
-  find, propEq, pathOr, isEmpty,
-} from 'ramda';
+import { pathOr } from 'ramda';
 import 'react-table/react-table.css';
 import './styles.scss';
 
@@ -96,7 +94,7 @@ class RosterTable extends React.PureComponent {
               minWidth: 50,
               accessor: d => d.player.info.nationality,
               Cell: row => (
-                <img src={`/images/country/${row.value}.svg`} />
+                <img src={`/images/country/${row.value}.svg`} alt="" />
               ),
             },
             {
@@ -105,14 +103,20 @@ class RosterTable extends React.PureComponent {
               className: 'text-left team-cell',
               maxWidth: 185,
               minWidth: 150,
-              accessor: d => `${d.player.info.draftInfo.year || ''}+${pathOr('Undrafted', ['player', 'info', 'draftInfo', 'team', 'abbreviation'], d)}+${d.player.info.draftInfo.pickOverall || ''}`,
-              Cell: row => (
-                <span>
-                  {row.value.split('+')[0]}
-                  {' '}
-                  {row.value.split('+')[1]}
-                </span>
-              ),
+              accessor: pathOr(null, ['player', 'info', 'draftInfo']),
+              Cell: row => (!row.value.year ? 'Undrafted' : (
+                <div>
+                  <div className="draft">
+                    {row.value.year}
+                  </div>
+                  <div className="draft">
+                    {row.value.team.abbreviation}
+                  </div>
+                  <div className="draft">
+                    {`R${row.value.round}`}
+                  </div>
+                </div>
+              )),
             },
           ]}
           defaultSorted={[

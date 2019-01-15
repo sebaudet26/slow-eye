@@ -256,6 +256,11 @@
   }
 }
 
+.draft {
+  float: left;
+  width: 50px;
+}
+
 @media screen and (max-width: 600px) {
   .ReactTable {
     font-size: 12px;
