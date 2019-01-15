@@ -97,7 +97,17 @@ const makePlayerQuery = id => `
         pim,
         shots,
         timeOnIce,
-        shifts
+        shifts,
+        saves,
+        goalsAgainst,
+        shutouts,
+        gamesStarted,
+        timeOnIce,
+        savePercentage,
+        goalAgainstAverage,
+        wins,
+        losses,
+        ot,
       }
     }
   }

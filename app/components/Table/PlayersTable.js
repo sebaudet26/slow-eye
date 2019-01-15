@@ -322,7 +322,7 @@ class PlayersTable extends React.PureComponent {
               Header: 'Team',
               id: 'team',
               className: 'text-left team-cell border-right',
-              maxWidth: 85,
+              maxWidth: 65,
               minWidth: 50,
               Cell: row => (
                 <a href={`./team?id=${row.value.id}`}>

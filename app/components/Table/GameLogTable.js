@@ -10,7 +10,7 @@ import './styles.scss';
 
 class GameLogTable extends React.PureComponent {
   render() {
-    const { logs } = this.props;
+    const { logs, info } = this.props;
     console.log('logs', logs);
     let data = [];
     if (logs.length) {
@@ -60,6 +60,7 @@ class GameLogTable extends React.PureComponent {
             {
               Header: 'G',
               id: 'goals',
+              show: info.primaryPosition.name !== 'Goalie',
               accessor: d => d.stat.goals,
               maxWidth: 65,
               minWidth: 50,
@@ -67,6 +68,7 @@ class GameLogTable extends React.PureComponent {
             {
               Header: 'A',
               id: 'assists',
+              show: info.primaryPosition.name !== 'Goalie',
               accessor: d => d.stat.assists,
               maxWidth: 65,
               minWidth: 50,
@@ -74,6 +76,7 @@ class GameLogTable extends React.PureComponent {
             {
               Header: 'Pts',
               id: 'points',
+              show: info.primaryPosition.name !== 'Goalie',
               accessor: d => d.stat.points,
               maxWidth: 65,
               minWidth: 50,
@@ -81,14 +84,57 @@ class GameLogTable extends React.PureComponent {
             {
               Header: '+/-',
               id: 'plusMinus',
+              show: info.primaryPosition.name !== 'Goalie',
               accessor: d => d.stat.plusMinus,
               maxWidth: 65,
               minWidth: 50,
             },
             {
-              Header: 'PIM',
-              id: 'pim',
-              accessor: d => d.stat.pim,
+              Header: 'W',
+              id: 'wins',
+              accessor: d => d.stat.wins,
+              maxWidth: 65,
+              minWidth: 50,
+            },
+            {
+              Header: 'L',
+              id: 'losses',
+              accessor: d => d.stat.losses,
+              maxWidth: 65,
+              minWidth: 50,
+            },
+            {
+              Header: 'OT',
+              id: 'ot',
+              accessor: d => d.stat.ot,
+              maxWidth: 65,
+              minWidth: 50,
+            },
+            {
+              Header: 'SV%',
+              id: 'savePercentage',
+              accessor: d => (d.stat.savePercentage).toFixed(3),
+              maxWidth: 65,
+              minWidth: 50,
+            },
+            {
+              Header: 'GA',
+              id: 'goalsAgainst',
+              accessor: d => d.stat.goalsAgainst,
+              maxWidth: 65,
+              minWidth: 50,
+            },
+            {
+              Header: 'SA',
+              id: 'saves',
+              accessor: d => d.stat.saves,
+              maxWidth: 65,
+              minWidth: 50,
+            },
+            {
+              Header: 'SO',
+              id: 'shutouts',
+              accessor: d => d.stat.shutouts,
               maxWidth: 65,
               minWidth: 50,
             },
@@ -96,6 +142,7 @@ class GameLogTable extends React.PureComponent {
               Header: 'Hits',
               id: 'hits',
               accessor: d => d.stat.hits,
+              show: info.primaryPosition.name !== 'Goalie',
               maxWidth: 65,
               minWidth: 50,
             },
@@ -103,6 +150,7 @@ class GameLogTable extends React.PureComponent {
               Header: 'Bks',
               id: 'blocked',
               accessor: d => d.stat.blocked,
+              show: info.primaryPosition.name !== 'Goalie',
               maxWidth: 65,
               minWidth: 50,
             },
@@ -110,6 +158,7 @@ class GameLogTable extends React.PureComponent {
               Header: 'PPG',
               id: 'powerPlayGoals',
               accessor: d => d.stat.powerPlayGoals,
+              show: info.primaryPosition.name !== 'Goalie',
               maxWidth: 65,
               minWidth: 50,
             },
@@ -117,6 +166,7 @@ class GameLogTable extends React.PureComponent {
               Header: 'SHG',
               id: 'shortHandedGoals',
               accessor: d => d.stat.shortHandedGoals,
+              show: info.primaryPosition.name !== 'Goalie',
               maxWidth: 65,
               minWidth: 50,
             },
@@ -124,6 +174,7 @@ class GameLogTable extends React.PureComponent {
               Header: 'GWG',
               id: 'gameWinningGoals',
               accessor: d => d.stat.gameWinningGoals,
+              show: info.primaryPosition.name !== 'Goalie',
               maxWidth: 65,
               minWidth: 50,
             },
@@ -131,6 +182,7 @@ class GameLogTable extends React.PureComponent {
               Header: 'SOG',
               id: 'shots',
               accessor: d => d.stat.shots,
+              show: info.primaryPosition.name !== 'Goalie',
               maxWidth: 65,
               minWidth: 50,
             },
@@ -144,6 +196,7 @@ class GameLogTable extends React.PureComponent {
             {
               Header: 'Shifts',
               id: 'shifts',
+              show: info.primaryPosition.name !== 'Goalie',
               accessor: d => d.stat.shifts,
               maxWidth: 65,
               minWidth: 50,

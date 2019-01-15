@@ -180,7 +180,7 @@ export default class PlayerPage extends React.Component {
           </TabPanel>
           <TabPanel>
             <h3>Game Logs</h3>
-            <GameLogTable logs={logs} />
+            <GameLogTable logs={logs} info={info} />
           </TabPanel>
         </Tabs>
       </div>
