@@ -6,9 +6,18 @@ import AvsImg from '../../images/teams/avalanche.png';
 import FlamesImg from '../../images/teams/flames.png';
 import BoxTable from '../../components/Table/BoxTable';
 
-export default class GamePage extends React.Component {
+const urlParams = new URLSearchParams(window.location.search);
+
+class GamePage extends React.Component {
+  componentDidMount() {
+    const { fetchGameBoxscore } = this.props;
+    fetchGameBoxscore(urlParams.get('id'));
+  }
+
   render() {
-    return (
+    const { gameBoxscore } = this.props;
+    console.log(gameBoxscore);
+    return (gameBoxscore.away && gameBoxscore.home ? (
       <div>
         <Helmet>
           <title>Game Page</title>
@@ -17,29 +26,29 @@ export default class GamePage extends React.Component {
         <div className="summary">
           <div className="summary-header">
             <div className="summary-header-team">
-              <img src={AvsImg} />
+              <img src={`../../images/teams/${gameBoxscore.away.team.teamName.replace(' ', '-').toLowerCase()}.png`} />
               <div className="summary-header-team-name">
-                <div className="city">Colorado</div>
-                <div className="team">Avalanche</div>
+                <div className="city">{gameBoxscore.away.team.location}</div>
+                <div className="team">{gameBoxscore.away.team.teamName}</div>
                 <div className="record">(20-16-8 48pts)</div>
               </div>
               <div className="summary-header-team-score">
-                3
+                {gameBoxscore.away.teamStats.goals}
               </div>
             </div>
             <div className="summary-header-result">
-              Final
+              {'Final'}
             </div>
             <div className="summary-header-team">
               <div className="summary-header-team-score">
-                5
+                {gameBoxscore.home.teamStats.goals}
               </div>
               <div className="summary-header-team-name">
-                <div className="city">Calgary</div>
-                <div className="team">Flames</div>
+                <div className="city">{gameBoxscore.home.team.location}</div>
+                <div className="team">{gameBoxscore.home.team.teamName}</div>
                 <div className="record">(28-13-4 60pts)</div>
               </div>
-              <img src={FlamesImg} />
+              <img src={`../../images/teams/${gameBoxscore.home.team.teamName.replace(' ', '-').toLowerCase()}.png`} />
             </div>
           </div>
           <div className="summary-period">
@@ -55,18 +64,24 @@ export default class GamePage extends React.Component {
                   </thead>
                   <tbody>
                     <tr>
-                      <td><img src={AvsImg} />Colorado Avalanche</td>
+                      <td>
+                        <img src={AvsImg} />
+                        {gameBoxscore.away.team.name}
+                      </td>
                       <td>2</td>
                       <td>0</td>
                       <td>1</td>
-                      <td>3</td>
+                      <td>{gameBoxscore.away.teamStats.goals}</td>
                     </tr>
                     <tr>
-                      <td><img src={FlamesImg} />Calgary Flames</td>
+                      <td>
+                        <img src={FlamesImg} />
+                        {gameBoxscore.home.team.name}
+                      </td>
                       <td>2</td>
                       <td>1</td>
                       <td>2</td>
-                      <td>5</td>
+                      <td>{gameBoxscore.home.teamStats.goals}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -84,18 +99,24 @@ export default class GamePage extends React.Component {
                   </thead>
                   <tbody>
                     <tr>
-                      <td><img src={AvsImg} />Colorado Avalanche</td>
+                      <td>
+                        <img src={`../../images/teams/${gameBoxscore.away.team.teamName.replace(' ', '-').toLowerCase()}.png`} />
+                        {gameBoxscore.away.team.name}
+                      </td>
                       <td>11</td>
                       <td>10</td>
                       <td>14</td>
-                      <td>35</td>
+                      <td>{gameBoxscore.away.teamStats.shots}</td>
                     </tr>
                     <tr>
-                      <td><img src={FlamesImg} />Calgary Flames</td>
+                      <td>
+                        <img src={`../../images/teams/${gameBoxscore.home.team.teamName.replace(' ', '-').toLowerCase()}.png`} />
+                        {gameBoxscore.home.team.name}
+                      </td>
                       <td>5</td>
                       <td>6</td>
                       <td>5</td>
-                      <td>16</td>
+                      <td>{gameBoxscore.home.teamStats.shots}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -103,11 +124,17 @@ export default class GamePage extends React.Component {
             </div>
           </div>
           <h3>Colorado Avalanche</h3>
-          <BoxTable />
+          { gameBoxscore.away ? <BoxTable players={gameBoxscore.away.players} /> : null }
           <h3>Calgary Flames</h3>
-          <BoxTable />
+          { gameBoxscore.home ? <BoxTable players={gameBoxscore.home.players} /> : null }
         </div>
       </div>
-    );
+    ) : null);
   }
 }
+
+GamePage.propTypes = {
+  fetchGameBoxscore: PropTypes.func.isRequired,
+};
+
+export default GamePage;

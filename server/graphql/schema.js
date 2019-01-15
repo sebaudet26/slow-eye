@@ -441,6 +441,22 @@ const Stat = new GraphQLObjectType({
       type: GraphQLFloat,
       resolve: prop('evenStrengthSavePercentage'),
     },
+    takeaways: {
+      type: GraphQLInt,
+      resolve: prop('takeaways'),
+    },
+    giveaways: {
+      type: GraphQLInt,
+      resolve: prop('giveaways'),
+    },
+    faceOffWins: {
+      type: GraphQLInt,
+      resolve: prop('faceOffWins'),
+    },
+    faceOffTaken: {
+      type: GraphQLInt,
+      resolve: prop('faceoffTaken'),
+    },
   },
 });
 

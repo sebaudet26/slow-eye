@@ -30,7 +30,7 @@ const ScoreCard = args => (
         </div>
       </div>
       <div className="game-card-footer">
-        {args.game.status.detailedState === 'Scheduled' ? null : <a href="/game?id=123">Game Summary</a>}
+        {args.game.status.detailedState === 'Scheduled' ? null : <a href={`/game?id=${args.game.gamePk}`}>Game Summary</a>}
       </div>
     </div>
   </div>

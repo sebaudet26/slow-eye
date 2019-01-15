@@ -5,6 +5,7 @@ const makeScoresQuery = date => `
 {
   games (date: "${date}"){
     gameDate,
+    gamePk,
     status {
       abstractGameState,
       codedGameState,
