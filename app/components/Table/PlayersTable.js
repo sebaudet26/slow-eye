@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import Select from 'react-select';
 import {
-  find, propEq, pathOr, pipe, prop, match, toLower, toString,
+  find, propEq, pathOr, pipe, prop, match, toLower, toString, length,
 } from 'ramda';
 import 'react-table/react-table.css';
 import { sortTimeOnIce } from '../../utils/sort';
@@ -324,6 +324,7 @@ class PlayersTable extends React.PureComponent {
                   toString,
                   toLower,
                   match(toLower(prop('value', filter))),
+                  length,
                 )(row);
               },
             },
@@ -349,6 +350,7 @@ class PlayersTable extends React.PureComponent {
                   toString,
                   toLower,
                   match(toLower(prop('value', filter))),
+                  length,
                 )(row);
               },
             },
@@ -368,6 +370,7 @@ class PlayersTable extends React.PureComponent {
                   toString,
                   toLower,
                   match(toLower(prop('value', filter))),
+                  length,
                 )(row);
               },
             },
