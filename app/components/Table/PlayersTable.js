@@ -80,7 +80,7 @@ const nationalities = [
   { value: 'CHE', label: 'Switzerland' },
   { value: 'SVK', label: 'Slovakia' },
   { value: 'DEU', label: 'Germany' },
-  { value: 'AUS', label: 'Austria' },
+  { value: 'AUT', label: 'Austria' },
   { value: 'DNK', label: 'Denmark' },
   { value: 'FRA', label: 'France' },
   { value: 'LVA', label: 'Latvia' },
