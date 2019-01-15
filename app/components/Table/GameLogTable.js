@@ -21,7 +21,7 @@ class GameLogTable extends React.PureComponent {
           resizable={false}
           data={logs}
           noDataText="Loading all dat good data stuff..."
-          defaultPageSize={20}
+          defaultPageSize={10}
           getTdProps={(state, rowInfo, column, instance) => ({
             onClick: (e, handleOriginal) => {
               console.log('It was in this row:', rowInfo);

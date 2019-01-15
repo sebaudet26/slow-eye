@@ -83,7 +83,7 @@ const nationalities = [
   { value: 'AUS', label: 'Austria' },
   { value: 'DNK', label: 'Denmark' },
   { value: 'FRA', label: 'France' },
-  { value: 'LAT', label: 'Latvia' },
+  { value: 'LVA', label: 'Latvia' },
   { value: 'NOR', label: 'Norway' },
   { value: 'SVN', label: 'Slovenia' },
   { value: 'NLD', label: 'Netherlands' },
