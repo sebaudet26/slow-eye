@@ -169,7 +169,7 @@ export default class PlayerPage extends React.Component {
           </div>
 
         </div>
-        <Tabs selectedIndex={this.state.tabIndex} onSelect={this.onTabSelect}>
+        <Tabs defaultIndex={0} selectedIndex={this.state.tabIndex} onSelect={this.onTabSelect}>
           <TabList>
             <Tab>Career Stats</Tab>
             <Tab>Game Logs</Tab>

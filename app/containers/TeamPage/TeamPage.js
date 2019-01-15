@@ -123,7 +123,7 @@ export default class TeamPage extends React.Component {
             </div>
           )}
         </div>
-        <Tabs selectedIndex={this.state.tabIndex} onSelect={this.onTabSelect}>
+        <Tabs defaultIndex={0} selectedIndex={this.state.tabIndex} onSelect={this.onTabSelect}>
           <TabList>
             <Tab>Depth Chart</Tab>
             <Tab>Roster</Tab>

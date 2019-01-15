@@ -92,6 +92,7 @@ class GameLogTable extends React.PureComponent {
             {
               Header: 'W',
               id: 'wins',
+              show: info.primaryPosition.name === 'Goalie',
               accessor: d => d.stat.wins,
               maxWidth: 65,
               minWidth: 50,
@@ -99,6 +100,7 @@ class GameLogTable extends React.PureComponent {
             {
               Header: 'L',
               id: 'losses',
+              show: info.primaryPosition.name === 'Goalie',
               accessor: d => d.stat.losses,
               maxWidth: 65,
               minWidth: 50,
@@ -106,6 +108,7 @@ class GameLogTable extends React.PureComponent {
             {
               Header: 'OT',
               id: 'ot',
+              show: info.primaryPosition.name === 'Goalie',
               accessor: d => d.stat.ot,
               maxWidth: 65,
               minWidth: 50,
@@ -113,6 +116,7 @@ class GameLogTable extends React.PureComponent {
             {
               Header: 'SV%',
               id: 'savePercentage',
+              show: info.primaryPosition.name === 'Goalie',
               accessor: d => d.stat.savePercentage,
               maxWidth: 65,
               minWidth: 50,
@@ -120,6 +124,7 @@ class GameLogTable extends React.PureComponent {
             {
               Header: 'GA',
               id: 'goalsAgainst',
+              show: info.primaryPosition.name === 'Goalie',
               accessor: d => d.stat.goalsAgainst,
               maxWidth: 65,
               minWidth: 50,
@@ -127,6 +132,7 @@ class GameLogTable extends React.PureComponent {
             {
               Header: 'SA',
               id: 'saves',
+              show: info.primaryPosition.name === 'Goalie',
               accessor: d => d.stat.saves,
               maxWidth: 65,
               minWidth: 50,
@@ -134,6 +140,7 @@ class GameLogTable extends React.PureComponent {
             {
               Header: 'SO',
               id: 'shutouts',
+              show: info.primaryPosition.name === 'Goalie',
               accessor: d => d.stat.shutouts,
               maxWidth: 65,
               minWidth: 50,
