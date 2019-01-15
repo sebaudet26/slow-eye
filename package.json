@@ -85,6 +85,7 @@
     "prop-types": "15.6.1",
     "ramda": "^0.26.1",
     "react": "^16.4.0",
+    "react-datepicker": "^2.0.0",
     "react-dom": "^16.4.0",
     "react-dropdown": "^1.6.3",
     "react-helmet": "5.2.0",

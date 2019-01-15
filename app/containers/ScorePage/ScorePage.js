@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import moment from 'moment';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import ScoreCard from '../../components/ScoreCard';
 import './style.scss';
 
@@ -52,6 +54,10 @@ export default class ScorePage extends React.Component {
         </Helmet>
         <h2>Scores</h2>
         <div className="scoreboard-selector">
+          <DatePicker
+            selected={this.state.dateSelected}
+            onChange={this.handleChangeDate}
+          />
           { daysOptions.map(option => (
             <a
               key={option.value}
