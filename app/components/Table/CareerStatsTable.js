@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import {
-  insert, mean, map, path, split, sum, pathOr,
+  insert, map, split, sum, pathOr,
 } from 'ramda';
 import 'react-table/react-table.css';
 import './styles.scss';
@@ -239,6 +239,7 @@ const CareerStatsTable = ({ stats, info }) => (
 
 CareerStatsTable.propTypes = {
   stats: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  info: PropTypes.shape({}).isRequired,
 };
 
 export default CareerStatsTable;

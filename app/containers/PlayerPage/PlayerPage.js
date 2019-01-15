@@ -17,24 +17,13 @@ const rounds = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '
 const urlParams = new URLSearchParams(window.location.search);
 
 const playerIsActiveThisYear = latestSeason => latestSeason.season === '20182019';
+const saveToLS = (name, value) => window.localStorage.setItem(name, value);
+const getFromLS = name => window.localStorage.getItem(name);
 
 export default class PlayerPage extends React.Component {
-  constructor() {
-    super();
-    this.onTabSelect = this.onTabSelect.bind(this);
-    this.state = {
-      tabIndex: Number(window.localStorage.getItem('teamTab') || 0),
-    };
-  }
-
   componentDidMount() {
     const { fetchPlayer } = this.props;
     fetchPlayer(urlParams.get('id'));
-  }
-
-  onTabSelect(tabIndex) {
-    window.localStorage.setItem('teamTab', tabIndex);
-    this.setState({ tabIndex });
   }
 
   render() {
@@ -169,7 +158,10 @@ export default class PlayerPage extends React.Component {
           </div>
 
         </div>
-        <Tabs defaultIndex={0} selectedIndex={this.state.tabIndex} onSelect={this.onTabSelect}>
+        <Tabs
+          defaultIndex={getFromLS('tabIndex') || 0}
+          onSelect={i => saveToLS('tabIndex', i)}
+        >
           <TabList>
             <Tab>Career Stats</Tab>
             <Tab>Game Logs</Tab>
