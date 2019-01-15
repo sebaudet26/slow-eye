@@ -29,9 +29,7 @@ const ScoreCard = args => (
           {isScheduled(args.game) ? points(args.game.teams.home) : args.game.teams.home.score}
         </div>
       </div>
-      <div className="game-card-footer">
-        {args.game.status.detailedState === 'Scheduled' ? null : <a href={`/game?id=${args.game.gamePk}`}>Game Summary</a>}
-      </div>
+      {args.game.status.detailedState === 'Scheduled' ? null : <div className="game-card-footer"><a href={`/game?id=${args.game.gamePk}`}>Game Summary</a></div>}
     </div>
   </div>
 );
