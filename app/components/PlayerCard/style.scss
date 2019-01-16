@@ -20,8 +20,6 @@
 
   &-header {
     position: relative;
-    border-bottom: solid 1px $grey-4;
-    padding-bottom: 5px;
     display: flex;
     align-items: center;
 
@@ -67,7 +65,7 @@
 
   &-stats {
     margin-top: 5px;
-    display: flex;
+    display: none;
 
     &-item {
       margin: auto;
