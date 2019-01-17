@@ -18,8 +18,7 @@ const nhlApi = async (resource, expiration) => {
     const response = await fetch(url);
     const data = await response.json();
     cache
-      .set(resource, JSON.stringify(data), 'EX', expiration || 60 * 60 * 12)
-      .then(res => console.log(`Set ${resource} cache ${res}`));
+      .set(resource, JSON.stringify(data), 'EX', expiration || 60 * 60 * 12);
     return data;
   } catch (e) {
     return console.error(e.stack || e.toString());
@@ -40,7 +39,6 @@ const findPlayerInDraft = (draftRounds, playerName) => {
       break;
     }
   }
-  console.log(playerDraftInfo);
   return playerDraftInfo;
 };
 
@@ -67,8 +65,7 @@ const fetchDraftInfoForPlayer = async (playerName, year = 2018) => {
   const draftInfoForPlayer = findPlayerInDraft(draftRounds, playerName);
   if (Object.keys(draftInfoForPlayer).length) {
     cache
-      .set(key, JSON.stringify(draftInfoForPlayer), 'EX', 60 * 60 * 24 * 300)
-      .then(res => console.log(`Set ${key} cache ${res}`));
+      .set(key, JSON.stringify(draftInfoForPlayer), 'EX', 60 * 60 * 24 * 300);
     return draftInfoForPlayer;
   }
   return fetchDraftInfoForPlayer(playerName, year - 1);

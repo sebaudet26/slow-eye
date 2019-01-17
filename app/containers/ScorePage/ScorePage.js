@@ -57,7 +57,7 @@ export default class ScorePage extends React.Component {
         <div className="scoreboard-selector">
           <DatePicker
             selected={dateSelected}
-            onChange={this.handleChangeDate}
+            onChange={v => this.handleChangeDate(moment(v).format(apiDateFormat))}
           />
           { daysOptions.map(option => (
             <button
