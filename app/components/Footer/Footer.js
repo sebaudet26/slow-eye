@@ -7,7 +7,11 @@ const Footer = () => (
       {'Made with'}
       <span role="img" aria-label="heart-emoji"> ❤️ </span>
       {'by '}
-      <a rel="noopener noreferrer" target="_blank" href="http://chatler.io">Seb and Alex</a>
+      <span className="bold">SE</span>
+b and
+      {' '}
+      <span className="bold">AL</span>
+ex
     </section>
   </footer>
 );
