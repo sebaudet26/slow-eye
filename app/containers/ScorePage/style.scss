@@ -8,6 +8,11 @@
   }
 }
 
+button {
+  outline: none;
+  cursor: pointer;
+}
+
 .scoreboard {
   display: flex;
   flex-flow: wrap;

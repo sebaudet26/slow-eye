@@ -42,6 +42,7 @@ export default class ScorePage extends React.Component {
 
   render() {
     const { games } = this.props;
+    const { dateSelected } = this.state;
     console.log(games);
     return (
       <div className="score-page">
@@ -55,18 +56,18 @@ export default class ScorePage extends React.Component {
         <h2>Scores</h2>
         <div className="scoreboard-selector">
           <DatePicker
-            selected={this.state.dateSelected}
+            selected={dateSelected}
             onChange={this.handleChangeDate}
           />
           { daysOptions.map(option => (
-            <a
+            <button
               key={option.value}
-              href="#"
-              className={this.state.dateSelected === option.value ? 'scoreboard-selector-item active' : 'scoreboard-selector-item'}
+              type="button"
+              className={dateSelected === option.value ? 'scoreboard-selector-item active' : 'scoreboard-selector-item'}
               onClick={() => this.handleChangeDate(option.value)}
             >
               {option.label}
-            </a>
+            </button>
           ))}
         </div>
         <div className="scoreboard">
