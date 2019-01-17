@@ -1,5 +1,13 @@
 @import '../../styles/variables.scss';
 
 .teamStats-page {
-  
+
+}
+
+@media screen and (max-width: 600px) {
+  .teamStats-page {
+    h2 {
+      margin-top: 0px;
+    }
+  }
 }
