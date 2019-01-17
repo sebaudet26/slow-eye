@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import Logo from '../../images/logo.svg';
 import MobileIcon from './images/hamburger-icon.svg';
 import './style.scss';
 
@@ -18,7 +19,8 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
       <div className="header">
         <div className="header-wrapper">
           <a className="header-logo" href="/">
-          Quick Stats
+            <img src={Logo} />
+            Sealstats
           </a>
           <div className="header-nav">
             <NavLink activeClassName="active" className="header-nav-item" exact to="/">

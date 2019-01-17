@@ -17,6 +17,12 @@
     font-size: 20px;
     font-weight: 600;
     color: $black;
+    display: flex;
+    align-items: center;
+
+    img {
+      margin-right: 10px;
+    }
   }
 
   &-nav {
