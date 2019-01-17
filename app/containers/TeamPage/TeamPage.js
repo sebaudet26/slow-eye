@@ -7,6 +7,7 @@ import {
 import {
   Tab, Tabs, TabList, TabPanel,
 } from 'react-tabs';
+import Dropdown from '../../components/Dropdown/Dropdown';
 import PlayerCard from '../../components/PlayerCard/PlayerCard';
 import RosterTable from '../../components/Table/RosterTable';
 import RosterStatsTable from '../../components/Table/RosterStatsTable';
@@ -90,7 +91,7 @@ export default class TeamPage extends React.Component {
               />
             </div>
             <div>
-              <h2>{team.name}</h2>
+              <Dropdown name={team.name} />
               <p>8th Eastern Conference, 4th Atlantic</p>
             </div>
           </div>
