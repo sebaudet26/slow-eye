@@ -16,31 +16,33 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
   render() {
     return (
       <div className="header">
-        <a className="header-logo" href="/">
+        <div className="header-wrapper">
+          <a className="header-logo" href="/">
           Quick Stats
-        </a>
-        <div className="header-nav">
-          <NavLink activeClassName="active" className="header-nav-item" exact to="/">
+          </a>
+          <div className="header-nav">
+            <NavLink activeClassName="active" className="header-nav-item" exact to="/">
             Player Stats
-          </NavLink>
-          <NavLink activeClassName="active" className="header-nav-item" to="/teamstats">
+            </NavLink>
+            <NavLink activeClassName="active" className="header-nav-item" to="/teamstats">
             Team Stats
-          </NavLink>
-          <NavLink activeClassName="active" className="header-nav-item" to="/standings">
+            </NavLink>
+            <NavLink activeClassName="active" className="header-nav-item" to="/standings">
             Standings
-          </NavLink>
-          <NavLink activeClassName="active" className="header-nav-item" to="/scores">
+            </NavLink>
+            <NavLink activeClassName="active" className="header-nav-item" to="/scores">
             Scores
-          </NavLink>
-        </div>
-        <div className="header-mobile">
-          <img className="header-mobile-icon" src={MobileIcon} alt="" onClick={burgerToggle} />
-          <ul className="header-mobile-list">
-            <li><NavLink to="/" exact onClick={burgerToggle}>Player Stats</NavLink></li>
-            <li><NavLink to="/teamstats" onClick={burgerToggle}>Team Stats</NavLink></li>
-            <li><NavLink to="/standings" onClick={burgerToggle}>Standings</NavLink></li>
-            <li><NavLink to="/scores" onClick={burgerToggle}>Scores</NavLink></li>
-          </ul>
+            </NavLink>
+          </div>
+          <div className="header-mobile">
+            <img className="header-mobile-icon" src={MobileIcon} alt="" onClick={burgerToggle} />
+            <ul className="header-mobile-list">
+              <li><NavLink to="/" exact onClick={burgerToggle}>Player Stats</NavLink></li>
+              <li><NavLink to="/teamstats" onClick={burgerToggle}>Team Stats</NavLink></li>
+              <li><NavLink to="/standings" onClick={burgerToggle}>Standings</NavLink></li>
+              <li><NavLink to="/scores" onClick={burgerToggle}>Scores</NavLink></li>
+            </ul>
+          </div>
         </div>
       </div>
     );

@@ -15,7 +15,7 @@ import Footer from '../../components/Footer';
 import './style.scss';
 
 const App = () => (
-  <div className="app-wrapper">
+  <div>
     <Helmet
       titleTemplate="%s - Quick Stats"
       defaultTitle="Quick Stats"
@@ -23,17 +23,21 @@ const App = () => (
       <meta name="description" content="Quick Stats - Hockey Stats" />
     </Helmet>
     <Header />
-    <Switch>
-      <Route exact path="/" component={PlayerStatsPage} />
-      <Route path="/standings" component={StandingsPage} />
-      <Route path="/player" component={PlayerPage} />
-      <Route path="/team" component={TeamPage} />
-      <Route path="/teamstats" component={TeamStatsPage} />
-      <Route path="/scores" component={ScorePage} />
-      <Route path="/game" component={GamePage} />
-      <Route path="" component={NotFoundPage} />
-    </Switch>
-    <Footer />
+    <div className="app-wrapper">
+      <Switch>
+        <Route exact path="/" component={PlayerStatsPage} />
+        <Route path="/standings" component={StandingsPage} />
+        <Route path="/player" component={PlayerPage} />
+        <Route path="/team" component={TeamPage} />
+        <Route path="/teamstats" component={TeamStatsPage} />
+        <Route path="/scores" component={ScorePage} />
+        <Route path="/game" component={GamePage} />
+        <Route path="" component={NotFoundPage} />
+      </Switch>
+    </div>
+    <div className="app-wrapper">
+      <Footer />
+    </div>
   </div>
 );
 
