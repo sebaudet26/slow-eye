@@ -32,6 +32,8 @@ const makeQuery = season => `
         pim,
         hits,
         blocked,
+        powerPlayGoals,
+        shortHandedGoals,
         shots,
         shotPct,
         timeOnIcePerGame,
