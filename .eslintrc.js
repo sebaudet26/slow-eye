@@ -8,6 +8,7 @@ module.exports = {
     "es6": true
   },
   "rules": {
+    "no-plusplus": "off",
     "import/no-named-as-default-member": "off",
     "import/no-named-as-default": "off",
     "jsx-a11y/click-events-have-key-events": "off",

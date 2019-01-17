@@ -98,6 +98,7 @@
     "react-tabs": "^3.0.0",
     "react-test-renderer": "^16.4.0",
     "react-tooltip": "^3.9.0",
+    "redis": "^2.8.0",
     "redux": "3.7.2",
     "redux-immutable": "4.0.0",
     "redux-saga": "0.16.0",
