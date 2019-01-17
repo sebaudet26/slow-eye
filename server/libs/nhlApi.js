@@ -12,14 +12,14 @@ const nhlApi = async (resource, expiration) => {
   try {
     const cachedValue = await cache.get(resource);
     if (cachedValue) {
-      console.log('cached resource', resource);
       return JSON.parse(cachedValue);
     }
     const url = `${nhlApiUrl}${resource}`;
     const response = await fetch(url);
     const data = await response.json();
-    const res = await cache.set(resource, JSON.stringify(data), 'EX', expiration || 60 * 60 * 12);
-    console.log('cache response', res);
+    cache
+      .set(resource, JSON.stringify(data), 'EX', expiration || 60 * 60 * 12)
+      .then(res => console.log(`Set ${resource} cache ${res}`));
     return data;
   } catch (e) {
     return console.error(e.stack || e.toString());
@@ -40,6 +40,7 @@ const findPlayerInDraft = (draftRounds, playerName) => {
       break;
     }
   }
+  console.log(playerDraftInfo);
   return playerDraftInfo;
 };
 
@@ -53,7 +54,7 @@ const fetchCurrentSeasonGameLogsForPlayerId = async (playerId) => {
 const fetchDraftInfoForPlayer = async (playerName, year = 2018) => {
   const key = `draft-${playerName.replace(' ', '')}`;
   const cachedValue = await cache.get(key);
-  if (cachedValue) {
+  if (cachedValue && cachedValue !== 'undefined') {
     return JSON.parse(cachedValue);
   }
   // Undrafted
@@ -65,7 +66,9 @@ const fetchDraftInfoForPlayer = async (playerName, year = 2018) => {
   const draftRounds = path(['drafts', 0, 'rounds'], apiData);
   const draftInfoForPlayer = findPlayerInDraft(draftRounds, playerName);
   if (Object.keys(draftInfoForPlayer).length) {
-    cache.set(key, JSON.draftInfoForPlayer)[playerName] = draftInfoForPlayer;
+    cache
+      .set(key, JSON.stringify(draftInfoForPlayer), 'EX', 60 * 60 * 24 * 300)
+      .then(res => console.log(`Set ${key} cache ${res}`));
     return draftInfoForPlayer;
   }
   return fetchDraftInfoForPlayer(playerName, year - 1);

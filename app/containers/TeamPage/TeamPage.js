@@ -114,8 +114,8 @@ export default class TeamPage extends React.Component {
           )}
         </div>
         <Tabs
-          defaultIndex={getFromLS('tabIndex') || 0}
-          onSelect={i => saveToLS('tabIndex', i)}
+          defaultIndex={Number(getFromLS('teamTabIndex')) || 0}
+          onSelect={i => saveToLS('teamTabIndex', i)}
         >
           <TabList>
             <Tab>Depth Chart</Tab>

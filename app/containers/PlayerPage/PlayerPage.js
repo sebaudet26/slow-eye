@@ -159,8 +159,8 @@ export default class PlayerPage extends React.Component {
 
         </div>
         <Tabs
-          defaultIndex={getFromLS('tabIndex') || 0}
-          onSelect={i => saveToLS('tabIndex', i)}
+          defaultIndex={Number(getFromLS('playerTabIndex')) || 0}
+          onSelect={i => saveToLS('playerTabIndex', i)}
         >
           <TabList>
             <Tab>Career Stats</Tab>
