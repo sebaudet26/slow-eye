@@ -119,7 +119,7 @@ class GameLogTable extends React.PureComponent {
               Header: 'SV%',
               id: 'savePercentage',
               show: isGoalie(pos),
-              accessor: d => d.stat.savePercentage.toFixed(3),
+              accessor: d => pathOr(0, ['stat', 'savePercentage'], d).toFixed(3),
               maxWidth: 65,
               minWidth: 50,
             },
