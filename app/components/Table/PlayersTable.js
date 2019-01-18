@@ -253,7 +253,7 @@ class PlayersTable extends React.PureComponent {
             },
             {
               id: 'position',
-              value: posSelected || 'all',
+              value: posSelected || 'S',
             },
             {
               id: 'team',
@@ -275,7 +275,6 @@ class PlayersTable extends React.PureComponent {
           defaultFilterMethod={toLowerCaseAndMatch}
           getTdProps={(state, rowInfo, column, instance) => ({
             onClick: (e, handleOriginal) => {
-              console.log('It was in this row:', rowInfo);
               if (handleOriginal) {
                 handleOriginal();
               }
@@ -554,7 +553,7 @@ class PlayersTable extends React.PureComponent {
               id: 'shutouts',
               maxWidth: 85,
               minWidth: 50,
-              show: this.state.posSelected === 'G',
+              show: posSelected === 'G',
               filterable: false,
               accessor: d => pathOr(0, ['stats', 0, 'stat', 'shutouts'], d),
             },

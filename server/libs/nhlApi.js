@@ -8,11 +8,13 @@ const cache = require('./redisApi');
 const nhlApiUrl = 'https://statsapi.web.nhl.com/api/v1';
 
 // expiration is a number in seconds
-const nhlApi = async (resource, expiration) => {
+const nhlApi = async (resource, expiration, force) => {
   try {
-    const cachedValue = await cache.get(resource);
-    if (cachedValue) {
-      return JSON.parse(cachedValue);
+    if (!force) {
+      const cachedValue = await cache.get(resource);
+      if (cachedValue) {
+        return JSON.parse(cachedValue);
+      }
     }
     const url = `${nhlApiUrl}${resource}`;
     const response = await fetch(url);
@@ -171,7 +173,7 @@ const fetchGames = async (args) => {
   } else {
     resource += `?date=${moment().format('YYYY-MM-DD')}`;
   }
-  const gamesResponse = await nhlApi(resource, cacheExp || 60);
+  const gamesResponse = await nhlApi(resource, cacheExp || 60, true);
   const games = flatten(map(propOr({}, 'games'), gamesResponse.dates || []));
   return games;
 };
