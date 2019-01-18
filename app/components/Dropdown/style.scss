@@ -1,6 +1,6 @@
 @import '../../styles/variables.scss';
 
-.dropdown {
+.dropdownMenu {
   position: relative;
 
   &-trigger {
@@ -25,24 +25,42 @@
     top: -2px;
   }
 
-  &-menu {
+  &-list {
     position: absolute;
+
     background: $white;
     box-shadow: $shadow;
     z-index: 99;
     border-radius: 6px;
     height: 300px;
-    right: 0px;
+    left: 0px;
 
-    &-list {
+    &-block {
+      width: 240px;
+
+      &:last-child {
+        a {
+          border-left: solid 1px $grey-4;
+        }
+      }
+    }
+
+    &-wrapper {
       overflow: auto;
       height: 300px;
+      display: flex;
 
       a {
         color: $black;
-        display: block;
+        display: flex;
+        align-items: center;
         padding: 10px 15px;
         border-bottom: solid 1px $grey-4;
+
+        img {
+          margin-right: 10px;
+          width: 25px;
+        }
 
         &:hover {
           color: $main;
@@ -53,5 +71,11 @@
         }
       }
     }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .dropdownMenu-list-wrapper {
+    display: block;
   }
 }
