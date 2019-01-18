@@ -6,108 +6,109 @@ const makePlayerQuery = id => `
 {
   player (id: ${id}) {
     info {
-      firstName,
-      lastName,
-      shootsCatches,
-      birthDate,
-      birthCity,
-      birthStateProvince,
-      birthCountry,
-      nationality,
-      height,
-      weight,
-      captain,
-      rookie,
-      fullName,
-      currentAge,
-      rosterStatus,
+      firstName
+      lastName
+      shootsCatches
+      birthDate
+      birthCity
+      birthStateProvince
+      birthCountry
+      nationality
+      height
+      weight
+      captain
+      rookie
+      fullName
+      currentAge
+      rosterStatus
       currentTeamInfo {
-        id,
-        name,
-        teamName,
+        id
+        name
+        teamName
         abbreviation
-      },
+      }
       primaryPosition {
-        name,
+        name
         abbreviation
-      },
+      }
       draftInfo {
-        year,
-        round,
-        pickOverall,
-        pickInRound,
+        year
+        round
+        pickOverall
+        pickInRound
         team {
           name
         }
       }
-    },
+    }
     careerStats {
-      season,
+      season
       team {
         name
         abbreviation
-      },
+      }
       league {
         name
-      },
-      stat {
-        assists,
-        goals,
-        points,
-        games,
-        plusMinus,
-        shots,
-        shotPct,
-        hits,
-        pim,
-        blocked,
-        timeOnIcePerGame
-        saves,
-        goalsAgainst,
-        shutouts,
-        gamesStarted,
-        timeOnIce,
-        savePercentage,
-        goalAgainstAverage,
-        wins,
-        losses,
-        ot,
-        ties,
       }
-    },
+      stat {
+        assists
+        goals
+        points
+        games
+        plusMinus
+        shots
+        shotPct
+        hits
+        pim
+        blocked
+        timeOnIcePerGame
+        saves
+        goalsAgainst
+        shutouts
+        gamesStarted
+        timeOnIce
+        savePercentage
+        goalAgainstAverage
+        wins
+        losses
+        ot
+        ties
+      }
+    }
     logs {
-      date,
-      isWin,
+      date
+      isWin
+      isOT
       opponent {
         shortName
         teamName
         id
         abbreviation
-      },
+      }
       stat {
-        goals,
-        assists,
-        points,
-        plusMinus,
-        hits,
-        blocked,
-        powerPlayGoals,
-        shortHandedGoals,
-        gameWinningGoals,
-        pim,
-        shots,
-        timeOnIce,
-        shifts,
-        saves,
-        goalsAgainst,
-        shutouts,
-        gamesStarted,
-        timeOnIce,
-        savePercentage,
-        goalAgainstAverage,
-        wins,
-        losses,
-        ot,
+        goals
+        assists
+        points
+        plusMinus
+        hits
+        blocked
+        powerPlayGoals
+        shortHandedGoals
+        gameWinningGoals
+        pim
+        shots
+        timeOnIce
+        shifts
+        saves
+        goalsAgainst
+        shutouts
+        gamesStarted
+        timeOnIce
+        savePercentage
+        goalAgainstAverage
+        wins
+        losses
+        ot
       }
     }
   }
@@ -116,7 +117,7 @@ const makePlayerQuery = id => `
 
 export const fetchPlayer = id => async (dispatch) => {
   try {
-    const data = await graphqlApi(makePlayerQuery(id), `player-${id}`);
+    const data = await graphqlApi(makePlayerQuery(id));
     console.log('data', data);
     return dispatch({
       type: FETCH_PLAYER_BY_ID,

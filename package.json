@@ -1,7 +1,6 @@
 {
-  "name": "react-redux-boilerplate",
-  "version": "1.0.0",
-  "description": "A minimal react-redux boilerplate with all the best practices",
+  "name": "slow-eye",
+  "description": "sports statistics web service",
   "repository": {
     "type": "git",
     "url": "git://github.com/flexdinesh/react-redux-boilerplate.git"
@@ -11,7 +10,6 @@
     "node": ">=10"
   },
   "author": "Alexandre Sobolevski <sobolevski.a@gmail.com>",
-  "license": "MIT",
   "scripts": {
     "prebuild": "npm run build:clean",
     "build": "cross-env NODE_ENV=production webpack --config config/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
@@ -27,8 +25,8 @@
     "lint:js": "npm run lint:eslint -- . ",
     "pretest": "npm run test:clean",
     "test:clean": "rimraf ./coverage",
-    "test": "cross-env NODE_ENV=test jest --coverage",
-    "test:watch": "cross-env NODE_ENV=test jest --watchAll"
+    "test": "echo 'no tests'",
+    "test:watch": "echo 'no tests'"
   },
   "dependencies": {
     "add-asset-html-webpack-plugin": "2.1.3",
