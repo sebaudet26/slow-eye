@@ -5,6 +5,7 @@ import injectReducer from '../../utils/injectReducer';
 import { fetchTeamById, fetchTeamRosterDetails } from './actions';
 import { makeSelectTeam, makeSelectTeamRoster } from './selectors';
 import reducer from './reducer';
+// import standingsReducer from '../StandingsPage';
 import TeamPage from './TeamPage';
 
 const mapDispatchToProps = dispatch => ({
@@ -15,11 +16,17 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = createStructuredSelector({
   teams: makeSelectTeam(),
   rosters: makeSelectTeamRoster(),
+  // standings: makeSelectTeamStandings(),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 const withReducer = injectReducer({ key: 'home', reducer });
+// const withStandings = injectReducer({ key: 'standings', standingsReducer });
 
-export default compose(withReducer, withConnect)(TeamPage);
+export default compose(
+  withReducer,
+  // withStandings,
+  withConnect,
+)(TeamPage);
 export { mapDispatchToProps };

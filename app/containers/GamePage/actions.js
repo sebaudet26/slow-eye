@@ -5,6 +5,7 @@ import graphqlApi from '../../utils/api';
 const makeGameBoxscoreQuery = id => `
 {
   game (id: "${id}") {
+    id
     away {
       team {
         id

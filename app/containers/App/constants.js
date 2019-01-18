@@ -9,7 +9,6 @@
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
 
-export const LOAD_PLAYERS = 'boilerplate/App/LOAD_PLAYERS';
-export const LOAD_PLAYERS_SUCCESS = 'boilerplate/App/LOAD_PLAYERS_SUCCESS';
-export const LOAD_PLAYERS_ERROR = 'boilerplate/App/LOAD_PLAYERS_ERROR';
 export const DEFAULT_LOCALE = 'en';
+
+export default null;

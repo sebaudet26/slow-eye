@@ -2,15 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import {
-  equals, filter, isNil, join, map, or, pathOr, path, pipe, prop, reject,
+  filter, map, isEmpty, pipe, reject,
 } from 'ramda';
 import './style.scss';
+import {
+  isScratched,
+  isGoalie,
+  isScratchedOrGoalie,
+} from '../../utils/player';
+import { logoForTeamName } from '../../utils/team';
 import BoxTable from '../../components/Table/BoxTable';
-
-const urlParams = new URLSearchParams(window.location.search);
-const isScratched = pipe(prop('boxscore'), isNil);
-const isGoalie = pipe(path(['position', 'abbreviation']), equals('G'));
-const isScratchedOrGoalie = p => or(isGoalie(p), isScratched(p));
 
 const intoLink = player => (
   <a className="scratches-player" href={`/player?id=${player.person.id}`}>{player.person.fullName}</a>
@@ -18,25 +19,26 @@ const intoLink = player => (
 
 class GamePage extends React.Component {
   componentDidMount() {
-    const { fetchGameBoxscore } = this.props;
-    fetchGameBoxscore(urlParams.get('id'));
+    const { fetchGameBoxscore, gameId, gameBoxscore } = this.props;
+    if (gameId && isEmpty(gameBoxscore)) {
+      fetchGameBoxscore(gameId);
+    }
   }
 
   render() {
     const { gameBoxscore } = this.props;
-    console.log(gameBoxscore);
     if (!gameBoxscore.away || !gameBoxscore.home) {
       return null;
     }
     const awayTeamImage = (
       <img
-        src={`../../images/teams/${gameBoxscore.away.team.teamName.replace(' ', '-').toLowerCase()}.png`}
+        src={logoForTeamName(gameBoxscore.away.team.teamName)}
         alt=""
       />
     );
     const homeTeamImage = (
       <img
-        src={`../../images/teams/${gameBoxscore.home.team.teamName.replace(' ', '-').toLowerCase()}.png`}
+        src={logoForTeamName(gameBoxscore.home.team.teamName)}
         alt=""
       />
     );
@@ -173,6 +175,7 @@ class GamePage extends React.Component {
 GamePage.propTypes = {
   fetchGameBoxscore: PropTypes.func.isRequired,
   gameBoxscore: PropTypes.shape({}).isRequired,
+  gameId: PropTypes.string.isRequired,
 };
 
 export default GamePage;

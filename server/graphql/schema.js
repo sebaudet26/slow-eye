@@ -587,6 +587,7 @@ const TeamBoxscore = new GraphQLObjectType({
 const Boxscore = new GraphQLObjectType({
   name: 'Boxscore',
   fields: {
+    id: { type: GraphQLString, resolve: prop('id') },
     away: { type: TeamBoxscore, resolve: prop('away') },
     home: { type: TeamBoxscore, resolve: prop('home') },
   },

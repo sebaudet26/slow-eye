@@ -8,6 +8,8 @@ module.exports = {
     "es6": true
   },
   "rules": {
+    "operator-linebreak": "off",
+    "implicit-arrow-linebreak": "off",
     "no-plusplus": "off",
     "import/no-named-as-default-member": "off",
     "import/no-named-as-default": "off",

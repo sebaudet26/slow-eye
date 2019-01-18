@@ -181,7 +181,7 @@ const fetchGames = async (args) => {
 const fetchBoxscore = async (gameId) => {
   const resource = `/game/${gameId}/boxscore`;
   const boxscoreResponse = await nhlApi(resource, 60);
-  return prop('teams', boxscoreResponse);
+  return { ...prop('teams', boxscoreResponse), id: gameId };
 };
 
 module.exports = {

@@ -2,10 +2,11 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import injectReducer from '../../utils/injectReducer';
-import { makeSelectBoxscore } from './selectors';
+import { makeSelectBoxscore, makeSelectGameId } from './selectors';
 import { fetchGameBoxscore } from './actions';
 import reducer from './reducer';
 import GamePage from './GamePage';
+
 
 const mapDispatchToProps = dispatch => ({
   fetchGameBoxscore: id => dispatch(fetchGameBoxscore(id)),
@@ -13,6 +14,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = createStructuredSelector({
   gameBoxscore: makeSelectBoxscore(),
+  gameId: makeSelectGameId(),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
