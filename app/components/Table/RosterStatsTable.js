@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  last, pipe, pathOr,
+  last, pipe, pathOr, invoker,
 } from 'ramda';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
@@ -113,7 +113,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'SV%',
           id: 'savePercentage',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'savePercentage'])),
+          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'savePercentage']), invoker(1, 'toFixed')(3)),
           show: position === 'G',
           maxWidth: 75,
           minWidth: 50,

@@ -2,10 +2,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
-import { pathOr } from 'ramda';
+import { pathOr, not } from 'ramda';
 import { sortTimeOnIce } from '../../utils/sort';
 import 'react-table/react-table.css';
 import './styles.scss';
+
+const isGoalie = pos => pos === 'G';
 
 class GameLogTable extends React.PureComponent {
   render() {
@@ -15,6 +17,7 @@ class GameLogTable extends React.PureComponent {
     if (logs.length) {
       data = logs;
     }
+    const pos = info.primaryPosition.abbreviation;
     return (
       <div>
         <ReactTable
@@ -59,7 +62,7 @@ class GameLogTable extends React.PureComponent {
             {
               Header: 'G',
               id: 'goals',
-              show: info.primaryPosition.name !== 'Goalie',
+              show: not(isGoalie(pos)),
               accessor: d => d.stat.goals,
               maxWidth: 65,
               minWidth: 50,
@@ -67,7 +70,7 @@ class GameLogTable extends React.PureComponent {
             {
               Header: 'A',
               id: 'assists',
-              show: info.primaryPosition.name !== 'Goalie',
+              show: not(isGoalie(pos)),
               accessor: d => d.stat.assists,
               maxWidth: 65,
               minWidth: 50,
@@ -75,7 +78,7 @@ class GameLogTable extends React.PureComponent {
             {
               Header: 'Pts',
               id: 'points',
-              show: info.primaryPosition.name !== 'Goalie',
+              show: not(isGoalie(pos)),
               accessor: d => d.stat.points,
               maxWidth: 65,
               minWidth: 50,
@@ -83,7 +86,7 @@ class GameLogTable extends React.PureComponent {
             {
               Header: '+/-',
               id: 'plusMinus',
-              show: info.primaryPosition.name !== 'Goalie',
+              show: not(isGoalie(pos)),
               accessor: d => d.stat.plusMinus,
               maxWidth: 65,
               minWidth: 50,
@@ -91,39 +94,39 @@ class GameLogTable extends React.PureComponent {
             {
               Header: 'W',
               id: 'wins',
-              show: info.primaryPosition.name === 'Goalie',
-              accessor: d => d.stat.wins,
+              show: isGoalie(pos),
+              accessor: d => (d.isWin ? 1 : 0),
               maxWidth: 65,
               minWidth: 50,
             },
             {
               Header: 'L',
               id: 'losses',
-              show: info.primaryPosition.name === 'Goalie',
-              accessor: d => d.stat.losses,
+              show: isGoalie(pos),
+              accessor: d => (d.isWin || d.isOT ? '0' : '1'),
               maxWidth: 65,
               minWidth: 50,
             },
             {
               Header: 'OT',
               id: 'ot',
-              show: info.primaryPosition.name === 'Goalie',
-              accessor: d => d.stat.ot,
+              show: isGoalie(pos),
+              accessor: d => (d.isOT ? '1' : '0'),
               maxWidth: 65,
               minWidth: 50,
             },
             {
               Header: 'SV%',
               id: 'savePercentage',
-              show: info.primaryPosition.name === 'Goalie',
-              accessor: d => d.stat.savePercentage,
+              show: isGoalie(pos),
+              accessor: d => d.stat.savePercentage.toFixed(3),
               maxWidth: 65,
               minWidth: 50,
             },
             {
               Header: 'GA',
               id: 'goalsAgainst',
-              show: info.primaryPosition.name === 'Goalie',
+              show: isGoalie(pos),
               accessor: d => d.stat.goalsAgainst,
               maxWidth: 65,
               minWidth: 50,
@@ -131,7 +134,7 @@ class GameLogTable extends React.PureComponent {
             {
               Header: 'SA',
               id: 'saves',
-              show: info.primaryPosition.name === 'Goalie',
+              show: isGoalie(pos),
               accessor: d => d.stat.saves,
               maxWidth: 65,
               minWidth: 50,
@@ -139,7 +142,7 @@ class GameLogTable extends React.PureComponent {
             {
               Header: 'SO',
               id: 'shutouts',
-              show: info.primaryPosition.name === 'Goalie',
+              show: isGoalie(pos),
               accessor: d => d.stat.shutouts,
               maxWidth: 65,
               minWidth: 50,
@@ -148,7 +151,7 @@ class GameLogTable extends React.PureComponent {
               Header: 'Hits',
               id: 'hits',
               accessor: d => d.stat.hits,
-              show: info.primaryPosition.name !== 'Goalie',
+              show: not(isGoalie(pos)),
               maxWidth: 65,
               minWidth: 50,
             },
@@ -156,7 +159,7 @@ class GameLogTable extends React.PureComponent {
               Header: 'Bks',
               id: 'blocked',
               accessor: d => d.stat.blocked,
-              show: info.primaryPosition.name !== 'Goalie',
+              show: not(isGoalie(pos)),
               maxWidth: 65,
               minWidth: 50,
             },
@@ -164,7 +167,7 @@ class GameLogTable extends React.PureComponent {
               Header: 'PPG',
               id: 'powerPlayGoals',
               accessor: d => d.stat.powerPlayGoals,
-              show: info.primaryPosition.name !== 'Goalie',
+              show: not(isGoalie(pos)),
               maxWidth: 65,
               minWidth: 50,
             },
@@ -172,7 +175,7 @@ class GameLogTable extends React.PureComponent {
               Header: 'SHG',
               id: 'shortHandedGoals',
               accessor: d => d.stat.shortHandedGoals,
-              show: info.primaryPosition.name !== 'Goalie',
+              show: not(isGoalie(pos)),
               maxWidth: 65,
               minWidth: 50,
             },
@@ -180,7 +183,7 @@ class GameLogTable extends React.PureComponent {
               Header: 'GWG',
               id: 'gameWinningGoals',
               accessor: d => d.stat.gameWinningGoals,
-              show: info.primaryPosition.name !== 'Goalie',
+              show: not(isGoalie(pos)),
               maxWidth: 65,
               minWidth: 50,
             },
@@ -188,14 +191,14 @@ class GameLogTable extends React.PureComponent {
               Header: 'SOG',
               id: 'shots',
               accessor: d => d.stat.shots,
-              show: info.primaryPosition.name !== 'Goalie',
+              show: not(isGoalie(pos)),
               maxWidth: 65,
               minWidth: 50,
             },
             {
               Header: 'Shifts',
               id: 'shifts',
-              show: info.primaryPosition.name !== 'Goalie',
+              show: not(isGoalie(pos)),
               accessor: d => d.stat.shifts,
               maxWidth: 65,
               minWidth: 50,
