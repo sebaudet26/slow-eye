@@ -37,7 +37,7 @@ button {
         top: 1px;
         cursor: pointer;
         transition: 0.3s;
-        width: 85px;
+        width: 90px;
 
         &:hover {
           opacity: 0.75;
@@ -87,6 +87,9 @@ button {
   .score-page {
     h2 {
       margin-top: 0px;
+    }
+    .scoreboard-header {
+      display: none;
     }
   }
 }
