@@ -9,7 +9,7 @@ const ScoreCard = args => (
   <div className="game-card-wrapper">
     <div className="game-card">
       <div className="game-card-header">
-        {isScheduled(args.game) ? `${moment(args.game.gameDate).format('LLL')}` : `${args.game.status.detailedState}`}
+        {isScheduled(args.game) ? `${moment(args.game.gameDate).format('h:mm')} PM` : `${args.game.status.detailedState}`}
       </div>
       <div className="game-card-team">
         <img src={`../../images/teams/small/${args.game.teams.away.team.abbreviation}.png`} />
