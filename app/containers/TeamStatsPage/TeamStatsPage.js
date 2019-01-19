@@ -16,7 +16,7 @@ export default class TeamStatsPage extends React.Component {
       <div>
         <Helmet>
           <title>Team Stats</title>
-          <meta name="description" content="Quick Stats" />
+          <meta name="description" content="Seal Stats" />
         </Helmet>
         <div className="teamStats-page">
           <h2>Team Stats</h2>

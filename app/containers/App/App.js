@@ -17,10 +17,10 @@ import './style.scss';
 const App = () => (
   <div>
     <Helmet
-      titleTemplate="%s - Quick Stats"
-      defaultTitle="Quick Stats"
+      titleTemplate="%s - Seal Stats"
+      defaultTitle="Seal Stats"
     >
-      <meta name="description" content="Quick Stats - Hockey Stats" />
+      <meta name="description" content="Seal Stats - Hockey Stats" />
     </Helmet>
     <Header />
     <div className="app-wrapper">

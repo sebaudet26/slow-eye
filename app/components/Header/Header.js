@@ -21,7 +21,7 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
         <div className="header-wrapper">
           <a className="header-logo" href="/">
             <img src={Logo} />
-            <span className="header-brand">Sealstats</span>
+            <span className="header-brand">Seal Stats</span>
           </a>
           <SearchBar />
           <div className="header-nav">
