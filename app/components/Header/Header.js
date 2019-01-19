@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import Logo from '../../images/logo.svg';
 import MobileIcon from './images/hamburger-icon.svg';
+import SearchBar from '../SearchBar/SearchBar';
 import './style.scss';
 
 function burgerToggle() {
@@ -20,29 +21,30 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
         <div className="header-wrapper">
           <a className="header-logo" href="/">
             <img src={Logo} />
-            Sealstats
+            <span className="header-brand">Sealstats</span>
           </a>
+          <SearchBar />
           <div className="header-nav">
+            <NavLink activeClassName="active" className="header-nav-item" to="/scores">
+            Scores
+            </NavLink>
+            <NavLink activeClassName="active" className="header-nav-item" to="/standings">
+            Standings
+            </NavLink>
             <NavLink activeClassName="active" className="header-nav-item" exact to="/">
             Player Stats
             </NavLink>
             <NavLink activeClassName="active" className="header-nav-item" to="/teamstats">
             Team Stats
             </NavLink>
-            <NavLink activeClassName="active" className="header-nav-item" to="/standings">
-            Standings
-            </NavLink>
-            <NavLink activeClassName="active" className="header-nav-item" to="/scores">
-            Scores
-            </NavLink>
           </div>
           <div className="header-mobile">
             <img className="header-mobile-icon" src={MobileIcon} alt="" onClick={burgerToggle} />
             <ul className="header-mobile-list">
+              <li><NavLink to="/scores" onClick={burgerToggle}>Scores</NavLink></li>
+              <li><NavLink to="/standings" onClick={burgerToggle}>Standings</NavLink></li>
               <li><NavLink to="/" exact onClick={burgerToggle}>Player Stats</NavLink></li>
               <li><NavLink to="/teamstats" onClick={burgerToggle}>Team Stats</NavLink></li>
-              <li><NavLink to="/standings" onClick={burgerToggle}>Standings</NavLink></li>
-              <li><NavLink to="/scores" onClick={burgerToggle}>Scores</NavLink></li>
             </ul>
           </div>
         </div>

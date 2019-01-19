@@ -1,0 +1,47 @@
+@import '../../styles/variables.scss';
+
+.searchBar {
+  margin-left: 25px;
+  width: 35%;
+
+  form {
+    background: $white;
+    height: 38px;
+    line-height: 38px;
+    padding-left: 8px;
+    box-shadow: $shadow;
+    border-radius: 6px;
+    margin: auto;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+
+    label {
+      padding: 0 12px;
+      border-left: solid 1px $grey-4;
+    }
+
+    input {
+      outline: none;
+      width: 100%;
+    }
+  }
+}
+
+@media screen and (max-width: 950px) {
+  .searchBar {
+    width: 35%;
+  }
+}
+
+@media screen and (max-width: 799px) {
+  .searchBar {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .searchBar {
+    margin-left: 5px;
+  }
+}
