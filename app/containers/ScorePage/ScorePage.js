@@ -14,7 +14,7 @@ const apiDateFormat = 'YYYY-MM-DD';
 const daysOptions = [
   { value: moment().subtract(2, 'days').format(apiDateFormat), label: moment().subtract(2, 'days').format(dayLabelFormat) },
   { value: moment().subtract(1, 'days').format(apiDateFormat), label: moment().subtract(1, 'days').format(dayLabelFormat) },
-  { value: moment().format(apiDateFormat), label: 'Today\'s Games' },
+  { value: moment().subtract(10, 'hours').format(apiDateFormat), label: 'Today\'s Games' },
   { value: moment().add(1, 'days').format(apiDateFormat), label: moment().add(1, 'days').format(dayLabelFormat) },
   { value: moment().add(2, 'days').format(apiDateFormat), label: moment().add(2, 'days').format(dayLabelFormat) },
 ];
@@ -35,7 +35,6 @@ export default class ScorePage extends React.Component {
   }
 
   handleChangeDate(newDate) {
-    console.log(newDate);
     this.setState({ dateSelected: newDate });
     const { fetchGames } = this.props;
     fetchGames(newDate);
@@ -58,7 +57,11 @@ export default class ScorePage extends React.Component {
         <div className="scoreboard-header">
           <div className="scoreboard-datePicker">
             <label>
-              <img src={CalendarIcon} className="scoreboard-datePicker-calendar" />
+              <img
+                src={CalendarIcon}
+                className="scoreboard-datePicker-calendar"
+                alt=""
+              />
               <DatePicker
                 selected={dateSelected}
                 onChange={v => this.handleChangeDate(moment(v).format(apiDateFormat))}
