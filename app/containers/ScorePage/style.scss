@@ -84,6 +84,12 @@ button {
   }
 }
 
+@media screen and (max-width: 850px) {
+  .scoreboard-datePicker {
+    display: none;
+  }
+}
+
 @media screen and (max-width: 600px) {
   .score-page {
     h2 {
