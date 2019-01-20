@@ -12,8 +12,8 @@ const dayLabelFormat = 'ddd MMM D';
 const apiDateFormat = 'YYYY-MM-DD';
 
 const daysOptions = [
-  { value: moment().subtract(2, 'days').format(apiDateFormat), label: moment().subtract(2, 'days').format(dayLabelFormat) },
-  { value: moment().subtract(1, 'days').format(apiDateFormat), label: moment().subtract(1, 'days').format(dayLabelFormat) },
+  { value: moment().subtract(10, 'hours').subtract(2, 'days').format(apiDateFormat), label: moment().subtract(2, 'days').format(dayLabelFormat) },
+  { value: moment().subtract(10, 'hours').subtract(1, 'days').format(apiDateFormat), label: moment().subtract(1, 'days').format(dayLabelFormat) },
   { value: moment().subtract(10, 'hours').format(apiDateFormat), label: 'Today\'s Games' },
   { value: moment().add(1, 'days').format(apiDateFormat), label: moment().add(1, 'days').format(dayLabelFormat) },
   { value: moment().add(2, 'days').format(apiDateFormat), label: moment().add(2, 'days').format(dayLabelFormat) },
