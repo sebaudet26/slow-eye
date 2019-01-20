@@ -93,7 +93,7 @@ button {
 @media screen and (max-width: 600px) {
   .score-page {
     h2 {
-      margin-top: 0px;
+      display: none;
     }
     .scoreboard-header {
       display: none;

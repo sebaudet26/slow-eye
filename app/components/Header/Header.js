@@ -2,17 +2,12 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import Logo from '../../images/logo.svg';
 import MobileIcon from './images/hamburger-icon.svg';
+import ScoreIcon from './images/scoreboard.js';
+import StandingsIcon from './images/standings.js';
+import StatsIcon from './images/stats.js';
+import TeamsIcon from './images/team.js';
 import SearchBar from '../SearchBar/SearchBar';
 import './style.scss';
-
-function burgerToggle() {
-  const mobileLinks = document.querySelector('.header-mobile-list');
-  if (mobileLinks.style.display === 'block') {
-    mobileLinks.style.display = 'none';
-  } else {
-    mobileLinks.style.display = 'block';
-  }
-}
 
 class Header extends React.Component { // eslint-disable-line react/prefer-stateless-function
   render() {
@@ -39,12 +34,31 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
             </NavLink>
           </div>
           <div className="header-mobile">
-            <img className="header-mobile-icon" src={MobileIcon} alt="" onClick={burgerToggle} />
             <ul className="header-mobile-list">
-              <li><NavLink to="/scores" onClick={burgerToggle}>Scores</NavLink></li>
-              <li><NavLink to="/standings" onClick={burgerToggle}>Standings</NavLink></li>
-              <li><NavLink to="/" exact onClick={burgerToggle}>Player Stats</NavLink></li>
-              <li><NavLink to="/teamstats" onClick={burgerToggle}>Team Stats</NavLink></li>
+              <li>
+                <NavLink activeClassName="active" to="/scores">
+                  <ScoreIcon />
+                  Scores
+                </NavLink>
+              </li>
+              <li>
+                <NavLink activeClassName="active" to="/standings">
+                  <StandingsIcon />
+                  Standings
+                </NavLink>
+              </li>
+              <li>
+                <NavLink activeClassName="active" to="/" exact>
+                  <StatsIcon />
+                  Player Stats
+                </NavLink>
+              </li>
+              <li>
+                <NavLink activeClassName="active" to="/teamstats">
+                  <TeamsIcon />
+                  Team Stats
+                </NavLink>
+              </li>
             </ul>
           </div>
         </div>
