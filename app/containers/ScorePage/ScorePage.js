@@ -12,18 +12,33 @@ const dayLabelFormat = 'ddd MMM D';
 const apiDateFormat = 'YYYY-MM-DD';
 
 const daysOptions = [
-  { value: moment().subtract(10, 'hours').subtract(2, 'days').format(apiDateFormat), label: moment().subtract(2, 'days').format(dayLabelFormat) },
-  { value: moment().subtract(10, 'hours').subtract(1, 'days').format(apiDateFormat), label: moment().subtract(1, 'days').format(dayLabelFormat) },
-  { value: moment().subtract(10, 'hours').format(apiDateFormat), label: 'Today\'s Games' },
-  { value: moment().add(1, 'days').format(apiDateFormat), label: moment().add(1, 'days').format(dayLabelFormat) },
-  { value: moment().add(2, 'days').format(apiDateFormat), label: moment().add(2, 'days').format(dayLabelFormat) },
+  {
+    value: moment().subtract(3, 'hours').subtract(2, 'days').format(apiDateFormat),
+    label: moment().subtract(3, 'hours').subtract(2, 'days').format(dayLabelFormat),
+  },
+  {
+    value: moment().subtract(3, 'hours').subtract(1, 'days').format(apiDateFormat),
+    label: moment().subtract(3, 'hours').subtract(1, 'days').format(dayLabelFormat),
+  },
+  {
+    value: moment().subtract(3, 'hours').format(apiDateFormat),
+    label: 'Today\'s Games',
+  },
+  {
+    value: moment().subtract(3, 'hours').add(1, 'days').format(apiDateFormat),
+    label: moment().subtract(3, 'hours').add(1, 'days').format(dayLabelFormat),
+  },
+  {
+    value: moment().subtract(3, 'hours').add(2, 'days').format(apiDateFormat),
+    label: moment().subtract(3, 'hours').add(2, 'days').format(dayLabelFormat),
+  },
 ];
 
 export default class ScorePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dateSelected: moment().format(apiDateFormat),
+      dateSelected: daysOptions[2].value,
     };
     this.handleChangeDate = this.handleChangeDate.bind(this);
   }
