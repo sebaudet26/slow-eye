@@ -2,13 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { pathOr } from 'ramda';
 import ReactTable from 'react-table';
+import withFixedColumns from 'react-table-hoc-fixed-columns';
 import { sortTimeOnIce } from '../../utils/sort';
 import 'react-table/react-table.css';
 import './styles.scss';
 
+const ReactTableFixedColumns = withFixedColumns(ReactTable);
+
 const BoxTable = ({ players, goalieMode }) => (
   <div>
-    <ReactTable
+    <ReactTableFixedColumns
       resizable={false}
       noDataText="Loading all dat good data stuff..."
       sortable
@@ -19,6 +22,7 @@ const BoxTable = ({ players, goalieMode }) => (
           id: 'number',
           accessor: pathOr('-', ['jerseyNumber']),
           className: '',
+          fixed: 'left',
           maxWidth: 50,
           minWidth: 50,
         },
@@ -32,8 +36,9 @@ const BoxTable = ({ players, goalieMode }) => (
               {row.value}
             </a>
           ),
+          fixed: 'left',
           maxWidth: 200,
-          minWidth: 200,
+          minWidth: 150,
         },
         {
           Header: 'G',
@@ -189,7 +194,7 @@ const BoxTable = ({ players, goalieMode }) => (
           id: 'timeonice',
           accessor: pathOr('-', ['boxscore', 'timeOnIce']),
           maxWidth: 85,
-          minWidth: 50,
+          minWidth: 60,
           sortMethod: sortTimeOnIce,
         },
       ]}

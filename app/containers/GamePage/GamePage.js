@@ -81,7 +81,7 @@ class GamePage extends React.Component {
               <div className="summary-period-card">
                 <table className="period-table">
                   <thead>
-                    <th />
+                    <th>Team</th>
                     <th>PIM</th>
                     <th>PP</th>
                     <th>Hits</th>
