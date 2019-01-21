@@ -8,7 +8,6 @@ initialState.set('teams', {});
 initialState.set('rosters', {});
 
 function teamsReducer(state = initialState, action) {
-  console.log(action.type, action.payload);
   switch (action.type) {
     case FETCH_TEAM:
       return state.setIn(['teams', action.payload.team.id], action.payload.team);

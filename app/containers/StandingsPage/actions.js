@@ -5,46 +5,47 @@ import graphqlApi from '../../utils/api';
 const wildCardStandingsQuery = `
 {
   standings {
-    type,
+    type
     conference {
       name
-    },
+    }
     division {
       name
-    },
+    }
     teamRecords {
       records {
         overallRecords {
-          wins,
-          losses,
-          ot,
+          wins
+          losses
+          ot
           type
         }
-      },
-      gamesPlayed,
-      goalsScored,
-      goalsAgainst,
-      divisionRank,
-      wildCardRank,
+      }
+      gamesPlayed
+      goalsScored
+      goalsAgainst
+      conferenceRank
+      divisionRank
+      wildCardRank
       leagueRecord {
-        wins,
-        losses,
+        wins
+        losses
         ot
-      },
+      }
       streak {
         code
-      },
-      points,
+      }
+      points
       team {
-        id,
-        name,
+        id
+        name
         abbreviation
-      },
+      }
       records {
         overallRecords {
-          type,
-          wins,
-          losses,
+          type
+          wins
+          losses
           ot
         }
       }

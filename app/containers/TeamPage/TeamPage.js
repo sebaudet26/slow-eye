@@ -11,34 +11,23 @@ import Dropdown from '../../components/Dropdown/Dropdown';
 import PlayerCard from '../../components/PlayerCard/PlayerCard';
 import RosterTable from '../../components/Table/RosterTable';
 import RosterStatsTable from '../../components/Table/RosterStatsTable';
+import { findTeamRecordInStandings, logoForTeamName } from '../../utils/team';
+import {
+  pointsInLatestSeason,
+  gamesPlayedLatestSeason,
+  positionIs,
+  shootingSideIs,
+  forwardsAbbreviations,
+} from '../../utils/player';
+import {
+  saveToLS,
+  getFromLS,
+} from '../../utils/localStorage';
 import './style.scss';
 import '../../styles/tabs.scss';
 
 const urlParams = new URLSearchParams(window.location.search);
-const forwardsAbbreviations = ['LW', 'C', 'RW'];
-const saveToLS = (name, value) => window.localStorage.setItem(name, value);
-const getFromLS = name => window.localStorage.getItem(name);
 
-const pointsInLatestSeason = player => (
-  player.stats.length
-    ? player.stats[player.stats.length - 1].stat.points
-    : 0
-);
-const gamesPlayedLatestSeason = player => (
-  player.stats.length
-    ? player.stats[player.stats.length - 1].stat.games
-    : 0
-);
-const positionIs = pos => player => (
-  player.stats.length
-    ? player.info.primaryPosition.abbreviation === pos
-    : 0
-);
-const shootingSideIs = side => player => (
-  player.stats.length
-    ? player.info.shootsCatches === side
-    : 0
-);
 const renderPlayerCard = player => <PlayerCard key={player.id} player={player} />;
 
 const renderTeamStat = (label, stat) => (
@@ -85,7 +74,7 @@ export default class TeamPage extends React.Component {
           <div className="team-header-title">
             <div className="team-img">
               <img
-                src={`../../images/teams/${team.teamName.replace(' ', '-').toLowerCase()}.png`}
+                src={logoForTeamName(team.teamName)}
                 className="team-img-logo"
                 alt=""
               />
