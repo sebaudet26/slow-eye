@@ -19,7 +19,6 @@
 
       &:nth-child(4) {
         text-align: left;
-        border-right: solid 1px $grey-4;
       }
 
       &:nth-child(5), &:nth-child(6) {
@@ -198,7 +197,6 @@
 .filters {
   margin: 15px 0 25px 0;
   display: flex;
-  //display: none;
 
   &-input {
     margin-top: 5px;
@@ -261,6 +259,22 @@
 }
 
 @media screen and (max-width: 600px) {
+  .border-mobile {
+    border-right: solid 1px $grey-4 !important;
+  }
+
+  .player-stats {
+    .rt-th {
+      &:nth-child(2) {
+        border-right: solid 1px $grey-4;
+      }
+
+      &:nth-child(3), &:nth-child(4) {
+        display: none;
+      }
+    }
+  }
+
   .ReactTable {
     box-shadow: none;
     border-radius: 6px;
