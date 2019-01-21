@@ -36,10 +36,11 @@
     justify-content: flex-end;
 
     &-item {
-      margin-left: 15px;
+      margin-left: 20px;
       color: $black;
       font-size: $link;
       font-weight: 500;
+      white-space: pre;
     }
 
     .active {
@@ -79,6 +80,16 @@
             margin: auto;
           }
         }
+      }
+    }
+  }
+}
+
+@media (min-width: 1000px) {
+  .header {
+    &-nav {
+      &-item {
+        margin-right: 10px;
       }
     }
   }
