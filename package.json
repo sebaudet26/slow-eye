@@ -83,6 +83,7 @@
     "prop-types": "15.6.1",
     "ramda": "^0.26.1",
     "react": "^16.4.0",
+    "react-date-pagination": "^1.0.2",
     "react-datepicker": "^2.0.0",
     "react-dom": "^16.4.0",
     "react-dropdown": "^1.6.3",
