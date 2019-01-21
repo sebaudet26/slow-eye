@@ -251,6 +251,10 @@
   &__option {
     cursor: pointer !important;
   }
+
+  &__menu {
+    z-index: 99 !important;
+  }
 }
 
 .draft {
