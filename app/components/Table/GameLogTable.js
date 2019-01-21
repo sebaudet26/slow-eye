@@ -207,8 +207,8 @@ class GameLogTable extends React.PureComponent {
               Header: 'TOI',
               id: 'toi',
               accessor: d => d.stat.timeOnIce,
-              maxWidth: 65,
-              minWidth: 60,
+              maxWidth: 70,
+              minWidth: 65,
               sortMethod: sortTimeOnIce,
             },
           ]}

@@ -109,7 +109,6 @@ export default class TeamPage extends React.Component {
                 {renderTeamStat('GA', Math.round(Number(team.stats.splits[0].gamesPlayed) * Number(team.stats.splits[0].goalsAgainstPerGame)))}
                 {renderTeamStat('PP%', team.stats.splits[0].powerPlayPercentage)}
                 {renderTeamStat('PK%', team.stats.splits[0].penaltyKillPercentage)}
-                {renderTeamStat('EVGGAR', Number(team.stats.splits[0].evGGARatio).toFixed(2))}
               </div>
             </div>
           )}
