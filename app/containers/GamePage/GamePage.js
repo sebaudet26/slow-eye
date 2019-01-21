@@ -24,6 +24,11 @@ class GamePage extends React.Component {
     if (gameId && isEmpty(gameBoxscore)) {
       fetchGameBoxscore(gameId);
     }
+    this.liveFeedInterval = setInterval(() => fetchGameBoxscore(gameId), 60000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.liveFeedInterval);
   }
 
   render() {

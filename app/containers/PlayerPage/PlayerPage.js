@@ -32,7 +32,9 @@ export default class PlayerPage extends React.Component {
     if (isEmpty(player)) {
       return (<div />);
     }
-    const { careerStats = [], info = {}, logs = [] } = player;
+    const {
+      careerStats = [], careerPlayoffStats = [], info = {}, logs = [],
+    } = player;
     const {
       primaryPosition = {},
       currentTeamInfo = {},
@@ -168,7 +170,20 @@ export default class PlayerPage extends React.Component {
           </TabList>
           <TabPanel>
             <h3>Season Stats</h3>
-            <CareerStatsTable stats={careerStats} info={info} />
+            {
+              careerStats.length
+                ? <CareerStatsTable stats={careerStats} info={info} />
+                : null
+            }
+            {
+              careerPlayoffStats.length
+                ? (
+                  <div>
+                    <h3>Playoff Stats</h3>
+                    <CareerStatsTable stats={careerPlayoffStats} info={info} />
+                  </div>
+                ) : null
+            }
           </TabPanel>
           <TabPanel>
             <h3>Game Logs</h3>

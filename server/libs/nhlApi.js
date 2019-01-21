@@ -1,5 +1,5 @@
 const {
-  contains, filter, flatten, map, mergeAll, path, prop, pipe, equals, toLower, propOr,
+  contains, filter, flatten, map, mergeAll, path, prop, pipe, equals, toLower, propOr, takeLast,
 } = require('ramda');
 const moment = require('moment');
 const fetch = require('node-fetch');
@@ -44,8 +44,14 @@ const findPlayerInDraft = (draftRounds, playerName) => {
   return playerDraftInfo;
 };
 
-const fetchCurrentSeasonGameLogsForPlayerId = async (playerId) => {
+const fetchGameLogsForPlayerId = async (playerId) => {
   const apiResponse = await nhlApi(`/people/${playerId}/stats?stats=gameLog`);
+  const gameLogs = path(['stats', 0, 'splits'], apiResponse);
+  return gameLogs;
+};
+
+const fetchPlayoffGameLogsForPlayerId = async (playerId) => {
+  const apiResponse = await nhlApi(`/people/${playerId}/stats?stats=playoffGameLog`);
   const gameLogs = path(['stats', 0, 'splits'], apiResponse);
   return gameLogs;
 };
@@ -88,8 +94,27 @@ const fetchStatsForPlayerId = async (playerId, args) => {
   return path(['stats', 0, 'splits'], playerStatsData);
 };
 
+const fetchPlayoffStatsForPlayerId = async (playerId, args) => {
+  let resource = `/people/${playerId}/stats?stats=statsSingleSeasonPlayoffs`;
+  if (args && args.season) {
+    resource += `&season=${args.season}`;
+  }
+  const playerStatsData = await nhlApi(resource);
+  return path(['stats', 0, 'splits'], playerStatsData);
+};
+
 const fetchAllYearsStatsForPlayerId = async (playerId) => {
   const resource = `/people/${playerId}/stats?stats=yearByYear`;
+  const playerStatsData = await nhlApi(resource);
+  // NHL = 133
+  // AHL = 153
+  const usefulLeagueIds = [133];
+  const isStatUseful = seasonStat => contains(path(['league', 'id'], seasonStat), usefulLeagueIds);
+  return filter(isStatUseful, path(['stats', 0, 'splits'], playerStatsData));
+};
+
+const fetchAllYearsPlayoffStatsForPlayerId = async (playerId) => {
+  const resource = `/people/${playerId}/stats?stats=yearByYearPlayoffs`;
   const playerStatsData = await nhlApi(resource);
   // NHL = 133
   // AHL = 153
@@ -199,7 +224,7 @@ module.exports = {
   fetchLiveFeed,
   fetchStandings,
   fetchStatsForPlayerId,
-  fetchCurrentSeasonGameLogsForPlayerId,
+  fetchGameLogsForPlayerId,
   fetchAllYearsStatsForPlayerId,
   fetchDraftInfoForPlayer,
   fetchInfoForPlayerId,
@@ -211,4 +236,6 @@ module.exports = {
   fetchAllPlayers,
   fetchGames,
   fetchBoxscore,
+  fetchAllYearsPlayoffStatsForPlayerId,
+  fetchPlayoffGameLogsForPlayerId,
 };

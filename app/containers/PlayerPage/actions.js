@@ -75,6 +75,40 @@ const makePlayerQuery = id => `
         ties
       }
     }
+    careerPlayoffStats {
+      season
+      team {
+        name
+        abbreviation
+      }
+      league {
+        name
+      }
+      stat {
+        assists
+        goals
+        points
+        games
+        plusMinus
+        shots
+        shotPct
+        hits
+        pim
+        blocked
+        timeOnIcePerGame
+        saves
+        goalsAgainst
+        shutouts
+        gamesStarted
+        timeOnIce
+        savePercentage
+        goalAgainstAverage
+        wins
+        losses
+        ot
+        ties
+      }
+    }
     logs {
       date
       isWin
