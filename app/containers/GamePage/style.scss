@@ -133,3 +133,38 @@
     margin: 7.5px;
   }
 }
+
+@media screen and (max-width: 600px) {
+  .summary {
+    &-header {
+      padding: 0px;
+
+      &-team {
+        &-name {
+          font-size: 16px;
+        }
+
+        &-record {
+          font-size: 14px;
+        }
+
+        &-score {
+          font-size: 24px;
+          margin: 0 10px;
+        }
+
+        img {
+          width: 40px;
+
+          &:first-child {
+            margin-right: 10px;
+          }
+
+          &:last-child {
+            margin-left: 10px;
+          }
+        }
+      }
+    }
+  }
+}
