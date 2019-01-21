@@ -60,17 +60,11 @@
     &-card {
       border-radius: 6px;
       margin: auto;
-      padding: 15px 20px;
       background: $white;
       box-shadow: $shadow;
 
       &-wrapper {
-        width: 80%;
-
-        &:first-child {
-          padding-right: 15px;
-          margin: auto;
-        }
+        width: 100%;
       }
     }
   }
@@ -97,18 +91,8 @@
 
     th {
       text-align: center;
-      font-weight: 400;
-      padding: 10px 5px;
-
-      &:first-child {
-        text-align: left;
-        padding-left: 0px;
-      }
-
-      &:last-child {
-        padding-right: 0px;
-        font-weight: 600;
-      }
+      font-weight: 600;
+      padding: 10px;
     }
   }
 
@@ -130,7 +114,7 @@
         text-align: center;
 
         &:first-child {
-          padding-left: 0px;
+          padding-left: 10px;
           text-align: left;
         }
 
