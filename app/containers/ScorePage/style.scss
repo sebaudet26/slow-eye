@@ -95,17 +95,8 @@ button {
     h2 {
       display: none;
     }
-    .scoreboard-selector {
+    .scoreboard-header {
       display: none;
-    }
-    .scoreboard-datePicker {
-      display:block;
-      position: inherit;
-      margin: auto;
-    }
-
-    .react-datepicker-popper {
-      left: -75px !important;
     }
   }
 }
