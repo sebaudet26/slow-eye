@@ -5,14 +5,16 @@ import {
   last, pipe, pathOr, invoker,
 } from 'ramda';
 import ReactTable from 'react-table';
+import withFixedColumns from 'react-table-hoc-fixed-columns';
 import 'react-table/react-table.css';
 import './styles.scss';
 
+const ReactTableFixedColumns = withFixedColumns(ReactTable);
 const takeLatestSeason = pipe(pathOr([], ['player', 'stats']), last);
 
 const RosterStatsTable = ({ players, position }) => (
   <div>
-    <ReactTable
+    <ReactTableFixedColumns
       data={players}
       resizable={false}
       noDataText="Loading all dat good data stuff..."
@@ -23,6 +25,7 @@ const RosterStatsTable = ({ players, position }) => (
           Cell: row => <div>{(row.viewIndex + 1) + (row.page * row.pageSize)}</div>,
           className: 'text-left',
           sortable: false,
+          fixed: 'left',
           maxWidth: 40,
           minWidth: 40,
         },
@@ -31,6 +34,7 @@ const RosterStatsTable = ({ players, position }) => (
           id: 'fullName',
           accessor: d => `${d.player.info.fullName}+${d.player.id}`,
           className: 'text-left',
+          fixed: 'left',
           maxWidth: 200,
           minWidth: 150,
           Cell: row => (
@@ -42,9 +46,10 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'Age',
           id: 'age',
-          className: 'text-left border-right',
+          className: 'border-right',
           maxWidth: 65,
           minWidth: 50,
+          fixed: 'left',
           accessor: d => d.player.info.currentAge,
         },
         {
@@ -212,7 +217,7 @@ const RosterStatsTable = ({ players, position }) => (
           accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'shotPct'])),
           show: position !== 'G',
           maxWidth: 75,
-          minWidth: 50,
+          minWidth: 55,
         },
         {
           Header: 'TOI/GP',
@@ -220,7 +225,7 @@ const RosterStatsTable = ({ players, position }) => (
           accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'timeOnIcePerGame'])),
           show: position !== 'G',
           maxWidth: 75,
-          minWidth: 60,
+          minWidth: 65,
         },
       ]}
       defaultSorted={[

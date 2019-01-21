@@ -2,17 +2,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
+import withFixedColumns from 'react-table-hoc-fixed-columns';
 import { pathOr } from 'ramda';
 import 'react-table/react-table.css';
 import './styles.scss';
 
+const ReactTableFixedColumns = withFixedColumns(ReactTable);
 
 class RosterTable extends React.PureComponent {
   render() {
     const { players } = this.props;
     return (
       <div>
-        <ReactTable
+        <ReactTableFixedColumns
           data={players}
           resizable={false}
           noDataText="Loading all dat good data stuff..."

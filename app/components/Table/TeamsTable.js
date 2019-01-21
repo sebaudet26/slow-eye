@@ -2,8 +2,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
+import withFixedColumns from 'react-table-hoc-fixed-columns';
 import 'react-table/react-table.css';
 import './styles.scss';
+
+const ReactTableFixedColumns = withFixedColumns(ReactTable);
 
 class TeamsTable extends React.PureComponent {
   render() {
@@ -15,7 +18,7 @@ class TeamsTable extends React.PureComponent {
     }
     return (
       <div>
-        <ReactTable
+        <ReactTableFixedColumns
           resizable={false}
           data={teams}
           noDataText="Loading all dat good data stuff..."
@@ -27,19 +30,22 @@ class TeamsTable extends React.PureComponent {
               className: 'text-left',
               maxWidth: 30,
               minWidth: 30,
+              fixed: 'left',
               sortable: false,
             },
             {
               Header: 'Team',
               id: 'name',
               accessor: d => `${d.name}+${d.abbreviation}+${d.id}`,
-              className: 'text-left border-right team-cell',
+              className: 'text-left team-cell',
               maxWidth: 300,
-              minWidth: 200,
+              minWidth: 125,
+              fixed: 'left',
               Cell: row => (
                 <a href={`./team?id=${row.value.split('+')[2]}`}>
                   <img src={`/images/teams/small/${row.value.split('+')[1]}.png`} />
-                  {row.value.split('+')[0]}
+                  <span className="hidden-mobile">{row.value.split('+')[0]}</span>
+                  <span className="hidden-desktop">{row.value.split('+')[1]}</span>
                 </a>
               ),
             },
