@@ -22,7 +22,7 @@ const daysOptions = [
   },
   {
     value: moment().subtract(3, 'hours').format(apiDateFormat),
-    label: 'Today\'s Games',
+    label: moment().subtract(3, 'hours').format(dayLabelFormat),
   },
   {
     value: moment().subtract(3, 'hours').add(1, 'days').format(apiDateFormat),
