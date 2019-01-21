@@ -11,26 +11,28 @@ import './style.scss';
 const dayLabelFormat = 'ddd MMM D';
 const apiDateFormat = 'YYYY-MM-DD';
 
+const extendDayHours = 12;
+
 const daysOptions = [
   {
-    value: moment().subtract(3, 'hours').subtract(2, 'days').format(apiDateFormat),
-    label: moment().subtract(3, 'hours').subtract(2, 'days').format(dayLabelFormat),
+    value: moment().subtract(extendDayHours, 'hours').subtract(2, 'days').format(apiDateFormat),
+    label: moment().subtract(extendDayHours, 'hours').subtract(2, 'days').format(dayLabelFormat),
   },
   {
-    value: moment().subtract(3, 'hours').subtract(1, 'days').format(apiDateFormat),
-    label: moment().subtract(3, 'hours').subtract(1, 'days').format(dayLabelFormat),
+    value: moment().subtract(extendDayHours, 'hours').subtract(1, 'days').format(apiDateFormat),
+    label: moment().subtract(extendDayHours, 'hours').subtract(1, 'days').format(dayLabelFormat),
   },
   {
-    value: moment().subtract(3, 'hours').format(apiDateFormat),
-    label: moment().subtract(3, 'hours').format(dayLabelFormat),
+    value: moment().subtract(extendDayHours, 'hours').format(apiDateFormat),
+    label: 'Today\'s Games',
   },
   {
-    value: moment().subtract(3, 'hours').add(1, 'days').format(apiDateFormat),
-    label: moment().subtract(3, 'hours').add(1, 'days').format(dayLabelFormat),
+    value: moment().subtract(extendDayHours, 'hours').add(1, 'days').format(apiDateFormat),
+    label: moment().subtract(extendDayHours, 'hours').add(1, 'days').format(dayLabelFormat),
   },
   {
-    value: moment().subtract(3, 'hours').add(2, 'days').format(apiDateFormat),
-    label: moment().subtract(3, 'hours').add(2, 'days').format(dayLabelFormat),
+    value: moment().subtract(extendDayHours, 'hours').add(2, 'days').format(apiDateFormat),
+    label: moment().subtract(extendDayHours, 'hours').add(2, 'days').format(dayLabelFormat),
   },
 ];
 
