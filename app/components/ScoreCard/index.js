@@ -1,5 +1,7 @@
 import React from 'react';
 import moment from 'moment';
+import { gameStatusLabels } from '../../utils/game';
+import { smallLogoForTeamName } from '../../utils/team';
 import './styles.scss';
 
 const isScheduled = game => game.status.detailedState === 'Scheduled';
@@ -9,10 +11,10 @@ const ScoreCard = args => (
   <div className="game-card-wrapper">
     <div className="game-card">
       <div className="game-card-header">
-        {isScheduled(args.game) ? `${moment(args.game.gameDate).format('h:mm')} PM` : `${args.game.status.detailedState}`}
+        {isScheduled(args.game) ? `${moment(args.game.gameDate).format('h:mm')} PM` : `${gameStatusLabels[args.game.status.codedGameState]}`}
       </div>
       <div className="game-card-team">
-        <img src={`../../images/teams/small/${args.game.teams.away.team.abbreviation}.png`} />
+        <img src={smallLogoForTeamName(args.game.teams.away.team.abbreviation)} alt="" />
         <a className="game-card-team-name" href={`/team?id=${args.game.teams.away.team.id}`}>
           {args.game.teams.away.team.name}
         </a>
@@ -21,7 +23,7 @@ const ScoreCard = args => (
         </div>
       </div>
       <div className="game-card-team">
-        <img src={`../../images/teams/small/${args.game.teams.home.team.abbreviation}.png`} />
+        <img src={smallLogoForTeamName(args.game.teams.home.team.abbreviation)} alt="" />
         <a className="game-card-team-name" href={`/team?id=${args.game.teams.home.team.id}`}>
           {args.game.teams.home.team.name}
         </a>

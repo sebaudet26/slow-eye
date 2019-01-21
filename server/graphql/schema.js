@@ -24,6 +24,7 @@ const {
   fetchAllTeams,
   fetchGames,
   fetchBoxscore,
+  fetchLiveFeed,
 } = require('../libs/nhlApi');
 
 const ifNotThereFetchId = propName => async (d) => {
@@ -590,6 +591,7 @@ const Boxscore = new GraphQLObjectType({
     id: { type: GraphQLString, resolve: prop('id') },
     away: { type: TeamBoxscore, resolve: prop('away') },
     home: { type: TeamBoxscore, resolve: prop('home') },
+    status: { type: GameStatus, resolve: r => fetchLiveFeed(r.id) },
   },
 });
 

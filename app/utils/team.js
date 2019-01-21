@@ -5,6 +5,9 @@ import {
 export const logoForTeamName = teamName =>
   `../../images/teams/${teamName.replace(' ', '-').toLowerCase()}.png`;
 
+export const smallLogoForTeamName = teamAbr =>
+  `../../images/teams/small/${teamAbr}.png`;
+
 export const findTeamRecordInStandings = standings => teamId =>
   pipe(
     prop('standings'),

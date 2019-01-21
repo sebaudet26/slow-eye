@@ -181,11 +181,22 @@ const fetchGames = async (args) => {
 const fetchBoxscore = async (gameId) => {
   const resource = `/game/${gameId}/boxscore`;
   const boxscoreResponse = await nhlApi(resource, 60);
-  return { ...prop('teams', boxscoreResponse), id: gameId };
+  return {
+    ...prop('teams', boxscoreResponse),
+    id: gameId,
+  };
+};
+
+const fetchLiveFeed = async (gameId) => {
+  const resource = `/game/${gameId}/feed/live`;
+  console.log(resource);
+  const boxscoreResponse = await nhlApi(resource, 60);
+  return path(['gameData', 'status'], boxscoreResponse);
 };
 
 module.exports = {
   nhlApi,
+  fetchLiveFeed,
   fetchStandings,
   fetchStatsForPlayerId,
   fetchCurrentSeasonGameLogsForPlayerId,

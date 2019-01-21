@@ -11,6 +11,7 @@ import {
   isScratchedOrGoalie,
 } from '../../utils/player';
 import { logoForTeamName } from '../../utils/team';
+import { gameStatusLabels } from '../../utils/game';
 import BoxTable from '../../components/Table/BoxTable';
 
 const intoLink = player => (
@@ -62,7 +63,7 @@ class GamePage extends React.Component {
               </div>
             </div>
             <div className="summary-header-result">
-              {'Final'}
+              {gameStatusLabels[gameBoxscore.status.codedGameState]}
             </div>
             <div className="summary-header-team">
               <div className="summary-header-team-score">

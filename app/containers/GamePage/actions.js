@@ -6,6 +6,9 @@ const makeGameBoxscoreQuery = id => `
 {
   game (id: "${id}") {
     id
+    status {
+      codedGameState
+    }
     away {
       team {
         id
