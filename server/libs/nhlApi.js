@@ -1,5 +1,5 @@
 const {
-  contains, filter, flatten, map, mergeAll, path, prop, pipe, equals, toLower, propOr, takeLast,
+  head, contains, filter, flatten, map, mergeAll, path, prop, pipe, equals, toLower, propOr, pathEq,
 } = require('ramda');
 const moment = require('moment');
 const fetch = require('node-fetch');
@@ -221,6 +221,24 @@ const fetchLiveFeed = async (gameId) => {
   };
 };
 
+const fetchTeamRanking = async (teamId) => {
+  const standingsResponse = await nhlApi('/standings', 60 * 60);
+  const teamStanding = pipe(
+    map(o => o.teamRecords.map(t => ({ conference: o.conference, division: o.division, ...t }))),
+    flatten,
+    filter(pathEq(['team', 'id'], teamId)),
+    head,
+  )(standingsResponse.records);
+
+  return {
+    conference: teamStanding.conferenceRank,
+    conferenceName: teamStanding.conference.name,
+    division: teamStanding.divisionRank,
+    divisionName: teamStanding.division.name,
+    league: teamStanding.leagueRank,
+  };
+};
+
 module.exports = {
   nhlApi,
   fetchLiveFeed,
@@ -238,6 +256,7 @@ module.exports = {
   fetchAllPlayers,
   fetchGames,
   fetchBoxscore,
+  fetchTeamRanking,
   fetchAllYearsPlayoffStatsForPlayerId,
   fetchPlayoffGameLogsForPlayerId,
 };

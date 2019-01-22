@@ -10,6 +10,13 @@ const makeTeamQuery = id => `
     link
     abbreviation
     teamName
+    ranking {
+      conference
+      conferenceName
+      division
+      divisionName
+      league
+    }
     roster {
       id
     },

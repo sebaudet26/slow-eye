@@ -11,7 +11,7 @@ import Dropdown from '../../components/Dropdown/Dropdown';
 import PlayerCard from '../../components/PlayerCard/PlayerCard';
 import RosterTable from '../../components/Table/RosterTable';
 import RosterStatsTable from '../../components/Table/RosterStatsTable';
-import { findTeamRecordInStandings, logoForTeamName } from '../../utils/team';
+import { logoForTeamName } from '../../utils/team';
 import {
   pointsInLatestSeason,
   gamesPlayedLatestSeason,
@@ -25,6 +25,13 @@ import {
 } from '../../utils/localStorage';
 import './style.scss';
 import '../../styles/tabs.scss';
+
+
+const getNumberWithOrdinal = (n) => {
+  const s = ['th', 'st', 'nd', 'rd'];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+};
 
 const urlParams = new URLSearchParams(window.location.search);
 
@@ -81,7 +88,17 @@ export default class TeamPage extends React.Component {
             </div>
             <div>
               <Dropdown name={team.name} />
-              <p>8th Eastern Conference, 4th Atlantic</p>
+              <p>
+                <span style={{ margin: 5 }}>
+                  {`${getNumberWithOrdinal(team.ranking.conference)} in ${team.ranking.divisionName} Division,`}
+                </span>
+                <span style={{ margin: 5 }}>
+                  {`${getNumberWithOrdinal(team.ranking.conference)} in ${team.ranking.conferenceName} Conference,`}
+                </span>
+                <span style={{ margin: 5 }}>
+                  {`${getNumberWithOrdinal(team.ranking.league)} in the NHL`}
+                </span>
+              </p>
             </div>
           </div>
           { !team.stats ? null : (
@@ -238,7 +255,7 @@ export default class TeamPage extends React.Component {
 
 TeamPage.propTypes = {
   teams: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  roster: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  rosters: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   fetchTeamById: PropTypes.func.isRequired,
   fetchTeamRosterDetails: PropTypes.func.isRequired,
 };

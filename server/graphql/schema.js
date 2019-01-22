@@ -24,6 +24,7 @@ const {
   fetchAllTeams,
   fetchGames,
   fetchBoxscore,
+  fetchTeamRanking,
   fetchLiveFeed,
   fetchAllYearsPlayoffStatsForPlayerId,
   fetchPlayoffGameLogsForPlayerId,
@@ -115,6 +116,17 @@ const TeamRosterPlayer = new GraphQLObjectType({
   },
 });
 
+const TeamRanking = new GraphQLObjectType({
+  name: 'TeamRanking',
+  fields: {
+    conference: { type: GraphQLInt, resolve: prop('conference') },
+    conferenceName: { type: GraphQLString, resolve: prop('conferenceName') },
+    division: { type: GraphQLInt, resolve: prop('division') },
+    divisionName: { type: GraphQLString, resolve: prop('divisionName') },
+    league: { type: GraphQLInt, resolve: prop('league') },
+  },
+});
+
 const TeamInfo = new GraphQLObjectType({
   name: 'TeamInfo',
   fields: {
@@ -129,6 +141,7 @@ const TeamInfo = new GraphQLObjectType({
     officialSiteUrl: { type: GraphQLString, resolve: ifNotThereFetchId('officialSiteUrl') },
     stats: { type: TeamStats, resolve: p => fetchStatsForTeamId(p.id) },
     roster: { type: GraphQLList(TeamRosterPlayer), resolve: p => fetchPlayersForTeamId(p.id) },
+    ranking: { type: TeamRanking, resolve: p => fetchTeamRanking(p.id) },
   },
 });
 
