@@ -13,7 +13,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = createStructuredSelector({
-  gameBoxscore: makeSelectBoxscore(),
+  game: makeSelectBoxscore(),
   gameId: makeSelectGameId(),
 });
 

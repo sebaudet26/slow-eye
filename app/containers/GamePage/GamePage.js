@@ -11,7 +11,7 @@ import {
   isScratchedOrGoalie,
 } from '../../utils/player';
 import { logoForTeamName } from '../../utils/team';
-import { gameStatusLabels } from '../../utils/game';
+import { gameStatusLabels, getStatusText } from '../../utils/game';
 import BoxTable from '../../components/Table/BoxTable';
 
 const intoLink = player => (
@@ -20,8 +20,8 @@ const intoLink = player => (
 
 class GamePage extends React.Component {
   componentDidMount() {
-    const { fetchGameBoxscore, gameId, gameBoxscore } = this.props;
-    if (gameId && isEmpty(gameBoxscore)) {
+    const { fetchGameBoxscore, gameId, game } = this.props;
+    if (gameId && isEmpty(game)) {
       fetchGameBoxscore(gameId);
     }
     this.liveFeedInterval = setInterval(() => fetchGameBoxscore(gameId), 60000);
@@ -32,22 +32,28 @@ class GamePage extends React.Component {
   }
 
   render() {
-    const { gameBoxscore } = this.props;
-    if (!gameBoxscore.away || !gameBoxscore.home) {
+    console.log(this.props);
+    const { game } = this.props;
+    if (!game || !game.boxscore || !game.liveFeed) {
       return null;
     }
+
+    const { boxscore } = game;
+
     const awayTeamImage = (
       <img
-        src={logoForTeamName(gameBoxscore.away.team.teamName)}
+        src={logoForTeamName(boxscore.away.team.teamName)}
         alt=""
       />
     );
+
     const homeTeamImage = (
       <img
-        src={logoForTeamName(gameBoxscore.home.team.teamName)}
+        src={logoForTeamName(boxscore.home.team.teamName)}
         alt=""
       />
     );
+
     return (
       <div>
         <Helmet>
@@ -59,24 +65,24 @@ class GamePage extends React.Component {
             <div className="summary-header-team">
               {awayTeamImage}
               <div className="summary-header-team-name">
-                <div className="city">{gameBoxscore.away.team.location}</div>
-                <div className="team">{gameBoxscore.away.team.teamName}</div>
+                <div className="city">{boxscore.away.team.location}</div>
+                <div className="team">{boxscore.away.team.teamName}</div>
                 <div className="record">(20-16-8 48pts)</div>
               </div>
               <div className="summary-header-team-score">
-                {gameBoxscore.away.teamStats.goals}
+                {boxscore.away.teamStats.goals}
               </div>
             </div>
             <div className="summary-header-result">
-              {gameStatusLabels[gameBoxscore.status.codedGameState]}
+              {getStatusText(game)}
             </div>
             <div className="summary-header-team">
               <div className="summary-header-team-score">
-                {gameBoxscore.home.teamStats.goals}
+                {boxscore.home.teamStats.goals}
               </div>
               <div className="summary-header-team-name">
-                <div className="city">{gameBoxscore.home.team.location}</div>
-                <div className="team">{gameBoxscore.home.team.teamName}</div>
+                <div className="city">{boxscore.home.team.location}</div>
+                <div className="team">{boxscore.home.team.teamName}</div>
                 <div className="record">(28-13-4 60pts)</div>
               </div>
               {homeTeamImage}
@@ -101,37 +107,37 @@ class GamePage extends React.Component {
                   <tbody>
                     <tr>
                       <td>
-                        <a href={`/team?id=${gameBoxscore.away.team.id}`}>
+                        <a href={`/team?id=${boxscore.away.team.id}`}>
                           {awayTeamImage}
-                          {gameBoxscore.away.team.name}
+                          {boxscore.away.team.name}
                         </a>
                       </td>
-                      <td>{gameBoxscore.away.teamStats.pim}</td>
-                      <td>{`${gameBoxscore.away.teamStats.powerPlayGoals}/${gameBoxscore.away.teamStats.powerPlayOpportunities}`}</td>
-                      <td>{gameBoxscore.away.teamStats.hits}</td>
-                      <td>{gameBoxscore.away.teamStats.faceOffWinPercentage.toFixed()}</td>
-                      <td>{gameBoxscore.away.teamStats.takeaways}</td>
-                      <td>{gameBoxscore.away.teamStats.giveaways}</td>
-                      <td>{gameBoxscore.away.teamStats.blocked}</td>
-                      <td>{gameBoxscore.away.teamStats.shots}</td>
-                      <td>{gameBoxscore.away.teamStats.goals}</td>
+                      <td>{boxscore.away.teamStats.pim}</td>
+                      <td>{`${boxscore.away.teamStats.powerPlayGoals}/${boxscore.away.teamStats.powerPlayOpportunities}`}</td>
+                      <td>{boxscore.away.teamStats.hits}</td>
+                      <td>{boxscore.away.teamStats.faceOffWinPercentage.toFixed()}</td>
+                      <td>{boxscore.away.teamStats.takeaways}</td>
+                      <td>{boxscore.away.teamStats.giveaways}</td>
+                      <td>{boxscore.away.teamStats.blocked}</td>
+                      <td>{boxscore.away.teamStats.shots}</td>
+                      <td>{boxscore.away.teamStats.goals}</td>
                     </tr>
                     <tr>
                       <td>
-                        <a href={`/team?id=${gameBoxscore.home.team.id}`}>
+                        <a href={`/team?id=${boxscore.home.team.id}`}>
                           {homeTeamImage}
-                          {gameBoxscore.home.team.name}
+                          {boxscore.home.team.name}
                         </a>
                       </td>
-                      <td>{gameBoxscore.home.teamStats.pim}</td>
-                      <td>{`${gameBoxscore.home.teamStats.powerPlayGoals}/${gameBoxscore.home.teamStats.powerPlayOpportunities}`}</td>
-                      <td>{gameBoxscore.home.teamStats.hits}</td>
-                      <td>{gameBoxscore.home.teamStats.faceOffWinPercentage.toFixed()}</td>
-                      <td>{gameBoxscore.home.teamStats.takeaways}</td>
-                      <td>{gameBoxscore.home.teamStats.giveaways}</td>
-                      <td>{gameBoxscore.home.teamStats.blocked}</td>
-                      <td>{gameBoxscore.home.teamStats.shots}</td>
-                      <td>{gameBoxscore.home.teamStats.goals}</td>
+                      <td>{boxscore.home.teamStats.pim}</td>
+                      <td>{`${boxscore.home.teamStats.powerPlayGoals}/${boxscore.home.teamStats.powerPlayOpportunities}`}</td>
+                      <td>{boxscore.home.teamStats.hits}</td>
+                      <td>{boxscore.home.teamStats.faceOffWinPercentage.toFixed()}</td>
+                      <td>{boxscore.home.teamStats.takeaways}</td>
+                      <td>{boxscore.home.teamStats.giveaways}</td>
+                      <td>{boxscore.home.teamStats.blocked}</td>
+                      <td>{boxscore.home.teamStats.shots}</td>
+                      <td>{boxscore.home.teamStats.goals}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -139,13 +145,13 @@ class GamePage extends React.Component {
             </div>
           </div>
 
-          <h3>{gameBoxscore.away.team.name}</h3>
+          <h3>{boxscore.away.team.name}</h3>
           <BoxTable
-            players={reject(isScratchedOrGoalie, gameBoxscore.away.players)}
+            players={reject(isScratchedOrGoalie, boxscore.away.players)}
             goalieMode={false}
           />
           <BoxTable
-            players={filter(isGoalie, gameBoxscore.away.players)}
+            players={filter(isGoalie, boxscore.away.players)}
             goalieMode
           />
           <div className="scratches">
@@ -153,16 +159,16 @@ class GamePage extends React.Component {
             {pipe(
               filter(isScratched),
               map(intoLink),
-            )(gameBoxscore.away.players)}
+            )(boxscore.away.players)}
           </div>
 
-          <h3>{gameBoxscore.home.team.name}</h3>
+          <h3>{boxscore.home.team.name}</h3>
           <BoxTable
-            players={reject(isScratchedOrGoalie, gameBoxscore.home.players)}
+            players={reject(isScratchedOrGoalie, boxscore.home.players)}
             goalieMode={false}
           />
           <BoxTable
-            players={filter(isGoalie, gameBoxscore.home.players)}
+            players={filter(isGoalie, boxscore.home.players)}
             goalieMode
           />
           <div className="scratches">
@@ -170,7 +176,7 @@ class GamePage extends React.Component {
             {pipe(
               filter(isScratched),
               map(intoLink),
-            )(gameBoxscore.home.players)}
+            )(boxscore.home.players)}
           </div>
         </div>
       </div>
@@ -180,7 +186,7 @@ class GamePage extends React.Component {
 
 GamePage.propTypes = {
   fetchGameBoxscore: PropTypes.func.isRequired,
-  gameBoxscore: PropTypes.shape({}).isRequired,
+  game: PropTypes.shape({}).isRequired,
   gameId: PropTypes.string.isRequired,
 };
 

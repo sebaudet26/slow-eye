@@ -8,7 +8,7 @@ const {
   GraphQLFloat,
 } = require('graphql');
 const {
-  pipe, prop, path, map, values,
+  pathOr, pipe, prop, path, map, values, takeLast,
 } = require('ramda');
 const {
   fetchStandings,
@@ -597,13 +597,33 @@ const TeamBoxscore = new GraphQLObjectType({
   },
 });
 
-const Boxscore = new GraphQLObjectType({
-  name: 'Boxscore',
+const PlayByPlay = new GraphQLObjectType({
+  name: 'PlayByPlay',
   fields: {
-    id: { type: GraphQLString, resolve: prop('id') },
-    away: { type: TeamBoxscore, resolve: prop('away') },
-    home: { type: TeamBoxscore, resolve: prop('home') },
-    status: { type: GameStatus, resolve: r => fetchLiveFeed(r.id) },
+    period: { type: GraphQLInt, resolve: path(['about', 'period']) },
+    periodType: { type: GraphQLString, resolve: path(['about', 'periodType']) },
+    ordinalNum: { type: GraphQLString, resolve: path(['about', 'ordinalNum']) },
+    periodTime: { type: GraphQLString, resolve: path(['about', 'periodTime']) },
+    periodTimeRemaining: { type: GraphQLString, resolve: path(['about', 'periodTimeRemaining']) },
+    dateTime: { type: GraphQLString, resolve: path(['about', 'dateTime']) },
+    event: { type: GraphQLString, resolve: path(['result', 'event']) },
+    eventCode: { type: GraphQLString, resolve: path(['result', 'eventCode']) },
+    eventTypeId: { type: GraphQLString, resolve: path(['result', 'eventTypeId']) },
+    description: { type: GraphQLString, resolve: path(['result', 'description']) },
+  },
+});
+
+const LiveFeed = new GraphQLObjectType({
+  name: 'LiveFeed',
+  fields: {
+    status: { type: GameStatus, resolve: path(['gameData', 'status']) },
+    lastTenPlays: {
+      type: GraphQLList(PlayByPlay),
+      resolve: pipe(
+        pathOr([], ['liveData', 'plays', 'allPlays']),
+        takeLast(10),
+      ),
+    },
   },
 });
 
@@ -624,16 +644,29 @@ const Matchup = new GraphQLObjectType({
   },
 });
 
+const Boxscore = new GraphQLObjectType({
+  name: 'Boxscore',
+  fields: {
+    id: { type: GraphQLString, resolve: prop('id') },
+    away: { type: TeamBoxscore, resolve: path(['away']) },
+    home: { type: TeamBoxscore, resolve: path(['home']) },
+  },
+});
+
 const Game = new GraphQLObjectType({
   name: 'Game',
   fields: {
-    gamePk: { type: GraphQLInt, resolve: prop('gamePk') },
+    id: { type: GraphQLString, resolve: d => prop('gamePk', d) },
     link: { type: GraphQLString, resolve: prop('link') },
     gameType: { type: GraphQLString, resolve: prop('gameType') },
     season: { type: GraphQLString, resolve: prop('season') },
     gameDate: { type: GraphQLString, resolve: prop('gameDate') },
     status: { type: GameStatus, resolve: prop('status') },
     teams: { type: Matchup, resolve: prop('teams') },
+    // Lazy load live feed
+    liveFeed: { type: LiveFeed, resolve: p => fetchLiveFeed(p.gamePk) },
+    // Lazy load boxscore
+    boxscore: { type: Boxscore, resolve: p => fetchBoxscore(p.gamePk) },
     // venue: {},
   },
 });
@@ -682,8 +715,8 @@ const schema = new GraphQLSchema({
         args: {
           id: { type: GraphQLString },
         },
-        type: Boxscore,
-        resolve: (root, args) => fetchBoxscore(args.id),
+        type: Game,
+        resolve: (root, args) => ({ gamePk: args.id }),
       },
     },
   }),

@@ -4,8 +4,17 @@ import { FETCH_GAMES } from './constants';
 const makeScoresQuery = date => `
 {
   games (date: "${date}"){
-    gameDate,
-    gamePk,
+    id,
+    gameDate
+    liveFeed {
+      lastTenPlays {
+        period
+        periodTimeRemaining
+        periodType
+        periodTime
+        description
+      }
+    }
     status {
       abstractGameState,
       codedGameState,

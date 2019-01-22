@@ -8,6 +8,9 @@ export const logoForTeamName = teamName =>
 export const smallLogoForTeamName = teamAbr =>
   `../../images/teams/small/${teamAbr}.png`;
 
+
+export const calculatePoints = team => `${team.leagueRecord.wins * 2 + team.leagueRecord.ot} pts`;
+
 export const findTeamRecordInStandings = standings => teamId =>
   pipe(
     prop('standings'),

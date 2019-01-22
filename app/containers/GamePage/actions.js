@@ -5,109 +5,120 @@ import graphqlApi from '../../utils/api';
 const makeGameBoxscoreQuery = id => `
 {
   game (id: "${id}") {
-    id
-    status {
-      codedGameState
+   id
+    liveFeed {
+      lastTenPlays {
+        period
+        periodTimeRemaining
+        periodType
+        periodTime
+        description
+      }
+      status {
+        codedGameState
+      }
     }
-    away {
-      team {
-        id
-        name
-        teamName
-        abbreviation
-        locationName
-      }
-      teamStats {
-        goals
-        shots
-        pim
-        powerPlayGoals
-        powerPlayOpportunities
-        faceOffWinPercentage
-        blocked
-        takeaways
-        giveaways
-        hits
-      }
-      players {
-        person {
+    boxscore {
+      away {
+        team {
           id
-          fullName
-        }
-        jerseyNumber
-        position {
+          name
+          teamName
           abbreviation
+          locationName
         }
-        boxscore {
+        teamStats {
           goals
-          assists
           shots
-          hits
-          plusMinus
+          pim
+          powerPlayGoals
+          powerPlayOpportunities
+          faceOffWinPercentage
           blocked
           takeaways
           giveaways
-          timeOnIce
-          penaltyMinutes
-          pim
-          faceOffWins
-          faceOffTaken
-          powerPlaySavePercentage
-          evenStrengthSavePercentage
-          shortHandedSavePercentage
-          savePercentage
-          saves
-        }
-      }
-    }
-    home {
-      team {
-        id
-        name
-        teamName
-        abbreviation
-        locationName
-      }
-      teamStats {
-        goals
-        shots
-        pim
-        powerPlayGoals
-        powerPlayOpportunities
-        faceOffWinPercentage
-        blocked
-        takeaways
-        giveaways
-        hits
-      }
-      players {
-        person {
-          id
-          fullName
-        }
-        position {
-          abbreviation
-        }
-        jerseyNumber
-        boxscore {
-          goals
-          assists
-          shots
           hits
-          plusMinus
+        }
+        players {
+          person {
+            id
+            fullName
+          }
+          jerseyNumber
+          position {
+            abbreviation
+          }
+          boxscore {
+            goals
+            assists
+            shots
+            hits
+            plusMinus
+            blocked
+            takeaways
+            giveaways
+            timeOnIce
+            penaltyMinutes
+            pim
+            faceOffWins
+            faceOffTaken
+            powerPlaySavePercentage
+            evenStrengthSavePercentage
+            shortHandedSavePercentage
+            savePercentage
+            saves
+          }
+        }
+      }
+      home {
+        team {
+          id
+          name
+          teamName
+          abbreviation
+          locationName
+        }
+        teamStats {
+          goals
+          shots
+          pim
+          powerPlayGoals
+          powerPlayOpportunities
+          faceOffWinPercentage
           blocked
           takeaways
           giveaways
-          timeOnIce
-          penaltyMinutes
-          pim
-          faceOffWins
-          faceOffTaken
-          powerPlaySavePercentage
-          evenStrengthSavePercentage
-          shortHandedSavePercentage
-          savePercentage
-          saves
+          hits
+        }
+        players {
+          person {
+            id
+            fullName
+          }
+          position {
+            abbreviation
+          }
+          jerseyNumber
+          boxscore {
+            goals
+            assists
+            shots
+            hits
+            plusMinus
+            blocked
+            takeaways
+            giveaways
+            timeOnIce
+            penaltyMinutes
+            pim
+            faceOffWins
+            faceOffTaken
+            powerPlaySavePercentage
+            evenStrengthSavePercentage
+            shortHandedSavePercentage
+            savePercentage
+            saves
+          }
         }
       }
     }

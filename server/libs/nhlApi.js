@@ -205,18 +205,22 @@ const fetchGames = async (args) => {
 
 const fetchBoxscore = async (gameId) => {
   const resource = `/game/${gameId}/boxscore`;
+  console.log(resource);
   const boxscoreResponse = await nhlApi(resource, 60);
   return {
-    ...prop('teams', boxscoreResponse),
     id: gameId,
+    ...prop('teams', boxscoreResponse),
   };
 };
 
 const fetchLiveFeed = async (gameId) => {
   const resource = `/game/${gameId}/feed/live`;
+  const liveFeedResponse = await nhlApi(resource, 60);
   console.log(resource);
-  const boxscoreResponse = await nhlApi(resource, 60);
-  return path(['gameData', 'status'], boxscoreResponse);
+  return {
+    id: gameId,
+    ...liveFeedResponse,
+  };
 };
 
 module.exports = {
