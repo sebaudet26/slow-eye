@@ -1,9 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './style.scss';
 
 const Footer = () => (
-  <footer>
-    <section>
+  <footer className="footer">
+    <div>
       {'Made with'}
       <span role="img" aria-label="heart-emoji"> ❤️ </span>
       {'by '}
@@ -12,7 +13,12 @@ b and
       {' '}
       <span className="bold">AL</span>
 ex
-    </section>
+    </div>
+    <div className="footer-links">
+      <Link to="/contributors">
+        Contributors
+      </Link>
+    </div>
   </footer>
 );
 

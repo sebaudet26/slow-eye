@@ -1,7 +1,6 @@
 @import '../../styles/variables.scss';
 
-footer {
-  display: flex;
+.footer {
   justify-content: space-between;
   margin-top: 25px;
   padding: 25px 0;
@@ -9,5 +8,8 @@ footer {
 
   a {
     color: $main;
+    font-weight: 500;
+    color: $black;
+    text-decoration: underline;
   }
 }

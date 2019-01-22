@@ -91,12 +91,17 @@
       display: none;
     }
 
+    .css-9za7aq {
+      border-right: solid 1px $grey-4 !important;
+    }
+
     .rt-th {
       text-align: center;
       border-right: 0;
       font-weight: 600;
       padding: 10px;
       outline: none;
+      border-bottom: 0px !important;
 
       &:first-child, &:nth-child(2) {
         text-align: left;
@@ -106,8 +111,15 @@
 
   .rt-tbody {
 
+    .css-9za7aq {
+      border-right: solid 1px $grey-4 !important;
+    }
+
     .rt-tr.-odd {
-      background: #f6f9fca3;
+
+      .rt-td {
+        background: #f9fcff;
+      }
     }
 
     .rt-tr-group {
