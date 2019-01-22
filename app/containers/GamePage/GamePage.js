@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import {
-  filter, map, isEmpty, pipe, reject,
+  filter, join, map, isEmpty, pick, pipe, reject, values,
 } from 'ramda';
 import './style.scss';
 import {
@@ -67,7 +67,10 @@ class GamePage extends React.Component {
               <div className="summary-header-team-name">
                 <div className="city">{boxscore.away.team.location}</div>
                 <div className="team">{boxscore.away.team.teamName}</div>
-                <div className="record">(20-16-8 48pts)</div>
+                <div className="record">
+                  {join('-', values(pick(['wins', 'losses', 'ot'], boxscore.away.seasonTeamStats.splits[0])))}
+                  {` ${boxscore.away.seasonTeamStats.splits[0].pts}pts`}
+                </div>
               </div>
               <div className="summary-header-team-score">
                 {boxscore.away.teamStats.goals}
@@ -83,7 +86,10 @@ class GamePage extends React.Component {
               <div className="summary-header-team-name">
                 <div className="city">{boxscore.home.team.location}</div>
                 <div className="team">{boxscore.home.team.teamName}</div>
-                <div className="record">(28-13-4 60pts)</div>
+                <div className="record">
+                  {join('-', values(pick(['wins', 'losses', 'ot'], boxscore.home.seasonTeamStats.splits[0])))}
+                  {` ${boxscore.home.seasonTeamStats.splits[0].pts}pts`}
+                </div>
               </div>
               {homeTeamImage}
             </div>

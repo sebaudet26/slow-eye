@@ -125,6 +125,7 @@ const fetchAllYearsPlayoffStatsForPlayerId = async (playerId) => {
 
 const fetchStatsForTeamId = async (teamId) => {
   let resource = `/teams/${teamId}/stats?stats=statsSingleSeason`;
+  console.log(resource);
   const teamInfo = await nhlApi(resource, 60 * 60);
   let stats = path(['stats', 0], teamInfo);
   if (!stats) {

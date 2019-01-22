@@ -27,6 +27,14 @@ const makeGameBoxscoreQuery = id => `
           abbreviation
           locationName
         }
+        seasonTeamStats {
+          splits {
+            wins
+            losses
+            ot
+            pts
+          }
+        }
         teamStats {
           goals
           shots
@@ -89,6 +97,14 @@ const makeGameBoxscoreQuery = id => `
           takeaways
           giveaways
           hits
+        }
+        seasonTeamStats {
+          splits {
+            wins
+            losses
+            ot
+            pts
+          }
         }
         players {
           person {

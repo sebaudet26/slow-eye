@@ -593,6 +593,7 @@ const TeamBoxscore = new GraphQLObjectType({
   fields: {
     team: { type: TeamInfo, resolve: prop('team') },
     teamStats: { type: GameTeamStat, resolve: path(['teamStats', 'teamSkaterStats']) },
+    seasonTeamStats: { type: TeamStats, resolve: p => fetchStatsForTeamId(p.team.id) },
     players: { type: GraphQLList(Player), resolve: pipe(prop('players'), values) },
   },
 });
@@ -632,7 +633,7 @@ const MatchupTeam = new GraphQLObjectType({
   fields: {
     leagueRecord: { type: Record, resolve: prop('leagueRecord') },
     score: { type: GraphQLInt, resolve: prop('score') },
-    team: { type: TeamInfo, resolve: o => fetchInfoForTeamId(o.team.id) },
+    team: { type: TeamStat, resolve: o => fetchInfoForTeamId(o.team.id) },
   },
 });
 
