@@ -6,12 +6,13 @@
   }
 
   .patreon-btn {
-    color: $white;
-    background: #ff5747;
+    color: $black;
+    background: $white;
     font-weight: 500;
     box-shadow: $shadow;
-    padding: 10px 15px;
+    padding: 15px;
     border-radius: 6px;
+    display: inline-block;
 
     img {
       margin-right: 10px;
