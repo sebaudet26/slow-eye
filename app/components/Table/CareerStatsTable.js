@@ -197,10 +197,10 @@ const CareerStatsTable = ({ stats, info }) => (
           minWidth: 50,
           show: info.primaryPosition.name === 'Goalie',
           filterable: false,
-          accessor: d => `${pathOr('-', ['stat', 'savePercentage'], d)}+${pathOr('-', ['stat', 'saves'], d)}+${pathOr('-', ['stat', 'goalsAgainst'], d)}`,
+          accessor: d => `${pathOr('-', ['stat', 'savePercentage'], d)}`,
           Cell: row => (
             <span>
-              {row.value.split('+')[0]}
+              {row.value.split('+')[0].toFixed(3)}
             </span>
           ),
           Footer: (sumByPath(stats, ['stat', 'saves']) / (sumByPath(stats, ['stat', 'saves']) + sumByPath(stats, ['stat', 'goalsAgainst']))).toFixed(3),
@@ -212,10 +212,10 @@ const CareerStatsTable = ({ stats, info }) => (
           minWidth: 50,
           show: info.primaryPosition.name === 'Goalie',
           filterable: false,
-          accessor: d => `${pathOr('-', ['stat', 'goalAgainstAverage'], d)}+${pathOr('-', ['stat', 'goalsAgainst'], d)}+${pathOr('-', ['stat', 'games'], d)}`,
+          accessor: d => `${pathOr('-', ['stat', 'goalAgainstAverage'], d)}`,
           Cell: row => (
             <span>
-              {row.value.split('+')[0]}
+              {row.value.split('+')[0].toFixed(2)}
             </span>
           ),
           Footer: (sumByPath(stats, ['stat', 'goalsAgainst']) / sumByPath(stats, ['stat', 'games'])).toFixed(2),
