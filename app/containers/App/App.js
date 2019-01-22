@@ -9,6 +9,7 @@ import TeamPage from '../TeamPage/Loadable';
 import TeamStatsPage from '../TeamStatsPage/Loadable';
 import ScorePage from '../ScorePage/Loadable';
 import GamePage from '../GamePage/Loadable';
+import ContributorsPage from '../Contributors/Loadable';
 import NotFoundPage from '../NotFoundPage/Loadable';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -32,6 +33,7 @@ const App = () => (
         <Route path="/teamstats" component={TeamStatsPage} />
         <Route path="/scores" component={ScorePage} />
         <Route path="/game" component={GamePage} />
+        <Route path="/contributors" component={ContributorsPage} />
         <Route path="" component={NotFoundPage} />
       </Switch>
     </div>

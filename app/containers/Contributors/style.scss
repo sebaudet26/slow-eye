@@ -1,0 +1,24 @@
+@import '../../styles/variables.scss';
+
+.contributor-page {
+  p {
+    font-size: 18px;
+  }
+
+  .patreon-btn {
+    color: $white;
+    background: #ff5747;
+    font-weight: 500;
+    box-shadow: $shadow;
+    padding: 10px 15px;
+    border-radius: 6px;
+
+    img {
+      margin-right: 10px;
+    }
+
+    &:hover {
+      box-shadow: $shadow-2;
+    }
+  }
+}
