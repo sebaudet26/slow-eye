@@ -90,12 +90,25 @@ button {
   }
 }
 
+@media screen and (max-width: 650px) {
+  .scoreboard-selector {
+    &-item {
+      padding: 0 5px;
+
+      &:first-child, &:last-child {
+        display: none;
+      }
+
+      &:nth-child(4) {
+        border-right: 0px;
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 600px) {
   .score-page {
     h2 {
-      display: none;
-    }
-    .scoreboard-header {
       display: none;
     }
   }
