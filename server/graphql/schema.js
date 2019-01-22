@@ -646,7 +646,7 @@ const MatchupTeam = new GraphQLObjectType({
   fields: {
     leagueRecord: { type: Record, resolve: prop('leagueRecord') },
     score: { type: GraphQLInt, resolve: prop('score') },
-    team: { type: TeamStat, resolve: o => fetchInfoForTeamId(o.team.id) },
+    team: { type: TeamInfo, resolve: o => fetchInfoForTeamId(o.team.id) },
   },
 });
 
