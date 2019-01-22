@@ -125,7 +125,6 @@ const fetchAllYearsPlayoffStatsForPlayerId = async (playerId) => {
 
 const fetchStatsForTeamId = async (teamId) => {
   let resource = `/teams/${teamId}/stats?stats=statsSingleSeason`;
-  console.log(resource);
   const teamInfo = await nhlApi(resource, 60 * 60);
   let stats = path(['stats', 0], teamInfo);
   if (!stats) {
@@ -206,7 +205,6 @@ const fetchGames = async (args) => {
 
 const fetchBoxscore = async (gameId) => {
   const resource = `/game/${gameId}/boxscore`;
-  console.log(resource);
   const boxscoreResponse = await nhlApi(resource, 60);
   return {
     id: gameId,
@@ -217,7 +215,6 @@ const fetchBoxscore = async (gameId) => {
 const fetchLiveFeed = async (gameId) => {
   const resource = `/game/${gameId}/feed/live`;
   const liveFeedResponse = await nhlApi(resource, 60);
-  console.log(resource);
   return {
     id: gameId,
     ...liveFeedResponse,
