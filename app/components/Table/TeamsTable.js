@@ -130,7 +130,7 @@ class TeamsTable extends React.PureComponent {
             {
               Header: 'PP%',
               id: 'powerPlayPercentage',
-              accessor: d => d.stats.splits[0].powerPlayPercentage,
+              accessor: d => d.stats.splits[0].powerPlayPercentage.toFixed(1),
               maxWidth: 65,
               minWidth: 55,
             },

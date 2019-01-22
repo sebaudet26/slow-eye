@@ -499,7 +499,7 @@ class PlayersTable extends React.PureComponent {
               minWidth: 50,
               show: not(isGoalie(posSelected)),
               filterable: false,
-              accessor: d => pathOr(0, ['stats', 0, 'stat', 'shotPct'], d),
+              accessor: d => pathOr(0, ['stats', 0, 'stat', 'shotPct'], d).toFixed(1),
             },
             {
               Header: 'TOI/GP',

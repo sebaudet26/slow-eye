@@ -32,14 +32,14 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'Name',
           id: 'fullName',
-          accessor: d => `${d.player.info.fullName}+${d.player.id}`,
+          accessor: d => d.player.info,
           className: 'text-left',
           fixed: 'left',
           maxWidth: 200,
           minWidth: 150,
           Cell: row => (
-            <a href={`./player?id=${row.value.split('+')[1]}`}>
-              {row.value.split('+')[0]}
+            <a href={`./player?id=${row.value.id}`}>
+              {row.value.fullName}
             </a>
           ),
         },
@@ -214,10 +214,13 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'S%',
           id: 'shotPct',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'shotPct'])),
+          accessor: d => pipe(takeLatestSeason, pathOr('0', ['stat', 'shotPct']))(d),
           show: position !== 'G',
           maxWidth: 75,
           minWidth: 55,
+          Cell: row => (
+            <span>{row.value.toFixed(1)}</span>
+          ),
         },
         {
           Header: 'TOI/GP',

@@ -48,11 +48,11 @@ const CareerStatsTable = ({ stats, info }) => (
           maxWidth: 250,
           minWidth: 200,
           className: 'border-right text-left team-cell',
-          accessor: d => `${pathOr('-', ['team', 'name'], d)}+${pathOr('-', ['team', 'abbreviation'], d)}`,
+          accessor: d => d.team,
           Cell: row => (
             <div>
-              <img src={`/images/teams/small/${row.value.split('+')[1]}.png`} />
-              {row.value.split('+')[0]}
+              <img src={`/images/teams/small/${row.value.abbreviation}.png`} alt="" />
+              {row.value.name}
             </div>
           ),
         },
@@ -142,11 +142,9 @@ const CareerStatsTable = ({ stats, info }) => (
           maxWidth: 85,
           minWidth: 60,
           show: info.primaryPosition.name !== 'Goalie',
-          accessor: d => `${pathOr('-', ['stat', 'shotPct'], d)}+${pathOr('-', ['stat', 'goals'], d)}+${pathOr('-', ['stat', 'shots'], d)}`,
+          accessor: pathOr('0', ['stat', 'shotPct']),
           Cell: row => (
-            <span>
-              {row.value.split('+')[0]}
-            </span>
+            <span>{row.value.toFixed(1)}</span>
           ),
           Footer: ((sumByPath(stats, ['stat', 'goals']) / sumByPath(stats, ['stat', 'shots'])) * 100).toFixed(1),
         },
@@ -197,11 +195,9 @@ const CareerStatsTable = ({ stats, info }) => (
           minWidth: 50,
           show: info.primaryPosition.name === 'Goalie',
           filterable: false,
-          accessor: d => `${pathOr('-', ['stat', 'savePercentage'], d)}`,
+          accessor: pathOr('0', ['stat', 'savePercentage']),
           Cell: row => (
-            <span>
-              {row.value.split('+')[0].toFixed(3)}
-            </span>
+            <span>{row.value.toFixed(3)}</span>
           ),
           Footer: (sumByPath(stats, ['stat', 'saves']) / (sumByPath(stats, ['stat', 'saves']) + sumByPath(stats, ['stat', 'goalsAgainst']))).toFixed(3),
         },
@@ -212,11 +208,9 @@ const CareerStatsTable = ({ stats, info }) => (
           minWidth: 50,
           show: info.primaryPosition.name === 'Goalie',
           filterable: false,
-          accessor: d => `${pathOr('-', ['stat', 'goalAgainstAverage'], d)}`,
+          accessor: pathOr('-', ['stat', 'goalAgainstAverage']),
           Cell: row => (
-            <span>
-              {row.value.split('+')[0].toFixed(2)}
-            </span>
+            <span>{row.value.toFixed(2)}</span>
           ),
           Footer: (sumByPath(stats, ['stat', 'goalsAgainst']) / sumByPath(stats, ['stat', 'games'])).toFixed(2),
         },
