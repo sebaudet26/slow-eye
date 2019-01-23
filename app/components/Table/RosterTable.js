@@ -35,7 +35,7 @@ class RosterTable extends React.PureComponent {
               maxWidth: 200,
               minWidth: 150,
               Cell: row => (
-                <a href={`./player?id=${row.value.split('+')[1]}`}>
+                <a href={`/player?id=${row.value.split('+')[1]}`}>
                   {row.value.split('+')[0]}
                 </a>
               ),

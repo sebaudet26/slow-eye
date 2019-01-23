@@ -32,14 +32,14 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'Name',
           id: 'fullName',
-          accessor: d => d.player.info,
+          accessor: d => `${d.player.info.fullName}+${d.player.id}`,
           className: 'text-left',
           fixed: 'left',
           maxWidth: 200,
           minWidth: 150,
           Cell: row => (
-            <a href={`./player?id=${row.value.id}`}>
-              {row.value.fullName}
+            <a href={`/player?id=${row.value.split('+')[1]}`}>
+              {row.value.split('+')[0]}
             </a>
           ),
         },
