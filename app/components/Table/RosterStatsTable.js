@@ -219,7 +219,7 @@ const RosterStatsTable = ({ players, position }) => (
           maxWidth: 75,
           minWidth: 55,
           Cell: row => (
-            <span>{row.value.toFixed(1)}</span>
+            <span>{Number(row.value).toFixed(1)}</span>
           ),
         },
         {
