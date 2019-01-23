@@ -15,6 +15,7 @@
     width: 100%;
     max-width: 400px;
     display: flex;
+    position: relative;
 
     label {
       padding: 0 12px;
@@ -29,9 +30,31 @@
 
 }
 
-.option {
-  display: block;
-  z-index:99999;
+.options {
+  position: absolute;
+  background: $white;
+  z-index: 99;
+  width: 100%;
+  top: 40px;
+  left: 0px;
+  border-radius: 6px;
+  box-shadow: $shadow;
+
+  &-item {
+    padding: 5px 15px;
+    display: block;
+    border-bottom: solid 1px $grey-4;
+
+    &:hover {
+      background: $grey-5;
+    }
+  }
+
+  &-img {
+    width: 40px;
+    border-radius: 99px;
+    margin-right: 10px;
+  }
 }
 
 @media screen and (max-width: 950px) {

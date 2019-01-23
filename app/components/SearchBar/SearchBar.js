@@ -19,8 +19,9 @@ const graphqlQuery = `{
 const renderPlayerOption = p => (
   <a
     href={`/player?id=${p.id}`}
-    className="option"
+    className="options-item"
   >
+    <img className="options-img" src={`https://nhl.bamcontent.com/images/headshots/current/60x60/${p.id}@2x.png`} />
     {p.person.fullName}
   </a>
 );
@@ -72,16 +73,19 @@ class SearchBar extends React.Component {
           <label>
             <img src={SearchIcon} ref="Search Icon" alt="" />
           </label>
+          <div className="options">
+            {
+              query ?
+                pipe(
+                  filter(playerNameMatches(query)),
+                  take(5),
+                  map(renderPlayerOption),
+                )(players)
+                : null
+            }
+          </div>
         </form>
-        {
-          query ?
-            pipe(
-              filter(playerNameMatches(query)),
-              take(10),
-              map(renderPlayerOption),
-            )(players)
-            : null
-        }
+
       </div>
     );
   }
