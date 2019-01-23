@@ -6,8 +6,9 @@ import {
 } from 'ramda';
 import SearchIcon from '../../images/search.svg';
 import graphqlApi from '../../utils/api';
+import { smallLogoForTeamName } from '../../utils/team';
 
-const graphqlQuery = `{
+const graphqlQueryPlayers = `{
   players {
     id
     person {
@@ -16,28 +17,47 @@ const graphqlQuery = `{
   }
 }`;
 
-const renderPlayerOption = p => (
+const graphqlQueryTeams = `{
+  teams {
+    id
+    name
+    abbreviation
+  }
+}`;
+
+const renderOption = opt => (
   <a
-    href={`/player?id=${p.id}`}
+    href={`/${opt.linkType}?id=${opt.id}`}
     className="options-item"
   >
-    <img
-      className="options-img"
-      src={`https://nhl.bamcontent.com/images/headshots/current/60x60/${p.id}@2x.png`}
-      alt=""
-    />
-    {p.person.fullName}
+    {
+      opt.linkType === 'player'
+        ? (
+          <img
+            className="options-img"
+            src={`https://nhl.bamcontent.com/images/headshots/current/60x60/${opt.id}@2x.png`}
+            alt=""
+          />
+        ) : (
+          <img
+            className="options-img"
+            src={smallLogoForTeamName(opt.abbreviation)}
+            alt=""
+          />
+        )
+    }
+    {opt.string}
   </a>
 );
 
-const playerNameMatches =
-  query => p => new RegExp(query, 'i').test(p.person.fullName);
+const stringMatches =
+  query => opt => new RegExp(query, 'i').test(opt.string);
 
 class SearchBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      players: [],
+      options: [],
       query: '',
     };
     this.getPlayersShortList = this.getPlayersShortList.bind(this);
@@ -53,8 +73,17 @@ class SearchBar extends React.Component {
   }
 
   async getPlayersShortList() {
-    const { players } = await graphqlApi(graphqlQuery);
-    this.setState({ players });
+    const { players } = await graphqlApi(graphqlQueryPlayers);
+    const { teams } = await graphqlApi(graphqlQueryTeams);
+    const newOptions = [
+      ...players.map(p => ({
+        id: p.id, string: p.person.fullName, linkType: 'player',
+      })),
+      ...teams.map(t => ({
+        id: t.id, string: t.name, linkType: 'team', abbreviation: t.abbreviation,
+      })),
+    ];
+    this.setState({ options: newOptions });
   }
 
   handleInputChange(e) {
@@ -64,8 +93,8 @@ class SearchBar extends React.Component {
   }
 
   render() {
-    const { players, query } = this.state;
-    console.log('players in the header', players);
+    const { options, query } = this.state;
+    console.log('options in the header', options);
     return (
       <div className="searchBar">
         <form className="searchBar-form">
@@ -80,10 +109,10 @@ class SearchBar extends React.Component {
             {
               query ?
                 pipe(
-                  filter(playerNameMatches(query)),
+                  filter(stringMatches(query)),
                   take(5),
-                  map(renderPlayerOption),
-                )(players)
+                  map(renderOption),
+                )(options)
                 : null
             }
           </div>
