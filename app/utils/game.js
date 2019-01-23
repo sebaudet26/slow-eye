@@ -1,4 +1,4 @@
-import { tail } from 'ramda';
+import { last } from 'ramda';
 import moment from 'moment';
 
 export const gameStatusLabels = {
@@ -13,7 +13,7 @@ export const calculateGameTime = (lastEvent) => {
   if (!lastEvent) {
     return 'Starting Soon';
   }
-  return `Period ${lastEvent.period} ${lastEvent.periodTime}`;
+  return `Period ${lastEvent.period}, ${lastEvent.periodTime}`;
 };
 
 export const getStatusText = (game) => {
@@ -25,7 +25,7 @@ export const getStatusText = (game) => {
     case '1':
       return `Scheduled ${moment(game.gameDate).format('h:mm')} PM`;
     case '3':
-      return `Live - ${calculateGameTime(tail(game.liveFeed.lastTenPlays))}`;
+      return `Live - ${calculateGameTime(last(game.liveFeed.lastTenPlays))}`;
     case '7':
       return 'Final';
     default:
