@@ -99,6 +99,7 @@
     "react-tabs": "^3.0.0",
     "react-test-renderer": "^16.4.0",
     "react-tooltip": "^3.9.0",
+    "read-yaml": "^1.1.0",
     "redis": "^2.8.0",
     "redux": "3.7.2",
     "redux-immutable": "4.0.0",
@@ -126,7 +127,6 @@
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
-    "eslint-plugin-react": "^7.11.1",
-    "read-yaml": "^1.1.0"
+    "eslint-plugin-react": "^7.11.1"
   }
 }
