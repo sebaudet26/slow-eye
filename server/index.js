@@ -1,7 +1,7 @@
+require('./util/loadDevEnv');
 const express = require('express');
 const { resolve } = require('path');
 const bodyParser = require('body-parser');
-
 const logger = require('./util//logger');
 const argv = require('./util/argv');
 const port = require('./util//port');

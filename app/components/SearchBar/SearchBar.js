@@ -21,7 +21,11 @@ const renderPlayerOption = p => (
     href={`/player?id=${p.id}`}
     className="options-item"
   >
-    <img className="options-img" src={`https://nhl.bamcontent.com/images/headshots/current/60x60/${p.id}@2x.png`} />
+    <img
+      className="options-img"
+      src={`https://nhl.bamcontent.com/images/headshots/current/60x60/${p.id}@2x.png`}
+      alt=""
+    />
     {p.person.fullName}
   </a>
 );
@@ -67,11 +71,10 @@ class SearchBar extends React.Component {
         <form className="searchBar-form">
           <input
             placeholder="Search For Player"
-            ref={input => this.search = input}
             onChange={this.handleInputChange}
           />
           <label>
-            <img src={SearchIcon} ref="Search Icon" alt="" />
+            <img src={SearchIcon} alt="" />
           </label>
           <div className="options">
             {

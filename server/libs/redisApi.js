@@ -1,15 +1,11 @@
 const redis = require('redis');
 const { promisify } = require('util');
 
-const REDIS_URL = 'redis-13394.c16.us-east-1-3.ec2.cloud.redislabs.com';
-const REDIS_PSW = 'yz7fdpaQ1vcVaIvbQgS5lFtUtwxiJA2F';
-const REDIS_PORT = 13394;
-
 const makeCacheClient = () => {
   const redisClient = redis.createClient({
-    host: REDIS_URL,
-    port: REDIS_PORT,
-    auth_pass: REDIS_PSW,
+    host: process.env.REDIS_URL,
+    port: process.env.REDIS_PORT,
+    auth_pass: process.env.REDIS_PSW,
   });
 
   const cache = {
