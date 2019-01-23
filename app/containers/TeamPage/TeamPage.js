@@ -89,14 +89,10 @@ export default class TeamPage extends React.Component {
             <div>
               <Dropdown name={team.name} />
               <p>
-                <span style={{ margin: 5 }}>
-                  {`${getNumberWithOrdinal(team.ranking.conference)} in ${team.ranking.divisionName} Division,`}
-                </span>
-                <span style={{ margin: 5 }}>
-                  {`${getNumberWithOrdinal(team.ranking.conference)} in ${team.ranking.conferenceName} Conference,`}
-                </span>
-                <span style={{ margin: 5 }}>
-                  {`${getNumberWithOrdinal(team.ranking.league)} in the NHL`}
+                <span>
+                  {`${getNumberWithOrdinal(team.ranking.division)} Division, `}
+                  {`${getNumberWithOrdinal(team.ranking.conference)} Conference, `}
+                  {`${getNumberWithOrdinal(team.ranking.league)} League`}
                 </span>
               </p>
             </div>
