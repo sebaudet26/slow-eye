@@ -112,7 +112,6 @@ class PlayersTable extends React.PureComponent {
   constructor() {
     super();
     this.state = getSavedState();
-    this.handleNameChange = this.handleNameChange.bind(this);
     this.handlePosChange = this.handlePosChange.bind(this);
     this.handleTeamChange = this.handleTeamChange.bind(this);
     this.handleNatChange = this.handleNatChange.bind(this);
@@ -121,10 +120,6 @@ class PlayersTable extends React.PureComponent {
 
   componentDidUpdate() {
     saveStateToLS(this.state);
-  }
-
-  handleNameChange(e) {
-    this.setState({ nameSelected: e.target.value });
   }
 
   handlePosChange(target) {
@@ -148,21 +143,11 @@ class PlayersTable extends React.PureComponent {
     console.log('players', players);
     console.log(this.state);
     const {
-      nameSelected, posSelected, natSelected, teamSelected, XPSelected,
+      posSelected, natSelected, teamSelected, XPSelected,
     } = this.state;
     return (
       <div>
         <div className="filters">
-          <div className="filters-item">
-            <label>Filter By Player Name</label>
-            <input
-              placeholder="e.g. Wayne Gretzky"
-              className="filters-input"
-              type="text"
-              onChange={this.handleNameChange}
-              value={nameSelected}
-            />
-          </div>
           <div className="filters-item">
             <div className="filters-item-label">Filter By Position</div>
             <Select
@@ -250,10 +235,6 @@ class PlayersTable extends React.PureComponent {
         </div>
         <ReactTableFixedColumns
           filtered={[
-            {
-              id: 'fullName',
-              value: nameSelected || '',
-            },
             {
               id: 'position',
               value: posSelected || 'S',

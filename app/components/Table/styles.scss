@@ -192,29 +192,10 @@
   margin: 15px 0 25px 0;
   display: flex;
 
-  &-input {
-    margin-top: 5px;
-    padding: 2px 8px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    min-height: 38px;
-    outline: 0 !important;
-    transition: 0.3s;
-    background: #ffffff;
-    box-shadow: 0px 2px 12px 0px rgba(221, 231, 239, 0.75);
-    border-radius: 6px;
-  }
-
   &-item {
     max-width: 200px;
     width: 100%;
     margin-right: 15px;
-
-    &:first-child {
-      position: relative;
-      top: -3px;
-    }
 
     &-label, label {
       margin-bottom: 5px;
