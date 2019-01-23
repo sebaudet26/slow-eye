@@ -55,6 +55,11 @@
     width: 40px;
     border-radius: 99px;
     margin-right: 10px;
+
+    &.team {
+      border-radius: 0px;
+      width: 30px;
+    }
   }
 }
 

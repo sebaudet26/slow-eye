@@ -40,7 +40,7 @@ const renderOption = opt => (
           />
         ) : (
           <img
-            className="options-img"
+            className="options-img team"
             src={smallLogoForTeamName(opt.abbreviation)}
             alt=""
           />

@@ -144,7 +144,7 @@ const CareerStatsTable = ({ stats, info }) => (
           show: info.primaryPosition.name !== 'Goalie',
           accessor: pathOr('0', ['stat', 'shotPct']),
           Cell: row => (
-            <span>{row.value.toFixed(1)}</span>
+            <span>{Number(row.value).toFixed(1)}</span>
           ),
           Footer: ((sumByPath(stats, ['stat', 'goals']) / sumByPath(stats, ['stat', 'shots'])) * 100).toFixed(1),
         },
@@ -197,7 +197,7 @@ const CareerStatsTable = ({ stats, info }) => (
           filterable: false,
           accessor: pathOr('0', ['stat', 'savePercentage']),
           Cell: row => (
-            <span>{row.value.toFixed(3)}</span>
+            <span>{Number(row.value).toFixed(3)}</span>
           ),
           Footer: (sumByPath(stats, ['stat', 'saves']) / (sumByPath(stats, ['stat', 'saves']) + sumByPath(stats, ['stat', 'goalsAgainst']))).toFixed(3),
         },
@@ -210,7 +210,7 @@ const CareerStatsTable = ({ stats, info }) => (
           filterable: false,
           accessor: pathOr('-', ['stat', 'goalAgainstAverage']),
           Cell: row => (
-            <span>{row.value.toFixed(2)}</span>
+            <span>{Number(row.value).toFixed(2)}</span>
           ),
           Footer: (sumByPath(stats, ['stat', 'goalsAgainst']) / sumByPath(stats, ['stat', 'games'])).toFixed(2),
         },
