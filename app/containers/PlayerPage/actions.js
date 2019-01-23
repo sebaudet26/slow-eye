@@ -15,6 +15,7 @@ const makePlayerQuery = id => `
       birthCountry
       nationality
       height
+      active
       weight
       captain
       rookie
