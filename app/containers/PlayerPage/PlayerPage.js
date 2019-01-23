@@ -95,7 +95,7 @@ export default class PlayerPage extends React.Component {
               <div className="player-desc-right">
                 <p>
                   <span className="bold">Born</span>
-                  {` ${moment(info.birthDate).format('LL')} (${info.currentAge} yrs.) `}
+                  {` ${moment(info.birthDate).format('LL')} (${moment().diff(info.birthDate, 'years')} yrs. ago) `}
                   <span className="bold"> Birthplace</span>
                   {` ${[info.birthCity, info.birthStateProvince || '', info.birthCountry].filter(Boolean).join(', ')} `}
                 </p>
