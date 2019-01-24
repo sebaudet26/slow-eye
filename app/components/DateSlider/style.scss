@@ -96,12 +96,11 @@
 
 .slick-slider {
   height: 64px;
-  background: #f9fcff;
+  background: $grey-5;
   box-shadow: $shadow;
   border-radius: 6px;
 
   .slick-slide {
-    background: #f9fcff;
     height: 64px;
     display: flex;
     align-items: center;
@@ -140,7 +139,9 @@
   }
 
   .slick-current {
+    box-shadow: $shadow-2;
     background: $white;
+    position: relative;
 
     .slick-slide-date {
       font-size: 16px;
