@@ -71,7 +71,7 @@ const CareerStatsTable = ({ stats, info }) => (
           minWidth: 55,
           show: info.primaryPosition.name !== 'Goalie',
           accessor: d => pathOr('-', ['stat', 'goals'], d),
-          Footer: sumByPath(stats, ['stat', 'goals']),
+          Footer: sumByPath(stats.filter(), ['stat', 'goals']),
         },
         {
           Header: 'A',

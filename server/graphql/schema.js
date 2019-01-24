@@ -21,6 +21,7 @@ const {
   fetchDraftInfoForPlayer,
   fetchPlayersForTeamId,
   fetchAllPlayers,
+  fetchAllHistoryPlayers,
   fetchAllTeams,
   fetchGames,
   fetchBoxscore,
@@ -685,10 +686,22 @@ const Game = new GraphQLObjectType({
   },
 });
 
+const PlayerBio = new GraphQLObjectType({
+  name: 'PlayerBio',
+  fields: {
+    name: { type: GraphQLString, resolve: prop('playerName') },
+    id: { type: GraphQLInt, resolve: prop('playerId') },
+  },
+});
+
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     fields: {
+      allHistoryPlayers: {
+        type: new GraphQLList(PlayerBio),
+        resolve: fetchAllHistoryPlayers,
+      },
       players: {
         args: { season: { type: GraphQLString } },
         type: new GraphQLList(Player),
@@ -702,11 +715,11 @@ const schema = new GraphQLSchema({
         }),
       },
       standings: {
-        type: GraphQLList(StandingsRecord),
+        type: new GraphQLList(StandingsRecord),
         resolve: fetchStandings,
       },
       teams: {
-        type: GraphQLList(TeamInfo),
+        type: new GraphQLList(TeamInfo),
         resolve: fetchAllTeams,
       },
       team: {
@@ -722,7 +735,7 @@ const schema = new GraphQLSchema({
           date: { type: GraphQLString },
           endDate: { type: GraphQLString },
         },
-        type: GraphQLList(Game),
+        type: new GraphQLList(Game),
         resolve: (root, args) => fetchGames(args),
       },
       game: {

@@ -5,7 +5,29 @@ const moment = require('moment');
 const fetch = require('node-fetch');
 const cache = require('./redisApi');
 
-const nhlApiUrl = 'https://statsapi.web.nhl.com/api/v1';
+
+const nhlApiBase = 'http://www.nhl.com/stats/rest';
+const nhlStatsApiBase = 'https://statsapi.web.nhl.com/api/v1';
+
+// expiration is a number in seconds
+const nhlStatsApi = async (resource, expiration, force) => {
+  try {
+    if (!force) {
+      const cachedValue = await cache.get(resource);
+      if (cachedValue) {
+        return JSON.parse(cachedValue);
+      }
+    }
+    const url = `${nhlStatsApiBase}${resource}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    cache
+      .set(resource, JSON.stringify(data), 'EX', expiration || 60 * 60 * 12);
+    return data;
+  } catch (e) {
+    return console.error(e.stack || e.toString());
+  }
+};
 
 // expiration is a number in seconds
 const nhlApi = async (resource, expiration, force) => {
@@ -16,7 +38,7 @@ const nhlApi = async (resource, expiration, force) => {
         return JSON.parse(cachedValue);
       }
     }
-    const url = `${nhlApiUrl}${resource}`;
+    const url = `${nhlApiBase}${resource}`;
     const response = await fetch(url);
     const data = await response.json();
     cache
@@ -28,18 +50,17 @@ const nhlApi = async (resource, expiration, force) => {
 };
 
 const fetchGameLogsForPlayerId = async (playerId) => {
-  const apiResponse = await nhlApi(`/people/${playerId}/stats?stats=gameLog`);
+  const apiResponse = await nhlStatsApi(`/people/${playerId}/stats?stats=gameLog`);
   const gameLogs = path(['stats', 0, 'splits'], apiResponse);
   return gameLogs;
 };
 
 const fetchPlayoffGameLogsForPlayerId = async (playerId) => {
-  const apiResponse = await nhlApi(`/people/${playerId}/stats?stats=playoffGameLog`);
+  const apiResponse = await nhlStatsApi(`/people/${playerId}/stats?stats=playoffGameLog`);
   const gameLogs = path(['stats', 0, 'splits'], apiResponse);
   return gameLogs;
 };
 
-// https://github.com/dword4/nhlapi#draft
 const fetchDraftInfoForPlayer = async (playerId) => {
   const response = await fetch(
     `https://records.nhl.com/site/api/draft?cayenneExp=playerId=${playerId}`,
@@ -50,7 +71,7 @@ const fetchDraftInfoForPlayer = async (playerId) => {
 
 const fetchInfoForPlayerId = async (playerId) => {
   const resource = `/people/${playerId}`;
-  const playerInfoData = await nhlApi(resource);
+  const playerInfoData = await nhlStatsApi(resource);
   return path(['people', 0], playerInfoData);
 };
 
@@ -59,7 +80,7 @@ const fetchStatsForPlayerId = async (playerId, args) => {
   if (args && args.season) {
     resource += `&season=${args.season}`;
   }
-  const playerStatsData = await nhlApi(resource);
+  const playerStatsData = await nhlStatsApi(resource);
   return path(['stats', 0, 'splits'], playerStatsData);
 };
 
@@ -68,13 +89,13 @@ const fetchPlayoffStatsForPlayerId = async (playerId, args) => {
   if (args && args.season) {
     resource += `&season=${args.season}`;
   }
-  const playerStatsData = await nhlApi(resource);
+  const playerStatsData = await nhlStatsApi(resource);
   return path(['stats', 0, 'splits'], playerStatsData);
 };
 
 const fetchAllYearsStatsForPlayerId = async (playerId) => {
   const resource = `/people/${playerId}/stats?stats=yearByYear`;
-  const playerStatsData = await nhlApi(resource);
+  const playerStatsData = await nhlStatsApi(resource);
   // NHL = 133
   // AHL = 153
   const usefulLeagueIds = [133];
@@ -84,7 +105,7 @@ const fetchAllYearsStatsForPlayerId = async (playerId) => {
 
 const fetchAllYearsPlayoffStatsForPlayerId = async (playerId) => {
   const resource = `/people/${playerId}/stats?stats=yearByYearPlayoffs`;
-  const playerStatsData = await nhlApi(resource);
+  const playerStatsData = await nhlStatsApi(resource);
   // NHL = 133
   // AHL = 153
   const usefulLeagueIds = [133];
@@ -94,11 +115,11 @@ const fetchAllYearsPlayoffStatsForPlayerId = async (playerId) => {
 
 const fetchStatsForTeamId = async (teamId) => {
   let resource = `/teams/${teamId}/stats?stats=statsSingleSeason`;
-  const teamInfo = await nhlApi(resource, 60 * 60);
+  const teamInfo = await nhlStatsApi(resource, 60 * 60);
   let stats = path(['stats', 0], teamInfo);
   if (!stats) {
     resource = `/teams/${teamId}?expand=team.stats`;
-    await nhlApi(resource, true);
+    await nhlStatsApi(resource, true);
     stats = path(['teams', 0, 'teamStats', 0], teamInfo);
   }
   return stats;
@@ -106,7 +127,7 @@ const fetchStatsForTeamId = async (teamId) => {
 
 const fetchInfoForTeamId = async (teamId) => {
   const resource = `/teams/${teamId}`;
-  const teamInfo = await nhlApi(resource);
+  const teamInfo = await nhlStatsApi(resource);
   return path(['teams', 0], teamInfo);
 };
 
@@ -115,7 +136,7 @@ const fetchPlayersForTeamId = async (teamId, args) => {
   if (args && args.season) {
     resource += `?season=${args.season}`;
   }
-  const json = await nhlApi(resource);
+  const json = await nhlStatsApi(resource);
   const allRosterIds = map(path(['person', 'id']), json.roster);
   const playerInfo = mergeAll(json.roster.map(p => ({ [p.person.id]: { ...p } })));
   const fullData = allRosterIds.map(id => ({
@@ -129,7 +150,7 @@ const fetchAllTeams = async (args) => {
   if (args && args.season) {
     resource += `?season=${args.season}`;
   }
-  const allTeamsData = await nhlApi(resource, 60 * 60 * 24 * 300);
+  const allTeamsData = await nhlStatsApi(resource, 60 * 60 * 24 * 300);
   return prop('teams', allTeamsData);
 };
 
@@ -151,7 +172,7 @@ const fetchAllPlayers = async (args) => {
 };
 
 const fetchStandings = async () => {
-  const standingsResponse = await nhlApi('/standings/wildCardWithLeaders?expand=standings.record', 60 * 60);
+  const standingsResponse = await nhlStatsApi('/standings/wildCardWithLeaders?expand=standings.record', 60 * 60);
   const standings = prop('records', standingsResponse);
   return standings;
 };
@@ -167,14 +188,14 @@ const fetchGames = async (args) => {
   } else {
     resource += `?date=${moment().format('YYYY-MM-DD')}`;
   }
-  const gamesResponse = await nhlApi(resource, cacheExp || 60, true);
+  const gamesResponse = await nhlStatsApi(resource, cacheExp || 60, true);
   const games = flatten(map(propOr({}, 'games'), gamesResponse.dates || []));
   return games;
 };
 
 const fetchBoxscore = async (gameId) => {
   const resource = `/game/${gameId}/boxscore`;
-  const boxscoreResponse = await nhlApi(resource, 60);
+  const boxscoreResponse = await nhlStatsApi(resource, 60);
   return {
     id: gameId,
     ...prop('teams', boxscoreResponse),
@@ -183,7 +204,7 @@ const fetchBoxscore = async (gameId) => {
 
 const fetchLiveFeed = async (gameId) => {
   const resource = `/game/${gameId}/feed/live`;
-  const liveFeedResponse = await nhlApi(resource, 60);
+  const liveFeedResponse = await nhlStatsApi(resource, 60);
   return {
     id: gameId,
     ...liveFeedResponse,
@@ -191,7 +212,7 @@ const fetchLiveFeed = async (gameId) => {
 };
 
 const fetchTeamRanking = async (teamId) => {
-  const standingsResponse = await nhlApi('/standings', 60 * 60);
+  const standingsResponse = await nhlStatsApi('/standings', 60 * 60);
   const teamStanding = pipe(
     map(o => o.teamRecords.map(t => ({ conference: o.conference, division: o.division, ...t }))),
     flatten,
@@ -208,8 +229,13 @@ const fetchTeamRanking = async (teamId) => {
   };
 };
 
+const fetchAllHistoryPlayers = async () => {
+  const resource = '/skaters?isAggregate=true&reportType=basic&isGame=false&reportName=bios&sort=[{%22property%22:%22playerBirthDate%22,%22direction%22:%22DESC%22}]&cayenneExp=gameTypeId=2%20and%20seasonId%3E=19212922%20and%20seasonId%3C=20182019';
+  const response = await nhlApi(resource, 60 * 60 * 24 * 7);
+  return response.data;
+};
+
 module.exports = {
-  nhlApi,
   fetchLiveFeed,
   fetchStandings,
   fetchStatsForPlayerId,
@@ -217,6 +243,7 @@ module.exports = {
   fetchAllYearsStatsForPlayerId,
   fetchDraftInfoForPlayer,
   fetchInfoForPlayerId,
+  fetchAllHistoryPlayers,
   fetchPlayer,
   fetchInfoForTeamId,
   fetchStatsForTeamId,

@@ -8,12 +8,18 @@ import SearchIcon from '../../images/search.svg';
 import graphqlApi from '../../utils/api';
 import { smallLogoForTeamName } from '../../utils/team';
 
+let action;
+const debounce = (func, delay) => {
+  if (action) {
+    clearTimeout(action);
+  }
+  setTimeout(func, delay);
+};
+
 const graphqlQueryPlayers = `{
-  players {
+  allHistoryPlayers {
     id
-    person {
-      fullName
-    }
+    name
   }
 }`;
 
@@ -73,11 +79,11 @@ class SearchBar extends React.Component {
   }
 
   async getPlayersShortList() {
-    const { players } = await graphqlApi(graphqlQueryPlayers);
+    const { allHistoryPlayers: players } = await graphqlApi(graphqlQueryPlayers);
     const { teams } = await graphqlApi(graphqlQueryTeams);
     const newOptions = [
       ...players.map(p => ({
-        id: p.id, string: p.person.fullName, linkType: 'player',
+        id: p.id, string: p.name, linkType: 'player',
       })),
       ...teams.map(t => ({
         id: t.id, string: t.name, linkType: 'team', abbreviation: t.abbreviation,
@@ -87,14 +93,12 @@ class SearchBar extends React.Component {
   }
 
   handleInputChange(e) {
-    this.setState({
-      query: e.target.value,
-    });
+    const newValue = e.target.value;
+    debounce(() => this.setState({ query: newValue }), 150);
   }
 
   render() {
     const { options, query } = this.state;
-    console.log('options in the header', options);
     return (
       <div className="searchBar">
         <form className="searchBar-form">
