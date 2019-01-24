@@ -11,6 +11,7 @@ import {
 import CareerStatsTable from '../../components/Table/CareerStatsTable';
 import GameLogTable from '../../components/Table/GameLogTable';
 import PlayerBadges from '../../components/PlayerBadges/PlayerBadges';
+import PlayerImage from '../../components/PlayerImage';
 import './style.scss';
 import '../../styles/tabs.scss';
 
@@ -58,7 +59,7 @@ export default class PlayerPage extends React.Component {
         </Helmet>
         <div className="player-header">
           <div className="player-img">
-            <img src={`https://nhl.bamcontent.com/images/headshots/current/168x168/${urlParams.get('id')}@2x.png`} className="player-img-face" />
+            <PlayerImage id={urlParams.get('id')} />
             <div className="icon-wrapper player-img-country">
               <img src={`/images/country/${nationality}.svg`} className="" />
             </div>
@@ -82,7 +83,7 @@ export default class PlayerPage extends React.Component {
             </p>
             <div className="player-desc">
               <div>
-                {!draftInfo.team ? <span>Undrafted</span> : (
+                {!draftInfo ? <span>Undrafted</span> : (
                   <div>
                     <p>
                       <span className="bold">Drafted by</span>

@@ -5,6 +5,7 @@ import {
   filter, map, pipe, take,
 } from 'ramda';
 import SearchIcon from '../../images/search.svg';
+import PlayerIcon from '../PlayerIcon';
 import graphqlApi from '../../utils/api';
 import { smallLogoForTeamName } from '../../utils/team';
 
@@ -13,7 +14,7 @@ const debounce = (func, delay) => {
   if (action) {
     clearTimeout(action);
   }
-  setTimeout(func, delay);
+  action = setTimeout(func, delay);
 };
 
 const graphqlQueryPlayers = `{
@@ -39,11 +40,7 @@ const renderOption = opt => (
     {
       opt.linkType === 'player'
         ? (
-          <img
-            className="options-img"
-            src={`https://nhl.bamcontent.com/images/headshots/current/60x60/${opt.id}@2x.png`}
-            alt=""
-          />
+          <PlayerIcon id={opt.id} />
         ) : (
           <img
             className="options-img team"
@@ -94,7 +91,7 @@ class SearchBar extends React.Component {
 
   handleInputChange(e) {
     const newValue = e.target.value;
-    debounce(() => this.setState({ query: newValue }), 150);
+    debounce(() => this.setState({ query: newValue }), 200);
   }
 
   render() {
