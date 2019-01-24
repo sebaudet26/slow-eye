@@ -227,11 +227,11 @@ const StandingsRecord = new GraphQLObjectType({
 const DraftInfo = new GraphQLObjectType({
   name: 'DraftInfo',
   fields: {
-    year: { type: GraphQLInt, resolve: prop('year') },
-    round: { type: GraphQLInt, resolve: pipe(prop('round'), Number) },
-    pickOverall: { type: GraphQLInt, resolve: prop('pickOverall') },
+    year: { type: GraphQLInt, resolve: prop('draftYear') },
+    round: { type: GraphQLInt, resolve: prop('roundNumber') },
+    pickOverall: { type: GraphQLInt, resolve: prop('overallPickNumber') },
     pickInRound: { type: GraphQLInt, resolve: prop('pickInRound') },
-    team: { type: TeamInfo, resolve: prop('team') },
+    team: { type: TeamInfo, resolve: p => fetchInfoForTeamId(p.draftedByTeamId) },
   },
 });
 
@@ -262,7 +262,7 @@ const PlayerInfo = new GraphQLObjectType({
     // Lazy load current team info
     currentTeamInfo: { type: TeamInfo, resolve: p => fetchInfoForTeamId(p.currentTeam.id) },
     // Lazy load draft info
-    draftInfo: { type: DraftInfo, resolve: p => fetchDraftInfoForPlayer(p.fullName) },
+    draftInfo: { type: DraftInfo, resolve: p => fetchDraftInfoForPlayer(p.id) },
   },
 });
 

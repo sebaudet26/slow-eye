@@ -27,23 +27,6 @@ const nhlApi = async (resource, expiration, force) => {
   }
 };
 
-// TODO: should use a regex to take out special characters
-// or maybe fuzzy matching instead of strict match
-const compareToName = playerName => pipe(path(['prospect', 'fullName']), toLower, equals(toLower(playerName)));
-
-const findPlayerInDraft = (draftRounds, playerName) => {
-  let playerDraftInfo = {};
-  for (let i = 0; i < draftRounds.length; i++) {
-    const round = draftRounds[i];
-    const playersFound = filter(compareToName(playerName), round.picks);
-    if (playersFound.length) {
-      [playerDraftInfo] = playersFound;
-      break;
-    }
-  }
-  return playerDraftInfo;
-};
-
 const fetchGameLogsForPlayerId = async (playerId) => {
   const apiResponse = await nhlApi(`/people/${playerId}/stats?stats=gameLog`);
   const gameLogs = path(['stats', 0, 'splits'], apiResponse);
@@ -57,26 +40,12 @@ const fetchPlayoffGameLogsForPlayerId = async (playerId) => {
 };
 
 // https://github.com/dword4/nhlapi#draft
-const fetchDraftInfoForPlayer = async (playerName, year = 2018) => {
-  const key = `draft-${playerName.replace(' ', '')}`;
-  const cachedValue = await cache.get(key);
-  if (cachedValue && cachedValue !== 'undefined') {
-    return JSON.parse(cachedValue);
-  }
-  // Undrafted
-  if (year < 1980) {
-    return {};
-  }
-  // Get a batch of 5 years worth of draft picks
-  const apiData = await nhlApi(`/draft/${year}`, 60 * 60 * 24 * 300);
-  const draftRounds = path(['drafts', 0, 'rounds'], apiData);
-  const draftInfoForPlayer = findPlayerInDraft(draftRounds, playerName);
-  if (Object.keys(draftInfoForPlayer).length) {
-    cache
-      .set(key, JSON.stringify(draftInfoForPlayer), 'EX', 60 * 60 * 24 * 300);
-    return draftInfoForPlayer;
-  }
-  return fetchDraftInfoForPlayer(playerName, year - 1);
+const fetchDraftInfoForPlayer = async (playerId) => {
+  const response = await fetch(
+    `https://records.nhl.com/site/api/draft?cayenneExp=playerId=${playerId}`,
+  );
+  const json = await response.json();
+  return json.data[0];
 };
 
 const fetchInfoForPlayerId = async (playerId) => {
