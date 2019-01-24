@@ -2,10 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import moment from 'moment';
-import DatePicker from 'react-datepicker';
-import CalendarIcon from '../../images/calendar.svg';
-import 'react-datepicker/dist/react-datepicker.css';
-import ScoreCard from '../../components/ScoreCard';
+import DateSlider from '../../components/DateSlider';
 import './style.scss';
 
 const dayLabelFormat = 'ddd MMM D';
@@ -34,6 +31,14 @@ const daysOptions = [
     value: moment().subtract(extendDayHours, 'hours').add(2, 'days').format(apiDateFormat),
     label: moment().subtract(extendDayHours, 'hours').add(2, 'days').format(dayLabelFormat),
   },
+  {
+    value: moment().subtract(extendDayHours, 'hours').add(3, 'days').format(apiDateFormat),
+    label: moment().subtract(extendDayHours, 'hours').add(3, 'days').format(dayLabelFormat),
+  },
+  {
+    value: moment().subtract(extendDayHours, 'hours').add(4, 'days').format(apiDateFormat),
+    label: moment().subtract(extendDayHours, 'hours').add(4, 'days').format(dayLabelFormat),
+  },
 ];
 
 export default class ScorePage extends React.Component {
@@ -42,25 +47,22 @@ export default class ScorePage extends React.Component {
     this.state = {
       dateSelected: daysOptions[2].value,
     };
-    this.handleChangeDate = this.handleChangeDate.bind(this);
+    this.fetchGamesForDateOptions = this.fetchGamesForDateOptions.bind(this);
+  }
+
+  async fetchGamesForDateOptions() {
+    await Promise.all(daysOptions.map(opt => this.props.fetchGames(opt.value)));
   }
 
   componentDidMount() {
     const { dateSelected } = this.state;
     const { fetchGames } = this.props;
-    fetchGames(dateSelected);
-  }
-
-  handleChangeDate(newDate) {
-    this.setState({ dateSelected: newDate });
-    const { fetchGames } = this.props;
-    fetchGames(newDate);
+    this.fetchGamesForDateOptions();
   }
 
   render() {
     const { games } = this.props;
     const { dateSelected } = this.state;
-    console.log(games);
     return (
       <div className="score-page">
         <Helmet>
@@ -70,45 +72,13 @@ export default class ScorePage extends React.Component {
             content="Scores"
           />
         </Helmet>
-        <h2>Scores</h2>
-        <div className="scoreboard-header">
-          <div className="scoreboard-datePicker">
-            <label>
-              <img
-                src={CalendarIcon}
-                className="scoreboard-datePicker-calendar"
-                alt=""
-              />
-              <DatePicker
-                selected={dateSelected}
-                onChange={v => this.handleChangeDate(moment(v).format(apiDateFormat))}
-                dateFormat="eee MMM dd"
-                todayButton="Today"
-              />
-            </label>
-          </div>
-          <div className="scoreboard-selector">
-            { daysOptions.map(option => (
-              <button
-                key={option.value}
-                type="button"
-                className={dateSelected === option.value ? 'scoreboard-selector-item active' : 'scoreboard-selector-item'}
-                onClick={() => this.handleChangeDate(option.value)}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="scoreboard-results">
-          {games.map(game => <ScoreCard game={game} />)}
-        </div>
+        <DateSlider daysOptions={daysOptions} games={games} />
       </div>
     );
   }
 }
 
 ScorePage.propTypes = {
-  games: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  games: PropTypes.shape({}).isRequired,
   fetchGames: PropTypes.func.isRequired,
 };

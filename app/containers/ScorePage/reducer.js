@@ -2,14 +2,14 @@ import { fromJS } from 'immutable';
 import { FETCH_GAMES } from './constants';
 
 const initialState = fromJS({
+  games: {},
 });
 
 function playerReducer(state = initialState, action) {
   switch (action.type) {
     case FETCH_GAMES:
-      return state.set('games', action.payload.games);
+      return state.setIn(['games', action.payload.date.replace(/-/g, '')], action.payload.games);
     default:
-      // return state.set('players', playersMock);
       return state;
   }
 }

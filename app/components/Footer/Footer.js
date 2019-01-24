@@ -18,6 +18,9 @@ ex
       <Link to="/contributors">
         Contributors
       </Link>
+      <Link to="/halloffame">
+        Hall of Fame
+      </Link>
     </div>
   </footer>
 );

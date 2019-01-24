@@ -3,7 +3,6 @@
 .score {
   &-page {
     h2 {
-      margin-bottom: 5px;
     }
   }
 }
@@ -11,105 +10,4 @@
 button {
   outline: none;
   cursor: pointer;
-}
-
-.scoreboard {
-  &-header {
-    display: flex;
-    padding: 10px;
-    border-radius: 6px;
-    background: $white;
-    box-shadow: $shadow;
-  }
-
-
-  &-datePicker {
-    position: absolute;
-
-    .react-datepicker__input-container {
-      input {
-        margin-left: 10px;
-        text-transform: uppercase;
-        font-size: 14px;
-        color: $black !important;
-        font-weight: 500;
-        outline: none;
-        position: relative;
-        top: 1px;
-        cursor: pointer;
-        transition: 0.3s;
-        width: 90px;
-
-        &:hover {
-          opacity: 0.75;
-        }
-      }
-    }
-
-    &-calendar {
-      cursor: pointer;
-      transition: 0.3s;
-
-      &:hover {
-        opacity: 0.75;
-      }
-    }
-  }
-
-  &-selector {
-    margin: auto;
-
-    &-item {
-      padding: 0 15px;
-      font-size: 14px;
-      text-transform: uppercase;
-      font-weight: 500;
-      color: $black;
-      border-right: 1px solid $grey-4;
-      transition: 0.3s;
-
-      &.active {
-        font-size: 16px;
-        font-weight: 500;
-        color: $main;
-      }
-    }
-  }
-
-  &-results {
-    display: flex;
-    flex-flow: wrap;
-    align-items: center;
-    margin-top: 25px;
-  }
-}
-
-@media screen and (max-width: 850px) {
-  .scoreboard-datePicker {
-    display: none;
-  }
-}
-
-@media screen and (max-width: 650px) {
-  .scoreboard-selector {
-    &-item {
-      padding: 0 5px;
-
-      &:first-child, &:last-child {
-        display: none;
-      }
-
-      &:nth-child(4) {
-        border-right: 0px;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .score-page {
-    h2 {
-      display: none;
-    }
-  }
 }

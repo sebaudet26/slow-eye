@@ -1,0 +1,154 @@
+@import '../../styles/variables.scss';
+
+.scoreboard {
+
+  &-header {
+    display: flex;
+    align-items: center;
+    margin-top: 0.83em;
+    margin-bottom: 5px;
+
+    h2 {
+      margin: 0;
+    }
+  }
+
+  &-datePicker {
+    position: relative;
+    top: -3px;
+
+    label {
+      width: 150px;
+      margin-left: 10px;
+    }
+
+    .react-datepicker__input-container {
+      input {
+        margin-left: 10px;
+        text-transform: uppercase;
+        font-size: 14px;
+        color: $black !important;
+        font-weight: 500;
+        outline: none;
+        position: relative;
+        top: 1px;
+        cursor: pointer;
+        transition: 0.3s;
+        width: 90px;
+
+        &:hover {
+          opacity: 0.75;
+        }
+      }
+    }
+
+    &-calendar {
+      cursor: pointer;
+      transition: 0.3s;
+
+      &:hover {
+        opacity: 0.75;
+      }
+    }
+  }
+
+  &-results {
+    display: flex;
+    flex-flow: wrap;
+    align-items: center;
+    margin-top: 25px;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  .scoreboard-datePicker {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .scoreboard-selector {
+    &-item {
+      padding: 0 5px;
+
+      &:first-child, &:last-child {
+        display: none;
+      }
+
+      &:nth-child(4) {
+        border-right: 0px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .score-page {
+    h2 {
+      display: none;
+    }
+  }
+}
+
+.slick-track {
+  height: 64px;
+}
+
+.slick-slider {
+  height: 64px;
+  background: #f9fcff;
+  box-shadow: $shadow;
+  border-radius: 6px;
+
+  .slick-slide {
+    background: #f9fcff;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    border-left: solid 1px $grey-4;
+    cursor: pointer;
+    transition: 0.3s;
+
+    div {
+      margin: auto;
+    }
+
+    &-content {
+      outline: 0;
+      display: block;
+      text-align: center;
+    }
+
+    &-date {
+      font-weight: 500;
+      color: $grey-2;
+      transition: 0.3s;
+    }
+
+    &-games {
+      font-size: 14px;
+      color: $grey-2;
+    }
+
+    &:hover {
+      background: $white;
+
+      .slick-slide-date {
+        color: $black;
+      }
+    }
+  }
+
+  .slick-current {
+    background: $white;
+
+    .slick-slide-date {
+      font-size: 16px;
+      color: $black;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+
+}

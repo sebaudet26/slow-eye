@@ -55,10 +55,12 @@ const makeScoresQuery = date => `
 export const fetchGames = date => async (dispatch) => {
   try {
     const data = await graphqlApi(makeScoresQuery(date));
-    console.log('data', data);
     return dispatch({
       type: FETCH_GAMES,
-      payload: data,
+      payload: {
+        date,
+        games: data,
+      },
     });
   } catch (e) {
     // TODO: dispatch error to reducer
