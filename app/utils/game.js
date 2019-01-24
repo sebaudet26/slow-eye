@@ -1,13 +1,14 @@
 import { last } from 'ramda';
 import moment from 'moment';
-
-export const gameStatusLabels = {
-  1: 'Scheduled',
-  3: 'Live',
-  4: 'OT',
-  6: 'Final/OT',
-  7: 'Final',
-};
+//
+// export const gameStatusLabels = {
+//   1: 'Scheduled',
+//   2: 'Pregame',
+//   3: 'Live',
+//   4: 'OT',
+//   6: 'Final/OT',
+//   7: 'Final',
+// };
 
 export const isScheduled = game => game.status.detailedState === 'Scheduled';
 
@@ -28,15 +29,15 @@ export const getStatusText = (game) => {
 
   switch (statusCode) {
     case '1':
-      return `Scheduled ${moment(game.gameDate).format('h:mm')} PM`;
+      return ` - ${moment(game.gameDate).format('h:mm')} PM`;
     case '3':
-      return `Live - ${calculateGameTime(last(game.liveFeed.lastTenPlays))}`;
+      return ` - ${calculateGameTime(last(game.liveFeed.lastTenPlays))}`;
     case '4':
-      return `Live - ${calculateGameTime(last(game.liveFeed.lastTenPlays))}`;
+      return ` - ${calculateGameTime(last(game.liveFeed.lastTenPlays))}`;
     case '6':
-      return 'Final/OT';
+      return '';
     case '7':
-      return 'Final';
+      return '';
     default:
       return '';
   }

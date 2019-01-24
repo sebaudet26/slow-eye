@@ -3,39 +3,39 @@ import { isScheduled, getStatusText } from '../../utils/game';
 import { smallLogoForTeamName, calculatePoints } from '../../utils/team';
 import './styles.scss';
 
-const ScoreCard = args => (
+const ScoreCard = ({ game }) => (
   <div className="game-card-wrapper">
     <div className="game-card">
       <div className="game-card-header">
-        {getStatusText(args.game)}
+        {`${game.status.detailedState}${getStatusText(game)}`}
       </div>
       <div className="game-card-team">
-        <img src={smallLogoForTeamName(args.game.teams.away.team.abbreviation)} alt="" />
-        <a className="game-card-team-name" href={`/team?id=${args.game.teams.away.team.id}`}>
-          {args.game.teams.away.team.name}
+        <img src={smallLogoForTeamName(game.teams.away.team.abbreviation)} alt="" />
+        <a className="game-card-team-name" href={`/team?id=${game.teams.away.team.id}`}>
+          {game.teams.away.team.name}
         </a>
         <div className="game-card-team-score">
           {
-            isScheduled(args.game)
-              ? calculatePoints(args.game.teams.away)
-              : args.game.teams.away.score
+            isScheduled(game)
+              ? calculatePoints(game.teams.away)
+              : game.teams.away.score
           }
         </div>
       </div>
       <div className="game-card-team">
-        <img src={smallLogoForTeamName(args.game.teams.home.team.abbreviation)} alt="" />
-        <a className="game-card-team-name" href={`/team?id=${args.game.teams.home.team.id}`}>
-          {args.game.teams.home.team.name}
+        <img src={smallLogoForTeamName(game.teams.home.team.abbreviation)} alt="" />
+        <a className="game-card-team-name" href={`/team?id=${game.teams.home.team.id}`}>
+          {game.teams.home.team.name}
         </a>
         <div className="game-card-team-score">
           {
-            isScheduled(args.game)
-              ? calculatePoints(args.game.teams.home)
-              : args.game.teams.home.score
+            isScheduled(game)
+              ? calculatePoints(game.teams.home)
+              : game.teams.home.score
           }
         </div>
       </div>
-      {args.game.status.detailedState === 'Scheduled' ? null : <div className="game-card-footer"><a href={`/game?id=${args.game.id}`}>Game Summary</a></div>}
+      {game.status.detailedState === 'Scheduled' ? null : <div className="game-card-footer"><a href={`/game?id=${game.id}`}>Game Summary</a></div>}
     </div>
   </div>
 );

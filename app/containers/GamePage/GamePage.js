@@ -11,7 +11,7 @@ import {
   isScratchedOrGoalie,
 } from '../../utils/player';
 import { logoForTeamName } from '../../utils/team';
-import { gameStatusLabels, getStatusText } from '../../utils/game';
+import { getStatusText } from '../../utils/game';
 import BoxTable from '../../components/Table/BoxTable';
 
 const intoLink = player => (
@@ -77,7 +77,7 @@ class GamePage extends React.Component {
               </div>
             </div>
             <div className="summary-header-result">
-              {getStatusText(game)}
+              {`${game.status.detailedState}${getStatusText(game)}`}
             </div>
             <div className="summary-header-team">
               <div className="summary-header-team-score">
