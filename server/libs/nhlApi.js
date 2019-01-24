@@ -230,7 +230,7 @@ const fetchTeamRanking = async (teamId) => {
 };
 
 const fetchAllHistoryPlayers = async () => {
-  const resource = '/skaters?isAggregate=true&reportType=basic&isGame=false&reportName=bios&sort=[{%22property%22:%22playerBirthDate%22,%22direction%22:%22DESC%22}]&cayenneExp=gameTypeId=2%20and%20seasonId%3E=19212922%20and%20seasonId%3C=20182019';
+  const resource = '/skaters?isAggregate=true&reportType=basic&isGame=false&reportName=bios&sort=[{%22property%22:%22playerBirthDate%22,%22direction%22:%22DESC%22}]&cayenneExp=gameTypeId=2%20and%20seasonId%3E=19171918%20and%20seasonId%3C=20182019';
   const response = await nhlApi(resource, 60 * 60 * 24 * 7);
   return response.data;
 };
