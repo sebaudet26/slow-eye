@@ -8,7 +8,7 @@ const {
   GraphQLFloat,
 } = require('graphql');
 const {
-  pathOr, pipe, prop, path, map, values, takeLast,
+  pathOr, pipe, prop, path, map, values, takeLast, take,
 } = require('ramda');
 const {
   fetchStandings,
@@ -552,8 +552,13 @@ const Player = new GraphQLObjectType({
     },
     // Lazy load game logs
     logs: {
+      args: {
+        lastFive: { type: GraphQLBoolean },
+      },
       type: new GraphQLList(SeasonStat),
-      resolve: p => fetchGameLogsForPlayerId(p.id),
+      resolve: (p, args) =>
+        fetchGameLogsForPlayerId(p.id)
+          .then(logs => (args.lastFive ? take(5, logs) : logs)),
     },
     // Lazy load game logs
     playoffLogs: {
