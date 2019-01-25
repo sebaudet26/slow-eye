@@ -46,6 +46,10 @@
     border-bottom: solid 1px $grey-4;
     color: $black;
 
+    &:last-child {
+      border-bottom: 0px;
+    }
+
     &:hover {
       background: $grey-5;
     }

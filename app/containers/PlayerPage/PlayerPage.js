@@ -95,6 +95,8 @@ export default class PlayerPage extends React.Component {
                 <p>
                   <span className="bold">Born</span>
                   {` ${moment(info.birthDate).format('LL')} (${moment().diff(info.birthDate, 'years')} yrs. ago) `}
+                </p>
+                <p>
                   <span className="bold"> Birthplace</span>
                   {` ${[info.birthCity, info.birthStateProvince || '', info.birthCountry].filter(Boolean).join(', ')} `}
                 </p>
