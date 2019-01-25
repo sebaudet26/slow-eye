@@ -8,7 +8,6 @@ import './style.scss';
 import {
   Tab, Tabs, TabList, TabPanel,
 } from 'react-tabs';
-import '../../styles/tabs.scss';
 import {
   isScratched,
   isGoalie,

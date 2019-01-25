@@ -13,7 +13,6 @@ import GameLogTable from '../../components/Table/GameLogTable';
 import PlayerBadges from '../../components/PlayerBadges/PlayerBadges';
 import PlayerImage from '../../components/PlayerImage';
 import './style.scss';
-import '../../styles/tabs.scss';
 
 const rounds = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th'];
 

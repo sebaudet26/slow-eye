@@ -24,8 +24,6 @@ import {
   getFromLS,
 } from '../../utils/localStorage';
 import './style.scss';
-import '../../styles/tabs.scss';
-
 
 const getNumberWithOrdinal = (n) => {
   const s = ['th', 'st', 'nd', 'rd'];
