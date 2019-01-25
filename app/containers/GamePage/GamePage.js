@@ -6,6 +6,10 @@ import {
 } from 'ramda';
 import './style.scss';
 import {
+  Tab, Tabs, TabList, TabPanel,
+} from 'react-tabs';
+import '../../styles/tabs.scss';
+import {
   isScratched,
   isGoalie,
   isScratchedOrGoalie,
@@ -17,6 +21,9 @@ import BoxTable from '../../components/Table/BoxTable';
 const intoLink = player => (
   <a className="scratches-player" href={`/player?id=${player.person.id}`}>{player.person.fullName}</a>
 );
+
+const saveToLS = (name, value) => window.localStorage.setItem(name, value);
+const getFromLS = name => window.localStorage.getItem(name);
 
 class GamePage extends React.Component {
   componentDidMount() {
@@ -93,98 +100,179 @@ class GamePage extends React.Component {
               {homeTeamImage}
             </div>
           </div>
-          <div className="summary-period">
-            <div className="summary-period-card-wrapper">
-              <div className="summary-period-card">
-                <table className="period-table">
-                  <thead>
-                    <tr>
-                      <th />
-                      <th>PIM</th>
-                      <th>PP</th>
-                      <th>Hits</th>
-                      <th>Fo%</th>
-                      <th>TK</th>
-                      <th>GV</th>
-                      <th>BK</th>
-                      <th>Shots</th>
-                      <th>Goals</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <a href={`/team?id=${boxscore.away.team.id}`}>
-                          {awayTeamImage}
-                          {boxscore.away.team.name}
-                        </a>
-                      </td>
-                      <td>{boxscore.away.teamStats.pim}</td>
-                      <td>{`${boxscore.away.teamStats.powerPlayGoals}/${boxscore.away.teamStats.powerPlayOpportunities}`}</td>
-                      <td>{boxscore.away.teamStats.hits}</td>
-                      <td>{boxscore.away.teamStats.faceOffWinPercentage.toFixed()}</td>
-                      <td>{boxscore.away.teamStats.takeaways}</td>
-                      <td>{boxscore.away.teamStats.giveaways}</td>
-                      <td>{boxscore.away.teamStats.blocked}</td>
-                      <td>{boxscore.away.teamStats.shots}</td>
-                      <td>{boxscore.away.teamStats.goals}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href={`/team?id=${boxscore.home.team.id}`}>
-                          {homeTeamImage}
-                          {boxscore.home.team.name}
-                        </a>
-                      </td>
-                      <td>{boxscore.home.teamStats.pim}</td>
-                      <td>{`${boxscore.home.teamStats.powerPlayGoals}/${boxscore.home.teamStats.powerPlayOpportunities}`}</td>
-                      <td>{boxscore.home.teamStats.hits}</td>
-                      <td>{boxscore.home.teamStats.faceOffWinPercentage.toFixed()}</td>
-                      <td>{boxscore.home.teamStats.takeaways}</td>
-                      <td>{boxscore.home.teamStats.giveaways}</td>
-                      <td>{boxscore.home.teamStats.blocked}</td>
-                      <td>{boxscore.home.teamStats.shots}</td>
-                      <td>{boxscore.home.teamStats.goals}</td>
-                    </tr>
-                  </tbody>
-                </table>
+
+          <Tabs
+            defaultIndex={Number(getFromLS('playerTabIndex')) || 0}
+            onSelect={i => saveToLS('playerTabIndex', i)}
+          >
+            <TabList>
+              <Tab>Summary</Tab>
+              <Tab>{boxscore.away.team.name}</Tab>
+              <Tab>{boxscore.home.team.name}</Tab>
+            </TabList>
+            <TabPanel>
+              <div className="summary-overall">
+                <div className="summary-overall-wrapper">
+                  <div className="summary-overall-card">
+                    <table className="overall-table">
+                      <thead>
+                        <tr>
+                          <th />
+                          <th>PIM</th>
+                          <th>PP</th>
+                          <th>Hits</th>
+                          <th>Fo%</th>
+                          <th>TK</th>
+                          <th>GV</th>
+                          <th>BK</th>
+                          <th>Shots</th>
+                          <th>Goals</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <a href={`/team?id=${boxscore.away.team.id}`}>
+                              {awayTeamImage}
+                              {boxscore.away.team.name}
+                            </a>
+                          </td>
+                          <td>{boxscore.away.teamStats.pim}</td>
+                          <td>{`${boxscore.away.teamStats.powerPlayGoals}/${boxscore.away.teamStats.powerPlayOpportunities}`}</td>
+                          <td>{boxscore.away.teamStats.hits}</td>
+                          <td>{boxscore.away.teamStats.faceOffWinPercentage.toFixed()}</td>
+                          <td>{boxscore.away.teamStats.takeaways}</td>
+                          <td>{boxscore.away.teamStats.giveaways}</td>
+                          <td>{boxscore.away.teamStats.blocked}</td>
+                          <td>{boxscore.away.teamStats.shots}</td>
+                          <td>{boxscore.away.teamStats.goals}</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <a href={`/team?id=${boxscore.home.team.id}`}>
+                              {homeTeamImage}
+                              {boxscore.home.team.name}
+                            </a>
+                          </td>
+                          <td>{boxscore.home.teamStats.pim}</td>
+                          <td>{`${boxscore.home.teamStats.powerPlayGoals}/${boxscore.home.teamStats.powerPlayOpportunities}`}</td>
+                          <td>{boxscore.home.teamStats.hits}</td>
+                          <td>{boxscore.home.teamStats.faceOffWinPercentage.toFixed()}</td>
+                          <td>{boxscore.home.teamStats.takeaways}</td>
+                          <td>{boxscore.home.teamStats.giveaways}</td>
+                          <td>{boxscore.home.teamStats.blocked}</td>
+                          <td>{boxscore.home.teamStats.shots}</td>
+                          <td>{boxscore.home.teamStats.goals}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+              <div className="summary-events">
+                <div className="summary-events-wrapper">
+                  <div className="summary-events-card">
+                    <table className="events-table">
+                      <thead>
+                        <tr>
+                          <th>1st Period</th>
+                        </tr>
+                        <tr>
+                          <th>Time</th>
+                          <th>Goal By</th>
+                          <th>Assist(s)</th>
+                          <th />
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Test</td>
+                          <td>Test</td>
+                          <td>Test</td>
+                          <td>PPG</td>
+                        </tr>
+                      </tbody>
+                      <thead>
+                        <tr>
+                          <th>2nd Period</th>
+                        </tr>
+                        <tr>
+                          <th>Time</th>
+                          <th>Goal By</th>
+                          <th>Assist(s)</th>
+                          <th />
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Test</td>
+                          <td>Test</td>
+                          <td>Test</td>
+                          <td>PPG</td>
+                        </tr>
+                      </tbody>
+                      <thead>
+                        <tr>
+                          <th>3rd Period</th>
+                        </tr>
+                        <tr>
+                          <th>Time</th>
+                          <th>Goal By</th>
+                          <th>Assist(s)</th>
+                          <th />
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Test</td>
+                          <td>Test</td>
+                          <td>Test</td>
+                          <td>PPG</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </TabPanel>
+            <TabPanel>
+              <h3>{boxscore.away.team.name}</h3>
+              <BoxTable
+                players={reject(isScratchedOrGoalie, boxscore.away.players)}
+                goalieMode={false}
+              />
+              <BoxTable
+                players={filter(isGoalie, boxscore.away.players)}
+                goalieMode
+              />
+              <div className="scratches">
+                <span>Scratches: </span>
+                {pipe(
+                  filter(isScratched),
+                  map(intoLink),
+                )(boxscore.away.players)}
+              </div>
+            </TabPanel>
 
-          <h3>{boxscore.away.team.name}</h3>
-          <BoxTable
-            players={reject(isScratchedOrGoalie, boxscore.away.players)}
-            goalieMode={false}
-          />
-          <BoxTable
-            players={filter(isGoalie, boxscore.away.players)}
-            goalieMode
-          />
-          <div className="scratches">
-            <span>Scratches: </span>
-            {pipe(
-              filter(isScratched),
-              map(intoLink),
-            )(boxscore.away.players)}
-          </div>
-
-          <h3>{boxscore.home.team.name}</h3>
-          <BoxTable
-            players={reject(isScratchedOrGoalie, boxscore.home.players)}
-            goalieMode={false}
-          />
-          <BoxTable
-            players={filter(isGoalie, boxscore.home.players)}
-            goalieMode
-          />
-          <div className="scratches">
-            <span>Scratches: </span>
-            {pipe(
-              filter(isScratched),
-              map(intoLink),
-            )(boxscore.home.players)}
-          </div>
+            <TabPanel>
+              <h3>{boxscore.home.team.name}</h3>
+              <BoxTable
+                players={reject(isScratchedOrGoalie, boxscore.home.players)}
+                goalieMode={false}
+              />
+              <BoxTable
+                players={filter(isGoalie, boxscore.home.players)}
+                goalieMode
+              />
+              <div className="scratches">
+                <span>Scratches: </span>
+                {pipe(
+                  filter(isScratched),
+                  map(intoLink),
+                )(boxscore.home.players)}
+              </div>
+            </TabPanel>
+          </Tabs>
         </div>
       </div>
     );

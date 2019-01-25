@@ -14,8 +14,6 @@
       margin: auto;
 
       &-name {
-        .city {
-        }
 
         .team {
           font-weight: 500;
@@ -54,36 +52,25 @@
     }
   }
 
-  &-period {
+  &-overall, &-events {
     display: flex;
+    margin-top: 25px;
 
-    &-card {
+    &-wrapper {
+      width: 100%;
+    }
+
+    &-card, {
       border-radius: 6px;
       margin: auto;
       background: $white;
       box-shadow: $shadow;
       overflow: scroll;
-
-      &-wrapper {
-        width: 100%;
-      }
-    }
-  }
-
-  &-body {
-    margin-top: 15px;
-    background: $white;
-    box-shadow: $shadow;
-    border-radius: 6px;
-
-    &-title {
-      padding: 15px 20px;
-      font-size: $h3;
     }
   }
 }
 
-.period-table {
+.overall-table {
   width: 100%;
 
   thead {
@@ -128,10 +115,50 @@
   }
 }
 
+.events-table {
+  width: 100%;
+
+  tr:nth-child(2) {
+    border-top: solid 1px $grey-4;
+  }
+
+  thead {
+    border-top: solid 1px $grey-4;
+    border-bottom: solid 1px $grey-4;
+
+    &:first-child {
+      border-top: 0px;
+    }
+
+    th {
+      text-align: left;
+      font-weight: 600;
+      padding: 10px;
+    }
+  }
+
+  tbody {
+    tr {
+      td {
+        padding: 10px;
+      }
+    }
+  }
+}
+
 .scratches {
-  margin: 10px;
   &-player {
-    margin: 7.5px;
+    margin: 3px;
+
+    &:last-child {
+      &::after {
+        content: '';
+      }
+    }
+
+    &::after {
+      content: ',';
+    }
   }
 }
 
