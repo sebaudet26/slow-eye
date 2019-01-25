@@ -106,7 +106,7 @@ class RosterTable extends React.PureComponent {
               maxWidth: 185,
               minWidth: 150,
               accessor: pathOr(null, ['player', 'info', 'draftInfo']),
-              Cell: row => (!row.value.year ? 'Undrafted' : (
+              Cell: row => (!row.value ? 'Undrafted' : (
                 <div>
                   <div className="draft">
                     {row.value.year}
