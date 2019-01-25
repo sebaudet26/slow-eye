@@ -58,7 +58,6 @@ const makeQuery = season => `
 export const fetchAllPlayers = season => async (dispatch) => {
   try {
     const data = await graphqlApi(makeQuery(season || '20182019'));
-    console.log(data);
     return dispatch({
       type: FETCH_PLAYERS,
       payload: data,

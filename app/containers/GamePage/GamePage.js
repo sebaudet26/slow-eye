@@ -32,7 +32,6 @@ class GamePage extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     const { game } = this.props;
     if (!game || !game.boxscore || !game.liveFeed) {
       return null;

@@ -133,7 +133,7 @@ const makePlayerQuery = id => `
         ot
       }
     },
-    logs {
+    logs (lastFive: true){
       date,
       stat {
         points,
@@ -146,9 +146,7 @@ const makePlayerQuery = id => `
 
 export const fetchTeamRosterDetails = (id, roster) => async (dispatch) => {
   try {
-    console.log('roster', roster);
     const filledRoster = await Promise.all(roster.map(p => graphqlApi(makePlayerQuery(p.id), `player-${p.id}`)));
-    console.log('data', filledRoster);
     return dispatch({
       type: FETCH_TEAM_ROSTER,
       payload: {
@@ -165,7 +163,6 @@ export const fetchTeamRosterDetails = (id, roster) => async (dispatch) => {
 export const fetchTeamById = id => async (dispatch) => {
   try {
     const data = await graphqlApi(makeTeamQuery(id));
-    console.log('data', data);
     return dispatch({
       type: FETCH_TEAM,
       payload: data,

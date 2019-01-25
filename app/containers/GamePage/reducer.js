@@ -5,7 +5,6 @@ const initialState = fromJS({
 });
 
 function gameBoxscoreReducer(state = initialState, action) {
-  console.log(action.type, action.payload);
   switch (action.type) {
     case FETCH_GAME_BOXSCORE:
       return state.setIn(['boxscores', action.payload.game.id], action.payload.game);

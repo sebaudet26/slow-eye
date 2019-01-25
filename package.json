@@ -105,6 +105,7 @@
     "redis": "^2.8.0",
     "redux": "3.7.2",
     "redux-immutable": "4.0.0",
+    "redux-logger": "^3.0.6",
     "redux-saga": "0.16.0",
     "redux-thunk": "^2.3.0",
     "request": "^2.88.0",

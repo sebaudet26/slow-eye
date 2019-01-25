@@ -7,7 +7,6 @@ const initialState = fromJS({
 initialState.set('standings', []);
 
 function standingsReducer(state = initialState, action) {
-  console.log(action.type, action.payload);
   switch (action.type) {
     case FETCH_WILDCARD_STANDINGS:
       return state.set('standings', action.payload.standings);

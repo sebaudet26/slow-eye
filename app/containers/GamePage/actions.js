@@ -146,7 +146,6 @@ const makeGameBoxscoreQuery = id => `
 export const fetchGameBoxscore = id => async (dispatch) => {
   try {
     const data = await graphqlApi(makeGameBoxscoreQuery(id));
-    console.log('data', data);
     return dispatch({
       type: FETCH_GAME_BOXSCORE,
       payload: data,

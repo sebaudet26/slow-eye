@@ -57,7 +57,6 @@ const wildCardStandingsQuery = `
 export const fetchWildCardStandings = () => async (dispatch) => {
   try {
     const data = await graphqlApi(wildCardStandingsQuery);
-    console.log('data', data);
     return dispatch({
       type: FETCH_WILDCARD_STANDINGS,
       payload: data,

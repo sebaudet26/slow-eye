@@ -7,7 +7,12 @@ import thunkMiddleware from 'redux-thunk';
 import { fromJS } from 'immutable';
 import { routerMiddleware } from 'react-router-redux';
 import createSagaMiddleware from 'redux-saga';
+import { createLogger } from 'redux-logger';
 import createReducer from './reducers';
+
+const logger = createLogger({
+  stateTransformer: state => state.toJS(),
+});
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -16,6 +21,7 @@ export default function configureStore(initialState = {}, history) {
   // 1. sagaMiddleware: Makes redux-sagas work
   // 2. routerMiddleware: Syncs the location/URL path to the state
   const middlewares = [
+    logger,
     sagaMiddleware,
     routerMiddleware(history),
     thunkMiddleware,

@@ -153,7 +153,6 @@ const makePlayerQuery = id => `
 export const fetchPlayer = id => async (dispatch) => {
   try {
     const data = await graphqlApi(makePlayerQuery(id));
-    console.log('data', data);
     return dispatch({
       type: FETCH_PLAYER_BY_ID,
       payload: data,

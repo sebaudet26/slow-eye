@@ -7,7 +7,6 @@ const initialState = fromJS({
 });
 
 function homeReducer(state = initialState, action) {
-  // console.log(action.type, action.payload);
   switch (action.type) {
     case FETCH_PLAYERS:
       return state.set('players', sortBy(path(['person', 'fullName']))(action.payload.players));

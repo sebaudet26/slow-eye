@@ -53,7 +53,6 @@ const allTeams = `
 export const fetchAllTeams = () => async (dispatch) => {
   try {
     const data = await graphqlApi(allTeams);
-    console.log(data);
     return dispatch({
       type: FETCH_TEAMS,
       payload: data,
