@@ -5,7 +5,7 @@ import graphqlApi from '../../utils/api';
 const makeGameBoxscoreQuery = id => `
 {
   game (id: "${id}") {
-   id
+    id
     liveFeed {
       lastTenPlays {
         period
@@ -16,6 +16,7 @@ const makeGameBoxscoreQuery = id => `
       }
       status {
         codedGameState
+        detailedState
       }
     }
     boxscore {

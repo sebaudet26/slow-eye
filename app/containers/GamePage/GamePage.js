@@ -77,7 +77,7 @@ class GamePage extends React.Component {
               </div>
             </div>
             <div className="summary-header-result">
-              {`${game.status.detailedState}${getStatusText(game)}`}
+              {`${game.liveFeed.status.detailedState}${getStatusText(game)}`}
             </div>
             <div className="summary-header-team">
               <div className="summary-header-team-score">
