@@ -42,10 +42,33 @@
       font-weight: 500;
       white-space: pre;
       font-size: 16px;
+      position: relative;
+
+      &::after {
+        content: "";
+        transition: 0.3s;
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        height: 2px;
+        width: 100%;
+        background: $black;
+        opacity: 0;
+      }
+
+      &:hover {
+        &::after {
+          opacity: 1;
+        }
+      }
     }
 
     .active {
-      color: $main;
+      color: $black;
+
+      &::after {
+        opacity: 1;
+      }
     }
   }
 
