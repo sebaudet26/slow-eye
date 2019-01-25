@@ -35,7 +35,13 @@ const ScoreCard = ({ game }) => (
           }
         </div>
       </div>
-      {game.status.detailedState === 'Scheduled' ? null : <div className="game-card-footer"><a href={`/game?id=${game.id}`}>Game Summary</a></div>}
+      {game.status.detailedState === 'Scheduled' ? null : (
+        <div className="game-card-footer">
+          <a href={`/game?id=${game.id}`}>
+            Game Summary
+          </a>
+        </div>
+      )}
     </div>
   </div>
 );
