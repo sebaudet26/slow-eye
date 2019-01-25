@@ -11,7 +11,6 @@ const ReactTableFixedColumns = withFixedColumns(ReactTable);
 class TeamsTable extends React.PureComponent {
   render() {
     const { teams } = this.props;
-    console.log('teams', teams);
     let data = [];
     if (teams.length) {
       data = teams;

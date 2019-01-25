@@ -13,7 +13,6 @@ export default class StandingsPage extends React.Component {
 
   render() {
     const { standings } = this.props;
-    console.log(standings);
     return (
       <div className="standings-page">
         <Helmet>

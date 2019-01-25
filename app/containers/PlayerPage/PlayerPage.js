@@ -31,7 +31,6 @@ export default class PlayerPage extends React.Component {
 
   render() {
     const { player } = this.props;
-    console.log('player', player);
     if (isEmpty(player)) {
       return (<div />);
     }

@@ -66,8 +66,6 @@ export default class TeamPage extends React.Component {
     const { teams, rosters } = this.props;
     const team = teams[urlParams.get('id')] || {};
     const roster = rosters[urlParams.get('id')] || {};
-    console.log('team', team);
-    console.log('roster', roster);
     return (isEmpty(team) ? null : (
       <div className="team-page">
         <Helmet>

@@ -11,8 +11,6 @@ const isGoalie = pos => pos === 'G';
 
 class GameLogTable extends React.PureComponent {
   render() {
-    const { logs, info } = this.props;
-    console.log('logs', logs);
     let data = [];
     if (logs.length) {
       data = logs;
@@ -25,14 +23,6 @@ class GameLogTable extends React.PureComponent {
           data={logs}
           noDataText="Loading all dat good data stuff..."
           defaultPageSize={10}
-          getTdProps={(state, rowInfo, column, instance) => ({
-            onClick: (e, handleOriginal) => {
-              console.log('It was in this row:', rowInfo);
-              if (handleOriginal) {
-                handleOriginal();
-              }
-            },
-          })}
           columns={[
             {
               Header: 'Date',

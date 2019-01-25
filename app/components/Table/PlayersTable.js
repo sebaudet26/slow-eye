@@ -140,8 +140,6 @@ class PlayersTable extends React.PureComponent {
 
   render() {
     const { players } = this.props;
-    console.log('players', players);
-    console.log(this.state);
     const {
       posSelected, natSelected, teamSelected, XPSelected,
     } = this.state;
