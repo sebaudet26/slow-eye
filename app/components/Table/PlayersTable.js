@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import Select from 'react-select';
 import {
-  any, find, propEq, pathOr, pipe, prop, match, toLower, toString, split, replace, length, not,
+  any, find, propEq, pathOr, pipe, prop, map, match, toLower, toString, split, replace, length, not,
 } from 'ramda';
 import withFixedColumns from 'react-table-hoc-fixed-columns';
 import 'react-table/react-table.css';
@@ -99,6 +99,14 @@ const experience = [
   { value: 'false', label: 'Veteran' },
 ];
 
+const seasons = [];
+for (let y = 2019; y > 1917; y--) {
+  seasons.push({
+    value: Number(`${y - 1}${y}`),
+    label: `${y - 1}-${y}`,
+  });
+}
+
 // Dropdown Styles
 const customStyles = {
   option: (provided, state) => ({
@@ -112,14 +120,27 @@ class PlayersTable extends React.PureComponent {
   constructor() {
     super();
     this.state = getSavedState();
+    this.handleSeasonChange = this.handleSeasonChange.bind(this);
     this.handlePosChange = this.handlePosChange.bind(this);
     this.handleTeamChange = this.handleTeamChange.bind(this);
     this.handleNatChange = this.handleNatChange.bind(this);
     this.handleXPChange = this.handleXPChange.bind(this);
   }
 
+  componentDidMount() {
+    const { seasonSelected } = this.state;
+    const { fetchPlayers } = this.props;
+    fetchPlayers(seasonSelected || seasons[0].value);
+  }
+
   componentDidUpdate() {
     saveStateToLS(this.state);
+  }
+
+  handleSeasonChange(target) {
+    const { fetchPlayers } = this.props;
+    this.setState({ seasonSelected: target.value });
+    fetchPlayers(target.value);
   }
 
   handlePosChange(target) {
@@ -138,14 +159,37 @@ class PlayersTable extends React.PureComponent {
     this.setState({ XPSelected: target.value });
   }
 
+  // TODO: selectors should live in the container and pass down their state
   render() {
     const { players } = this.props;
     const {
-      posSelected, natSelected, teamSelected, XPSelected,
+      seasonSelected, posSelected, natSelected, teamSelected, XPSelected,
     } = this.state;
+    console.log('seasonSelected', seasonSelected);
     return (
       <div>
         <div className="filters">
+          <div className="filters-item">
+            <div className="filters-item-label">Filter By Season</div>
+            <Select
+              onChange={this.handleSeasonChange}
+              classNamePrefix="react-select"
+              defaultValue={seasons[0]}
+              options={seasons}
+              styles={customStyles}
+              value={find(propEq('value', seasonSelected))(seasons)}
+              theme={theme => ({
+                ...theme,
+                borderRadius: 6,
+                colors: {
+                  ...theme.colors,
+                  primary: '#3D5AFE',
+                  primary50: '#CBD1DB',
+                  primary25: '#E2E7EC',
+                },
+              })}
+            />
+          </div>
           <div className="filters-item">
             <div className="filters-item-label">Filter By Position</div>
             <Select
@@ -292,7 +336,7 @@ class PlayersTable extends React.PureComponent {
               Header: 'Pos',
               id: 'position',
               className: 'text-left hidden-mobile',
-              maxWidth: 65,
+              maxWidth: 50,
               minWidth: 50,
               fixed: 'left',
               accessor: prop('positionCode'),
@@ -313,11 +357,11 @@ class PlayersTable extends React.PureComponent {
               },
             },
             {
-              Header: 'Team',
+              Header: 'Team(s)',
               id: 'team',
               className: 'text-left team-cell hidden-mobile',
-              maxWidth: 65,
-              minWidth: 50,
+              maxWidth: 85,
+              minWidth: 75,
               fixed: 'left',
               Cell: row => (
                 row.value.split(',').map(teamAbr => (
@@ -336,9 +380,11 @@ class PlayersTable extends React.PureComponent {
                   toString,
                   toLower,
                   replace(/\s/g, ''),
+                  replace(/"/g, ''),
                   split(','),
-                  length(match(toLower(prop('value', filter)))),
-                  any,
+                  map(toLower),
+                  map(pipe(match(toLower(filter.value)), length, Boolean)),
+                  any(v => v),
                 )(row);
               },
             },
@@ -587,6 +633,7 @@ class PlayersTable extends React.PureComponent {
 
 PlayersTable.propTypes = {
   players: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  fetchPlayers: PropTypes.func.isRequired,
 };
 
 export default PlayersTable;

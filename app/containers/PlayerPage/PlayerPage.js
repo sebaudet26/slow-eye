@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import {
-  isEmpty, sum, map, path, filter, pipe,
+  isEmpty,
 } from 'ramda';
 import {
   Tab, Tabs, TabList, TabPanel,
@@ -15,7 +15,7 @@ import PlayerImage from '../../components/PlayerImage';
 import { sumNumbers } from '../../utils/player';
 import './style.scss';
 
-const rounds = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th'];
+const rounds = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th'];
 
 const urlParams = new URLSearchParams(window.location.search);
 

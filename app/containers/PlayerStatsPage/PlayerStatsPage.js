@@ -5,13 +5,8 @@ import PlayersTable from '../../components/Table/PlayersTable';
 import './style.scss';
 
 class PlayerStatsPage extends React.PureComponent {
-  componentDidMount() {
-    const { fetchPlayers } = this.props;
-    fetchPlayers('20182019');
-  }
-
   render() {
-    const { players } = this.props;
+    const { players, fetchPlayers } = this.props;
     return (
       <article>
         <Helmet>
@@ -21,7 +16,7 @@ class PlayerStatsPage extends React.PureComponent {
         <div className="playerStats-page">
           <h2>Player Stats</h2>
         </div>
-        <PlayersTable players={players} />
+        <PlayersTable players={players} fetchPlayers={fetchPlayers} />
       </article>
     );
   }

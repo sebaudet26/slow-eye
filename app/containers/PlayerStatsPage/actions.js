@@ -19,6 +19,7 @@ const makeQuery = season => `
     shGoals
     teams
     hits
+    rookie
     blockedShots
     shots
     shootingPctg
