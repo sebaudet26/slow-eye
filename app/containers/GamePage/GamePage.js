@@ -99,6 +99,7 @@ class GamePage extends React.Component {
                 <table className="period-table">
                   <thead>
                     <tr>
+                      <th />
                       <th>PIM</th>
                       <th>PP</th>
                       <th>Hits</th>
