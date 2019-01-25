@@ -105,10 +105,27 @@ class GamePage extends React.Component {
             onSelect={i => saveToLS('playerTabIndex', i)}
           >
             <TabList>
-              <Tab>Summary</Tab>
               <Tab>{boxscore.away.team.name}</Tab>
+              <Tab>Summary</Tab>
               <Tab>{boxscore.home.team.name}</Tab>
             </TabList>
+            <TabPanel>
+              <BoxTable
+                players={reject(isScratchedOrGoalie, boxscore.away.players)}
+                goalieMode={false}
+              />
+              <BoxTable
+                players={filter(isGoalie, boxscore.away.players)}
+                goalieMode
+              />
+              <div className="scratches">
+                <span>Scratches: </span>
+                {pipe(
+                  filter(isScratched),
+                  map(intoLink),
+                )(boxscore.away.players)}
+              </div>
+            </TabPanel>
             <TabPanel>
               <div className="summary-overall">
                 <div className="summary-overall-wrapper">
@@ -235,26 +252,6 @@ class GamePage extends React.Component {
               </div>
             </TabPanel>
             <TabPanel>
-              <h3>{boxscore.away.team.name}</h3>
-              <BoxTable
-                players={reject(isScratchedOrGoalie, boxscore.away.players)}
-                goalieMode={false}
-              />
-              <BoxTable
-                players={filter(isGoalie, boxscore.away.players)}
-                goalieMode
-              />
-              <div className="scratches">
-                <span>Scratches: </span>
-                {pipe(
-                  filter(isScratched),
-                  map(intoLink),
-                )(boxscore.away.players)}
-              </div>
-            </TabPanel>
-
-            <TabPanel>
-              <h3>{boxscore.home.team.name}</h3>
               <BoxTable
                 players={reject(isScratchedOrGoalie, boxscore.home.players)}
                 goalieMode={false}

@@ -12,6 +12,8 @@
       display: flex;
       align-items: center;
       margin: auto;
+      width: 250px;
+      justify-content: center;
 
       &-name {
 
@@ -159,6 +161,12 @@
     &::after {
       content: ',';
     }
+  }
+}
+
+.react-tabs {
+  &__tab-list {
+    justify-content: center;
   }
 }
 
