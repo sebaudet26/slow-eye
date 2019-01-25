@@ -8,7 +8,7 @@ const {
   GraphQLFloat,
 } = require('graphql');
 const {
-  pathOr, pipe, prop, path, map, values, takeLast, take,
+  pathOr, pipe, prop, path, map, values, takeLast, take, propOr,
 } = require('ramda');
 const {
   fetchStandings,
@@ -29,6 +29,7 @@ const {
   fetchLiveFeed,
   fetchAllYearsPlayoffStatsForPlayerId,
   fetchPlayoffGameLogsForPlayerId,
+  fetchHistoricPlayersStats,
 } = require('../libs/nhlApi');
 
 const ifNotThereFetchId = propName => async (d) => {
@@ -699,10 +700,83 @@ const PlayerBio = new GraphQLObjectType({
   },
 });
 
+const PlayerHistoryReport = new GraphQLObjectType({
+  name: 'PlayerHistoryReport',
+  fields: {
+    assists: { type: GraphQLInt, resolve: prop('assists') },
+    faceoffWinPctg: { type: GraphQLFloat, resolve: prop('faceoffWinPctg') },
+    gameWinningGoals: { type: GraphQLInt, resolve: prop('gameWinningGoals') },
+    gamesPlayed: { type: GraphQLInt, resolve: prop('gamesPlayed') },
+    goals: { type: GraphQLInt, resolve: prop('goals') },
+    otGoals: { type: GraphQLInt, resolve: prop('otGoals') },
+    penaltyMinutes: { type: GraphQLInt, resolve: prop('penaltyMinutes') },
+    birthCity: { type: GraphQLString, resolve: prop('playerBirthCity') },
+    birthCountry: { type: GraphQLString, resolve: prop('playerBirthCountry') },
+    birthDate: { type: GraphQLString, resolve: prop('playerBirthDate') },
+    birthStateProvince: { type: GraphQLString, resolve: prop('playerBirthStateProvince') },
+    draftOverallPickNo: { type: GraphQLInt, resolve: prop('playerDraftOverallPickNo') },
+    draftRoundNo: { type: GraphQLInt, resolve: prop('playerDraftRoundNo') },
+    draftYear: { type: GraphQLInt, resolve: prop('playerDraftYear') },
+    firstName: { type: GraphQLString, resolve: prop('playerFirstName') },
+    height: { type: GraphQLInt, resolve: prop('playerHeight') },
+    id: { type: GraphQLInt, resolve: prop('playerId') },
+    inHockeyHof: { type: GraphQLInt, resolve: prop('playerInHockeyHof') },
+    isActive: { type: GraphQLInt, resolve: prop('playerIsActive') },
+    lastName: { type: GraphQLString, resolve: prop('playerLastName') },
+    name: { type: GraphQLString, resolve: prop('playerName') },
+    nationality: { type: GraphQLString, resolve: prop('playerNationality') },
+    positionCode: { type: GraphQLString, resolve: prop('playerPositionCode') },
+    shootsCatches: { type: GraphQLString, resolve: prop('playerShootsCatches') },
+    teams: { type: GraphQLString, resolve: prop('playerTeamsPlayedFor') },
+    weight: { type: GraphQLInt, resolve: prop('playerWeight') },
+    plusMinus: { type: GraphQLInt, resolve: prop('plusMinus') },
+    points: { type: GraphQLInt, resolve: prop('points') },
+    pointsPerGame: { type: GraphQLFloat, resolve: prop('pointsPerGame') },
+    ppGoals: { type: GraphQLInt, resolve: prop('ppGoals') },
+    ppPoints: { type: GraphQLInt, resolve: prop('ppPoints') },
+    seasonId: { type: GraphQLInt, resolve: prop('seasonId') },
+    shGoals: { type: GraphQLInt, resolve: prop('shGoals') },
+    shPoints: { type: GraphQLInt, resolve: prop('shPoints') },
+    shiftsPerGame: { type: GraphQLFloat, resolve: prop('shiftsPerGame') },
+    shootingPctg: { type: GraphQLString, resolve: d => (d.shootingPctg * 100).toFixed(1) },
+    shots: { type: GraphQLInt, resolve: prop('shots') },
+    timeOnIcePerGame: {
+      type: GraphQLString,
+      resolve: (d) => {
+        const secondsCount = propOr(0, 'timeOnIcePerGame', d);
+        const minutesDecimals = secondsCount / 60;
+        const minutes = Math.floor(minutesDecimals);
+        const secondsDecimals = minutesDecimals - minutes;
+        const seconds = secondsDecimals * 60;
+        return `${minutes.toFixed(0)}:${seconds > 10 ? seconds.toFixed(0) : `0${seconds.toFixed(0)}`}`;
+      },
+    },
+    blockedShots: { type: GraphQLInt, resolve: prop('blockedShots') },
+    blockedShotsPerGame: { type: GraphQLFloat, resolve: prop('blockedShotsPerGame') },
+    faceoffs: { type: GraphQLInt, resolve: prop('faceoffs') },
+    faceoffsLost: { type: GraphQLInt, resolve: prop('faceoffsLost') },
+    faceoffsWon: { type: GraphQLInt, resolve: prop('faceoffsWon') },
+    giveaways: { type: GraphQLInt, resolve: prop('giveaways') },
+    goalsPerGame: { type: GraphQLFloat, resolve: prop('goalsPerGame') },
+    hits: { type: GraphQLInt, resolve: prop('hits') },
+    hitsPerGame: { type: GraphQLFloat, resolve: prop('hitsPerGame') },
+    missedShots: { type: GraphQLInt, resolve: prop('missedShots') },
+    missedShotsPerGame: { type: GraphQLFloat, resolve: prop('missedShotsPerGame') },
+    shotsPerGame: { type: GraphQLFloat, resolve: prop('shotsPerGame') },
+    takeaways: { type: GraphQLInt, resolve: prop('takeaways') },
+    rookie: { type: GraphQLBoolean, resolve: prop('rookie') },
+  },
+});
+
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     fields: {
+      allHistoryPlayersReport: {
+        args: { season: { type: GraphQLString } },
+        type: GraphQLList(PlayerHistoryReport),
+        resolve: (root, args) => fetchHistoricPlayersStats(args.season),
+      },
       allHistoryPlayers: {
         type: new GraphQLList(PlayerBio),
         resolve: fetchAllHistoryPlayers,

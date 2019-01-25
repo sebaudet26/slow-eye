@@ -4,54 +4,25 @@ import graphqlApi from '../../utils/api';
 
 const makeQuery = season => `
 {
-  players ${season ? `(season: "${season}")` : ''} {
-    id,
-    person {
-      fullName
-    },
-    team {
-      id
-      abbreviation
-    },
-    position {
-      abbreviation
-    },
-    info {
-      nationality
-      rookie
-      fullName
-    },
-    stats ${season ? `(season: "${season}")` : ''}{
-      season,
-      stat {
-        games,
-        goals,
-        points,
-        assists,
-        plusMinus,
-        pim,
-        hits,
-        blocked,
-        powerPlayGoals,
-        shortHandedGoals,
-        shots,
-        shotPct,
-        timeOnIcePerGame,
-        saves,
-        goalsAgainst,
-        shutouts,
-        gamesStarted,
-        timeOnIce,
-        savePercentage,
-        goalAgainstAverage,
-        wins,
-        losses,
-        ot,
-        evenStrengthSavePercentage,
-        powerPlaySavePercentage,
-        shortHandedSavePercentage
-      }
-    }
+  allHistoryPlayersReport (season: "${season}") {
+    id
+    name
+    nationality
+    positionCode
+    gamesPlayed
+    goals
+    assists
+    points
+    plusMinus
+    penaltyMinutes
+    ppGoals
+    shGoals
+    teams
+    hits
+    blockedShots
+    shots
+    shootingPctg
+    timeOnIcePerGame
   }
 }`;
 
@@ -60,7 +31,7 @@ export const fetchAllPlayers = season => async (dispatch) => {
     const data = await graphqlApi(makeQuery(season || '20182019'));
     return dispatch({
       type: FETCH_PLAYERS,
-      payload: data,
+      payload: data.allHistoryPlayersReport,
     });
   } catch (e) {
     // TODO: dispatch error to reducer

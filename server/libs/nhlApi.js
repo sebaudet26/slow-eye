@@ -1,5 +1,5 @@
 const {
-  head, contains, filter, flatten, map, mergeAll, path, prop, pipe, equals, toLower, propOr, pathEq,
+  head, contains, filter, flatten, map, mergeAll, path, prop, pipe, take, propOr, pathEq, mergeLeft,
 } = require('ramda');
 const moment = require('moment');
 const fetch = require('node-fetch');
@@ -39,6 +39,7 @@ const nhlApi = async (resource, expiration, force) => {
       }
     }
     const url = `${nhlApiBase}${resource}`;
+    console.log(url);
     const response = await fetch(url);
     const data = await response.json();
     cache
@@ -235,6 +236,25 @@ const fetchAllHistoryPlayers = async () => {
   return response.data;
 };
 
+const fetchHistoricPlayersStats = async (season = 20182019) => {
+  // const seasonStart = 20182019;
+  const skatersummary = `/skaters?isAggregate=false&reportType=basic&isGame=false&reportName=skatersummary&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}&sort=[{%22property%22:%22playerId%22}]`;
+  const realtime = `/skaters?isAggregate=false&reportType=basic&isGame=false&reportName=realtime&sort=[{%22property%22:%22playerId%22}]&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
+  try {
+    const [skatersummaryJSON, realtimeJSON] = await Promise.all([
+      nhlApi(skatersummary, 60 * 60 * 24, true),
+      nhlApi(realtime, 60 * 60 * 24, true),
+    ]);
+    return pipe(
+      map(prop('data')),
+      ([arr1, arr2]) => arr1.map((item, k) => mergeLeft(arr1[k], arr2[k])),
+    )([skatersummaryJSON, realtimeJSON]);
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+};
+
 module.exports = {
   fetchLiveFeed,
   fetchStandings,
@@ -255,4 +275,5 @@ module.exports = {
   fetchTeamRanking,
   fetchAllYearsPlayoffStatsForPlayerId,
   fetchPlayoffGameLogsForPlayerId,
+  fetchHistoricPlayersStats,
 };
