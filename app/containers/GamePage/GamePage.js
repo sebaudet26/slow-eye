@@ -101,8 +101,8 @@ class GamePage extends React.Component {
           </div>
 
           <Tabs
-            defaultIndex={Number(getFromLS('playerTabIndex')) || 0}
-            onSelect={i => saveToLS('playerTabIndex', i)}
+            defaultIndex={Number(getFromLS('gameTabIndex')) || 1}
+            onSelect={i => saveToLS('gameTabIndex', i)}
           >
             <TabList>
               <Tab>{boxscore.away.team.name}</Tab>
@@ -185,6 +185,73 @@ class GamePage extends React.Component {
                   </div>
                 </div>
               </div>
+              <h3>Scoring Summary</h3>
+              <div className="summary-events">
+                <div className="summary-events-wrapper">
+                  <div className="summary-events-card">
+                    <table className="events-table">
+                      <thead>
+                        <tr>
+                          <th>1st Period</th>
+                        </tr>
+                        <tr>
+                          <th>Time</th>
+                          <th>Goal By</th>
+                          <th>Assist(s)</th>
+                          <th />
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Test</td>
+                          <td>Test</td>
+                          <td>Test</td>
+                          <td>PPG</td>
+                        </tr>
+                      </tbody>
+                      <thead>
+                        <tr>
+                          <th>2nd Period</th>
+                        </tr>
+                        <tr>
+                          <th>Time</th>
+                          <th>Goal By</th>
+                          <th>Assist(s)</th>
+                          <th />
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Test</td>
+                          <td>Test</td>
+                          <td>Test</td>
+                          <td>PPG</td>
+                        </tr>
+                      </tbody>
+                      <thead>
+                        <tr>
+                          <th>3rd Period</th>
+                        </tr>
+                        <tr>
+                          <th>Time</th>
+                          <th>Goal By</th>
+                          <th>Assist(s)</th>
+                          <th />
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Test</td>
+                          <td>Test</td>
+                          <td>Test</td>
+                          <td>PPG</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <h3>Penalties</h3>
               <div className="summary-events">
                 <div className="summary-events-wrapper">
                   <div className="summary-events-card">
