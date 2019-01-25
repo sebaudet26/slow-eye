@@ -18,21 +18,30 @@ const Header = () => (
       </a>
       <SearchBar />
       <div className="header-nav">
+        <NavLink activeClassName="active" className="header-nav-item" exact to="/">
+          Standings
+        </NavLink>
         <NavLink activeClassName="active" className="header-nav-item" to="/scores">
             Scores
         </NavLink>
-        <NavLink activeClassName="active" className="header-nav-item" to="/standings">
-            Standings
-        </NavLink>
-        <NavLink activeClassName="active" className="header-nav-item" exact to="/">
+        <NavLink activeClassName="active" className="header-nav-item" to="/playerstats">
             Player Stats
         </NavLink>
         <NavLink activeClassName="active" className="header-nav-item" to="/teamstats">
             Team Stats
         </NavLink>
+        <NavLink activeClassName="active" className="header-nav-item" to="/drafts">
+            Drafts
+        </NavLink>
       </div>
       <div className="header-mobile">
         <ul className="header-mobile-list">
+          <li>
+            <NavLink activeClassName="active" exact to="/">
+              <StandingsIcon />
+                Standings
+            </NavLink>
+          </li>
           <li>
             <NavLink activeClassName="active" to="/scores">
               <ScoreIcon />
@@ -40,13 +49,7 @@ const Header = () => (
             </NavLink>
           </li>
           <li>
-            <NavLink activeClassName="active" to="/standings">
-              <StandingsIcon />
-                  Standings
-            </NavLink>
-          </li>
-          <li>
-            <NavLink activeClassName="active" to="/" exact>
+            <NavLink activeClassName="active" to="/playerstats">
               <StatsIcon />
                   Player Stats
             </NavLink>

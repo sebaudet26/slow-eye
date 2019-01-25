@@ -11,6 +11,7 @@ import ScorePage from '../ScorePage/Loadable';
 import GamePage from '../GamePage/Loadable';
 import ContributorsPage from '../Contributors/Loadable';
 import NotFoundPage from '../NotFoundPage/Loadable';
+import DraftPage from '../DraftPage/Loadable';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import './style.scss';
@@ -26,13 +27,14 @@ const App = () => (
     <Header />
     <div className="app-wrapper">
       <Switch>
-        <Route exact path="/" component={PlayerStatsPage} />
-        <Route path="/standings" component={StandingsPage} />
+        <Route exact path="/" component={StandingsPage} />
+        <Route path="/playerstats" component={PlayerStatsPage} />
         <Route path="/player" component={PlayerPage} />
         <Route path="/team" component={TeamPage} />
         <Route path="/teamstats" component={TeamStatsPage} />
         <Route path="/scores" component={ScorePage} />
         <Route path="/game" component={GamePage} />
+        <Route path="/drafts" component={DraftPage} />
         <Route path="/contributors" component={ContributorsPage} />
         <Route path="" component={NotFoundPage} />
       </Switch>
