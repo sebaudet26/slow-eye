@@ -10,7 +10,6 @@
   input, select {
     height: 30px;
   }
-
   &.player-stats {
     .rt-th {
       &:nth-child(3) {
@@ -106,6 +105,14 @@
       outline: none;
       border-bottom: 0px !important;
 
+      &:first-child {
+        border-radius: 6px 0 0 0;
+      }
+
+      &:last-child {
+        border-radius: 0 6px 0 0;
+      }
+
       &:first-child, &:nth-child(2) {
         text-align: left;
       }
@@ -167,9 +174,7 @@
   }
 }
 
-.css-10o5k90 .-header .rt-th, .css-10o5k90 .-filters .rt-th, .css-10o5k90 .rt-td {
-  background: transparent !important;
-}
+//
 
 
 .hidden {
