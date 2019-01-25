@@ -1,5 +1,5 @@
 import {
-  equals, isNil, or, path, pipe, prop,
+  equals, isNil, map, or, path, pipe, prop, sum, filter,
 } from 'ramda';
 
 export const isScratched = pipe(prop('boxscore'), isNil);
@@ -25,5 +25,11 @@ export const shootingSideIs = side => player => (
     ? player.info.shootsCatches === side
     : 0
 );
+
+export const sumNumbers = (data, pathToNumber) => pipe(
+  map(path(pathToNumber)),
+  filter(val => typeof val === 'number'),
+  arr => (arr.length ? sum(arr) : '-'),
+)(data);
 
 export const forwardsAbbreviations = ['LW', 'C', 'RW'];

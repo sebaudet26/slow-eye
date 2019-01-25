@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import {
-  isEmpty, sum, map, pathOr,
+  isEmpty, sum, map, path, filter, pipe,
 } from 'ramda';
 import {
   Tab, Tabs, TabList, TabPanel,
@@ -12,6 +12,7 @@ import CareerStatsTable from '../../components/Table/CareerStatsTable';
 import GameLogTable from '../../components/Table/GameLogTable';
 import PlayerBadges from '../../components/PlayerBadges/PlayerBadges';
 import PlayerImage from '../../components/PlayerImage';
+import { sumNumbers } from '../../utils/player';
 import './style.scss';
 
 const rounds = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th'];
@@ -21,6 +22,14 @@ const urlParams = new URLSearchParams(window.location.search);
 const playerIsActiveThisYear = latestSeason => latestSeason.season === '20182019';
 const saveToLS = (name, value) => window.localStorage.setItem(name, value);
 const getFromLS = name => window.localStorage.getItem(name);
+const sumNumbersByPath = ({
+  active, isActiveThisYear, lastSeason, careerStats, pathToNumber,
+}) => {
+  if (active) {
+    return isActiveThisYear ? lastSeason.stat.plusMinus : 0;
+  }
+  return sumNumbers(careerStats, pathToNumber);
+};
 
 export default class PlayerPage extends React.Component {
   componentDidMount() {
@@ -112,13 +121,13 @@ export default class PlayerPage extends React.Component {
               <div className="player-stats-item">
                 <div className="light small-text">GP</div>
                 <div className="bold">
-                  {
-                  active === true ? (
-                    isActiveThisYear ? lastSeason.stat.games : 0
-                  ) : (
-                    sum(map(pathOr(careerStats, ['stat', 'games']), careerStats))
-                  )
-                  }
+                  {sumNumbersByPath({
+                    active,
+                    isActiveThisYear,
+                    lastSeason,
+                    careerStats,
+                    pathToNumber: ['stat', 'games'],
+                  })}
                 </div>
               </div>
               {primaryPosition.abbreviation === 'G'
@@ -126,26 +135,26 @@ export default class PlayerPage extends React.Component {
                   <div className="player-stats-item">
                     <div className="light small-text">W</div>
                     <div className="bold">
-                      {
-                      active === true ? (
-                        isActiveThisYear ? lastSeason.stat.wins : 0
-                      ) : (
-                        sum(map(pathOr(careerStats, ['stat', 'wins']), careerStats))
-                      )
-                      }
+                      {sumNumbersByPath({
+                        active,
+                        isActiveThisYear,
+                        lastSeason,
+                        careerStats,
+                        pathToNumber: ['stat', 'wins'],
+                      })}
                     </div>
                   </div>
                 ) : (
                   <div className="player-stats-item">
                     <div className="light small-text">G</div>
                     <div className="bold">
-                      {
-                      active === true ? (
-                        isActiveThisYear ? lastSeason.stat.goals : 0
-                      ) : (
-                        sum(map(pathOr(careerStats, ['stat', 'goals']), careerStats))
-                      )
-                      }
+                      {sumNumbersByPath({
+                        active,
+                        isActiveThisYear,
+                        lastSeason,
+                        careerStats,
+                        pathToNumber: ['stat', 'goals'],
+                      })}
                     </div>
                   </div>
                 )
@@ -155,26 +164,26 @@ export default class PlayerPage extends React.Component {
                   <div className="player-stats-item">
                     <div className="light small-text">L</div>
                     <div className="bold">
-                      {
-                      active === true ? (
-                        isActiveThisYear ? lastSeason.stat.losses : 0
-                      ) : (
-                        sum(map(pathOr(careerStats, ['stat', 'losses']), careerStats))
-                      )
-                      }
+                      {sumNumbersByPath({
+                        active,
+                        isActiveThisYear,
+                        lastSeason,
+                        careerStats,
+                        pathToNumber: ['stat', 'losses'],
+                      })}
                     </div>
                   </div>
                 ) : (
                   <div className="player-stats-item">
                     <div className="light small-text">A</div>
                     <div className="bold">
-                      {
-                      active === true ? (
-                        isActiveThisYear ? lastSeason.stat.assists : 0
-                      ) : (
-                        sum(map(pathOr(careerStats, ['stat', 'assists']), careerStats))
-                      )
-                      }
+                      {sumNumbersByPath({
+                        active,
+                        isActiveThisYear,
+                        lastSeason,
+                        careerStats,
+                        pathToNumber: ['stat', 'assists'],
+                      })}
                     </div>
                   </div>
                 )
@@ -184,26 +193,26 @@ export default class PlayerPage extends React.Component {
                   <div className="player-stats-item">
                     <div className="light small-text">OT</div>
                     <div className="bold">
-                      {
-                      active === true ? (
-                        isActiveThisYear ? lastSeason.stat.ot : 0
-                      ) : (
-                        sum(map(pathOr(careerStats, ['stat', 'ot']), careerStats))
-                      )
-                      }
+                      {sumNumbersByPath({
+                        active,
+                        isActiveThisYear,
+                        lastSeason,
+                        careerStats,
+                        pathToNumber: ['stat', 'ot'],
+                      })}
                     </div>
                   </div>
                 ) : (
                   <div className="player-stats-item">
                     <div className="light small-text">Pts</div>
                     <div className="bold">
-                      {
-                      active === true ? (
-                        isActiveThisYear ? lastSeason.stat.points : 0
-                      ) : (
-                        sum(map(pathOr(careerStats, ['stat', 'points']), careerStats))
-                      )
-                      }
+                      {sumNumbersByPath({
+                        active,
+                        isActiveThisYear,
+                        lastSeason,
+                        careerStats,
+                        pathToNumber: ['stat', 'points'],
+                      })}
                     </div>
                   </div>
                 )
@@ -213,26 +222,26 @@ export default class PlayerPage extends React.Component {
                   <div className="player-stats-item">
                     <div className="light small-text">SO</div>
                     <div className="bold">
-                      {
-                      active === true ? (
-                        isActiveThisYear ? lastSeason.stat.shutouts : 0
-                      ) : (
-                        sum(map(pathOr(careerStats, ['stat', 'shutouts']), careerStats))
-                      )
-                      }
+                      {sumNumbersByPath({
+                        active,
+                        isActiveThisYear,
+                        lastSeason,
+                        careerStats,
+                        pathToNumber: ['stat', 'shutouts'],
+                      })}
                     </div>
                   </div>
                 ) : (
                   <div className="player-stats-item">
                     <div className="light small-text">+/-</div>
                     <div className="bold">
-                      {
-                      active === true ? (
-                        isActiveThisYear ? lastSeason.stat.plusMinus : 0
-                      ) : (
-                        sum(map(pathOr(careerStats, ['stat', 'plusMinus']), careerStats))
-                      )
-                      }
+                      {sumNumbersByPath({
+                        active,
+                        isActiveThisYear,
+                        lastSeason,
+                        careerStats,
+                        pathToNumber: ['stat', 'plusMinus'],
+                      })}
                     </div>
                   </div>
                 )
