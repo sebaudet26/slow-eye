@@ -198,6 +198,13 @@
     width: 25px;
     margin-right: 10px;
   }
+
+  &.sm-margin {
+    img {
+      width: 25px;
+      margin-right: 5px;
+    }
+  }
 }
 
 .filters {

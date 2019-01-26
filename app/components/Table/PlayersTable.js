@@ -32,8 +32,8 @@ const positions = [
   { value: 'D', label: 'Defensemen' },
   { value: 'G', label: 'Goalies' },
   { value: 'C', label: 'Centers' },
-  { value: 'LW', label: 'Left Wings' },
-  { value: 'RW', label: 'Right Wings' },
+  { value: 'L', label: 'Left Wings' },
+  { value: 'R', label: 'Right Wings' },
 ];
 
 // Team Dropdown Options
@@ -357,17 +357,15 @@ class PlayersTable extends React.PureComponent {
               },
             },
             {
-              Header: 'Team(s)',
+              Header: 'Team',
               id: 'team',
-              className: 'text-left team-cell hidden-mobile',
+              className: 'text-left team-cell sm-margin hidden-mobile',
               maxWidth: 85,
               minWidth: 75,
               fixed: 'left',
               Cell: row => (
                 row.value.split(',').map(teamAbr => (
-                  <a href={`./team?id=${row.value.id}`}>
-                    <img src={`/images/teams/small/${teamAbr.trim()}.png`} alt="" />
-                  </a>
+                  <img src={`/images/teams/small/${teamAbr.trim()}.png`} alt="" />
                 ))
               ),
               accessor: prop('teams'),
@@ -465,6 +463,9 @@ class PlayersTable extends React.PureComponent {
               show: not(isGoalie(posSelected)),
               filterable: false,
               accessor: prop('plusMinus'),
+              Cell: row => (
+                <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
+              ),
             },
             {
               Header: 'PIM',
@@ -483,6 +484,9 @@ class PlayersTable extends React.PureComponent {
               show: not(isGoalie(posSelected)),
               filterable: false,
               accessor: prop('ppGoals'),
+              Cell: row => (
+                <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
+              ),
             },
             {
               Header: 'SHG',
@@ -492,6 +496,9 @@ class PlayersTable extends React.PureComponent {
               show: not(isGoalie(posSelected)),
               filterable: false,
               accessor: prop('shGoals'),
+              Cell: row => (
+                <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
+              ),
             },
             {
               Header: 'Hits',
@@ -501,6 +508,9 @@ class PlayersTable extends React.PureComponent {
               show: not(isGoalie(posSelected)),
               filterable: false,
               accessor: prop('hits'),
+              Cell: row => (
+                <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
+              ),
             },
             {
               Header: 'Bks',
@@ -510,6 +520,9 @@ class PlayersTable extends React.PureComponent {
               show: not(isGoalie(posSelected)),
               filterable: false,
               accessor: prop('blockedShots'),
+              Cell: row => (
+                <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
+              ),
             },
             {
               Header: 'SOG',
@@ -519,6 +532,9 @@ class PlayersTable extends React.PureComponent {
               show: not(isGoalie(posSelected)),
               filterable: false,
               accessor: prop('shots'),
+              Cell: row => (
+                <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
+              ),
             },
             {
               Header: 'S%',
