@@ -47,6 +47,7 @@ const makePlayerQuery = id => `
       team {
         name
         abbreviation
+        id
       }
       league {
         name
@@ -81,6 +82,7 @@ const makePlayerQuery = id => `
       team {
         name
         abbreviation
+        id
       }
       league {
         name

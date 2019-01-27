@@ -43,7 +43,7 @@ const CareerStatsTable = ({ stats, info }) => (
           className: 'text-left',
           accessor: d => insert(4, '-', split('', pathOr('-', ['season'], d))),
           maxWidth: 125,
-          minWidth: 100,
+          minWidth: 110,
           Footer: 'Total Stats',
         },
         {
@@ -58,13 +58,16 @@ const CareerStatsTable = ({ stats, info }) => (
           Header: 'Team',
           id: 'team',
           maxWidth: 250,
-          minWidth: 200,
+          minWidth: 225,
           className: 'border-right text-left team-cell',
-          accessor: d => d.team,
+          // accessor: d => d.team,
+          accessor: d => `${d.team.name}+${d.team.id}+${d.season}`,
           Cell: row => (
             <div>
-              <img src={`/images/teams/small/${row.value.abbreviation}.png`} alt="" />
-              {row.value.name}
+              <svg className="team-cell-logo">
+                <use xlinkHref={`/images/teams/season/${row.value.split('+')[2]}.svg#team-${row.value.split('+')[1]}-${row.value.split('+')[2]}-light`} />
+              </svg>
+              {row.value.split('+')[0]}
             </div>
           ),
         },
