@@ -91,6 +91,9 @@ const nationalities = [
   { value: 'SVN', label: 'Slovenia' },
   { value: 'NLD', label: 'Netherlands' },
   { value: 'AUS', label: 'Australia' },
+  { value: 'BLR', label: 'Belarus' },
+  { value: 'UKR', label: 'Ukraine' },
+  { value: 'KAZ', label: 'Kazakhstan' },
 ];
 
 const experience = [
