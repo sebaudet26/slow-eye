@@ -239,18 +239,38 @@ const fetchAllHistoryPlayers = async () => {
 };
 
 const fetchHistoricPlayersStats = async (season = 20182019) => {
-  // const seasonStart = 20182019;
-  const skatersummary = `/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}&sort=[{%22property%22:%22playerId%22}]`;
-  const realtime = `/skaters?isAggregate=false&reportType=basic&reportName=realtime&sort=[{%22property%22:%22playerId%22}]&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
+  const skatersummaryRookie = `/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&cayenneExp=playerRookieSeasonInd=1%20and%20gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}&sort=[{%22property%22:%22playerId%22}]`;
+  const realtimeRookie = `/skaters?isAggregate=false&reportType=basic&reportName=realtime&sort=[{%22property%22:%22playerId%22}]&cayenneExp=playerRookieSeasonInd=1%20and%20gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
+  // playerRookieSeasonInd=0 does not work ...
+  const skatersummaryAll = `/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}&sort=[{%22property%22:%22playerId%22}]`;
+  const realtimeAll = `/skaters?isAggregate=false&reportType=basic&reportName=realtime&sort=[{%22property%22:%22playerId%22}]&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
   try {
-    const [skatersummaryJSON, realtimeJSON] = await Promise.all([
-      nhlApi(skatersummary, 60 * 60 * 24, true),
-      nhlApi(realtime, 60 * 60 * 24, true),
+    const [
+      skatersummaryRookieJSON,
+      skatersummaryAllJSON,
+      realtimeRookieJSON,
+      realtimeAllJSON,
+    ] = await Promise.all([
+      nhlApi(skatersummaryRookie, 60 * 60 * 24, true),
+      nhlApi(skatersummaryAll, 60 * 60 * 24, true),
+      nhlApi(realtimeRookie, 60 * 60 * 24, true),
+      nhlApi(realtimeAll, 60 * 60 * 24, true),
     ]);
     return pipe(
       map(prop('data')),
-      ([arr1, arr2]) => arr1.map((item, k) => mergeLeft(arr1[k], arr2[k])),
-    )([skatersummaryJSON, realtimeJSON]);
+      ([arr1, arr2, arr3, arr4]) => {
+        const rookiePlayerIds = map(prop('playerId'), arr1);
+        return [
+          ...arr1.map((item, k) => mergeLeft(arr1[k], { ...arr3[k], rookie: true })),
+          ...arr2.filter(item => !rookiePlayerIds.includes(item.playerId)).map((item, k) => mergeLeft(arr2[k], { ...arr4[k], rookie: false })),
+        ];
+      },
+    )([
+      skatersummaryRookieJSON,
+      skatersummaryAllJSON,
+      realtimeRookieJSON,
+      realtimeAllJSON,
+    ]);
   } catch (e) {
     console.error(e);
     return [];
