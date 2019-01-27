@@ -765,6 +765,17 @@ const PlayerHistoryReport = new GraphQLObjectType({
     shotsPerGame: { type: GraphQLFloat, resolve: prop('shotsPerGame') },
     takeaways: { type: GraphQLInt, resolve: prop('takeaways') },
     rookie: { type: GraphQLBoolean, resolve: prop('rookie') },
+    // goalies
+    ties: { type: GraphQLInt, resolve: prop('ties') },
+    wins: { type: GraphQLInt, resolve: prop('wins') },
+    losses: { type: GraphQLInt, resolve: prop('losses') },
+    otLosses: { type: GraphQLInt, resolve: prop('otLosses') },
+    goalsAgainst: { type: GraphQLInt, resolve: prop('goalsAgainst') },
+    goalsAgainstAverage: { type: GraphQLFloat, resolve: prop('goalsAgainstAverage') },
+    saves: { type: GraphQLInt, resolve: prop('saves') },
+    shotsAgainst: { type: GraphQLInt, resolve: r => r.evShotsAgainst + r.ppShotsAgainst + r.shShotsAgainst },
+    savePercentage: { type: GraphQLFloat, resolve: prop('savePctg') },
+    shutouts: { type: GraphQLInt, resolve: prop('shutouts') },
   },
 });
 

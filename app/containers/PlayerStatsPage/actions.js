@@ -24,6 +24,16 @@ const makeQuery = season => `
     shots
     shootingPctg
     timeOnIcePerGame
+    ties
+    wins
+    losses
+    otLosses
+    goalsAgainst
+    goalsAgainstAverage
+    saves
+    shotsAgainst
+    savePercentage
+    shutouts
   }
 }`;
 

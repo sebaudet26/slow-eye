@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import Select from 'react-select';
 import {
-  any, find, propEq, pathOr, pipe, prop, map, match, toLower, toString, split, replace, length, not,
+  any, find, propEq, pathOr, pipe, prop, propOr, map, match, toLower, toString, split, replace, length, not,
 } from 'ramda';
 import withFixedColumns from 'react-table-hoc-fixed-columns';
 import 'react-table/react-table.css';
@@ -562,7 +562,7 @@ class PlayersTable extends React.PureComponent {
               minWidth: 50,
               show: isGoalie(posSelected),
               filterable: false,
-              accessor: d => pathOr(0, ['stats', 0, 'stat', 'wins'], d),
+              accessor: propOr('-', 'wins'),
             },
             {
               Header: 'L',
@@ -571,7 +571,7 @@ class PlayersTable extends React.PureComponent {
               minWidth: 50,
               show: isGoalie(posSelected),
               filterable: false,
-              accessor: d => pathOr(0, ['stats', 0, 'stat', 'losses'], d),
+              accessor: propOr('-', 'losses'),
             },
             {
               Header: 'OT',
@@ -580,7 +580,7 @@ class PlayersTable extends React.PureComponent {
               minWidth: 50,
               show: isGoalie(posSelected),
               filterable: false,
-              accessor: d => pathOr(0, ['stats', 0, 'stat', 'ot'], d),
+              accessor: propOr('-', 'otLosses'),
             },
             {
               Header: 'Sv%',
@@ -589,7 +589,7 @@ class PlayersTable extends React.PureComponent {
               minWidth: 50,
               show: isGoalie(posSelected),
               filterable: false,
-              accessor: d => pathOr(0, ['stats', 0, 'stat', 'savePercentage'], d).toFixed(3),
+              accessor: d => pathOr(0, ['savePercentage'], d).toFixed(3),
             },
             {
               Header: 'GAA',
@@ -598,7 +598,7 @@ class PlayersTable extends React.PureComponent {
               minWidth: 50,
               show: isGoalie(posSelected),
               filterable: false,
-              accessor: d => parseFloat(pathOr(0, ['stats', 0, 'stat', 'goalAgainstAverage'], d)).toFixed(2),
+              accessor: d => pathOr(0, ['goalsAgainstAverage'], d).toFixed(2),
             },
             {
               Header: 'SO',
@@ -607,7 +607,7 @@ class PlayersTable extends React.PureComponent {
               minWidth: 50,
               show: isGoalie(posSelected),
               filterable: false,
-              accessor: d => pathOr(0, ['stats', 0, 'stat', 'shutouts'], d),
+              accessor: pathOr('-', ['shutouts']),
             },
             {
               Header: 'SV',
@@ -616,7 +616,7 @@ class PlayersTable extends React.PureComponent {
               minWidth: 50,
               show: isGoalie(posSelected),
               filterable: false,
-              accessor: d => pathOr(0, ['stats', 0, 'stat', 'saves'], d),
+              accessor: propOr('-', 'saves'),
             },
             {
               Header: 'GA',
@@ -625,7 +625,7 @@ class PlayersTable extends React.PureComponent {
               minWidth: 50,
               show: isGoalie(posSelected),
               filterable: false,
-              accessor: d => pathOr(0, ['stats', 0, 'stat', 'goalsAgainst'], d),
+              accessor: propOr('-', 'goalsAgainst'),
             },
           ]}
           defaultSorted={[
