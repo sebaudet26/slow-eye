@@ -1,10 +1,9 @@
 const {
-  head, contains, filter, flatten, map, mergeAll, path, prop, pipe, take, propOr, pathEq, mergeLeft,
+  head, contains, filter, flatten, map, mergeAll, path, prop, pipe, propOr, pathEq, mergeLeft,
 } = require('ramda');
 const moment = require('moment');
 const fetch = require('node-fetch');
 const cache = require('./redisApi');
-
 
 const nhlApiBase = 'http://www.nhl.com/stats/rest';
 const nhlStatsApiBase = 'https://statsapi.web.nhl.com/api/v1';
@@ -230,15 +229,19 @@ const fetchTeamRanking = async (teamId) => {
 };
 
 const fetchAllHistoryPlayers = async () => {
-  const resource = '/skaters?isAggregate=true&reportType=basic&isGame=false&reportName=bios&sort=[{%22property%22:%22playerBirthDate%22,%22direction%22:%22DESC%22}]&cayenneExp=gameTypeId=2%20and%20seasonId%3E=19171918%20and%20seasonId%3C=20182019';
-  const response = await nhlApi(resource, 60 * 60 * 24 * 7);
-  return response.data;
+  const resourceSkaters = '/skaters?isAggregate=true&reportType=basic&reportName=bios&sort=[{%22property%22:%22playerBirthDate%22,%22direction%22:%22DESC%22}]&cayenneExp=seasonId%3E=19171918%20and%20seasonId%3C=20182019';
+  const resourceGoalies = '/goalies?isAggregate=true&reportType=goalie_basic&reportName=goaliebios&sort=[{%22property%22:%22playerBirthDate%22,%22direction%22:%22DESC%22}]&cayenneExp=seasonId%3E=19171918%20and%20seasonId%3C=20182019';
+  const [skaters, goalies] = await Promise.all([
+    nhlApi(resourceSkaters, 60 * 60 * 24 * 7),
+    nhlApi(resourceGoalies, 60 * 60 * 24 * 7),
+  ]);
+  return [...goalies.data, ...skaters.data];
 };
 
 const fetchHistoricPlayersStats = async (season = 20182019) => {
   // const seasonStart = 20182019;
-  const skatersummary = `/skaters?isAggregate=false&reportType=basic&isGame=false&reportName=skatersummary&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}&sort=[{%22property%22:%22playerId%22}]`;
-  const realtime = `/skaters?isAggregate=false&reportType=basic&isGame=false&reportName=realtime&sort=[{%22property%22:%22playerId%22}]&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
+  const skatersummary = `/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}&sort=[{%22property%22:%22playerId%22}]`;
+  const realtime = `/skaters?isAggregate=false&reportType=basic&reportName=realtime&sort=[{%22property%22:%22playerId%22}]&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
   try {
     const [skatersummaryJSON, realtimeJSON] = await Promise.all([
       nhlApi(skatersummary, 60 * 60 * 24, true),

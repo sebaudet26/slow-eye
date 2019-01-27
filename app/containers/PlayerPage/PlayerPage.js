@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import {
-  isEmpty,
+  isEmpty, path,
 } from 'ramda';
 import {
   Tab, Tabs, TabList, TabPanel,
@@ -26,7 +26,7 @@ const sumNumbersByPath = ({
   active, isActiveThisYear, lastSeason, careerStats, pathToNumber,
 }) => {
   if (active) {
-    return isActiveThisYear ? lastSeason.stat.plusMinus : 0;
+    return isActiveThisYear ? path(pathToNumber, lastSeason) : 0;
   }
   return sumNumbers(careerStats, pathToNumber);
 };
