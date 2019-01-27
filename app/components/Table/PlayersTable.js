@@ -162,6 +162,7 @@ class PlayersTable extends React.PureComponent {
   // TODO: selectors should live in the container and pass down their state
   render() {
     const { players } = this.props;
+    console.log('players', players);
     const {
       seasonSelected, posSelected, natSelected, teamSelected, XPSelected,
     } = this.state;
@@ -364,9 +365,9 @@ class PlayersTable extends React.PureComponent {
               minWidth: 75,
               fixed: 'left',
               Cell: row => (
-                row.value.split(',').map(teamAbr => (
-                  <img src={`/images/teams/small/${teamAbr.trim()}.png`} alt="" />
-                ))
+                <svg className="team-cell-logo">
+                  <use xlinkHref={`/images/teams/season/${seasonSelected}.svg#team-24-${seasonSelected}-light`} />
+                </svg>
               ),
               accessor: prop('teams'),
               filterMethod: (filter, row) => {
