@@ -33,7 +33,7 @@ const RosterStatsTable = ({ players, position }) => (
           Header: 'Name',
           id: 'fullName',
           accessor: d => `${d.player.info.fullName}+${d.player.id}`,
-          className: 'text-left',
+          className: 'text-left border-mobile',
           fixed: 'left',
           maxWidth: 200,
           minWidth: 150,
@@ -46,7 +46,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'Age',
           id: 'age',
-          className: 'border-right',
+          className: 'border-right hidden-mobile',
           maxWidth: 65,
           minWidth: 50,
           fixed: 'left',
