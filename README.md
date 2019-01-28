@@ -6,7 +6,6 @@ https://github.com/dword4/nhlapi
 
 
 TODO:
-----------------------
 ----------V1----------
 
 - ~~rookies vs veterans into players table~~
@@ -20,7 +19,6 @@ TODO:
 - video
 - Sort GAA reverse
 
-----------------------
 ----------V2----------
 
 - standings history
