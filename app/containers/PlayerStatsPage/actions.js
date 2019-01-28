@@ -1,10 +1,10 @@
 /* global fetch */
-import { FETCH_PLAYERS } from './constants';
+import { FETCH_PLAYERS, FETCH_TEAMS } from './constants';
 import graphqlApi from '../../utils/api';
 
-const makeQuery = season => `
+const makePlayersQuery = season => `
 {
-  allHistoryPlayersReport (season: "${season}") {
+  playersReport (season: "${season}") {
     id
     name
     nationality
@@ -40,12 +40,34 @@ const makeQuery = season => `
   }
 }`;
 
+const makeTeamsQuery = season => `
+{
+  teams (season: "${season}") {
+    id
+    abbreviation
+    name
+  }
+}`;
+
 export const fetchAllPlayers = season => async (dispatch) => {
   try {
-    const data = await graphqlApi(makeQuery(season || '20182019'));
+    const data = await graphqlApi(makePlayersQuery(season || '20182019'));
     return dispatch({
       type: FETCH_PLAYERS,
-      payload: data.allHistoryPlayersReport,
+      payload: data.playersReport,
+    });
+  } catch (e) {
+    // TODO: dispatch error to reducer
+    return console.error(e.toString());
+  }
+};
+
+export const fetchAllTeams = season => async (dispatch) => {
+  try {
+    const data = await graphqlApi(makeTeamsQuery(season || '20182019'));
+    return dispatch({
+      type: FETCH_TEAMS,
+      payload: data.teams,
     });
   } catch (e) {
     // TODO: dispatch error to reducer

@@ -238,7 +238,7 @@ const fetchAllHistoryPlayers = async () => {
   return [...goalies.data, ...skaters.data];
 };
 
-const fetchHistoricPlayersStats = async (season = 20182019) => {
+const fetchPlayersReport = async (season = 20182019) => {
   const skatersummaryRookie = `/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&cayenneExp=playerRookieSeasonInd=1%20and%20gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}&sort=[{%22property%22:%22playerId%22}]`;
   const realtimeRookie = `/skaters?isAggregate=false&reportType=basic&reportName=realtime&sort=[{%22property%22:%22playerId%22}]&cayenneExp=playerRookieSeasonInd=1%20and%20gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
   const goaliesRookie = `/goalies?isAggregate=false&reportType=goalie_basic&reportName=goaliesummary&sort=[{%22property%22:%22playerId%22}]&cayenneExp=playerRookieSeasonInd=1%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
@@ -311,5 +311,5 @@ module.exports = {
   fetchTeamRanking,
   fetchAllYearsPlayoffStatsForPlayerId,
   fetchPlayoffGameLogsForPlayerId,
-  fetchHistoricPlayersStats,
+  fetchPlayersReport,
 };

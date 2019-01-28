@@ -37,39 +37,8 @@ const positions = [
 ];
 
 // Team Dropdown Options
-const teams = [
+const baseTeamOptions = [
   { value: 'all', label: 'All Teams' },
-  { value: 'ANA', label: 'Anaheim Ducks' },
-  { value: 'ARI', label: 'Arizona Coyotes' },
-  { value: 'BOS', label: 'Boston Bruins' },
-  { value: 'BUF', label: 'Buffalo Sabres' },
-  { value: 'CAR', label: 'Carolina Hurricanes' },
-  { value: 'CBJ', label: 'Columbus Blue Jackets' },
-  { value: 'CGY', label: 'Calgary Flames' },
-  { value: 'CHI', label: 'Chicago Blackhawks' },
-  { value: 'COL', label: 'Colorado Avalanche' },
-  { value: 'DAL', label: 'Dallas Stars' },
-  { value: 'DET', label: 'Detroit Red Wings' },
-  { value: 'EDM', label: 'Edmonton Oilers' },
-  { value: 'FLA', label: 'Florida Panthers' },
-  { value: 'LAK', label: 'Los Angeles Kings' },
-  { value: 'MIN', label: 'Minnestota Wild' },
-  { value: 'MTL', label: 'Montreal Canadiens' },
-  { value: 'NSH', label: 'Nashville Predators' },
-  { value: 'NJD', label: 'New Jersey Devils' },
-  { value: 'NYI', label: 'New York Islanders' },
-  { value: 'NYR', label: 'New York Rangers' },
-  { value: 'OTT', label: 'Ottawa Senators' },
-  { value: 'PHI', label: 'Philadelphia Flyers' },
-  { value: 'PIT', label: 'Pittsburgh Penguins' },
-  { value: 'SJS', label: 'San Jose Sharks' },
-  { value: 'STL', label: 'St.Louis Blues' },
-  { value: 'TBL', label: 'Tampa Bay Lightning' },
-  { value: 'TOR', label: 'Toronto Maple Leafs' },
-  { value: 'VAN', label: 'Vancouver Canucks' },
-  { value: 'VGK', label: 'Vegas Golden Knights' },
-  { value: 'WPG', label: 'Winnipeg Jets' },
-  { value: 'WSH', label: 'Washington Capitals' },
 ];
 
 const nationalities = [
@@ -132,8 +101,9 @@ class PlayersTable extends React.PureComponent {
 
   componentDidMount() {
     const { seasonSelected } = this.state;
-    const { fetchPlayers } = this.props;
+    const { fetchPlayers, fetchTeams } = this.props;
     fetchPlayers(seasonSelected || seasons[0].value);
+    fetchTeams(seasonSelected || seasons[0].value);
   }
 
   componentDidUpdate() {
@@ -141,9 +111,10 @@ class PlayersTable extends React.PureComponent {
   }
 
   handleSeasonChange(target) {
-    const { fetchPlayers } = this.props;
-    this.setState({ seasonSelected: target.value });
+    const { fetchPlayers, fetchTeams } = this.props;
+    this.setState({ seasonSelected: target.value, teamSelected: baseTeamOptions[0].value });
     fetchPlayers(target.value);
+    fetchTeams(target.value);
   }
 
   handlePosChange(target) {
@@ -164,12 +135,18 @@ class PlayersTable extends React.PureComponent {
 
   // TODO: selectors should live in the container and pass down their state
   render() {
-    const { players } = this.props;
+    const { players, teams } = this.props;
     console.log(this.state);
     const {
       seasonSelected, posSelected, natSelected, teamSelected, XPSelected,
     } = this.state;
-    console.log('seasonSelected', seasonSelected);
+    const teamOptions = [
+      // All option is always first
+      ...baseTeamOptions,
+      // Teams are sorted alphabetically
+      // in the reducer when added to the store
+      ...(teams || []).map(t => ({ value: t.abbreviation, label: t.name })),
+    ];
     return (
       <div>
         <div className="filters">
@@ -220,10 +197,10 @@ class PlayersTable extends React.PureComponent {
             <Select
               onChange={this.handleTeamChange}
               classNamePrefix="react-select"
-              defaultValue={teams[0]}
-              options={teams}
+              defaultValue={teamOptions[0]}
+              options={teamOptions}
               styles={customStyles}
-              value={find(propEq('value', teamSelected))(teams)}
+              value={find(propEq('value', teamSelected))(teamOptions)}
               theme={theme => ({
                 ...theme,
                 borderRadius: 6,
@@ -241,7 +218,7 @@ class PlayersTable extends React.PureComponent {
             <Select
               onChange={this.handleNatChange}
               classNamePrefix="react-select"
-              defaultValue={teams[0]}
+              defaultValue={nationalities[0]}
               options={nationalities}
               styles={customStyles}
               value={find(propEq('value', natSelected))(nationalities)}
@@ -655,6 +632,7 @@ class PlayersTable extends React.PureComponent {
 PlayersTable.propTypes = {
   players: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   fetchPlayers: PropTypes.func.isRequired,
+  fetchTeams: PropTypes.func.isRequired,
 };
 
 export default PlayersTable;

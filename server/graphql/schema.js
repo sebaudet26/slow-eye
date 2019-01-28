@@ -30,7 +30,7 @@ const {
   fetchLiveFeed,
   fetchAllYearsPlayoffStatsForPlayerId,
   fetchPlayoffGameLogsForPlayerId,
-  fetchHistoricPlayersStats,
+  fetchPlayersReport,
 } = require('../libs/nhlApi');
 
 const ifNotThereFetchId = propName => async (d) => {
@@ -701,8 +701,8 @@ const PlayerBio = new GraphQLObjectType({
   },
 });
 
-const PlayerHistoryReport = new GraphQLObjectType({
-  name: 'PlayerHistoryReport',
+const PlayerReport = new GraphQLObjectType({
+  name: 'PlayerReport',
   fields: {
     assists: { type: GraphQLInt, resolve: prop('assists') },
     faceoffWinPctg: { type: GraphQLFloat, resolve: prop('faceoffWinPctg') },
@@ -792,10 +792,10 @@ const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     fields: {
-      allHistoryPlayersReport: {
+      playersReport: {
         args: { season: { type: GraphQLString } },
-        type: GraphQLList(PlayerHistoryReport),
-        resolve: (root, args) => fetchHistoricPlayersStats(args.season),
+        type: GraphQLList(PlayerReport),
+        resolve: (root, args) => fetchPlayersReport(args.season),
       },
       allHistoryPlayers: {
         type: new GraphQLList(PlayerBio),
@@ -818,8 +818,9 @@ const schema = new GraphQLSchema({
         resolve: fetchStandings,
       },
       teams: {
+        args: { season: { type: GraphQLString } },
         type: new GraphQLList(TeamInfo),
-        resolve: fetchAllTeams,
+        resolve: (root, args) => fetchAllTeams(args),
       },
       team: {
         type: TeamInfo,

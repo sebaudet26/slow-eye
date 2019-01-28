@@ -6,7 +6,9 @@ import './style.scss';
 
 class PlayerStatsPage extends React.PureComponent {
   render() {
-    const { players, fetchPlayers } = this.props;
+    const {
+      players, fetchPlayers, fetchTeams, teams,
+    } = this.props;
     return (
       <article>
         <Helmet>
@@ -16,7 +18,12 @@ class PlayerStatsPage extends React.PureComponent {
         <div className="playerStats-page">
           <h2>Player Stats</h2>
         </div>
-        <PlayersTable players={players} fetchPlayers={fetchPlayers} />
+        <PlayersTable
+          players={players}
+          fetchPlayers={fetchPlayers}
+          fetchTeams={fetchTeams}
+          teams={teams}
+        />
       </article>
     );
   }
@@ -25,6 +32,7 @@ class PlayerStatsPage extends React.PureComponent {
 PlayerStatsPage.propTypes = {
   players: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   fetchPlayers: PropTypes.func.isRequired,
+  fetchTeams: PropTypes.func.isRequired,
 };
 
 export default PlayerStatsPage;
