@@ -57,129 +57,191 @@ class Dropdown extends React.Component {
                 <div className="dropdownMenu-list-wrapper">
                   <div className="dropdownMenu-list-block">
                     <a href="/team?id=24">
-                      <img src="./images/teams/small/ANA.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-24-20182019-light" />
+                      </svg>
 Anaheim Ducks
                     </a>
                     <a href="/team?id=53">
-                      <img src="./images/teams/small/ARI.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-53-20182019-light" />
+                      </svg>
 Arizona Coyotes
                     </a>
                     <a href="/team?id=20">
-                      <img src="./images/teams/small/CGY.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-20-20182019-light" />
+                      </svg>
 Calgary Flames
                     </a>
                     <a href="/team?id=16">
-                      <img src="./images/teams/small/CHI.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-16-20182019-light" />
+                      </svg>
 Chicago Blackhawks
                     </a>
                     <a href="/team?id=21">
-                      <img src="./images/teams/small/COL.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-21-20182019-light" />
+                      </svg>
 Colorado Avalanche
                     </a>
                     <a href="/team?id=25">
-                      <img src="./images/teams/small/DAL.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-25-20182019-light" />
+                      </svg>
 Dallas Stars
                     </a>
                     <a href="/team?id=22">
-                      <img src="./images/teams/small/EDM.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-22-20182019-light" />
+                      </svg>
 Edmonton Oilers
                     </a>
                     <a href="/team?id=26">
-                      <img src="./images/teams/small/LAK.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-26-20182019-light" />
+                      </svg>
 Los Angeles Kings
                     </a>
                     <a href="/team?id=30">
-                      <img src="./images/teams/small/MIN.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-30-20182019-light" />
+                      </svg>
 Minnesota Wild
                     </a>
                     <a href="/team?id=18">
-                      <img src="./images/teams/small/NSH.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-18-20182019-light" />
+                      </svg>
 Nashville Predators
                     </a>
                     <a href="/team?id=28">
-                      <img src="./images/teams/small/SJS.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-28-20182019-light" />
+                      </svg>
 San Jose Sharks
                     </a>
                     <a href="/team?id=19">
-                      <img src="./images/teams/small/STL.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-19-20182019-light" />
+                      </svg>
 St.Louis Blues
                     </a>
                     <a href="/team?id=23">
-                      <img src="./images/teams/small/VAN.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-23-20182019-light" />
+                      </svg>
 Vancouver Canucks
                     </a>
                     <a href="/team?id=54">
-                      <img src="./images/teams/small/VGK.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-54-20182019-light" />
+                      </svg>
 Vegas Golden Knights
                     </a>
                     <a href="/team?id=52">
-                      <img src="./images/teams/small/WPG.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-52-20182019-light" />
+                      </svg>
 Winnipeg Jets
                     </a>
                   </div>
                   <div className="dropdownMenu-list-block">
                     <a href="/team?id=6">
-                      <img src="./images/teams/small/BOS.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-6-20182019-light" />
+                      </svg>
 Boston Bruins
                     </a>
                     <a href="/team?id=7">
-                      <img src="./images/teams/small/BUF.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-7-20182019-light" />
+                      </svg>
 Buffalo Sabres
                     </a>
                     <a href="/team?id=12">
-                      <img src="./images/teams/small/CAR.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-12-20182019-light" />
+                      </svg>
 Carolina Hurricanes
                     </a>
                     <a href="/team?id=29">
-                      <img src="./images/teams/small/CBJ.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-29-20182019-light" />
+                      </svg>
 Columbus Blue Jackets
                     </a>
                     <a href="/team?id=17">
-                      <img src="./images/teams/small/DET.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-17-20182019-light" />
+                      </svg>
 Detroit Red Wings
                     </a>
                     <a href="/team?id=13">
-                      <img src="./images/teams/small/FLA.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-13-20182019-light" />
+                      </svg>
 Florida Panthers
                     </a>
                     <a href="/team?id=8">
-                      <img src="./images/teams/small/MTL.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-8-20182019-light" />
+                      </svg>
 Montreal Canadiens
                     </a>
                     <a href="/team?id=1">
-                      <img src="./images/teams/small/NJD.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-1-20182019-light" />
+                      </svg>
 New Jersey Devils
                     </a>
                     <a href="/team?id=2">
-                      <img src="./images/teams/small/NYI.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-2-20182019-light" />
+                      </svg>
 New York Islanders
                     </a>
                     <a href="/team?id=3">
-                      <img src="./images/teams/small/NYR.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-3-20182019-light" />
+                      </svg>
 New York Rangers
                     </a>
                     <a href="/team?id=9">
-                      <img src="./images/teams/small/OTT.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-9-20182019-light" />
+                      </svg>
 Ottawa Senators
                     </a>
                     <a href="/team?id=4">
-                      <img src="./images/teams/small/PHI.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-4-20182019-light" />
+                      </svg>
 Philadelphia Flyers
                     </a>
                     <a href="/team?id=5">
-                      <img src="./images/teams/small/PIT.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-5-20182019-light" />
+                      </svg>
 Pittsburgh Penguins
                     </a>
                     <a href="/team?id=14">
-                      <img src="./images/teams/small/TBL.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-14-20182019-light" />
+                      </svg>
 Tampa Bay Lightning
                     </a>
                     <a href="/team?id=10">
-                      <img src="./images/teams/small/TOR.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-10-20182019-light" />
+                      </svg>
 Toronto Maple Leafs
                     </a>
                     <a href="/team?id=15">
-                      <img src="./images/teams/small/WSH.png" />
+                      <svg>
+                        <use xlinkHref="/images/teams/season/20182019.svg#team-15-20182019-light" />
+                      </svg>
 Washington Capitals
                     </a>
                   </div>
