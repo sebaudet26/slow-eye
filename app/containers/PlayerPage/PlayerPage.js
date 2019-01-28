@@ -281,10 +281,14 @@ export default class PlayerPage extends React.Component {
                 ) : null
             }
           </TabPanel>
-          <TabPanel>
-            <h3>Game Logs</h3>
-            <GameLogTable logs={logs} info={info} />
-          </TabPanel>
+          { active === true ? (
+            <TabPanel>
+              <h3>Game Logs</h3>
+              <GameLogTable logs={logs} info={info} />
+            </TabPanel>
+          ) : (
+            <div><h2>Player is retired :(</h2></div>
+          )}
         </Tabs>
       </div>
     );
