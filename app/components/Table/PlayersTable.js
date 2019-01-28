@@ -10,91 +10,30 @@ import withFixedColumns from 'react-table-hoc-fixed-columns';
 import 'react-table/react-table.css';
 import PlayerName from '../PlayerName';
 import TeamLogo from '../TeamLogo';
+import NationalityFilter from '../Filter/nationality';
+import ExperienceFilter from '../Filter/experience';
+import SeasonFilter from '../Filter/season';
+import PositionFilter from '../Filter/position';
+import TeamFilter from '../Filter/team';
 import { sortTimeOnIce } from '../../utils/sort';
+import { toLowerCaseAndMatch } from '../../utils/filter';
+import { isPosGoalie } from '../../utils/player';
+import { saveToLS, getFromLS } from '../../utils/localStorage';
+import seasons from '../../constants/seasons';
 import FilterIcon from './images/filter.svg';
 import './styles.scss';
 
 const ReactTableFixedColumns = withFixedColumns(ReactTable);
-const isGoalie = pos => pos === 'G';
-const toLowerCaseAndMatch = (filter, row) => String(row[filter.id])
-  .toLowerCase()
-  .match(filter.value.toLowerCase());
-
-const saveStateToLS = (state) => {
-  window.localStorage.setItem('playersFilters', JSON.stringify(state));
-};
-
-const getSavedState = () => {
-  const savedState = window.localStorage.getItem('playersFilters');
-  return savedState ? JSON.parse(savedState) : {};
-};
-
-const positions = [
-  { value: 'S', label: 'Skaters' },
-  { value: 'F', label: 'Forwards' },
-  { value: 'D', label: 'Defensemen' },
-  { value: 'G', label: 'Goalies' },
-  { value: 'C', label: 'Centers' },
-  { value: 'L', label: 'Left Wings' },
-  { value: 'R', label: 'Right Wings' },
-];
 
 // Team Dropdown Options
 const baseTeamOptions = [
   { value: 'all', label: 'All Teams' },
 ];
 
-const nationalities = [
-  { value: 'all', label: 'All' },
-  { value: 'CAN', label: 'Canada' },
-  { value: 'USA', label: 'United States' },
-  { value: 'RUS', label: 'Russia' },
-  { value: 'SWE', label: 'Sweden' },
-  { value: 'FIN', label: 'Finland' },
-  { value: 'CZE', label: 'Czech Republic' },
-  { value: 'CHE', label: 'Switzerland' },
-  { value: 'SVK', label: 'Slovakia' },
-  { value: 'DEU', label: 'Germany' },
-  { value: 'AUT', label: 'Austria' },
-  { value: 'DNK', label: 'Denmark' },
-  { value: 'FRA', label: 'France' },
-  { value: 'LVA', label: 'Latvia' },
-  { value: 'NOR', label: 'Norway' },
-  { value: 'SVN', label: 'Slovenia' },
-  { value: 'NLD', label: 'Netherlands' },
-  { value: 'AUS', label: 'Australia' },
-  { value: 'BLR', label: 'Belarus' },
-  { value: 'UKR', label: 'Ukraine' },
-  { value: 'KAZ', label: 'Kazakhstan' },
-];
-
-const experience = [
-  { value: 'all', label: 'All' },
-  { value: 'true', label: 'Rookie' },
-  { value: 'false', label: 'Veteran' },
-];
-
-const seasons = [];
-for (let y = 2019; y > 1917; y--) {
-  seasons.push({
-    value: Number(`${y - 1}${y}`),
-    label: `${y - 1}-${y}`,
-  });
-}
-
-// Dropdown Styles
-const customStyles = {
-  option: (provided, state) => ({
-    ...provided,
-  }),
-  control: () => ({
-  }),
-};
-
 class PlayersTable extends React.PureComponent {
   constructor() {
     super();
-    this.state = getSavedState();
+    this.state = JSON.parse(getFromLS('playersFilters') || {});
     this.handleSeasonChange = this.handleSeasonChange.bind(this);
     this.handlePosChange = this.handlePosChange.bind(this);
     this.handleTeamChange = this.handleTeamChange.bind(this);
@@ -110,7 +49,7 @@ class PlayersTable extends React.PureComponent {
   }
 
   componentDidUpdate() {
-    saveStateToLS(this.state);
+    saveToLS('playersFilters', JSON.stringify(this.state));
   }
 
   handleSeasonChange(target) {
@@ -154,6 +93,7 @@ class PlayersTable extends React.PureComponent {
       // in the reducer when added to the store
       ...(teams || []).map(t => ({ value: t.abbreviation, label: t.name })),
     ];
+
     return (
       <div>
         <div className="filter-toggle" onClick={this.filterToggle}>
@@ -161,111 +101,11 @@ class PlayersTable extends React.PureComponent {
           Show/Hide Filters
         </div>
         <div className="filters">
-          <div className="filters-item">
-            <div className="filters-item-label">Filter By Season</div>
-            <Select
-              onChange={this.handleSeasonChange}
-              classNamePrefix="react-select"
-              defaultValue={seasons[0]}
-              options={seasons}
-              styles={customStyles}
-              value={find(propEq('value', seasonSelected))(seasons)}
-              theme={theme => ({
-                ...theme,
-                borderRadius: 6,
-                colors: {
-                  ...theme.colors,
-                  primary: '#3D5AFE',
-                  primary50: '#CBD1DB',
-                  primary25: '#E2E7EC',
-                },
-              })}
-            />
-          </div>
-          <div className="filters-item">
-            <div className="filters-item-label">Filter By Position</div>
-            <Select
-              onChange={this.handlePosChange}
-              classNamePrefix="react-select"
-              defaultValue={positions[0]}
-              options={positions}
-              styles={customStyles}
-              value={find(propEq('value', posSelected))(positions)}
-              theme={theme => ({
-                ...theme,
-                borderRadius: 6,
-                colors: {
-                  ...theme.colors,
-                  primary: '#3D5AFE',
-                  primary50: '#CBD1DB',
-                  primary25: '#E2E7EC',
-                },
-              })}
-            />
-          </div>
-          <div className="filters-item">
-            <div className="filters-item-label">Filter By Team</div>
-            <Select
-              onChange={this.handleTeamChange}
-              classNamePrefix="react-select"
-              defaultValue={teamOptions[0]}
-              options={teamOptions}
-              styles={customStyles}
-              value={find(propEq('value', teamSelected))(teamOptions)}
-              theme={theme => ({
-                ...theme,
-                borderRadius: 6,
-                colors: {
-                  ...theme.colors,
-                  primary: '#3D5AFE',
-                  primary50: '#CBD1DB',
-                  primary25: '#E2E7EC',
-                },
-              })}
-            />
-          </div>
-          <div className="filters-item">
-            <div className="filters-item-label">Filter By Nationality</div>
-            <Select
-              onChange={this.handleNatChange}
-              classNamePrefix="react-select"
-              defaultValue={nationalities[0]}
-              options={nationalities}
-              styles={customStyles}
-              value={find(propEq('value', natSelected))(nationalities)}
-              theme={theme => ({
-                ...theme,
-                borderRadius: 6,
-                colors: {
-                  ...theme.colors,
-                  primary: '#3D5AFE',
-                  primary50: '#CBD1DB',
-                  primary25: '#E2E7EC',
-                },
-              })}
-            />
-          </div>
-          <div className="filters-item">
-            <div className="filters-item-label">Filter By Experience</div>
-            <Select
-              onChange={this.handleXPChange}
-              classNamePrefix="react-select"
-              defaultValue={experience[0]}
-              options={experience}
-              styles={customStyles}
-              value={find(propEq('value', XPSelected))(experience)}
-              theme={theme => ({
-                ...theme,
-                borderRadius: 6,
-                colors: {
-                  ...theme.colors,
-                  primary: '#3D5AFE',
-                  primary50: '#CBD1DB',
-                  primary25: '#E2E7EC',
-                },
-              })}
-            />
-          </div>
+          <SeasonFilter selected={seasonSelected} onChange={this.handleSeasonChange} />
+          <PositionFilter selected={posSelected} onChange={this.handlePosChange} />
+          <TeamFilter options={teamOptions} selected={teamSelected} onChange={this.handleTeamChange} />
+          <NationalityFilter selected={natSelected} onChange={this.handleNatChange} />
+          <ExperienceFilter selected={XPSelected} onChange={this.handleXPChange} />
         </div>
         <ReactTableFixedColumns
           filtered={[
@@ -328,7 +168,13 @@ class PlayersTable extends React.PureComponent {
               maxWidth: 50,
               minWidth: 50,
               fixed: 'left',
-              accessor: prop('positionCode'),
+              accessor: (d) => {
+                const pos = prop('positionCode', d);
+                if (['L', 'R'].includes(pos)) {
+                  return `${pos}W`;
+                }
+                return pos;
+              },
               filterMethod: (filter, row) => {
                 if (filter.value === 'S') {
                   return row[filter.id] !== 'G';
@@ -336,13 +182,7 @@ class PlayersTable extends React.PureComponent {
                 if (filter.value === 'F') {
                   return row[filter.id] === 'C' || row[filter.id] === 'LW' || row[filter.id] === 'RW';
                 }
-                return pipe(
-                  prop(filter.id),
-                  toString,
-                  toLower,
-                  match(toLower(prop('value', filter))),
-                  length,
-                )(row);
+                return toLowerCaseAndMatch(filter, row);
               },
             },
             {
@@ -421,7 +261,7 @@ class PlayersTable extends React.PureComponent {
               id: 'goals',
               maxWidth: 65,
               minWidth: 35,
-              show: not(isGoalie(posSelected)),
+              show: not(isPosGoalie(posSelected)),
               filterable: false,
               accessor: prop('goals'),
             },
@@ -430,7 +270,7 @@ class PlayersTable extends React.PureComponent {
               id: 'assists',
               maxWidth: 65,
               minWidth: 35,
-              show: not(isGoalie(posSelected)),
+              show: not(isPosGoalie(posSelected)),
               filterable: false,
               accessor: prop('assists'),
             },
@@ -439,7 +279,7 @@ class PlayersTable extends React.PureComponent {
               id: 'points',
               maxWidth: 65,
               minWidth: 40,
-              show: not(isGoalie(posSelected)),
+              show: not(isPosGoalie(posSelected)),
               filterable: false,
               accessor: prop('points'),
             },
@@ -448,7 +288,7 @@ class PlayersTable extends React.PureComponent {
               id: 'plusMinus',
               maxWidth: 65,
               minWidth: 40,
-              show: not(isGoalie(posSelected)),
+              show: not(isPosGoalie(posSelected)),
               filterable: false,
               accessor: prop('plusMinus'),
               Cell: row => (
@@ -460,7 +300,7 @@ class PlayersTable extends React.PureComponent {
               id: 'pim',
               maxWidth: 65,
               minWidth: 35,
-              show: not(isGoalie(posSelected)),
+              show: not(isPosGoalie(posSelected)),
               filterable: false,
               accessor: prop('penaltyMinutes'),
             },
@@ -469,7 +309,7 @@ class PlayersTable extends React.PureComponent {
               id: 'powerPlayGoals',
               maxWidth: 65,
               minWidth: 40,
-              show: not(isGoalie(posSelected)),
+              show: not(isPosGoalie(posSelected)),
               filterable: false,
               accessor: prop('ppGoals'),
               Cell: row => (
@@ -481,7 +321,7 @@ class PlayersTable extends React.PureComponent {
               id: 'shortHandedGoals',
               maxWidth: 65,
               minWidth: 40,
-              show: not(isGoalie(posSelected)),
+              show: not(isPosGoalie(posSelected)),
               filterable: false,
               accessor: prop('shGoals'),
               Cell: row => (
@@ -493,7 +333,7 @@ class PlayersTable extends React.PureComponent {
               id: 'hits',
               maxWidth: 65,
               minWidth: 35,
-              show: not(isGoalie(posSelected)),
+              show: not(isPosGoalie(posSelected)),
               filterable: false,
               accessor: prop('hits'),
               Cell: row => (
@@ -505,7 +345,7 @@ class PlayersTable extends React.PureComponent {
               id: 'blocked',
               maxWidth: 65,
               minWidth: 35,
-              show: not(isGoalie(posSelected)),
+              show: not(isPosGoalie(posSelected)),
               filterable: false,
               accessor: prop('blockedShots'),
               Cell: row => (
@@ -517,7 +357,7 @@ class PlayersTable extends React.PureComponent {
               id: 'shots',
               maxWidth: 65,
               minWidth: 50,
-              show: not(isGoalie(posSelected)),
+              show: not(isPosGoalie(posSelected)),
               filterable: false,
               accessor: prop('shots'),
               Cell: row => (
@@ -529,7 +369,7 @@ class PlayersTable extends React.PureComponent {
               id: 'shotPct',
               maxWidth: 65,
               minWidth: 50,
-              show: not(isGoalie(posSelected)),
+              show: not(isPosGoalie(posSelected)),
               filterable: false,
               accessor: prop('shootingPctg'),
             },
@@ -538,7 +378,7 @@ class PlayersTable extends React.PureComponent {
               id: 'TOIGP',
               maxWidth: 85,
               minWidth: 60,
-              show: not(isGoalie(posSelected)),
+              show: not(isPosGoalie(posSelected)),
               filterable: false,
               accessor: prop('timeOnIcePerGame'),
               sortMethod: sortTimeOnIce,
@@ -548,7 +388,7 @@ class PlayersTable extends React.PureComponent {
               id: 'wins',
               maxWidth: 85,
               minWidth: 50,
-              show: isGoalie(posSelected),
+              show: isPosGoalie(posSelected),
               filterable: false,
               accessor: propOr('-', 'wins'),
             },
@@ -557,7 +397,7 @@ class PlayersTable extends React.PureComponent {
               id: 'losses',
               maxWidth: 85,
               minWidth: 50,
-              show: isGoalie(posSelected),
+              show: isPosGoalie(posSelected),
               filterable: false,
               accessor: propOr('-', 'losses'),
             },
@@ -566,7 +406,7 @@ class PlayersTable extends React.PureComponent {
               id: 'ot',
               maxWidth: 85,
               minWidth: 50,
-              show: isGoalie(posSelected),
+              show: isPosGoalie(posSelected),
               filterable: false,
               accessor: propOr('-', 'otLosses'),
             },
@@ -575,7 +415,7 @@ class PlayersTable extends React.PureComponent {
               id: 'savePercentage',
               maxWidth: 85,
               minWidth: 50,
-              show: isGoalie(posSelected),
+              show: isPosGoalie(posSelected),
               filterable: false,
               accessor: d => pathOr(0, ['savePercentage'], d).toFixed(3),
             },
@@ -584,7 +424,7 @@ class PlayersTable extends React.PureComponent {
               id: 'goalAgainstAverage',
               maxWidth: 85,
               minWidth: 50,
-              show: isGoalie(posSelected),
+              show: isPosGoalie(posSelected),
               filterable: false,
               accessor: d => pathOr(0, ['goalsAgainstAverage'], d).toFixed(2),
             },
@@ -593,7 +433,7 @@ class PlayersTable extends React.PureComponent {
               id: 'shutouts',
               maxWidth: 85,
               minWidth: 50,
-              show: isGoalie(posSelected),
+              show: isPosGoalie(posSelected),
               filterable: false,
               accessor: pathOr('-', ['shutouts']),
             },
@@ -602,7 +442,7 @@ class PlayersTable extends React.PureComponent {
               id: 'saves',
               maxWidth: 85,
               minWidth: 50,
-              show: isGoalie(posSelected),
+              show: isPosGoalie(posSelected),
               filterable: false,
               accessor: propOr('-', 'saves'),
             },
@@ -611,7 +451,7 @@ class PlayersTable extends React.PureComponent {
               id: 'goalsAgainst',
               maxWidth: 85,
               minWidth: 50,
-              show: isGoalie(posSelected),
+              show: isPosGoalie(posSelected),
               filterable: false,
               accessor: propOr('-', 'goalsAgainst'),
             },

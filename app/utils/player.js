@@ -33,3 +33,5 @@ export const sumNumbers = (data, pathToNumber) => pipe(
 )(data);
 
 export const forwardsAbbreviations = ['LW', 'C', 'RW'];
+
+export const isPosGoalie = pos => pos === 'G';

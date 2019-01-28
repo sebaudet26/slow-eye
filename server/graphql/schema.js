@@ -253,7 +253,14 @@ const DraftPick = new GraphQLObjectType({
     round: { type: GraphQLInt, resolve: prop('roundNumber') },
     shootsCatches: { type: GraphQLString, resolve: prop('shootsCatches') },
     supplementalDraft: { type: GraphQLString, resolve: prop('supplementalDraft') },
-    teamPickHistory: { type: GraphQLString, resolve: prop('teamPickHistory') },
+    teamPickHistory: {
+      type: GraphQLList(TeamInfo),
+      resolve: pipe(
+        prop('teamPickHistory'),
+        split('-'),
+        map(teamAbr => find(propEq('abbreviation', teamAbr))(TEAMS)),
+      ),
+    },
     triCode: { type: GraphQLString, resolve: prop('triCode') },
     weight: { type: GraphQLInt, resolve: prop('weight') },
   },

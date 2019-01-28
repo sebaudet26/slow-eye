@@ -2,15 +2,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
-import { prop } from 'ramda';
+import { map, pipe, prop } from 'ramda';
 import PlayerName from '../PlayerName';
+import TeamLogo from '../TeamLogo';
+import { toLowerCaseAndMatch } from '../../utils/filter';
 import 'react-table/react-table.css';
 import './styles.scss';
 
-const DraftTable = ({ draft, round }) => (
-  <ReactTable
+const DraftTable = ({ draft, round, filters }) => {
+  console.log(filters);
+  return (<ReactTable
     data={draft}
     resizable={false}
+    filtered={[
+      {
+        id: 'position',
+        value: filters.posSelected,
+      },
+    ]}
     noDataText="Loading all dat good data stuff..."
     columns={[
       {
@@ -34,6 +43,11 @@ const DraftTable = ({ draft, round }) => (
         id: 'team',
         accessor: prop('teamPickHistory'),
         className: 'text-left team-cell',
+        Cell: pipe(
+          prop('value'),
+          map(prop('id')),
+          map(id => <TeamLogo teamId={id} season={20172018} />),
+        ),
         maxWidth: 150,
         minWidth: 100,
       },
@@ -53,6 +67,15 @@ const DraftTable = ({ draft, round }) => (
         className: 'text-left',
         maxWidth: 75,
         minWidth: 50,
+        filterMethod: (filter, row) => {
+          if (filter.value === 'S') {
+            return row[filter.id] !== 'G';
+          }
+          if (filter.value === 'F') {
+            return row[filter.id] === 'C' || row[filter.id] === 'LW' || row[filter.id] === 'RW';
+          }
+          return toLowerCaseAndMatch(filter, row);
+        },
       },
       {
         Header: 'Nat.',
@@ -78,36 +101,13 @@ const DraftTable = ({ draft, round }) => (
         maxWidth: 150,
         minWidth: 150,
       },
-      {
-        Header: 'GP',
-        id: 'games',
-        maxWidth: 75,
-        minWidth: 50,
-      },
-      {
-        Header: 'G',
-        id: 'goals',
-        maxWidth: 75,
-        minWidth: 50,
-      },
-      {
-        Header: 'A',
-        id: 'assists',
-        maxWidth: 75,
-        minWidth: 50,
-      },
-      {
-        Header: 'Pts',
-        id: 'points',
-        maxWidth: 75,
-        minWidth: 50,
-      },
     ]}
     defaultSortAsc
-    showPagination={false}
+    showPagination
     className="-striped"
     defaultPageSize={31}
   />
-);
+  );
+};
 
 export default DraftTable;
