@@ -9,6 +9,7 @@ import {
 import withFixedColumns from 'react-table-hoc-fixed-columns';
 import 'react-table/react-table.css';
 import { sortTimeOnIce } from '../../utils/sort';
+import FilterIcon from './images/filter.svg';
 import './styles.scss';
 
 const ReactTableFixedColumns = withFixedColumns(ReactTable);
@@ -133,6 +134,10 @@ class PlayersTable extends React.PureComponent {
     this.setState({ XPSelected: target.value });
   }
 
+  filterToggle() {
+    document.querySelector('.filters').classList.toggle('active');
+  }
+
   // TODO: selectors should live in the container and pass down their state
   render() {
     const { players, teams } = this.props;
@@ -149,6 +154,10 @@ class PlayersTable extends React.PureComponent {
     ];
     return (
       <div>
+        <div className="filter-toggle" onClick={this.filterToggle}>
+          <img src={FilterIcon} alt="Filter Icon" />
+          Show/Hide Filters
+        </div>
         <div className="filters">
           <div className="filters-item">
             <div className="filters-item-label">Filter By Season</div>
@@ -432,7 +441,7 @@ class PlayersTable extends React.PureComponent {
               Header: 'Pts',
               id: 'points',
               maxWidth: 65,
-              minWidth: 35,
+              minWidth: 40,
               show: not(isGoalie(posSelected)),
               filterable: false,
               accessor: prop('points'),

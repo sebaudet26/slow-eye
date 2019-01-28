@@ -215,6 +215,28 @@
   }
 }
 
+.filter-toggle {
+  display: none;
+  background: $white;
+  height: 38px;
+  line-height: 38px;
+  padding: 0 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-bottom: 15px;
+  box-shadow: $shadow;
+  border-radius: 6px;
+  font-weight: 500;
+
+  img {
+    margin-right: 10px;
+  }
+
+  &:hover {
+    box-shadow: $shadow-2;
+  }
+}
+
 .filters {
   margin: 15px 0 25px 0;
   display: flex;
@@ -303,6 +325,24 @@
   .hidden-mobile {
     display: none;
   }
+
+  .filter-toggle {
+    display: flex;
+    align-items: center;
+  }
+
+  .filters {
+    display: none;
+
+    &.active {
+      display: block;
+    }
+
+    &-item {
+      max-width: none;
+      margin-bottom: 15px;
+    }
+  }
 }
 
 @media screen and (max-width: 600px) {
@@ -322,10 +362,4 @@
       }
     }
   }
-
-  .filters {
-    display: none;
-  }
-
-
 }
