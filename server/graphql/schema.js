@@ -20,6 +20,7 @@ const {
   fetchStatsForTeamId,
   fetchInfoForTeamId,
   fetchDraftInfoForPlayer,
+  fetchDraft,
   fetchPlayersForTeamId,
   fetchAllPlayers,
   fetchAllHistoryPlayers,
@@ -224,6 +225,37 @@ const StandingsRecord = new GraphQLObjectType({
     conference: { type: ConferenceInfo, resolve: prop('conference') },
     division: { type: DivisionInfo, resolve: prop('division') },
     teamRecords: { type: GraphQLList(TeamRecord), resolve: prop('teamRecords') },
+  },
+});
+
+const DraftPick = new GraphQLObjectType({
+  name: 'DraftPick',
+  fields: {
+    prospectId: { type: GraphQLString, resolve: prop('id') },
+    amateurClubName: { type: GraphQLString, resolve: prop('amateurClubName') },
+    amateurLeague: { type: GraphQLString, resolve: prop('amateurLeague') },
+    birthDate: { type: GraphQLString, resolve: prop('birthDate') },
+    birthPlace: { type: GraphQLString, resolve: prop('birthPlace') },
+    countryCode: { type: GraphQLString, resolve: prop('countryCode') },
+    csPlayerId: { type: GraphQLInt, resolve: prop('csPlayerId') },
+    year: { type: GraphQLInt, resolve: prop('draftYear') },
+    teamId: { type: GraphQLInt, resolve: prop('draftedByTeamId') },
+    firstName: { type: GraphQLString, resolve: prop('firstName') },
+    height: { type: GraphQLInt, resolve: prop('height') },
+    lastName: { type: GraphQLString, resolve: prop('lastName') },
+    overallNumber: { type: GraphQLInt, resolve: prop('overallPickNumber') },
+    inRoundNumber: { type: GraphQLInt, resolve: prop('pickInRound') },
+    id: { type: GraphQLInt, resolve: prop('playerId') },
+    name: { type: GraphQLString, resolve: prop('playerName') },
+    position: { type: GraphQLString, resolve: prop('position') },
+    removedOutright: { type: GraphQLString, resolve: prop('removedOutright') },
+    removedOutrightWhy: { type: GraphQLString, resolve: prop('removedOutrightWhy') },
+    round: { type: GraphQLInt, resolve: prop('roundNumber') },
+    shootsCatches: { type: GraphQLString, resolve: prop('shootsCatches') },
+    supplementalDraft: { type: GraphQLString, resolve: prop('supplementalDraft') },
+    teamPickHistory: { type: GraphQLString, resolve: prop('teamPickHistory') },
+    triCode: { type: GraphQLString, resolve: prop('triCode') },
+    weight: { type: GraphQLInt, resolve: prop('weight') },
   },
 });
 
@@ -839,11 +871,14 @@ const schema = new GraphQLSchema({
         resolve: (root, args) => fetchGames(args),
       },
       game: {
-        args: {
-          id: { type: GraphQLString },
-        },
+        args: { id: { type: GraphQLString } },
         type: Game,
         resolve: (root, args) => ({ gamePk: args.id }),
+      },
+      draft: {
+        args: { year: { type: GraphQLInt } },
+        type: new GraphQLList(DraftPick),
+        resolve: (root, args) => fetchDraft(args),
       },
     },
   }),

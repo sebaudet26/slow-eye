@@ -8,6 +8,8 @@ import {
 } from 'ramda';
 import withFixedColumns from 'react-table-hoc-fixed-columns';
 import 'react-table/react-table.css';
+import PlayerName from '../PlayerName';
+import TeamLogo from '../TeamLogo';
 import { sortTimeOnIce } from '../../utils/sort';
 import FilterIcon from './images/filter.svg';
 import './styles.scss';
@@ -316,11 +318,8 @@ class PlayersTable extends React.PureComponent {
               maxWidth: 200,
               minWidth: 125,
               fixed: 'left',
-              Cell: row => (
-                <a href={`/player?id=${JSON.stringify(row.original.id)}`}>
-                  {row.value}
-                </a>
-              ),
+              Cell: row => <PlayerName id={row.original.id} name={row.value} />,
+
             },
             {
               Header: 'Pos',
@@ -353,12 +352,10 @@ class PlayersTable extends React.PureComponent {
               maxWidth: 85,
               minWidth: 75,
               fixed: 'left',
-              Cell: row => (
-                row.value.map(t => (
-                  <svg key={Math.random()} className="team-cell-logo">
-                    <use xlinkHref={`/images/teams/season/${seasonSelected}.svg#team-${t.id}-${seasonSelected}-light`} />
-                  </svg>
-                ))
+              Cell: pipe(
+                prop('value'),
+                map(prop('id')),
+                id => <TeamLogo teamId={id} season={seasonSelected} />,
               ),
               accessor: prop('teams'),
               filterMethod: (filter, row) => {

@@ -6,6 +6,7 @@ const fetch = require('node-fetch');
 const cache = require('./redisApi');
 
 const nhlApiBase = 'http://www.nhl.com/stats/rest';
+const nhlRecordsBase = 'https://records.nhl.com/site/api';
 const nhlStatsApiBase = 'https://statsapi.web.nhl.com/api/v1';
 
 // expiration is a number in seconds
@@ -18,6 +19,26 @@ const nhlStatsApi = async (resource, expiration, force) => {
       }
     }
     const url = `${nhlStatsApiBase}${resource}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    cache
+      .set(resource, JSON.stringify(data), 'EX', expiration || 60 * 60 * 12);
+    return data;
+  } catch (e) {
+    return console.error(e.stack || e.toString());
+  }
+};
+
+// expiration is a number in seconds
+const nhlRecordsApi = async (resource, expiration, force) => {
+  try {
+    if (!force) {
+      const cachedValue = await cache.get(resource);
+      if (cachedValue) {
+        return JSON.parse(cachedValue);
+      }
+    }
+    const url = `${nhlRecordsBase}${resource}`;
     const response = await fetch(url);
     const data = await response.json();
     cache
@@ -291,6 +312,12 @@ const fetchPlayersReport = async (season = 20182019) => {
   }
 };
 
+const fetchDraft = async (args) => {
+  const resource = `/draft?cayenneExp=draftYear=${args.year}`;
+  const draftResponse = await nhlRecordsApi(resource, 60 * 60 * 24 * 300, true);
+  return draftResponse.data;
+};
+
 module.exports = {
   fetchLiveFeed,
   fetchStandings,
@@ -298,6 +325,7 @@ module.exports = {
   fetchGameLogsForPlayerId,
   fetchAllYearsStatsForPlayerId,
   fetchDraftInfoForPlayer,
+  fetchDraft,
   fetchInfoForPlayerId,
   fetchAllHistoryPlayers,
   fetchPlayer,
