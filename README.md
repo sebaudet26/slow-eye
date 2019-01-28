@@ -4,8 +4,8 @@ Made with ❤️
 NHL API
 https://github.com/dword4/nhlapi
 
-
 TODO:
+
 ----------V1----------
 
 - ~~rookies vs veterans into players table~~
