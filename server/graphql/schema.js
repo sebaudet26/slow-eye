@@ -7,8 +7,9 @@ const {
   GraphQLInt,
   GraphQLFloat,
 } = require('graphql');
+const TEAMS = require('../libs/teams');
 const {
-  pathOr, pipe, prop, path, map, values, takeLast, take, propOr,
+  find, pathOr, pipe, prop, path, map, values, takeLast, take, propOr, split, propEq, replace,
 } = require('ramda');
 const {
   fetchStandings,
@@ -727,7 +728,15 @@ const PlayerHistoryReport = new GraphQLObjectType({
     nationality: { type: GraphQLString, resolve: prop('playerNationality') },
     positionCode: { type: GraphQLString, resolve: prop('playerPositionCode') },
     shootsCatches: { type: GraphQLString, resolve: prop('playerShootsCatches') },
-    teams: { type: GraphQLString, resolve: prop('playerTeamsPlayedFor') },
+    teams: {
+      type: GraphQLList(TeamInfo),
+      resolve: pipe(
+        prop('playerTeamsPlayedFor'),
+        replace(/\s/g, ''),
+        split(','),
+        map(teamAbr => find(propEq('abbreviation', teamAbr))(TEAMS)),
+      ),
+    },
     weight: { type: GraphQLInt, resolve: prop('playerWeight') },
     plusMinus: { type: GraphQLInt, resolve: prop('plusMinus') },
     points: { type: GraphQLInt, resolve: prop('points') },

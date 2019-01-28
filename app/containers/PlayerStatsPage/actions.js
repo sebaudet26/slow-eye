@@ -17,7 +17,10 @@ const makeQuery = season => `
     penaltyMinutes
     ppGoals
     shGoals
-    teams
+    teams {
+      id
+      abbreviation
+    }
     hits
     rookie
     blockedShots

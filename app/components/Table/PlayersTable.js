@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import Select from 'react-select';
 import {
-  any, find, propEq, pathOr, pipe, prop, propOr, map, match, toLower, toString, split, replace, length, not,
+  any, find, propEq, pathOr, pipe, prop, propOr, map, match, toLower, toString, split, replace, length, not, reject, isNil,
 } from 'ramda';
 import withFixedColumns from 'react-table-hoc-fixed-columns';
 import 'react-table/react-table.css';
@@ -165,7 +165,7 @@ class PlayersTable extends React.PureComponent {
   // TODO: selectors should live in the container and pass down their state
   render() {
     const { players } = this.props;
-    console.log('players', players);
+    console.log(this.state);
     const {
       seasonSelected, posSelected, natSelected, teamSelected, XPSelected,
     } = this.state;
@@ -368,9 +368,11 @@ class PlayersTable extends React.PureComponent {
               minWidth: 75,
               fixed: 'left',
               Cell: row => (
-                <svg className="team-cell-logo">
-                  <use xlinkHref={`/images/teams/season/${seasonSelected}.svg#team-24-${seasonSelected}-light`} />
-                </svg>
+                row.value.map(t => (
+                  <svg key={Math.random()} className="team-cell-logo">
+                    <use xlinkHref={`/images/teams/season/${seasonSelected}.svg#team-${t.id}-${seasonSelected}-light`} />
+                  </svg>
+                ))
               ),
               accessor: prop('teams'),
               filterMethod: (filter, row) => {
@@ -379,12 +381,11 @@ class PlayersTable extends React.PureComponent {
                 }
                 return pipe(
                   prop(filter.id),
-                  toString,
-                  toLower,
-                  replace(/\s/g, ''),
-                  replace(/"/g, ''),
-                  split(','),
+                  reject(isNil),
+                  map(prop('abbreviation')),
                   map(toLower),
+                  map(replace(/\s/g, '')),
+                  // map(replace(/"/g, '')),
                   map(pipe(match(toLower(filter.value)), length, Boolean)),
                   any(v => v),
                 )(row);
