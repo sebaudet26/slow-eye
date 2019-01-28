@@ -6,6 +6,9 @@ https://github.com/dword4/nhlapi
 
 
 TODO:
+----------------------
+----------V1----------
+
 - ~~rookies vs veterans into players table~~
 - ~~merge in goalies stats from the history for players page~~
 - ~~merge in goalies bios from the history for search bar~~
@@ -16,6 +19,9 @@ TODO:
 - game summaries
 - video
 - Sort GAA reverse
+
+----------------------
+----------V2----------
 
 - standings history
 - team stats history
