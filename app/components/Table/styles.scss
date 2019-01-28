@@ -11,6 +11,11 @@
     height: 30px;
   }
   &.player-stats {
+
+    .team-cell-logo {
+      margin-right: 0px;
+    }
+
     .rt-th {
       &:nth-child(3) {
         text-align: left;
@@ -212,6 +217,7 @@
     height: 22px;
     vertical-align: middle;
     background-size: contain;
+    margin-right: 5px;
   }
 }
 
