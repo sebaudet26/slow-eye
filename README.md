@@ -15,6 +15,7 @@ TODO:
 - scores carousel
 - game summaries
 - video
+- Sort GAA reverse
 
 - standings history
 - team stats history
