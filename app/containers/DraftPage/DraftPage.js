@@ -42,8 +42,10 @@ export default class StandingsPage extends React.Component {
             content="Draft"
           />
         </Helmet>
-        <h2>{`Draft ${selectedYear}`}</h2>
-        <PositionFilter selected={posSelected} onChange={this.handlePosChange} />
+        <h2>{`${selectedYear} NHL Draft`}</h2>
+        <div className="filters">
+          <PositionFilter selected={posSelected} onChange={this.handlePosChange} />
+        </div>
         <DraftTable draft={draft} filters={filters} />
       </div>
     );

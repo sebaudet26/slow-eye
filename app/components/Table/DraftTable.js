@@ -81,9 +81,12 @@ const DraftTable = ({ draft, round, filters }) => {
         Header: 'Nat.',
         id: 'countryCode',
         accessor: prop('countryCode'),
-        className: 'text-left',
+        className: 'text-left team-cell',
         maxWidth: 75,
         minWidth: 50,
+        Cell: row => (
+          <img src={`/images/country/${row.value}.svg`} alt="" />
+        ),
       },
       {
         Header: 'League',
@@ -104,7 +107,7 @@ const DraftTable = ({ draft, round, filters }) => {
     ]}
     defaultSortAsc
     showPagination
-    className="-striped"
+    className="-striped draft-table"
     defaultPageSize={31}
   />
   );
