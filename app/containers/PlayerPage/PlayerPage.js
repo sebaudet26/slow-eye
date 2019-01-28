@@ -90,17 +90,6 @@ export default class PlayerPage extends React.Component {
             </p>
             <div className="player-desc">
               <div>
-                {!draftInfo ? <span>Undrafted</span> : (
-                  <div>
-                    <p>
-                      <span className="bold">Drafted by</span>
-                      {` ${draftInfo.team.name}`}
-                    </p>
-                    <p>{`${rounds[draftInfo.round - 1]} Round, #${draftInfo.pickOverall} Overall, ${draftInfo.year} NHL Draft`}</p>
-                  </div>
-                )}
-              </div>
-              <div className="player-desc-right">
                 <p>
                   <span className="bold">Born</span>
                   {` ${moment(info.birthDate).format('LL')} (${moment().diff(info.birthDate, 'years')} yrs. ago) `}
@@ -115,6 +104,18 @@ export default class PlayerPage extends React.Component {
                   <span className="bold">Weight</span>
                   {` ${info.weight} lbs. `}
                 </p>
+              </div>
+              <div className="player-desc-right">
+                {!draftInfo ? <span>Undrafted</span> : (
+                  <div>
+                    <p>
+                      <span className="bold">Drafted by</span>
+                      {` ${draftInfo.team.name}`}
+                    </p>
+                    <p>{`${rounds[draftInfo.round - 1]} Round, #${draftInfo.pickOverall} Overall, ${draftInfo.year} NHL Draft`}</p>
+                  </div>
+                )}
+
               </div>
             </div>
             <div className="player-stats">
