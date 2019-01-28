@@ -76,11 +76,9 @@ export default class TeamPage extends React.Component {
         <div className="team-header">
           <div className="team-header-title">
             <div className="team-img">
-              <img
-                src={logoForTeamName(team.teamName)}
-                className="team-img-logo"
-                alt=""
-              />
+              <svg viewBox="10 0 100 75" width="100" height="75" className="team-img-logo">
+                <use xlinkHref={`/images/teams/season/20182019.svg#team-${team.id}-20182019-light`} />
+              </svg>
             </div>
             <div>
               <Dropdown name={team.name} />
