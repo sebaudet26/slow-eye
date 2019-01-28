@@ -16,11 +16,11 @@ TODO:
 - draft page
 - scores carousel
 - game summaries
-- video
 - Sort GAA reverse
 
 ----------V2----------
 
+- video
 - standings history
 - team stats history
 - team page for any season
