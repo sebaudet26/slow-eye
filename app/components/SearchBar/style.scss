@@ -76,6 +76,10 @@
 @media screen and (max-width: 799px) {
   .searchBar {
     width: 100%;
+
+    form {
+      max-width: none;
+    }
   }
 }
 
