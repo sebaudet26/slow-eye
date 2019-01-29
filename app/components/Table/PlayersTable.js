@@ -128,7 +128,7 @@ class PlayersTable extends React.PureComponent {
           ]}
           data={players}
           resizable={false}
-          noDataText="Loading all dat good data stuff..."
+          noDataText="Loading all that good stuff..."
           filterable
           defaultFilterMethod={toLowerCaseAndMatch}
           getTdProps={(state, rowInfo, column, instance) => ({
