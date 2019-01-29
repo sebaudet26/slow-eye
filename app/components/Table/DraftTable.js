@@ -2,7 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
-import { map, pipe, prop } from 'ramda';
+import {
+  map, pipe, prop, toLower, toString, length, match,
+} from 'ramda';
 import PlayerName from '../PlayerName';
 import TeamLogo from '../TeamLogo';
 import { toLowerCaseAndMatch } from '../../utils/filter';

@@ -12,6 +12,7 @@ const BaseFilter = ({
       onChange={onChange}
       classNamePrefix="react-select"
       defaultValue={options[0]}
+      isSearchable={false}
       options={options}
       styles={customStyles}
       value={find(propEq('value', selected))(options)}
