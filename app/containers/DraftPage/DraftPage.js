@@ -1,17 +1,43 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import {
+  concat, takeWhile, pipe, prop, uniq, map, filter,
+} from 'ramda';
 import DraftTable from '../../components/Table/DraftTable';
 import PositionFilter from '../../components/Filter/position';
+import YearFilter from '../../components/Filter/year';
+import RoundFilter from '../../components/Filter/round';
+import TeamFilter from '../../components/Filter/team';
+import NationalityFilter from '../../components/Filter/nationality';
 import './style.scss';
 
 export default class StandingsPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedYear: 2018,
+      yearSelected: 2018,
       posSelected: 'S',
+      natSelected: '',
+      roundSelected: '',
     };
     this.handlePosChange = this.handlePosChange.bind(this);
+    this.handleNatChange = this.handleNatChange.bind(this);
+    this.handleYearChange = this.handleYearChange.bind(this);
+    this.handleRoundChange = this.handleRoundChange.bind(this);
+  }
+
+  handleRoundChange(target) {
+    this.setState({ roundSelected: target.value });
+  }
+
+  handleYearChange(target) {
+    const { fetchDraft } = this.props;
+    fetchDraft(target.value);
+    this.setState({ yearSelected: target.value });
+  }
+
+  handleNatChange(target) {
+    this.setState({ natSelected: target.value });
   }
 
   handlePosChange(target) {
@@ -20,19 +46,30 @@ export default class StandingsPage extends React.Component {
 
   componentWillMount() {
     const { fetchDraft } = this.props;
-    const { selectedYear } = this.state;
-    fetchDraft(selectedYear);
+    const { yearSelected } = this.state;
+    fetchDraft(yearSelected);
   }
 
   render() {
     const { drafts } = this.props;
-    const { posSelected, selectedYear } = this.state;
-    const draft = drafts[selectedYear];
-    console.log(draft);
+    const {
+      posSelected, yearSelected, natSelected, roundSelected,
+    } = this.state;
+    const draft = drafts[yearSelected];
+    console.log('state', this.state);
     const filters = {
       posSelected,
+      natSelected,
+      roundSelected,
     };
-    console.log(filters);
+    const rounds = pipe(
+      map(prop('round')),
+      uniq,
+      map(round => ({ value: round, label: round })),
+      concat([{ value: '', label: 'All' }]),
+    )(draft || []);
+    console.log(roundSelected);
+    console.log('draft', draft);
     return (
       <div className="draft-page">
         <Helmet>
@@ -42,11 +79,14 @@ export default class StandingsPage extends React.Component {
             content="Draft"
           />
         </Helmet>
-        <h2>{`${selectedYear} NHL Draft`}</h2>
+        <h2>{`${yearSelected} NHL Draft`}</h2>
         <div className="filters">
+          <YearFilter selected={yearSelected} onChange={this.handleYearChange} />
+          <RoundFilter selected={roundSelected} onChange={this.handleRoundChange} options={rounds} />
           <PositionFilter selected={posSelected} onChange={this.handlePosChange} />
+          <NationalityFilter selected={natSelected} onChange={this.handleNatChange} />
         </div>
-        <DraftTable draft={draft} filters={filters} />
+        <DraftTable round={roundSelected} draft={draft} filters={filters} />
       </div>
     );
   }

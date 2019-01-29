@@ -1,5 +1,5 @@
 const nationalities = [
-  { value: 'all', label: 'All' },
+  { value: '', label: 'All' },
   { value: 'CAN', label: 'Canada' },
   { value: 'USA', label: 'United States' },
   { value: 'RUS', label: 'Russia' },

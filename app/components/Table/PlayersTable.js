@@ -119,7 +119,7 @@ class PlayersTable extends React.PureComponent {
             },
             {
               id: 'nationality',
-              value: natSelected || 'all',
+              value: natSelected,
             },
             {
               id: 'experience',
@@ -221,18 +221,6 @@ class PlayersTable extends React.PureComponent {
               maxWidth: 85,
               minWidth: 50,
               accessor: prop('nationality'),
-              filterMethod: (filter, row) => {
-                if (filter.value === 'all') {
-                  return true;
-                }
-                return pipe(
-                  prop(filter.id),
-                  toString,
-                  toLower,
-                  match(toLower(prop('value', filter))),
-                  length,
-                )(row);
-              },
             },
             {
               Header: 'XP',
