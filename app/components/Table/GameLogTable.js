@@ -20,7 +20,7 @@ const GameLogTable = ({ logs, info }) => {
       <ReactTable
         resizable={false}
         data={data}
-        noDataText="Loading all dat good data stuff..."
+        noDataText="Loading all that good stuff..."
         defaultPageSize={10}
         columns={[
           {

@@ -34,7 +34,7 @@ const DraftTable = ({ draft, filters, round }) => {
         value: filters.roundSelected,
       },
     ]}
-    noDataText="Loading all dat good data stuff..."
+    noDataText="Loading all that good stuff..."
     columns={[
       {
         Header: 'Rd.',

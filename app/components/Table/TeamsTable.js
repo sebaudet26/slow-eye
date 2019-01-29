@@ -20,7 +20,7 @@ class TeamsTable extends React.PureComponent {
         <ReactTableFixedColumns
           resizable={false}
           data={teams}
-          noDataText="Loading all dat good data stuff..."
+          noDataText="Loading all that good stuff..."
           columns={[
             {
               Header: '#',

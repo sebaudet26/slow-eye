@@ -17,7 +17,7 @@ const RosterStatsTable = ({ players, position }) => (
     <ReactTableFixedColumns
       data={players}
       resizable={false}
-      noDataText="Loading all dat good data stuff..."
+      noDataText="Loading all good stuff..."
       columns={[
         {
           Header: '#',

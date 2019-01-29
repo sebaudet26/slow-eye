@@ -17,7 +17,7 @@ class RosterTable extends React.PureComponent {
         <ReactTableFixedColumns
           data={players}
           resizable={false}
-          noDataText="Loading all dat good data stuff..."
+          noDataText="Loading all that good stuff..."
           columns={[
             {
               Header: '#',
