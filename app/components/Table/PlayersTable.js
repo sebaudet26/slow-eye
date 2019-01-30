@@ -33,7 +33,7 @@ const baseTeamOptions = [
 class PlayersTable extends React.PureComponent {
   constructor() {
     super();
-    this.state = JSON.parse(getFromLS('playersFilters') || {});
+    this.state = JSON.parse(getFromLS('playersFilters') || '{}');
     this.handleSeasonChange = this.handleSeasonChange.bind(this);
     this.handlePosChange = this.handlePosChange.bind(this);
     this.handleTeamChange = this.handleTeamChange.bind(this);

@@ -8,6 +8,7 @@ import PositionFilter from '../../components/Filter/position';
 import YearFilter from '../../components/Filter/year';
 import RoundFilter from '../../components/Filter/round';
 import TeamFilter from '../../components/Filter/team';
+import { getFromLS, saveToLS } from '../../utils/localStorage';
 import NationalityFilter from '../../components/Filter/nationality';
 import FilterIcon from '../../images/filter.svg';
 import './style.scss';
@@ -21,12 +22,17 @@ export default class StandingsPage extends React.Component {
       natSelected: '',
       roundSelected: '',
       teamSelected: '',
+      ...JSON.parse(getFromLS('draftFilters') || '{}'),
     };
     this.handlePosChange = this.handlePosChange.bind(this);
     this.handleNatChange = this.handleNatChange.bind(this);
     this.handleYearChange = this.handleYearChange.bind(this);
     this.handleRoundChange = this.handleRoundChange.bind(this);
     this.handleTeamChange = this.handleTeamChange.bind(this);
+  }
+
+  componentDidUpdate() {
+    saveToLS('draftFilters', JSON.stringify(this.state));
   }
 
   handleRoundChange(target) {
