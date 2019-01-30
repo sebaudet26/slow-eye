@@ -61,7 +61,7 @@ export default class PlayerPage extends React.Component {
           <title>{`${info.firstName} ${info.lastName}`}</title>
           <meta
             name="description"
-            content={`${info.firstName} ${info.lastName}`}
+            content={`${info.firstName} ${info.lastName} stats. Seal Stats is the best place to view NHL stats. User-friendly and fast. `}
           />
         </Helmet>
         <div className="player-header">

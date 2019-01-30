@@ -16,7 +16,7 @@ export default class TeamStatsPage extends React.Component {
       <div>
         <Helmet>
           <title>Team Stats</title>
-          <meta name="description" content="Seal Stats" />
+          <meta name="description" content="View NHL Team Stats. Seal Stats is the best place to view NHL stats. User-friendly and fast." />
         </Helmet>
         <div className="teamStats-page">
           <h2>Team Stats</h2>

@@ -69,7 +69,7 @@ export default class ScorePage extends React.Component {
           <title>Scores</title>
           <meta
             name="description"
-            content="Scores"
+            content="View Live NHL Scores. Seal Stats is the best place to view NHL stats. User-friendly and fast."
           />
         </Helmet>
         <DateSlider daysOptions={daysOptions} games={games} />

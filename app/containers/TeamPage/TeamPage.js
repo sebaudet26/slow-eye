@@ -70,7 +70,7 @@ export default class TeamPage extends React.Component {
           <title>{team.name}</title>
           <meta
             name="description"
-            content={team.name}
+            content={`${team.name} roster and stats. Seal Stats is the best place to view NHL stats. User-friendly and fast. `}
           />
         </Helmet>
         <div className="team-header">

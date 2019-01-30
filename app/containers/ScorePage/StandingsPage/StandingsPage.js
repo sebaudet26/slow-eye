@@ -19,7 +19,7 @@ export default class StandingsPage extends React.Component {
           <title>Standings</title>
           <meta
             name="description"
-            content="Standings"
+            content="View NHL Standings. Seal Stats is the best place to view NHL stats. User-friendly and fast."
           />
         </Helmet>
         <h2>Standings</h2>
