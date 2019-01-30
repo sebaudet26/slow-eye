@@ -27,12 +27,11 @@ const makeDraftQuery = year => `
     round
     shootsCatches
     supplementalDraft
-    teamPickHistory {
+    pickedBy {
       id
       name
       abbreviation
     }
-    triCode
     weight
   }
 }

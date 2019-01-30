@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import {
-  map, pipe, prop, toLower, toString, length, match, findLastIndex,
+  head, prop, path,
 } from 'ramda';
 import PlayerName from '../PlayerName';
 import TeamLogo from '../TeamLogo';
@@ -11,9 +11,10 @@ import { toLowerCaseAndMatch } from '../../utils/filter';
 import 'react-table/react-table.css';
 import './styles.scss';
 
-const DraftTable = ({ draft, filters, round }) => {
-  console.log(filters);
-  return (<ReactTable
+const DraftTable = ({
+  draft, filters, year, round,
+}) => (
+  <ReactTable
     data={draft}
     resizable={false}
     filtered={[
@@ -33,8 +34,12 @@ const DraftTable = ({ draft, filters, round }) => {
         id: 'roundNumber',
         value: filters.roundSelected,
       },
+      {
+        id: 'team',
+        value: filters.teamSelected,
+      },
     ]}
-    noDataText="Loading all that good stuff..."
+    noDataText="Loading all dat good data stuff..."
     columns={[
       {
         Header: 'Rd.',
@@ -53,17 +58,13 @@ const DraftTable = ({ draft, filters, round }) => {
         minWidth: 50,
       },
       {
-        Header: 'Team',
+        Header: 'Pick By',
         id: 'team',
-        accessor: prop('teamPickHistory'),
+        accessor: path(['pickedBy', 'abbreviation']),
         className: 'text-left team-cell',
-        Cell: pipe(
-          prop('value'),
-          map(prop('id')),
-          map(id => <TeamLogo teamId={id} season={20172018} />),
-        ),
-        maxWidth: 150,
-        minWidth: 100,
+        maxWidth: 75,
+        minWidth: 75,
+        Cell: row => <TeamLogo teamId={row.original.pickedBy.id} season={Number(`${year - 1}${year}`)} />,
       },
       {
         Header: 'Name',
@@ -103,12 +104,34 @@ const DraftTable = ({ draft, filters, round }) => {
         ),
       },
       {
+        Header: 'Height',
+        id: 'height',
+        accessor: prop('height'),
+        className: 'text-left team-cell',
+        maxWidth: 75,
+        minWidth: 50,
+        Cell: row => (
+          <span>
+            {`${Math.floor(row.value / 12)}' `}
+            {`${Math.floor(row.value % 12)}"`}
+          </span>
+        ),
+      },
+      {
+        Header: 'Weigth',
+        id: 'weight',
+        accessor: prop('weight'),
+        className: 'text-left team-cell',
+        maxWidth: 75,
+        minWidth: 50,
+      },
+      {
         Header: 'League',
         id: 'amateurLeague',
         accessor: prop('amateurLeague'),
         className: 'text-left',
-        maxWidth: 150,
-        minWidth: 150,
+        maxWidth: 125,
+        minWidth: 125,
       },
       {
         Header: 'Am. Team',
@@ -124,7 +147,6 @@ const DraftTable = ({ draft, filters, round }) => {
     className="-striped draft-table"
     defaultPageSize={31}
   />
-  );
-};
+);
 
 export default DraftTable;
