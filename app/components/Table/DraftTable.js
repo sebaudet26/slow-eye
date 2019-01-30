@@ -58,13 +58,18 @@ const DraftTable = ({
         minWidth: 50,
       },
       {
-        Header: 'Pick By',
+        Header: 'Drafted By',
         id: 'team',
         accessor: path(['pickedBy', 'abbreviation']),
         className: 'text-left team-cell',
-        maxWidth: 75,
-        minWidth: 75,
-        Cell: row => <TeamLogo teamId={row.original.pickedBy.id} season={Number(`${year - 1}${year}`)} />,
+        maxWidth: 250,
+        minWidth: 175,
+        Cell: row => (
+          <div>
+            <TeamLogo teamId={row.original.pickedBy.id} season={Number(`${year - 1}${year}`)} />
+            {row.original.pickedBy.name}
+          </div>
+        ),
       },
       {
         Header: 'Name',
