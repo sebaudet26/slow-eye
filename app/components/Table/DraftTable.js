@@ -138,8 +138,8 @@ const DraftTable = ({
         id: 'amateurClubName',
         accessor: prop('amateurClubName'),
         className: 'text-left',
-        maxWidth: 150,
-        minWidth: 150,
+        maxWidth: 200,
+        minWidth: 200,
       },
     ]}
     defaultSortAsc

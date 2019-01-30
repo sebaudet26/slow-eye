@@ -195,7 +195,7 @@ class PlayersTable extends React.PureComponent {
               Cell: pipe(
                 prop('value'),
                 map(prop('id')),
-                id => <TeamLogo teamId={id} season={seasonSelected} />,
+                map(id => <TeamLogo teamId={id} season={seasonSelected} />),
               ),
               accessor: prop('teams'),
               filterMethod: (filter, row) => {
