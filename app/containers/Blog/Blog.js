@@ -48,7 +48,7 @@ class BlogHome extends Component {
         <div>
           {this.state.resp.data.map(post => (
             <div key={post.slug}>
-              <Link to={`/post/${post.slug}`}>
+              <Link to={`/post?slug=${post.slug}`}>
                 {post.title}
               </Link>
             </div>

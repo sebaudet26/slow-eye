@@ -38,7 +38,7 @@ const App = () => (
         <Route path="/drafts" component={DraftPage} />
         <Route path="/contributors" component={ContributorsPage} />
         <Route path="/blog" component={BlogPage} />
-        <Route path="/post/:slug" component={BlogPost} />
+        <Route path="/post" component={BlogPost} />
         <Route path="" component={NotFoundPage} />
       </Switch>
     </div>

@@ -3,6 +3,14 @@ import Butter from 'buttercms';
 import { Helmet } from 'react-helmet';
 
 const butter = Butter('72b889cc7433551aef87ead79fda9723d260694f');
+const urlParams = new URLSearchParams(window.location.search);
+
+butter.post.retrieve('example-post')
+  .then((resp) => {
+    console.log(resp.data);
+  }).catch((resp) => {
+    console.log(resp);
+  });
 
 class BlogPost extends Component {
   constructor(props) {
@@ -14,7 +22,8 @@ class BlogPost extends Component {
   }
 
   componentWillMount() {
-    const slug = this.props.params.slug;
+    const slug = urlParams.get('slug');
+    console.log(slug);
 
     butter.post.retrieve(slug).then((resp) => {
       this.setState({
