@@ -71,6 +71,10 @@ class SearchBar extends React.Component {
     this.getPlayersShortList();
   }
 
+  componentWillUnmount() {
+    clearTimeout(action);
+  }
+
   componentWillReceiveProps() {
 
   }
