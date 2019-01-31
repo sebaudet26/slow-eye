@@ -10,7 +10,9 @@ import './style.scss';
 const renderSlide = (opt, games) => (
   <div className="slick-slide-content" key={Math.random()}>
     <div className="slick-slide-date">
-      {opt.label}
+      <span>
+        {opt.label}
+      </span>
     </div>
     <div className="slick-slide-games">
       {games[opt.value] ? `( ${games[opt.value].length} Games )` : '...'}

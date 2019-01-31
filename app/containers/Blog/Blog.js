@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import Butter from 'buttercms';
 
 const butter = Butter('72b889cc7433551aef87ead79fda9723d260694f');
@@ -46,10 +47,23 @@ class BlogHome extends Component {
 
       return (
         <div>
+          <Helmet>
+            <title>Blog</title>
+            <meta
+              name="description"
+              content="News & Articles"
+            />
+          </Helmet>
+          <h2>Blog</h2>
           {this.state.resp.data.map(post => (
             <div key={post.slug}>
               <Link to={`/post?slug=${post.slug}`}>
+                <img src={post.featured_image} />
                 {post.title}
+                <br />
+                {post.summary}
+                <br />
+                {`${post.author.first_name} ${post.author.last_name}`}
               </Link>
             </div>
           ))}
