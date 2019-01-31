@@ -205,7 +205,7 @@ class PlayersTable extends React.PureComponent {
                 return pipe(
                   prop(filter.id),
                   reject(isNil),
-                  map(prop('abbreviation')),
+                  map(propOr('', 'abbreviation')),
                   map(toLower),
                   map(replace(/\s/g, '')),
                   // map(replace(/"/g, '')),

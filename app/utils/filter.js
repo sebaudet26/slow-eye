@@ -6,7 +6,7 @@ export const toLowerCaseAndMatch = (filter, row) => pipe(
   prop(filter.id),
   toString,
   toLower,
-  match(toLower(filter.value)),
+  match(toLower(filter.value || '')),
   length,
 )(row);
 
