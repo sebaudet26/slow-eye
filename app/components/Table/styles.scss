@@ -270,7 +270,7 @@
     outline: 0 !important;
     transition: 0.3s;
     background: $white;
-    box-shadow: $shadow;
+    border: solid 1px $grey-4;
     border-radius: $radius;
 
     &:hover, &--is-focused {

@@ -8,8 +8,7 @@
     background: $white;
     height: 38px;
     line-height: 38px;
-    padding-left: 8px;
-    box-shadow: $shadow;
+    border: solid 1px $grey-4;
     border-radius: 6px;
     margin: auto;
     width: 100%;
@@ -17,14 +16,23 @@
     display: flex;
     position: relative;
 
+
+
     label {
       padding: 0 12px;
       border-left: solid 1px $grey-4;
+      display: flex;
     }
 
     input {
+      padding-left: 8px;
       outline: none;
       width: 100%;
+      transition: 0.3s;
+
+      &:focus {
+        box-shadow: $shadow;
+      }
     }
   }
 
