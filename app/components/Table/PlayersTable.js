@@ -27,13 +27,20 @@ const ReactTableFixedColumns = withFixedColumns(ReactTable);
 
 // Team Dropdown Options
 const baseTeamOptions = [
-  { value: 'all', label: 'All Teams' },
+  { value: '', label: 'All Teams' },
 ];
 
 class PlayersTable extends React.PureComponent {
   constructor() {
     super();
-    this.state = JSON.parse(getFromLS('playersFilters') || '{}');
+    this.state = {
+      seasonSelected: '20182019',
+      posSelected: 'S',
+      natSelected: '',
+      teamSelected: '',
+      XPSelected: '',
+      ...JSON.parse(getFromLS('playersFilters') || '{}'),
+    };
     this.handleSeasonChange = this.handleSeasonChange.bind(this);
     this.handlePosChange = this.handlePosChange.bind(this);
     this.handleTeamChange = this.handleTeamChange.bind(this);
@@ -111,11 +118,11 @@ class PlayersTable extends React.PureComponent {
           filtered={[
             {
               id: 'position',
-              value: posSelected || 'S',
+              value: posSelected,
             },
             {
               id: 'team',
-              value: teamSelected || 'all',
+              value: teamSelected,
             },
             {
               id: 'nationality',
@@ -123,7 +130,7 @@ class PlayersTable extends React.PureComponent {
             },
             {
               id: 'experience',
-              value: XPSelected || 'all',
+              value: XPSelected,
             },
           ]}
           data={players}
@@ -195,24 +202,19 @@ class PlayersTable extends React.PureComponent {
               Cell: pipe(
                 prop('value'),
                 map(prop('id')),
-                map(id => <TeamLogo teamId={id} season={seasonSelected} />),
+                map(id => <TeamLogo key={id} teamId={id} season={seasonSelected} />),
               ),
               accessor: prop('teams'),
-              filterMethod: (filter, row) => {
-                if (filter.value === 'all') {
-                  return true;
-                }
-                return pipe(
-                  prop(filter.id),
-                  reject(isNil),
-                  map(propOr('', 'abbreviation')),
-                  map(toLower),
-                  map(replace(/\s/g, '')),
-                  // map(replace(/"/g, '')),
-                  map(pipe(match(toLower(filter.value)), length, Boolean)),
-                  any(v => v),
-                )(row);
-              },
+              filterMethod: (filter, row) => pipe(
+                prop(filter.id),
+                reject(isNil),
+                map(propOr('', 'abbreviation')),
+                map(toLower),
+                map(replace(/\s/g, '')),
+                // map(replace(/"/g, '')),
+                map(pipe(match(toLower(filter.value)), length, Boolean)),
+                any(v => v),
+              )(row),
             },
             {
               Header: 'Nat.',
