@@ -120,7 +120,13 @@ const fetchAllYearsStatsForPlayerId = async (playerId) => {
   // AHL = 153
   const usefulLeagueIds = [133];
   const isStatUseful = seasonStat => contains(path(['league', 'id'], seasonStat), usefulLeagueIds);
-  return filter(isStatUseful, path(['stats', 0, 'splits'], playerStatsData));
+  const nhlSeasons = filter(isStatUseful, path(['stats', 0, 'splits'], playerStatsData));
+  // if nhler, return nhl seasons only
+  if (nhlSeasons.length) {
+    return nhlSeasons;
+  }
+  // if not, return everything we have
+  return path(['stats', 0, 'splits'], playerStatsData);
 };
 
 const fetchAllYearsPlayoffStatsForPlayerId = async (playerId) => {
