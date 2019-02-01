@@ -34,10 +34,6 @@ export const getStatusText = (game) => {
       return ` - ${calculateGameTime(last(game.liveFeed.lastTenPlays))}`;
     case '4':
       return ` - ${calculateGameTime(last(game.liveFeed.lastTenPlays))}`;
-    case '6':
-      return '';
-    case '7':
-      return '';
     default:
       return '';
   }

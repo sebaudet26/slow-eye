@@ -7,6 +7,44 @@ const makeGameBoxscoreQuery = id => `
   game (id: "${id}") {
     id
     liveFeed {
+      penaltySummary {
+        type
+        severity
+        minutes
+        period
+        periodTime
+        team {
+          name
+          triCode
+          id
+        }
+        receiver {
+          id
+          fullName
+        }
+      }
+      goalSummary {
+        period
+    		periodTime
+        isWinningGoal
+        isEmptyNet
+        strength
+        team {
+          name
+          triCode
+          id
+        }
+        scorer {
+          id
+          fullName
+          seasonTotal
+        }
+        assists {
+          id
+          fullName
+          seasonTotal
+        }
+      }
       lastTenPlays {
         period
         periodTimeRemaining
