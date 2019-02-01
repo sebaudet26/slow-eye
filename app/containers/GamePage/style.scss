@@ -125,6 +125,10 @@
       th:first-child {
         width: 150px;
       }
+
+      th:nth-child(2) {
+        width: 250px;
+      }
     }
     tr:nth-child(2) {
       border-top: solid 1px $grey-4;

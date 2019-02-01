@@ -27,7 +27,7 @@ const renderGoalInfo = goal => (
       <PlayerName
         key={goal.scorer.id}
         id={goal.scorer.id}
-        name={goal.scorer.fullName}
+        name={`${goal.scorer.fullName} (${goal.scorer.seasonTotal})`}
       />
     </td>
     <td>
@@ -36,7 +36,7 @@ const renderGoalInfo = goal => (
           <PlayerName
             key={Math.random()}
             id={player.id}
-            name={player.fullName}
+            name={`${player.fullName} (${player.seasonTotal})`}
           />
         ))}
     </td>
