@@ -12,11 +12,9 @@ TODO:
 - ~~merge in goalies stats from the history for players page~~
 - ~~merge in goalies bios from the history for search bar~~
 - ~~load teams from API into the team selector in players page~~
-
-- draft page
-- scores carousel
+- ~~draft page~~
+- ~~score carousel~~
 - game summaries
-- Sort GAA reverse
 
 ----------V2----------
 
