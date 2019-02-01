@@ -120,8 +120,20 @@
 .events-table {
   width: 100%;
 
-  tr:nth-child(2) {
-    border-top: solid 1px $grey-4;
+  thead {
+    tr:nth-child(2) {
+      border-top: solid 1px $grey-4;
+    }
+  }
+
+  tbody {
+    tr {
+      border-top: solid 1px $grey-4;
+
+      &:last-child {
+        border-bottom: solid 1px $grey-4;
+      }
+    }
   }
 
   thead {

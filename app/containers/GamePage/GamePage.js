@@ -21,18 +21,17 @@ import BoxTable from '../../components/Table/BoxTable';
 import PlayerName from '../../components/PlayerName';
 
 const renderGoalInfo = goal => (
-  <tbody key={Math.random()}>
-    <tr>
-      <td>{goal.periodTime}</td>
-      <td>
-        <PlayerName
-          key={goal.scorer.id}
-          id={goal.scorer.id}
-          name={goal.scorer.fullName}
-        />
-      </td>
-      <td>
-        {
+  <tr key={Math.random()}>
+    <td>{goal.periodTime}</td>
+    <td>
+      <PlayerName
+        key={goal.scorer.id}
+        id={goal.scorer.id}
+        name={goal.scorer.fullName}
+      />
+    </td>
+    <td>
+      {
         goal.assists.map(player => (
           <PlayerName
             key={Math.random()}
@@ -40,27 +39,24 @@ const renderGoalInfo = goal => (
             name={player.fullName}
           />
         ))}
-      </td>
-      <td>{goal.strength}</td>
-    </tr>
-  </tbody>
+    </td>
+    <td>{goal.strength}</td>
+  </tr>
 );
 
 const renderPenaltyInfo = penalty => (
-  <tbody key={Math.random()}>
-    <tr>
-      <td>{penalty.periodTime}</td>
-      <td>
-        <PlayerName
-          key={Math.random()}
-          id={penalty.receiver.id}
-          name={penalty.receiver.fullName}
-        />
-      </td>
-      <td>{penalty.type}</td>
-      <td>{`${penalty.minutes} mins`}</td>
-    </tr>
-  </tbody>
+  <tr key={Math.random()}>
+    <td>{penalty.periodTime}</td>
+    <td>
+      <PlayerName
+        key={Math.random()}
+        id={penalty.receiver.id}
+        name={penalty.receiver.fullName}
+      />
+    </td>
+    <td>{penalty.type}</td>
+    <td>{`${penalty.minutes} mins`}</td>
+  </tr>
 );
 
 const renderGoalEvents = (events, period) => (
@@ -78,7 +74,9 @@ const renderGoalEvents = (events, period) => (
         <th />
       </tr>
     </thead>
-    {map(renderGoalInfo, filter(event => event.period === period, events))}
+    <tbody>
+      {map(renderGoalInfo, filter(event => event.period === period, events))}
+    </tbody>
   </table>
 );
 
@@ -97,7 +95,9 @@ const renderPenaltyEvents = (events, period) => (
         <th />
       </tr>
     </thead>
-    {map(renderPenaltyInfo, filter(event => event.period === period, events))}
+    <tbody>
+      {map(renderPenaltyInfo, filter(event => event.period === period, events))}
+    </tbody>
   </table>
 );
 
