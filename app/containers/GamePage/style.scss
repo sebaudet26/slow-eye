@@ -121,6 +121,11 @@
   width: 100%;
 
   thead {
+    tr {
+      th:first-child {
+        width: 150px;
+      }
+    }
     tr:nth-child(2) {
       border-top: solid 1px $grey-4;
     }
