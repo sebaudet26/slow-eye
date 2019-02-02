@@ -22,6 +22,7 @@ import PlayerName from '../../components/PlayerName';
 
 const renderGoalInfo = goal => (
   <tr key={Math.random()}>
+    <td>{goal.team.triCode}</td>
     <td>{goal.periodTime}</td>
     <td>
       <PlayerName
@@ -46,6 +47,7 @@ const renderGoalInfo = goal => (
 
 const renderPenaltyInfo = penalty => (
   <tr key={Math.random()}>
+    <td>{penalty.team.triCode}</td>
     <td>{penalty.periodTime}</td>
     <td>
       <PlayerName
@@ -68,6 +70,7 @@ const renderGoalEvents = (events, period) => (
         </th>
       </tr>
       <tr>
+        <th>Team</th>
         <th>Time</th>
         <th>Goal By</th>
         <th>Assist(s)</th>
@@ -89,6 +92,7 @@ const renderPenaltyEvents = (events, period) => (
         </th>
       </tr>
       <tr>
+        <th>Team</th>
         <th>Time</th>
         <th>By</th>
         <th>Reason</th>
@@ -203,9 +207,8 @@ class GamePage extends React.Component {
                   filter(isScratched),
                   map(p => (
                     <PlayerName
-                      key={Math.random()}
-                      id={p.id}
-                      name={p.fullName}
+                      id={p.person.id}
+                      name={p.person.fullName}
                     />
                   )),
                 )(boxscore.away.players)}
@@ -307,9 +310,8 @@ class GamePage extends React.Component {
                     filter(isScratched),
                     map(p => (
                       <PlayerName
-                        key={Math.random()}
-                        id={p.id}
-                        name={p.fullName}
+                        id={p.person.id}
+                        name={p.person.fullName}
                       />
                     )),
                   )(boxscore.home.players)

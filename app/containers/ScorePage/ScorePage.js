@@ -34,7 +34,7 @@ const convertToOptions = moments => moments.map(moment => ({
 export default class ScorePage extends React.Component {
   constructor(props) {
     super(props);
-    const days = buildPaddedDateRange(moment());
+    const days = buildPaddedDateRange(moment().subtract(12, 'hours'));
     this.state = {
       currentDate: days[Math.round(days.length / 2)].format(storeKeyFormat),
       daysOptions: convertToOptions(days),

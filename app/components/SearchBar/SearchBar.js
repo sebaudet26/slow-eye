@@ -101,7 +101,6 @@ class SearchBar extends React.Component {
   }
 
   handleKeyDown(e) {
-    console.log(e.target);
     const { cursor, options } = this.state;
     // arrow up/down button should select next/previous list element
     if (e.keyCode === 38 && cursor > 0) {
