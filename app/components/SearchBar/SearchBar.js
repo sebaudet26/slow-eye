@@ -100,6 +100,10 @@ class SearchBar extends React.Component {
     debounce(() => this.setState({ query: newValue }), 200);
   }
 
+  handleFocus(e) {
+    event.target.select();
+  }
+
   handleKeyDown(e) {
     const { cursor, options } = this.state;
     // arrow up/down button should select next/previous list element
@@ -126,6 +130,7 @@ class SearchBar extends React.Component {
             placeholder="Search For Player"
             onChange={this.handleInputChange}
             onKeyDown={this.handleKeyDown}
+            onFocus={this.handleFocus}
           />
           <label>
             <img src={SearchIcon} alt="" />
