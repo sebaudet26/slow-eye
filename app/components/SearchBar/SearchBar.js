@@ -35,7 +35,7 @@ const graphqlQueryTeams = `{
 const renderOption = cursor => (opt, i) => (
   <a
     href={`/${opt.linkType}?id=${opt.id}`}
-    className={`options-item${cursor == i ? '-active' : ''}`}
+    className={`options-item${cursor == i ? ' active' : ''}`}
   >
     {
       opt.linkType === 'player'
