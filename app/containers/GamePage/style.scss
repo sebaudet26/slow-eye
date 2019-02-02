@@ -123,24 +123,45 @@
   thead {
     tr {
       th:first-child {
-        width: 150px;
+        width: 125px;
       }
 
       th:nth-child(2) {
-        width: 250px;
+        width: 200px;
+      }
+
+      th:nth-child(3) {
+        width: 400px;
+      }
+
+      th:nth-child(4) {
+        width: 200px;
+      }
+    }
+    tr:first-child {
+      th {
+        padding-bottom: 0px;
       }
     }
     tr:nth-child(2) {
-      border-top: solid 1px $grey-4;
+      th {
+        color: $grey-2;
+        padding: 5px 10px 5px 10px;
+        font-weight: 500;
+      }
     }
   }
 
   tbody {
     tr {
       border-top: solid 1px $grey-4;
-
+      
       &:last-child {
         border-bottom: solid 1px $grey-4;
+      }
+
+      td {
+        white-space: pre;
       }
     }
   }

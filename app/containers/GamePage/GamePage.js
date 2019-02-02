@@ -22,8 +22,13 @@ import PlayerName from '../../components/PlayerName';
 
 const renderGoalInfo = goal => (
   <tr key={Math.random()}>
-    <td>{goal.team.triCode}</td>
-    <td>{goal.periodTime}</td>
+    <td>
+      {goal.periodTime}
+      {' '}
+-
+      {' '}
+      {goal.team.triCode}
+    </td>
     <td>
       <PlayerName
         key={goal.scorer.id}
@@ -47,8 +52,13 @@ const renderGoalInfo = goal => (
 
 const renderPenaltyInfo = penalty => (
   <tr key={Math.random()}>
-    <td>{penalty.team.triCode}</td>
-    <td>{penalty.periodTime}</td>
+    <td>
+      {penalty.periodTime}
+      {' '}
+-
+      {' '}
+      {penalty.team.triCode}
+    </td>
     <td>
       <PlayerName
         key={Math.random()}
@@ -70,7 +80,6 @@ const renderGoalEvents = (events, period) => (
         </th>
       </tr>
       <tr>
-        <th>Team</th>
         <th>Time</th>
         <th>Goal By</th>
         <th>Assist(s)</th>
@@ -92,7 +101,6 @@ const renderPenaltyEvents = (events, period) => (
         </th>
       </tr>
       <tr>
-        <th>Team</th>
         <th>Time</th>
         <th>By</th>
         <th>Reason</th>
