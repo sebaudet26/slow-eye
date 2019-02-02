@@ -26,8 +26,8 @@ const RosterStatsTable = ({ players, position }) => (
           className: 'text-left',
           sortable: false,
           fixed: 'left',
-          maxWidth: 40,
-          minWidth: 40,
+          maxWidth: 30,
+          minWidth: 30,
         },
         {
           Header: 'Name',
@@ -57,7 +57,7 @@ const RosterStatsTable = ({ players, position }) => (
           id: 'games',
           accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'games'])),
           maxWidth: 75,
-          minWidth: 50,
+          minWidth: 35,
         },
         {
           Header: 'G',
@@ -65,7 +65,7 @@ const RosterStatsTable = ({ players, position }) => (
           accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'goals'])),
           show: position !== 'G',
           maxWidth: 75,
-          minWidth: 50,
+          minWidth: 35,
         },
         {
           Header: 'A',
@@ -73,7 +73,7 @@ const RosterStatsTable = ({ players, position }) => (
           accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'assists'])),
           show: position !== 'G',
           maxWidth: 75,
-          minWidth: 50,
+          minWidth: 35,
         },
         {
           Header: 'Pts',
