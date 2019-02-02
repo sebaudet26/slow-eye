@@ -130,6 +130,7 @@ const RosterStatsTable = ({ players, position }) => (
           show: position === 'G',
           maxWidth: 75,
           minWidth: 50,
+          sortMethod: (a, b) => (a > b ? -1 : 1),
         },
         {
           Header: 'SO',

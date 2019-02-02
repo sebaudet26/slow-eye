@@ -417,6 +417,7 @@ class PlayersTable extends React.PureComponent {
               show: isPosGoalie(posSelected),
               filterable: false,
               accessor: d => pathOr(0, ['goalsAgainstAverage'], d).toFixed(2),
+              sortMethod: (a, b) => (a > b ? -1 : 1),
             },
             {
               Header: 'SO',

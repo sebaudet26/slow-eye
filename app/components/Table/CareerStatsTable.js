@@ -235,6 +235,7 @@ const CareerStatsTable = ({ stats, info }) => (
             <span>{typeof row.value === 'number' ? Number(row.value).toFixed(2) : '-'}</span>
           ),
           Footer: (sumByPath(stats, ['stat', 'goalsAgainst']) / sumByPath(stats, ['stat', 'games'])).toFixed(2),
+          sortMethod: (a, b) => (a > b ? -1 : 1),
         },
         {
           Header: 'SV',
