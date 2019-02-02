@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import {
-  insert, map, split, sum, pathOr, filter,
+  insert, map, split, sum, pathOr, filter, prop,
 } from 'ramda';
 import { sumNumbers } from '../../utils/player';
 import 'react-table/react-table.css';
@@ -42,15 +42,15 @@ const CareerStatsTable = ({ stats, info }) => (
           id: 'fullName',
           className: 'text-left',
           accessor: d => insert(4, '-', split('', pathOr('-', ['season'], d))),
-          maxWidth: 125,
-          minWidth: 110,
+          maxWidth: 115,
+          minWidth: 115,
           Footer: 'Total Stats',
         },
         {
           Header: 'League',
           id: 'league',
-          maxWidth: 85,
-          minWidth: 60,
+          maxWidth: 100,
+          minWidth: 75,
           className: 'text-left',
           accessor: d => useAcronyms(pathOr('-', ['league', 'name'], d)),
         },
@@ -60,14 +60,13 @@ const CareerStatsTable = ({ stats, info }) => (
           maxWidth: 250,
           minWidth: 225,
           className: 'border-right text-left team-cell',
-          // accessor: d => d.team,
-          accessor: d => `${d.team.name}+${d.team.id}+${d.season}`,
+          accessor: prop('team'),
           Cell: row => (
             <div>
               <svg className="team-cell-logo">
-                <use xlinkHref={`/images/teams/season/${row.value.split('+')[2]}.svg#team-${row.value.split('+')[1]}-${row.value.split('+')[2]}-light`} />
+                <use xlinkHref={`/images/teams/season/${row.original.season}.svg#team-${row.value.id}-${row.original.season}-light`} />
               </svg>
-              {row.value.split('+')[0]}
+              {row.value.name}
             </div>
           ),
         },

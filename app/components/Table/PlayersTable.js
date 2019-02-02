@@ -4,7 +4,25 @@ import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import Select from 'react-select';
 import {
-  any, find, propEq, pathOr, pipe, prop, propOr, map, match, toLower, toString, split, replace, length, not, reject, isNil,
+  any,
+  find,
+  findIndex,
+  isNil,
+  last,
+  length,
+  map,
+  match,
+  not,
+  pathOr,
+  pipe,
+  prop,
+  propEq,
+  propOr,
+  reject,
+  replace,
+  split,
+  toLower,
+  toString,
 } from 'ramda';
 import withFixedColumns from 'react-table-hoc-fixed-columns';
 import 'react-table/react-table.css';
@@ -61,9 +79,20 @@ class PlayersTable extends React.PureComponent {
 
   handleSeasonChange(target) {
     const { fetchPlayers, fetchTeams } = this.props;
-    this.setState({ seasonSelected: target.value, teamSelected: baseTeamOptions[0].value });
+    this.setState({
+      seasonSelected: target.value,
+    });
     fetchPlayers(target.value);
     fetchTeams(target.value);
+  }
+
+  componentWillUpdate(newProps) {
+    const { teamSelected } = this.state;
+    if (newProps.teams && teamSelected.length) {
+      if (findIndex(propEq('abbreviation', teamSelected))(newProps.teams) < 0) {
+        return this.setState({ teamSelected: baseTeamOptions[0].value });
+      }
+    }
   }
 
   handlePosChange(target) {
@@ -208,12 +237,11 @@ class PlayersTable extends React.PureComponent {
               filterMethod: (filter, row) => pipe(
                 prop(filter.id),
                 reject(isNil),
-                map(propOr('', 'abbreviation')),
-                map(toLower),
-                map(replace(/\s/g, '')),
-                // map(replace(/"/g, '')),
-                map(pipe(match(toLower(filter.value)), length, Boolean)),
-                any(v => v),
+                last,
+                propOr('', 'abbreviation'),
+                toLower,
+                replace(/\s/g, ''),
+                pipe(match(toLower(filter.value)), length, Boolean),
               )(row),
             },
             {
@@ -449,11 +477,11 @@ class PlayersTable extends React.PureComponent {
           ]}
           defaultSorted={[
             {
-              id: 'points',
+              id: 'wins',
               desc: true,
             },
             {
-              id: 'wins',
+              id: 'points',
               desc: true,
             },
           ]}
