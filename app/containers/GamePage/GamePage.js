@@ -196,9 +196,9 @@ class GamePage extends React.Component {
             onSelect={i => saveToLS('gameTabIndex', i)}
           >
             <TabList>
-              <Tab>{boxscore.away.team.name}</Tab>
+              <Tab>{boxscore.away.team.teamName}</Tab>
               <Tab>Summary</Tab>
-              <Tab>{boxscore.home.team.name}</Tab>
+              <Tab>{boxscore.home.team.teamName}</Tab>
             </TabList>
             <TabPanel>
               <BoxTable
