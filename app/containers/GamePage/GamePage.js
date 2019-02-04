@@ -138,17 +138,15 @@ class GamePage extends React.Component {
     const { goalSummary = [], penaltySummary = [], lastTenPlays = [] } = liveFeed;
 
     const awayTeamImage = (
-      <img
-        src={logoForTeamName(boxscore.away.team.teamName)}
-        alt=""
-      />
+      <svg key={Math.random()} className="game-card-team-img">
+        <use xlinkHref={`/images/teams/season/20182019.svg#team-${boxscore.away.team.id}-20182019-light`} />
+      </svg>
     );
 
     const homeTeamImage = (
-      <img
-        src={logoForTeamName(boxscore.home.team.teamName)}
-        alt=""
-      />
+      <svg key={Math.random()} className="game-card-team-img">
+        <use xlinkHref={`/images/teams/season/20182019.svg#team-${boxscore.home.team.id}-20182019-light`} />
+      </svg>
     );
 
     return (
