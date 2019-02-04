@@ -68,7 +68,6 @@
       margin: auto;
       background: $white;
       box-shadow: $shadow;
-      overflow: scroll;
     }
   }
 }
@@ -210,6 +209,16 @@
 .react-tabs {
   &__tab-list {
     justify-content: center;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .summary {
+    &-events, &-overall {
+      &-card {
+        overflow: scroll;
+      }
+    }
   }
 }
 
