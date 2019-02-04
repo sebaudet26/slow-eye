@@ -203,6 +203,14 @@ const BoxTable = ({ players, goalieMode }) => (
           id: 'points',
           desc: true,
         },
+        {
+          id: 'goals',
+          desc: true,
+        },
+        {
+          id: 'timeonice',
+          desc: true,
+        },
       ]}
       defaultPageSize={players.length}
       defaultSortDesc

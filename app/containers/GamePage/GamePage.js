@@ -31,6 +31,7 @@ const renderGoalInfo = goal => (
     </td>
     <td>
       <PlayerName
+        withImage
         key={goal.scorer.id}
         id={goal.scorer.id}
         name={`${goal.scorer.fullName} (${goal.scorer.seasonTotal})`}
@@ -137,17 +138,15 @@ class GamePage extends React.Component {
     const { goalSummary = [], penaltySummary = [], lastTenPlays = [] } = liveFeed;
 
     const awayTeamImage = (
-      <img
-        src={logoForTeamName(boxscore.away.team.teamName)}
-        alt=""
-      />
+      <svg key={Math.random()} className="game-card-team-img">
+        <use xlinkHref={`/images/teams/season/20182019.svg#team-${boxscore.away.team.id}-20182019-light`} />
+      </svg>
     );
 
     const homeTeamImage = (
-      <img
-        src={logoForTeamName(boxscore.home.team.teamName)}
-        alt=""
-      />
+      <svg key={Math.random()} className="game-card-team-img">
+        <use xlinkHref={`/images/teams/season/20182019.svg#team-${boxscore.home.team.id}-20182019-light`} />
+      </svg>
     );
 
     return (
@@ -230,14 +229,14 @@ class GamePage extends React.Component {
                       <thead>
                         <tr>
                           <th />
+                          <th>Shots</th>
                           <th>PIM</th>
                           <th>PP</th>
                           <th>Hits</th>
                           <th>Fo%</th>
                           <th>TK</th>
                           <th>GV</th>
-                          <th>BK</th>
-                          <th>Shots</th>
+                          <th>Bks</th>
                           <th>Goals</th>
                         </tr>
                       </thead>
@@ -249,6 +248,7 @@ class GamePage extends React.Component {
                               {boxscore.away.team.name}
                             </a>
                           </td>
+                          <td>{boxscore.away.teamStats.shots}</td>
                           <td>{boxscore.away.teamStats.pim}</td>
                           <td>{`${boxscore.away.teamStats.powerPlayGoals}/${boxscore.away.teamStats.powerPlayOpportunities}`}</td>
                           <td>{boxscore.away.teamStats.hits}</td>
@@ -256,7 +256,6 @@ class GamePage extends React.Component {
                           <td>{boxscore.away.teamStats.takeaways}</td>
                           <td>{boxscore.away.teamStats.giveaways}</td>
                           <td>{boxscore.away.teamStats.blocked}</td>
-                          <td>{boxscore.away.teamStats.shots}</td>
                           <td>{boxscore.away.teamStats.goals}</td>
                         </tr>
                         <tr>
@@ -266,6 +265,7 @@ class GamePage extends React.Component {
                               {boxscore.home.team.name}
                             </a>
                           </td>
+                          <td>{boxscore.home.teamStats.shots}</td>
                           <td>{boxscore.home.teamStats.pim}</td>
                           <td>{`${boxscore.home.teamStats.powerPlayGoals}/${boxscore.home.teamStats.powerPlayOpportunities}`}</td>
                           <td>{boxscore.home.teamStats.hits}</td>
@@ -273,7 +273,6 @@ class GamePage extends React.Component {
                           <td>{boxscore.home.teamStats.takeaways}</td>
                           <td>{boxscore.home.teamStats.giveaways}</td>
                           <td>{boxscore.home.teamStats.blocked}</td>
-                          <td>{boxscore.home.teamStats.shots}</td>
                           <td>{boxscore.home.teamStats.goals}</td>
                         </tr>
                       </tbody>

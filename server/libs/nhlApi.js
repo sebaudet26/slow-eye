@@ -145,7 +145,7 @@ const fetchStatsForTeamId = async (teamId) => {
   let stats = path(['stats', 0], teamInfo);
   if (!stats) {
     resource = `/teams/${teamId}?expand=team.stats`;
-    await nhlStatsApi(resource, true);
+    await nhlStatsApi(resource, 60 * 60);
     stats = path(['teams', 0, 'teamStats', 0], teamInfo);
   }
   return stats;
