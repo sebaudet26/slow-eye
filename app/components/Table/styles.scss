@@ -10,8 +10,12 @@
   input, select {
     height: 30px;
   }
-
   &.player-stats {
+
+    .team-cell-logo {
+      margin-right: 0px;
+    }
+
     .rt-th {
       &:nth-child(3) {
         text-align: left;
@@ -60,7 +64,7 @@
     }
   }
 
-  &.roster {
+  &.roster, &.draft-table {
     .rt-thead {
       .rt-th {
         text-align: left;
@@ -105,6 +109,14 @@
       padding: 10px;
       outline: none;
       border-bottom: 0px !important;
+
+      &:first-child {
+        border-radius: 6px 0 0 0;
+      }
+
+      &:last-child {
+        border-radius: 0 6px 0 0;
+      }
 
       &:first-child, &:nth-child(2) {
         text-align: left;
@@ -167,9 +179,7 @@
   }
 }
 
-.css-10o5k90 .-header .rt-th, .css-10o5k90 .-filters .rt-th, .css-10o5k90 .rt-td {
-  background: transparent !important;
-}
+//
 
 
 .hidden {
@@ -192,6 +202,44 @@
   img {
     width: 25px;
     margin-right: 10px;
+  }
+
+  &.sm-margin {
+    img {
+      width: 25px;
+      margin-right: 5px;
+    }
+  }
+
+  &-logo {
+    display: inline-block;
+    width: 33px;
+    height: 22px;
+    vertical-align: middle;
+    background-size: contain;
+    margin-right: 5px;
+  }
+}
+
+.filter-toggle {
+  display: none;
+  background: $white;
+  height: 38px;
+  line-height: 38px;
+  padding: 0 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-bottom: 15px;
+  box-shadow: $shadow;
+  border-radius: 6px;
+  font-weight: 500;
+
+  img {
+    margin-right: 10px;
+  }
+
+  &:hover {
+    box-shadow: $shadow-2;
   }
 }
 
@@ -222,7 +270,7 @@
     outline: 0 !important;
     transition: 0.3s;
     background: $white;
-    box-shadow: $shadow;
+    border: solid 1px $grey-4;
     border-radius: $radius;
 
     &:hover, &--is-focused {
@@ -261,6 +309,17 @@
     }
   }
 
+  .rosterStats {
+    .rt-th {
+      &:nth-child(2) {
+        border-right: solid 1px $grey-4;
+      }
+      &:nth-child(3) {
+        display: none
+      }
+    }
+  }
+
   .border-mobile {
     border-right: solid 1px $grey-4 !important;
   }
@@ -271,6 +330,24 @@
 
   .hidden-mobile {
     display: none;
+  }
+
+  .filter-toggle {
+    display: flex;
+    align-items: center;
+  }
+
+  .filters {
+    display: none;
+
+    &.active {
+      display: block;
+    }
+
+    &-item {
+      max-width: none;
+      margin-bottom: 15px;
+    }
   }
 }
 
@@ -291,10 +368,4 @@
       }
     }
   }
-
-  .filters {
-    display: none;
-  }
-
-
 }

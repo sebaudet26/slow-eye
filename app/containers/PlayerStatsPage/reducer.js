@@ -1,7 +1,6 @@
 import { fromJS } from 'immutable';
-import { path, sortBy } from 'ramda';
-import { FETCH_PLAYERS } from './constants';
-// import playersMock from './mock';
+import { sortBy, prop } from 'ramda';
+import { FETCH_PLAYERS, FETCH_TEAMS } from './constants';
 
 const initialState = fromJS({
 });
@@ -9,9 +8,10 @@ const initialState = fromJS({
 function homeReducer(state = initialState, action) {
   switch (action.type) {
     case FETCH_PLAYERS:
-      return state.set('players', sortBy(path(['person', 'fullName']))(action.payload.players));
+      return state.set('players', action.payload);
+    case FETCH_TEAMS:
+      return state.set('teams', sortBy(prop('name'), action.payload));
     default:
-      // return state.set('players', playersMock);
       return state;
   }
 }

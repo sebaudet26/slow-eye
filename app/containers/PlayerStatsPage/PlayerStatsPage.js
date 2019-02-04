@@ -5,23 +5,25 @@ import PlayersTable from '../../components/Table/PlayersTable';
 import './style.scss';
 
 class PlayerStatsPage extends React.PureComponent {
-  componentDidMount() {
-    const { fetchPlayers } = this.props;
-    fetchPlayers('20182019');
-  }
-
   render() {
-    const { players } = this.props;
+    const {
+      players, fetchPlayers, fetchTeams, teams,
+    } = this.props;
     return (
       <article>
         <Helmet>
           <title>Player Stats</title>
-          <meta name="description" content="Seal Stats" />
+          <meta name="description" content="View NHL Players Stats. Leaderboards. Historical Stats. It's all here. Seal Stats is the best place to view NHL stats. User-friendly and fast." />
         </Helmet>
         <div className="playerStats-page">
           <h2>Player Stats</h2>
         </div>
-        <PlayersTable players={players} />
+        <PlayersTable
+          players={players}
+          fetchPlayers={fetchPlayers}
+          fetchTeams={fetchTeams}
+          teams={teams}
+        />
       </article>
     );
   }
@@ -30,6 +32,7 @@ class PlayerStatsPage extends React.PureComponent {
 PlayerStatsPage.propTypes = {
   players: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   fetchPlayers: PropTypes.func.isRequired,
+  fetchTeams: PropTypes.func.isRequired,
 };
 
 export default PlayerStatsPage;

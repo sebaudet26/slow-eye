@@ -7,8 +7,24 @@ const {
   GraphQLInt,
   GraphQLFloat,
 } = require('graphql');
+const TEAMS = require('../libs/teams');
 const {
-  pathOr, pipe, prop, path, map, values, takeLast, take,
+  equals,
+  head,
+  filter,
+  find,
+  map,
+  path,
+  pathOr,
+  pipe,
+  prop,
+  propEq,
+  propOr,
+  replace,
+  split,
+  take,
+  takeLast,
+  values,
 } = require('ramda');
 const {
   fetchStandings,
@@ -19,6 +35,7 @@ const {
   fetchStatsForTeamId,
   fetchInfoForTeamId,
   fetchDraftInfoForPlayer,
+  fetchDraft,
   fetchPlayersForTeamId,
   fetchAllPlayers,
   fetchAllHistoryPlayers,
@@ -29,6 +46,7 @@ const {
   fetchLiveFeed,
   fetchAllYearsPlayoffStatsForPlayerId,
   fetchPlayoffGameLogsForPlayerId,
+  fetchPlayersReport,
 } = require('../libs/nhlApi');
 
 const ifNotThereFetchId = propName => async (d) => {
@@ -134,6 +152,7 @@ const TeamInfo = new GraphQLObjectType({
     id: { type: GraphQLInt, resolve: prop('id') },
     name: { type: GraphQLString, resolve: ifNotThereFetchId('name') },
     link: { type: GraphQLString, resolve: ifNotThereFetchId('link') },
+    triCode: { type: GraphQLString, resolve: prop('triCode') },
     abbreviation: { type: GraphQLString, resolve: ifNotThereFetchId('abbreviation') },
     teamName: { type: GraphQLString, resolve: ifNotThereFetchId('teamName') },
     locationName: { type: GraphQLString, resolve: ifNotThereFetchId('locationName') },
@@ -225,6 +244,43 @@ const StandingsRecord = new GraphQLObjectType({
   },
 });
 
+const DraftPick = new GraphQLObjectType({
+  name: 'DraftPick',
+  fields: {
+    prospectId: { type: GraphQLString, resolve: prop('id') },
+    amateurClubName: { type: GraphQLString, resolve: prop('amateurClubName') },
+    amateurLeague: { type: GraphQLString, resolve: prop('amateurLeague') },
+    birthDate: { type: GraphQLString, resolve: prop('birthDate') },
+    birthPlace: { type: GraphQLString, resolve: prop('birthPlace') },
+    countryCode: { type: GraphQLString, resolve: prop('countryCode') },
+    csPlayerId: { type: GraphQLInt, resolve: prop('csPlayerId') },
+    year: { type: GraphQLInt, resolve: prop('draftYear') },
+    teamId: { type: GraphQLInt, resolve: prop('draftedByTeamId') },
+    firstName: { type: GraphQLString, resolve: prop('firstName') },
+    height: { type: GraphQLInt, resolve: prop('height') },
+    lastName: { type: GraphQLString, resolve: prop('lastName') },
+    overallNumber: { type: GraphQLInt, resolve: prop('overallPickNumber') },
+    inRoundNumber: { type: GraphQLInt, resolve: prop('pickInRound') },
+    id: { type: GraphQLInt, resolve: prop('playerId') },
+    name: { type: GraphQLString, resolve: prop('playerName') },
+    position: { type: GraphQLString, resolve: prop('position') },
+    removedOutright: { type: GraphQLString, resolve: prop('removedOutright') },
+    removedOutrightWhy: { type: GraphQLString, resolve: prop('removedOutrightWhy') },
+    round: { type: GraphQLInt, resolve: prop('roundNumber') },
+    shootsCatches: { type: GraphQLString, resolve: prop('shootsCatches') },
+    supplementalDraft: { type: GraphQLString, resolve: prop('supplementalDraft') },
+    pickedBy: {
+      type: TeamInfo,
+      resolve: pipe(
+        prop('triCode'),
+        teamAbr => find(propEq('abbreviation', teamAbr))(TEAMS),
+      ),
+    },
+    triCode: { type: GraphQLString, resolve: prop('triCode') },
+    weight: { type: GraphQLInt, resolve: prop('weight') },
+  },
+});
+
 const DraftInfo = new GraphQLObjectType({
   name: 'DraftInfo',
   fields: {
@@ -270,210 +326,57 @@ const PlayerInfo = new GraphQLObjectType({
 const Stat = new GraphQLObjectType({
   name: 'Stat',
   fields: {
-    timeOnIce: {
-      type: GraphQLString,
-      resolve: prop('timeOnIce'),
-    },
-    powerPlayTimeOnIce: {
-      type: GraphQLString,
-      resolve: prop('powerPlayTimeOnIce'),
-    },
-    evenTimeOnIce: {
-      type: GraphQLString,
-      resolve: prop('evenTimeOnIce'),
-    },
-    penaltyMinutes: {
-      type: GraphQLString,
-      resolve: prop('penaltyMinutes'),
-    },
-    shortHandedTimeOnIce: {
-      type: GraphQLString,
-      resolve: prop('shortHandedTimeOnIce'),
-    },
-    timeOnIcePerGame: {
-      type: GraphQLString,
-      resolve: prop('timeOnIcePerGame'),
-    },
-    evenTimeOnIcePerGame: {
-      type: GraphQLString,
-      resolve: prop('evenTimeOnIcePerGame'),
-    },
-    shortHandedTimeOnIcePerGame: {
-      type: GraphQLString,
-      resolve: prop('shortHandedTimeOnIcePerGame'),
-    },
-    powerPlayTimeOnIcePerGame: {
-      type: GraphQLString,
-      resolve: prop('powerPlayTimeOnIcePerGame'),
-    },
-    assists: {
-      type: GraphQLInt,
-      resolve: prop('assists'),
-    },
-    goals: {
-      type: GraphQLInt,
-      resolve: prop('goals'),
-    },
-    pim: {
-      type: GraphQLInt,
-      resolve: prop('pim'),
-    },
-    shots: {
-      type: GraphQLInt,
-      resolve: prop('shots'),
-    },
-    games: {
-      type: GraphQLInt,
-      resolve: prop('games'),
-    },
-    hits: {
-      type: GraphQLInt,
-      resolve: prop('hits'),
-    },
-    powerPlayGoals: {
-      type: GraphQLInt,
-      resolve: prop('powerPlayGoals'),
-    },
-    powerPlayPoints: {
-      type: GraphQLInt,
-      resolve: prop('powerPlayPoints'),
-    },
-    faceOffPct: {
-      type: GraphQLFloat,
-      resolve: prop('faceOffPct'),
-    },
-    shotPct: {
-      type: GraphQLFloat,
-      resolve: prop('shotPct'),
-    },
-    gameWinningGoals: {
-      type: GraphQLInt,
-      resolve: prop('gameWinningGoals'),
-    },
-    overTimeGoals: {
-      type: GraphQLInt,
-      resolve: prop('overTimeGoals'),
-    },
-    shortHandedGoals: {
-      type: GraphQLInt,
-      resolve: prop('shortHandedGoals'),
-    },
-    shortHandedPoints: {
-      type: GraphQLInt,
-      resolve: prop('shortHandedPoints'),
-    },
-    blocked: {
-      type: GraphQLInt,
-      resolve: prop('blocked'),
-    },
-    plusMinus: {
-      type: GraphQLInt,
-      resolve: prop('plusMinus'),
-    },
-    points: {
-      type: GraphQLInt,
-      resolve: prop('points'),
-    },
-    shifts: {
-      type: GraphQLInt,
-      resolve: prop('shifts'),
-    },
-    ot: {
-      type: GraphQLInt,
-      resolve: prop('ot'),
-    },
-    shutouts: {
-      type: GraphQLInt,
-      resolve: prop('shutouts'),
-    },
-    ties: {
-      type: GraphQLInt,
-      resolve: prop('ties'),
-    },
-    wins: {
-      type: GraphQLInt,
-      resolve: prop('wins'),
-    },
-    losses: {
-      type: GraphQLInt,
-      resolve: prop('losses'),
-    },
-    saves: {
-      type: GraphQLInt,
-      resolve: prop('saves'),
-    },
-    powerPlaySaves: {
-      type: GraphQLInt,
-      resolve: prop('powerPlaySaves'),
-    },
-    shortHandedSaves: {
-      type: GraphQLInt,
-      resolve: prop('shortHandedSaves'),
-    },
-    evenSaves: {
-      type: GraphQLInt,
-      resolve: prop('evenSaves'),
-    },
-    shortHandedShots: {
-      type: GraphQLInt,
-      resolve: prop('shortHandedShots'),
-    },
-    evenShots: {
-      type: GraphQLInt,
-      resolve: prop('evenShots'),
-    },
-    powerPlayShots: {
-      type: GraphQLInt,
-      resolve: prop('powerPlayShots'),
-    },
-    savePercentage: {
-      type: GraphQLFloat,
-      resolve: prop('savePercentage'),
-    },
-    goalAgainstAverage: {
-      type: GraphQLFloat,
-      resolve: prop('goalAgainstAverage'),
-    },
-    gamesStarted: {
-      type: GraphQLInt,
-      resolve: prop('gamesStarted'),
-    },
-    shotsAgainst: {
-      type: GraphQLInt,
-      resolve: prop('shotsAgainst'),
-    },
-    goalsAgainst: {
-      type: GraphQLInt,
-      resolve: prop('goalsAgainst'),
-    },
-    powerPlaySavePercentage: {
-      type: GraphQLFloat,
-      resolve: prop('powerPlaySavePercentage'),
-    },
-    shortHandedSavePercentage: {
-      type: GraphQLFloat,
-      resolve: prop('shortHandedSavePercentage'),
-    },
-    evenStrengthSavePercentage: {
-      type: GraphQLFloat,
-      resolve: prop('evenStrengthSavePercentage'),
-    },
-    takeaways: {
-      type: GraphQLInt,
-      resolve: prop('takeaways'),
-    },
-    giveaways: {
-      type: GraphQLInt,
-      resolve: prop('giveaways'),
-    },
-    faceOffWins: {
-      type: GraphQLInt,
-      resolve: prop('faceOffWins'),
-    },
-    faceOffTaken: {
-      type: GraphQLInt,
-      resolve: prop('faceoffTaken'),
-    },
+    timeOnIce: { type: GraphQLString, resolve: prop('timeOnIce') },
+    powerPlayTimeOnIce: { type: GraphQLString, resolve: prop('powerPlayTimeOnIce') },
+    evenTimeOnIce: { type: GraphQLString, resolve: prop('evenTimeOnIce') },
+    penaltyMinutes: { type: GraphQLString, resolve: prop('penaltyMinutes') },
+    shortHandedTimeOnIce: { type: GraphQLString, resolve: prop('shortHandedTimeOnIce') },
+    timeOnIcePerGame: { type: GraphQLString, resolve: prop('timeOnIcePerGame') },
+    evenTimeOnIcePerGame: { type: GraphQLString, resolve: prop('evenTimeOnIcePerGame') },
+    shortHandedTimeOnIcePerGame: { type: GraphQLString, resolve: prop('shortHandedTimeOnIcePerGame') },
+    powerPlayTimeOnIcePerGame: { type: GraphQLString, resolve: prop('powerPlayTimeOnIcePerGame') },
+    assists: { type: GraphQLInt, resolve: prop('assists') },
+    goals: { type: GraphQLInt, resolve: prop('goals') },
+    pim: { type: GraphQLInt, resolve: prop('pim') },
+    shots: { type: GraphQLInt, resolve: prop('shots') },
+    games: { type: GraphQLInt, resolve: prop('games') },
+    hits: { type: GraphQLInt, resolve: prop('hits') },
+    powerPlayGoals: { type: GraphQLInt, resolve: prop('powerPlayGoals') },
+    powerPlayPoints: { type: GraphQLInt, resolve: prop('powerPlayPoints') },
+    faceOffPct: { type: GraphQLFloat, resolve: prop('faceOffPct') },
+    shotPct: { type: GraphQLFloat, resolve: prop('shotPct') },
+    gameWinningGoals: { type: GraphQLInt, resolve: prop('gameWinningGoals') },
+    overTimeGoals: { type: GraphQLInt, resolve: prop('overTimeGoals') },
+    shortHandedGoals: { type: GraphQLInt, resolve: prop('shortHandedGoals') },
+    shortHandedPoints: { type: GraphQLInt, resolve: prop('shortHandedPoints') },
+    blocked: { type: GraphQLInt, resolve: prop('blocked') },
+    plusMinus: { type: GraphQLInt, resolve: prop('plusMinus') },
+    points: { type: GraphQLInt, resolve: prop('points') },
+    shifts: { type: GraphQLInt, resolve: prop('shifts') },
+    ot: { type: GraphQLInt, resolve: prop('ot') },
+    shutouts: { type: GraphQLInt, resolve: prop('shutouts') },
+    ties: { type: GraphQLInt, resolve: prop('ties') },
+    wins: { type: GraphQLInt, resolve: prop('wins') },
+    losses: { type: GraphQLInt, resolve: prop('losses') },
+    saves: { type: GraphQLInt, resolve: prop('saves') },
+    powerPlaySaves: { type: GraphQLInt, resolve: prop('powerPlaySaves') },
+    shortHandedSaves: { type: GraphQLInt, resolve: prop('shortHandedSaves') },
+    evenSaves: { type: GraphQLInt, resolve: prop('evenSaves') },
+    shortHandedShots: { type: GraphQLInt, resolve: prop('shortHandedShots') },
+    evenShots: { type: GraphQLInt, resolve: prop('evenShots') },
+    powerPlayShots: { type: GraphQLInt, resolve: prop('powerPlayShots') },
+    savePercentage: { type: GraphQLFloat, resolve: prop('savePercentage') },
+    goalAgainstAverage: { type: GraphQLFloat, resolve: prop('goalAgainstAverage') },
+    gamesStarted: { type: GraphQLInt, resolve: prop('gamesStarted') },
+    shotsAgainst: { type: GraphQLInt, resolve: prop('shotsAgainst') },
+    goalsAgainst: { type: GraphQLInt, resolve: prop('goalsAgainst') },
+    powerPlaySavePercentage: { type: GraphQLFloat, resolve: prop('powerPlaySavePercentage') },
+    shortHandedSavePercentage: { type: GraphQLFloat, resolve: prop('shortHandedSavePercentage') },
+    evenStrengthSavePercentage: { type: GraphQLFloat, resolve: prop('evenStrengthSavePercentage') },
+    takeaways: { type: GraphQLInt, resolve: prop('takeaways') },
+    giveaways: { type: GraphQLInt, resolve: prop('giveaways') },
+    faceOffWins: { type: GraphQLInt, resolve: prop('faceOffWins') },
+    faceOffTaken: { type: GraphQLInt, resolve: prop('faceoffTaken') },
   },
 });
 
@@ -498,6 +401,7 @@ const Person = new GraphQLObjectType({
     id: { type: GraphQLInt, resolve: prop('id') },
     link: { type: GraphQLString, resolve: prop('link') },
     fullName: { type: GraphQLString, resolve: prop('fullName') },
+    seasonTotal: { type: GraphQLInt, resolve: prop('seasonTotal') },
   },
 });
 
@@ -529,17 +433,17 @@ const Player = new GraphQLObjectType({
       args: {
         season: { type: GraphQLString },
       },
-      type: new GraphQLList(SeasonStat),
+      type: GraphQLList(SeasonStat),
       resolve: (p, args) => fetchStatsForPlayerId(p.id, args),
     },
     // Lazy load player stats
     careerStats: {
-      type: new GraphQLList(SeasonStat),
+      type: GraphQLList(SeasonStat),
       resolve: p => fetchAllYearsStatsForPlayerId(p.id),
     },
     // Lazy load player stats
     careerPlayoffStats: {
-      type: new GraphQLList(SeasonStat),
+      type: GraphQLList(SeasonStat),
       resolve: p => fetchAllYearsPlayoffStatsForPlayerId(p.id),
     },
     // Lazy load player stats
@@ -555,14 +459,14 @@ const Player = new GraphQLObjectType({
       args: {
         lastFive: { type: GraphQLBoolean },
       },
-      type: new GraphQLList(SeasonStat),
+      type: GraphQLList(SeasonStat),
       resolve: (p, args) =>
         fetchGameLogsForPlayerId(p.id)
           .then(logs => (args.lastFive ? take(5, logs) : logs)),
     },
     // Lazy load game logs
     playoffLogs: {
-      type: new GraphQLList(SeasonStat),
+      type: GraphQLList(SeasonStat),
       resolve: p => fetchPlayoffGameLogsForPlayerId(p.id),
     },
   },
@@ -633,6 +537,49 @@ const PlayByPlay = new GraphQLObjectType({
   },
 });
 
+const GoalGameEvent = new GraphQLObjectType({
+  name: 'GoalGameEvent',
+  fields: {
+    period: { type: GraphQLInt, resolve: path(['about', 'period']) },
+    periodTime: { type: GraphQLString, resolve: path(['about', 'periodTime']) },
+    team: { type: TeamInfo, resolve: prop('team') },
+    strength: { type: GraphQLString, resolve: path(['result', 'strength', 'name']) },
+    isWinningGoal: { type: GraphQLBoolean, resolve: path(['result', 'gameWinningGoal']) },
+    isEmptyNet: { type: GraphQLBoolean, resolve: path(['result', 'emptyNet']) },
+    scorer: {
+      type: Person,
+      resolve: d => ({
+        ...path(['players', 0, 'player'], d),
+        seasonTotal: path(['players', 0, 'seasonTotal'], d),
+      }),
+    },
+    assists: {
+      type: GraphQLList(Person),
+      resolve: d => pipe(
+        prop('players'),
+        filter(p => p.playerType === 'Assist'),
+        map(a => ({
+          ...prop('player', a),
+          seasonTotal: prop('seasonTotal', a),
+        })),
+      )(d),
+    },
+  },
+});
+
+const PenaltyGameEvent = new GraphQLObjectType({
+  name: 'PenaltyGameEvent',
+  fields: {
+    period: { type: GraphQLInt, resolve: path(['about', 'period']) },
+    periodTime: { type: GraphQLString, resolve: path(['about', 'periodTime']) },
+    team: { type: TeamInfo, resolve: prop('team') },
+    receiver: { type: Person, resolve: path(['players', 0, 'player']) },
+    type: { type: GraphQLString, resolve: path(['result', 'secondaryType']) },
+    severity: { type: GraphQLString, resolve: path(['result', 'penaltySeverity']) },
+    minutes: { type: GraphQLInt, resolve: path(['result', 'penaltyMinutes']) },
+  },
+});
+
 const LiveFeed = new GraphQLObjectType({
   name: 'LiveFeed',
   fields: {
@@ -642,6 +589,20 @@ const LiveFeed = new GraphQLObjectType({
       resolve: pipe(
         pathOr([], ['liveData', 'plays', 'allPlays']),
         takeLast(10),
+      ),
+    },
+    goalSummary: {
+      type: GraphQLList(GoalGameEvent),
+      resolve: pipe(
+        pathOr([], ['liveData', 'plays', 'allPlays']),
+        filter(d => d.result.eventTypeId === 'GOAL'),
+      ),
+    },
+    penaltySummary: {
+      type: GraphQLList(PenaltyGameEvent),
+      resolve: pipe(
+        pathOr([], ['liveData', 'plays', 'allPlays']),
+        filter(d => d.result.eventTypeId === 'PENALTY'),
       ),
     },
   },
@@ -699,17 +660,109 @@ const PlayerBio = new GraphQLObjectType({
   },
 });
 
+const PlayerReport = new GraphQLObjectType({
+  name: 'PlayerReport',
+  fields: {
+    assists: { type: GraphQLInt, resolve: prop('assists') },
+    faceoffWinPctg: { type: GraphQLFloat, resolve: prop('faceoffWinPctg') },
+    gameWinningGoals: { type: GraphQLInt, resolve: prop('gameWinningGoals') },
+    gamesPlayed: { type: GraphQLInt, resolve: prop('gamesPlayed') },
+    goals: { type: GraphQLInt, resolve: prop('goals') },
+    otGoals: { type: GraphQLInt, resolve: prop('otGoals') },
+    penaltyMinutes: { type: GraphQLInt, resolve: prop('penaltyMinutes') },
+    birthCity: { type: GraphQLString, resolve: prop('playerBirthCity') },
+    birthCountry: { type: GraphQLString, resolve: prop('playerBirthCountry') },
+    birthDate: { type: GraphQLString, resolve: prop('playerBirthDate') },
+    birthStateProvince: { type: GraphQLString, resolve: prop('playerBirthStateProvince') },
+    draftOverallPickNo: { type: GraphQLInt, resolve: prop('playerDraftOverallPickNo') },
+    draftRoundNo: { type: GraphQLInt, resolve: prop('playerDraftRoundNo') },
+    draftYear: { type: GraphQLInt, resolve: prop('playerDraftYear') },
+    firstName: { type: GraphQLString, resolve: prop('playerFirstName') },
+    height: { type: GraphQLInt, resolve: prop('playerHeight') },
+    id: { type: GraphQLInt, resolve: prop('playerId') },
+    inHockeyHof: { type: GraphQLInt, resolve: prop('playerInHockeyHof') },
+    isActive: { type: GraphQLInt, resolve: prop('playerIsActive') },
+    lastName: { type: GraphQLString, resolve: prop('playerLastName') },
+    name: { type: GraphQLString, resolve: prop('playerName') },
+    nationality: { type: GraphQLString, resolve: prop('playerNationality') },
+    positionCode: { type: GraphQLString, resolve: prop('playerPositionCode') },
+    shootsCatches: { type: GraphQLString, resolve: prop('playerShootsCatches') },
+    teams: {
+      type: GraphQLList(TeamInfo),
+      resolve: pipe(
+        prop('playerTeamsPlayedFor'),
+        replace(/\s/g, ''),
+        split(','),
+        map(teamAbr => find(propEq('abbreviation', teamAbr))(TEAMS)),
+      ),
+    },
+    weight: { type: GraphQLInt, resolve: prop('playerWeight') },
+    plusMinus: { type: GraphQLInt, resolve: prop('plusMinus') },
+    points: { type: GraphQLInt, resolve: prop('points') },
+    pointsPerGame: { type: GraphQLFloat, resolve: prop('pointsPerGame') },
+    ppGoals: { type: GraphQLInt, resolve: prop('ppGoals') },
+    ppPoints: { type: GraphQLInt, resolve: prop('ppPoints') },
+    seasonId: { type: GraphQLInt, resolve: prop('seasonId') },
+    shGoals: { type: GraphQLInt, resolve: prop('shGoals') },
+    shPoints: { type: GraphQLInt, resolve: prop('shPoints') },
+    shiftsPerGame: { type: GraphQLFloat, resolve: prop('shiftsPerGame') },
+    shootingPctg: { type: GraphQLString, resolve: d => (d.shootingPctg * 100).toFixed(1) },
+    shots: { type: GraphQLInt, resolve: prop('shots') },
+    timeOnIcePerGame: {
+      type: GraphQLString,
+      resolve: (d) => {
+        const secondsCount = propOr(0, 'timeOnIcePerGame', d);
+        const minutesDecimals = secondsCount / 60;
+        const minutes = Math.floor(minutesDecimals);
+        const secondsDecimals = minutesDecimals - minutes;
+        const seconds = secondsDecimals * 60;
+        return `${minutes.toFixed(0)}:${seconds > 10 ? seconds.toFixed(0) : `0${seconds.toFixed(0)}`}`;
+      },
+    },
+    blockedShots: { type: GraphQLInt, resolve: prop('blockedShots') },
+    blockedShotsPerGame: { type: GraphQLFloat, resolve: prop('blockedShotsPerGame') },
+    faceoffs: { type: GraphQLInt, resolve: prop('faceoffs') },
+    faceoffsLost: { type: GraphQLInt, resolve: prop('faceoffsLost') },
+    faceoffsWon: { type: GraphQLInt, resolve: prop('faceoffsWon') },
+    giveaways: { type: GraphQLInt, resolve: prop('giveaways') },
+    goalsPerGame: { type: GraphQLFloat, resolve: prop('goalsPerGame') },
+    hits: { type: GraphQLInt, resolve: prop('hits') },
+    hitsPerGame: { type: GraphQLFloat, resolve: prop('hitsPerGame') },
+    missedShots: { type: GraphQLInt, resolve: prop('missedShots') },
+    missedShotsPerGame: { type: GraphQLFloat, resolve: prop('missedShotsPerGame') },
+    shotsPerGame: { type: GraphQLFloat, resolve: prop('shotsPerGame') },
+    takeaways: { type: GraphQLInt, resolve: prop('takeaways') },
+    rookie: { type: GraphQLBoolean, resolve: prop('rookie') },
+    // goalies
+    ties: { type: GraphQLInt, resolve: prop('ties') },
+    wins: { type: GraphQLInt, resolve: prop('wins') },
+    losses: { type: GraphQLInt, resolve: prop('losses') },
+    otLosses: { type: GraphQLInt, resolve: prop('otLosses') },
+    goalsAgainst: { type: GraphQLInt, resolve: prop('goalsAgainst') },
+    goalsAgainstAverage: { type: GraphQLFloat, resolve: prop('goalsAgainstAverage') },
+    saves: { type: GraphQLInt, resolve: prop('saves') },
+    shotsAgainst: { type: GraphQLInt, resolve: r => r.evShotsAgainst + r.ppShotsAgainst + r.shShotsAgainst },
+    savePercentage: { type: GraphQLFloat, resolve: prop('savePctg') },
+    shutouts: { type: GraphQLInt, resolve: prop('shutouts') },
+  },
+});
+
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     fields: {
+      playersReport: {
+        args: { season: { type: GraphQLString } },
+        type: GraphQLList(PlayerReport),
+        resolve: (root, args) => fetchPlayersReport(args.season),
+      },
       allHistoryPlayers: {
-        type: new GraphQLList(PlayerBio),
+        type: GraphQLList(PlayerBio),
         resolve: fetchAllHistoryPlayers,
       },
       players: {
         args: { season: { type: GraphQLString } },
-        type: new GraphQLList(Player),
+        type: GraphQLList(Player),
         resolve: fetchAllPlayers,
       },
       player: {
@@ -720,12 +773,13 @@ const schema = new GraphQLSchema({
         }),
       },
       standings: {
-        type: new GraphQLList(StandingsRecord),
+        type: GraphQLList(StandingsRecord),
         resolve: fetchStandings,
       },
       teams: {
-        type: new GraphQLList(TeamInfo),
-        resolve: fetchAllTeams,
+        args: { season: { type: GraphQLString } },
+        type: GraphQLList(TeamInfo),
+        resolve: (root, args) => fetchAllTeams(args),
       },
       team: {
         type: TeamInfo,
@@ -740,15 +794,18 @@ const schema = new GraphQLSchema({
           date: { type: GraphQLString },
           endDate: { type: GraphQLString },
         },
-        type: new GraphQLList(Game),
+        type: GraphQLList(Game),
         resolve: (root, args) => fetchGames(args),
       },
       game: {
-        args: {
-          id: { type: GraphQLString },
-        },
+        args: { id: { type: GraphQLString } },
         type: Game,
         resolve: (root, args) => ({ gamePk: args.id }),
+      },
+      draft: {
+        args: { year: { type: GraphQLInt } },
+        type: GraphQLList(DraftPick),
+        resolve: (root, args) => fetchDraft(args),
       },
     },
   }),

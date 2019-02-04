@@ -13,7 +13,7 @@ const BoxTable = ({ players, goalieMode }) => (
   <div>
     <ReactTableFixedColumns
       resizable={false}
-      noDataText="Loading all dat good data stuff..."
+      noDataText="Loading all that good stuff..."
       sortable
       data={players}
       columns={[

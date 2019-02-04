@@ -1,12 +1,12 @@
 const {
-  head, contains, filter, flatten, map, mergeAll, path, prop, pipe, equals, toLower, propOr, pathEq,
+  head, contains, filter, flatten, map, mergeAll, path, prop, pipe, propOr, pathEq, mergeLeft,
 } = require('ramda');
 const moment = require('moment');
 const fetch = require('node-fetch');
 const cache = require('./redisApi');
 
-
 const nhlApiBase = 'http://www.nhl.com/stats/rest';
+const nhlRecordsBase = 'https://records.nhl.com/site/api';
 const nhlStatsApiBase = 'https://statsapi.web.nhl.com/api/v1';
 
 // expiration is a number in seconds
@@ -19,6 +19,26 @@ const nhlStatsApi = async (resource, expiration, force) => {
       }
     }
     const url = `${nhlStatsApiBase}${resource}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    cache
+      .set(resource, JSON.stringify(data), 'EX', expiration || 60 * 60 * 12);
+    return data;
+  } catch (e) {
+    return console.error(e.stack || e.toString());
+  }
+};
+
+// expiration is a number in seconds
+const nhlRecordsApi = async (resource, expiration, force) => {
+  try {
+    if (!force) {
+      const cachedValue = await cache.get(resource);
+      if (cachedValue) {
+        return JSON.parse(cachedValue);
+      }
+    }
+    const url = `${nhlRecordsBase}${resource}`;
     const response = await fetch(url);
     const data = await response.json();
     cache
@@ -100,7 +120,13 @@ const fetchAllYearsStatsForPlayerId = async (playerId) => {
   // AHL = 153
   const usefulLeagueIds = [133];
   const isStatUseful = seasonStat => contains(path(['league', 'id'], seasonStat), usefulLeagueIds);
-  return filter(isStatUseful, path(['stats', 0, 'splits'], playerStatsData));
+  const nhlSeasons = filter(isStatUseful, path(['stats', 0, 'splits'], playerStatsData));
+  // if nhler, return nhl seasons only
+  if (nhlSeasons.length) {
+    return nhlSeasons;
+  }
+  // if not, return everything we have
+  return path(['stats', 0, 'splits'], playerStatsData);
 };
 
 const fetchAllYearsPlayoffStatsForPlayerId = async (playerId) => {
@@ -230,9 +256,72 @@ const fetchTeamRanking = async (teamId) => {
 };
 
 const fetchAllHistoryPlayers = async () => {
-  const resource = '/skaters?isAggregate=true&reportType=basic&isGame=false&reportName=bios&sort=[{%22property%22:%22playerBirthDate%22,%22direction%22:%22DESC%22}]&cayenneExp=gameTypeId=2%20and%20seasonId%3E=19171918%20and%20seasonId%3C=20182019';
-  const response = await nhlApi(resource, 60 * 60 * 24 * 7);
-  return response.data;
+  const resourceSkaters = '/skaters?isAggregate=true&reportType=basic&reportName=bios&sort=[{%22property%22:%22playerBirthDate%22,%22direction%22:%22DESC%22}]&cayenneExp=seasonId%3E=19171918%20and%20seasonId%3C=20182019';
+  const resourceGoalies = '/goalies?isAggregate=true&reportType=goalie_basic&reportName=goaliebios&sort=[{%22property%22:%22playerBirthDate%22,%22direction%22:%22DESC%22}]&cayenneExp=seasonId%3E=19171918%20and%20seasonId%3C=20182019';
+  const [skaters, goalies] = await Promise.all([
+    nhlApi(resourceSkaters, 60 * 60 * 24 * 7),
+    nhlApi(resourceGoalies, 60 * 60 * 24 * 7),
+  ]);
+  return [...goalies.data, ...skaters.data];
+};
+
+const fetchPlayersReport = async (season = 20182019) => {
+  const skatersummaryRookie = `/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&cayenneExp=playerRookieSeasonInd=1%20and%20gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}&sort=[{%22property%22:%22playerId%22}]`;
+  const realtimeRookie = `/skaters?isAggregate=false&reportType=basic&reportName=realtime&sort=[{%22property%22:%22playerId%22}]&cayenneExp=playerRookieSeasonInd=1%20and%20gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
+  const goaliesRookie = `/goalies?isAggregate=false&reportType=goalie_basic&reportName=goaliesummary&sort=[{%22property%22:%22playerId%22}]&cayenneExp=playerRookieSeasonInd=1%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}%20and%20gameTypeId=2`;
+  const goaliesAll = `/goalies?isAggregate=false&reportType=goalie_basic&reportName=goaliesummary&sort=[{%22property%22:%22playerId%22}]&cayenneExp=seasonId%3E=${season}%20and%20seasonId%3C=${season}%20and%20gameTypeId=2`;
+  // playerRookieSeasonInd=0 does not work ...
+  const skatersummaryAll = `/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}&sort=[{%22property%22:%22playerId%22}]`;
+  const realtimeAll = `/skaters?isAggregate=false&reportType=basic&reportName=realtime&sort=[{%22property%22:%22playerId%22}]&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
+
+  try {
+    const [
+      skatersummaryRookieJSON,
+      skatersummaryAllJSON,
+      realtimeRookieJSON,
+      realtimeAllJSON,
+      goaliesRookieJSON,
+      goaliesAllJSON,
+    ] = await Promise.all([
+      nhlApi(skatersummaryRookie, 60 * 60 * 24, true),
+      nhlApi(skatersummaryAll, 60 * 60 * 24, true),
+      nhlApi(realtimeRookie, 60 * 60 * 24, true),
+      nhlApi(realtimeAll, 60 * 60 * 24, true),
+      nhlApi(goaliesRookie, 60 * 60 * 24, true),
+      nhlApi(goaliesAll, 60 * 60 * 24, true),
+    ]);
+    return pipe(
+      map(prop('data')),
+      ([arr1, arr2, arr3, arr4, arr5, arr6]) => {
+        const rookiePlayerIds = map(prop('playerId'), arr1);
+        const goalieRookieIds = map(prop('playerId'), arr5);
+        return [
+          ...arr1.map((item, k) => mergeLeft(arr1[k], { ...arr3[k], rookie: true })),
+          ...arr2.map((item, k) => ({ ...item, ...arr4[k], rookie: false }))
+            .filter(item => !rookiePlayerIds.includes(item.playerId)),
+          ...arr5.map((item, k) => ({ ...arr5[k], rookie: true })),
+          ...arr6.map((item, k) => ({ ...item, rookie: false }))
+            .filter(item => !goalieRookieIds.includes(item.playerId)),
+        ];
+      },
+    )([
+      skatersummaryRookieJSON,
+      skatersummaryAllJSON,
+      realtimeRookieJSON,
+      realtimeAllJSON,
+      goaliesRookieJSON,
+      goaliesAllJSON,
+    ]);
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+};
+
+const fetchDraft = async (args) => {
+  const resource = `/draft?cayenneExp=draftYear=${args.year}`;
+  const draftResponse = await nhlRecordsApi(resource, 60 * 60 * 24 * 300, true);
+  return draftResponse.data;
 };
 
 module.exports = {
@@ -242,6 +331,7 @@ module.exports = {
   fetchGameLogsForPlayerId,
   fetchAllYearsStatsForPlayerId,
   fetchDraftInfoForPlayer,
+  fetchDraft,
   fetchInfoForPlayerId,
   fetchAllHistoryPlayers,
   fetchPlayer,
@@ -255,4 +345,5 @@ module.exports = {
   fetchTeamRanking,
   fetchAllYearsPlayoffStatsForPlayerId,
   fetchPlayoffGameLogsForPlayerId,
+  fetchPlayersReport,
 };

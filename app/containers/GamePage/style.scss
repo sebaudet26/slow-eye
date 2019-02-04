@@ -51,6 +51,7 @@
 
     &-result {
       font-weight: 500;
+      text-align: center;
     }
   }
 
@@ -120,8 +121,50 @@
 .events-table {
   width: 100%;
 
-  tr:nth-child(2) {
-    border-top: solid 1px $grey-4;
+  thead {
+    tr {
+      th:first-child {
+        width: 125px;
+      }
+
+      th:nth-child(2) {
+        width: 200px;
+      }
+
+      th:nth-child(3) {
+        width: 400px;
+      }
+
+      th:nth-child(4) {
+        width: 200px;
+      }
+    }
+    tr:first-child {
+      th {
+        padding-bottom: 0px;
+      }
+    }
+    tr:nth-child(2) {
+      th {
+        color: $grey-2;
+        padding: 5px 10px 5px 10px;
+        font-weight: 500;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      border-top: solid 1px $grey-4;
+
+      &:last-child {
+        border-bottom: solid 1px $grey-4;
+      }
+
+      td {
+        white-space: pre;
+      }
+    }
   }
 
   thead {

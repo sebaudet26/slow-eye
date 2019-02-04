@@ -17,7 +17,7 @@ const RosterStatsTable = ({ players, position }) => (
     <ReactTableFixedColumns
       data={players}
       resizable={false}
-      noDataText="Loading all dat good data stuff..."
+      noDataText="Loading all good stuff..."
       columns={[
         {
           Header: '#',
@@ -26,14 +26,14 @@ const RosterStatsTable = ({ players, position }) => (
           className: 'text-left',
           sortable: false,
           fixed: 'left',
-          maxWidth: 40,
-          minWidth: 40,
+          maxWidth: 30,
+          minWidth: 30,
         },
         {
           Header: 'Name',
           id: 'fullName',
           accessor: d => `${d.player.info.fullName}+${d.player.id}`,
-          className: 'text-left',
+          className: 'text-left border-mobile',
           fixed: 'left',
           maxWidth: 200,
           minWidth: 150,
@@ -46,7 +46,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'Age',
           id: 'age',
-          className: 'border-right',
+          className: 'border-right hidden-mobile',
           maxWidth: 65,
           minWidth: 50,
           fixed: 'left',
@@ -57,7 +57,7 @@ const RosterStatsTable = ({ players, position }) => (
           id: 'games',
           accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'games'])),
           maxWidth: 75,
-          minWidth: 50,
+          minWidth: 35,
         },
         {
           Header: 'G',
@@ -65,7 +65,7 @@ const RosterStatsTable = ({ players, position }) => (
           accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'goals'])),
           show: position !== 'G',
           maxWidth: 75,
-          minWidth: 50,
+          minWidth: 35,
         },
         {
           Header: 'A',
@@ -73,7 +73,7 @@ const RosterStatsTable = ({ players, position }) => (
           accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'assists'])),
           show: position !== 'G',
           maxWidth: 75,
-          minWidth: 50,
+          minWidth: 35,
         },
         {
           Header: 'Pts',
@@ -130,6 +130,7 @@ const RosterStatsTable = ({ players, position }) => (
           show: position === 'G',
           maxWidth: 75,
           minWidth: 50,
+          sortMethod: (a, b) => (a > b ? -1 : 1),
         },
         {
           Header: 'SO',

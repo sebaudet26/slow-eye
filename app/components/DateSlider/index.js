@@ -2,50 +2,54 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import CalendarIcon from '../../images/calendar.svg';
+import { sortBy, prop, values } from 'ramda';
 import ScoreCard from '../ScoreCard';
 import './slick-theme.min.scss';
 import './style.scss';
 
-const renderSlide = (opt, nbGames) => (
-  <div className="slick-slide-content" key={opt.value}>
+const renderSlide = (opt, games) => (
+  <div className="slick-slide-content" key={Math.random()}>
     <div className="slick-slide-date">
-      {opt.label}
+      <span>
+        {opt.label}
+      </span>
     </div>
     <div className="slick-slide-games">
-      {`(${nbGames} Games)`}
+      {games[opt.value] ? `( ${games[opt.value].length} Games )` : '...'}
     </div>
   </div>
 );
 
-
 class DateSlider extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { sliderValue: this.props.daysOptions[2].value.replace(/-/g, '') };
-    this.handleNewDateSelected = this.handleNewDateSelected.bind(this);
+    this.state = {};
   }
 
-  handleNewDateSelected(newIndex) {
-    this.setState({ sliderValue: this.props.daysOptions[newIndex].value.replace(/-/g, '') });
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const { daysOptions } = this.props;
+    if (
+      prevProps.daysOptions[Math.round(daysOptions.length / 2)].value
+      !== daysOptions[Math.round(daysOptions.length / 2)].value
+    ) {
+      this.slider.slickGoTo(Math.round(daysOptions.length / 2), true);
+    }
   }
 
   render() {
-    const { daysOptions, games } = this.props;
+    const { daysOptions, handleNewDateSelected, games } = this.props;
 
     const settings = {
       dots: false,
       className: 'center',
       swipeToSlide: true,
-      afterChange: this.handleNewDateSelected,
+      afterChange: handleNewDateSelected,
       infinite: false,
       focusOnSelect: true,
       speed: 200,
       slidesToShow: 5,
       slidesToScroll: 1,
-      initialSlide: 1,
+      initialSlide: Math.round(daysOptions.length / 2),
       centerMode: true,
       responsive: [
         {
@@ -72,34 +76,9 @@ class DateSlider extends React.Component {
       ],
     };
     return (
-      games[this.state.sliderValue] && games[this.state.sliderValue].games && Object.keys(games).length === daysOptions.length ? (
-        <div>
-          <div className="scoreboard-header">
-            <h2>Scores</h2>
-            <div className="scoreboard-datePicker">
-              <label>
-                <img
-                  src={CalendarIcon}
-                  className="scoreboard-datePicker-calendar"
-                  alt=""
-                />
-                <DatePicker
-                // selected={dateSelected}
-                // onChange={v => this.handleChangeDate(moment(v).format(apiDateFormat))}
-                  dateFormat="eee MMM dd"
-                  todayButton="Today"
-                />
-              </label>
-            </div>
-          </div>
-          <Slider ref={slider => this.slider = slider} {...settings}>
-            {daysOptions.map(opt => renderSlide(opt, games[opt.value.replace(/-/g, '')].games.length))}
-          </Slider>
-          <div className="scoreboard-results">
-            {games[this.state.sliderValue] ? games[this.state.sliderValue].games.map(game => <ScoreCard game={game} />) : null}
-          </div>
-        </div>
-      ) : null
+      <Slider ref={slider => this.slider = slider} {...settings}>
+        {daysOptions.map(opt => renderSlide(opt, games))}
+      </Slider>
     );
   }
 }

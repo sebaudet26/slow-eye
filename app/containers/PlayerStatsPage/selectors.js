@@ -6,3 +6,8 @@ export const makeSelectPlayers = () => createSelector(
   selectHome,
   homeState => homeState.get('players') || [],
 );
+
+export const makeSelectTeams = () => createSelector(
+  selectHome,
+  homeState => homeState.get('teams') || [],
+);

@@ -19,17 +19,12 @@ import {
   shootingSideIs,
   forwardsAbbreviations,
 } from '../../utils/player';
+import { getNumberWithOrdinal } from '../../utils/misc';
 import {
   saveToLS,
   getFromLS,
 } from '../../utils/localStorage';
 import './style.scss';
-
-const getNumberWithOrdinal = (n) => {
-  const s = ['th', 'st', 'nd', 'rd'];
-  const v = n % 100;
-  return n + (s[(v - 20) % 10] || s[v] || s[0]);
-};
 
 const urlParams = new URLSearchParams(window.location.search);
 
@@ -70,17 +65,15 @@ export default class TeamPage extends React.Component {
           <title>{team.name}</title>
           <meta
             name="description"
-            content={team.name}
+            content={`${team.name} roster and stats. Seal Stats is the best place to view NHL stats. User-friendly and fast. `}
           />
         </Helmet>
         <div className="team-header">
           <div className="team-header-title">
             <div className="team-img">
-              <img
-                src={logoForTeamName(team.teamName)}
-                className="team-img-logo"
-                alt=""
-              />
+              <svg viewBox="10 0 100 75" width="100" height="75" className="team-img-logo">
+                <use xlinkHref={`/images/teams/season/20182019.svg#team-${team.id}-20182019-light`} />
+              </svg>
             </div>
             <div>
               <Dropdown name={team.name} />

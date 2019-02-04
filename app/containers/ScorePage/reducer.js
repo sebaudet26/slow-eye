@@ -8,7 +8,7 @@ const initialState = fromJS({
 function playerReducer(state = initialState, action) {
   switch (action.type) {
     case FETCH_GAMES:
-      return state.setIn(['games', action.payload.date.replace(/-/g, '')], action.payload.games);
+      return state.setIn(['games', action.payload.date], action.payload.games);
     default:
       return state;
   }

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './style.scss';
 import {
-  filter, map, pipe, take,
+  filter, map, pipe, take, mapObjIndexed, values,
 } from 'ramda';
 import SearchIcon from '../../images/search.svg';
 import PlayerIcon from '../PlayerIcon';
@@ -32,10 +32,10 @@ const graphqlQueryTeams = `{
   }
 }`;
 
-const renderOption = opt => (
+const renderOption = cursor => (opt, i) => (
   <a
     href={`/${opt.linkType}?id=${opt.id}`}
-    className="options-item"
+    className={`options-item${cursor == i ? ' active' : ''}`}
   >
     {
       opt.linkType === 'player'
@@ -60,15 +60,21 @@ class SearchBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      cursor: 0,
       options: [],
       query: '',
     };
     this.getPlayersShortList = this.getPlayersShortList.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
   componentWillMount() {
     this.getPlayersShortList();
+  }
+
+  componentWillUnmount() {
+    clearTimeout(action);
   }
 
   componentWillReceiveProps() {
@@ -94,25 +100,49 @@ class SearchBar extends React.Component {
     debounce(() => this.setState({ query: newValue }), 200);
   }
 
+  handleFocus(e) {
+    event.target.select();
+  }
+
+  handleKeyDown(e) {
+    const { cursor, options } = this.state;
+    // arrow up/down button should select next/previous list element
+    if (e.keyCode === 38 && cursor > 0) {
+      this.setState(prevState => ({
+        cursor: prevState.cursor - 1,
+      }));
+    } else if (e.keyCode === 40 && cursor < 5) {
+      this.setState(prevState => ({
+        cursor: prevState.cursor + 1,
+      }));
+    } else if (e.keyCode == 13) {
+      window.open(`/player?id=${options[cursor].id}`);
+    }
+  }
+
   render() {
-    const { options, query } = this.state;
+    const { options, query, cursor } = this.state;
+    console.log(this.state);
     return (
       <div className="searchBar">
         <form className="searchBar-form">
           <input
             placeholder="Search For Player"
             onChange={this.handleInputChange}
+            onKeyDown={this.handleKeyDown}
+            onFocus={this.handleFocus}
           />
           <label>
             <img src={SearchIcon} alt="" />
           </label>
           <div className="options">
             {
-              query ?
-                pipe(
+              query
+                ? pipe(
                   filter(stringMatches(query)),
                   take(5),
-                  map(renderOption),
+                  mapObjIndexed(renderOption(cursor)),
+                  values,
                 )(options)
                 : null
             }

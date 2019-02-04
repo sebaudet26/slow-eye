@@ -15,14 +15,103 @@ import {
 } from '../../utils/player';
 import { logoForTeamName } from '../../utils/team';
 import { getStatusText } from '../../utils/game';
+import { saveToLS, getFromLS } from '../../utils/localStorage';
+import { getNumberWithOrdinal } from '../../utils/misc';
 import BoxTable from '../../components/Table/BoxTable';
+import PlayerName from '../../components/PlayerName';
 
-const intoLink = player => (
-  <a className="scratches-player" href={`/player?id=${player.person.id}`}>{player.person.fullName}</a>
+const renderGoalInfo = goal => (
+  <tr key={Math.random()}>
+    <td>
+      {goal.periodTime}
+      {' '}
+-
+      {' '}
+      {goal.team.triCode}
+    </td>
+    <td>
+      <PlayerName
+        key={goal.scorer.id}
+        id={goal.scorer.id}
+        name={`${goal.scorer.fullName} (${goal.scorer.seasonTotal})`}
+      />
+    </td>
+    <td>
+      {
+        goal.assists.map(player => (
+          <PlayerName
+            key={Math.random()}
+            id={player.id}
+            name={`${player.fullName} (${player.seasonTotal})`}
+          />
+        ))}
+    </td>
+    <td>{goal.strength}</td>
+  </tr>
 );
 
-const saveToLS = (name, value) => window.localStorage.setItem(name, value);
-const getFromLS = name => window.localStorage.getItem(name);
+const renderPenaltyInfo = penalty => (
+  <tr key={Math.random()}>
+    <td>
+      {penalty.periodTime}
+      {' '}
+-
+      {' '}
+      {penalty.team.triCode}
+    </td>
+    <td>
+      <PlayerName
+        key={Math.random()}
+        id={penalty.receiver.id}
+        name={penalty.receiver.fullName}
+      />
+    </td>
+    <td>{penalty.type}</td>
+    <td>{`${penalty.minutes} mins`}</td>
+  </tr>
+);
+
+const renderGoalEvents = (events, period) => (
+  <table className="events-table">
+    <thead>
+      <tr>
+        <th>
+          {`${getNumberWithOrdinal(period)} Period`}
+        </th>
+      </tr>
+      <tr>
+        <th>Time</th>
+        <th>Goal By</th>
+        <th>Assist(s)</th>
+        <th />
+      </tr>
+    </thead>
+    <tbody>
+      {map(renderGoalInfo, filter(event => event.period === period, events))}
+    </tbody>
+  </table>
+);
+
+const renderPenaltyEvents = (events, period) => (
+  <table className="events-table">
+    <thead>
+      <tr>
+        <th>
+          {`${getNumberWithOrdinal(period)} Period`}
+        </th>
+      </tr>
+      <tr>
+        <th>Time</th>
+        <th>By</th>
+        <th>Reason</th>
+        <th />
+      </tr>
+    </thead>
+    <tbody>
+      {map(renderPenaltyInfo, filter(event => event.period === period, events))}
+    </tbody>
+  </table>
+);
 
 class GamePage extends React.Component {
   componentDidMount() {
@@ -43,7 +132,9 @@ class GamePage extends React.Component {
       return null;
     }
 
-    const { boxscore } = game;
+    const { boxscore, liveFeed } = game;
+
+    const { goalSummary = [], penaltySummary = [], lastTenPlays = [] } = liveFeed;
 
     const awayTeamImage = (
       <img
@@ -63,7 +154,7 @@ class GamePage extends React.Component {
       <div>
         <Helmet>
           <title>Game Page</title>
-          <meta name="description" content="Game Page" />
+          <meta name="description" content={`${boxscore.away.team.teamName} vs. ${boxscore.home.team.teamName} game page. Seal Stats is the best place to view NHL stats. User-friendly and fast. `} />
         </Helmet>
         <div className="summary">
           <div className="summary-header">
@@ -105,9 +196,9 @@ class GamePage extends React.Component {
             onSelect={i => saveToLS('gameTabIndex', i)}
           >
             <TabList>
-              <Tab>{boxscore.away.team.name}</Tab>
+              <Tab>{boxscore.away.team.teamName}</Tab>
               <Tab>Summary</Tab>
-              <Tab>{boxscore.home.team.name}</Tab>
+              <Tab>{boxscore.home.team.teamName}</Tab>
             </TabList>
             <TabPanel>
               <BoxTable
@@ -122,7 +213,12 @@ class GamePage extends React.Component {
                 <span>Scratches: </span>
                 {pipe(
                   filter(isScratched),
-                  map(intoLink),
+                  map(p => (
+                    <PlayerName
+                      id={p.person.id}
+                      name={p.person.fullName}
+                    />
+                  )),
                 )(boxscore.away.players)}
               </div>
             </TabPanel>
@@ -189,65 +285,9 @@ class GamePage extends React.Component {
               <div className="summary-events">
                 <div className="summary-events-wrapper">
                   <div className="summary-events-card">
-                    <table className="events-table">
-                      <thead>
-                        <tr>
-                          <th>1st Period</th>
-                        </tr>
-                        <tr>
-                          <th>Time</th>
-                          <th>Goal By</th>
-                          <th>Assist(s)</th>
-                          <th />
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>Test</td>
-                          <td>Test</td>
-                          <td>Test</td>
-                          <td>PPG</td>
-                        </tr>
-                      </tbody>
-                      <thead>
-                        <tr>
-                          <th>2nd Period</th>
-                        </tr>
-                        <tr>
-                          <th>Time</th>
-                          <th>Goal By</th>
-                          <th>Assist(s)</th>
-                          <th />
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>Test</td>
-                          <td>Test</td>
-                          <td>Test</td>
-                          <td>PPG</td>
-                        </tr>
-                      </tbody>
-                      <thead>
-                        <tr>
-                          <th>3rd Period</th>
-                        </tr>
-                        <tr>
-                          <th>Time</th>
-                          <th>Goal By</th>
-                          <th>Assist(s)</th>
-                          <th />
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>Test</td>
-                          <td>Test</td>
-                          <td>Test</td>
-                          <td>PPG</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    {renderGoalEvents(goalSummary, 1)}
+                    {renderGoalEvents(goalSummary, 2)}
+                    {renderGoalEvents(goalSummary, 3)}
                   </div>
                 </div>
               </div>
@@ -255,65 +295,9 @@ class GamePage extends React.Component {
               <div className="summary-events">
                 <div className="summary-events-wrapper">
                   <div className="summary-events-card">
-                    <table className="events-table">
-                      <thead>
-                        <tr>
-                          <th>1st Period</th>
-                        </tr>
-                        <tr>
-                          <th>Time</th>
-                          <th>Goal By</th>
-                          <th>Assist(s)</th>
-                          <th />
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>Test</td>
-                          <td>Test</td>
-                          <td>Test</td>
-                          <td>PPG</td>
-                        </tr>
-                      </tbody>
-                      <thead>
-                        <tr>
-                          <th>2nd Period</th>
-                        </tr>
-                        <tr>
-                          <th>Time</th>
-                          <th>Goal By</th>
-                          <th>Assist(s)</th>
-                          <th />
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>Test</td>
-                          <td>Test</td>
-                          <td>Test</td>
-                          <td>PPG</td>
-                        </tr>
-                      </tbody>
-                      <thead>
-                        <tr>
-                          <th>3rd Period</th>
-                        </tr>
-                        <tr>
-                          <th>Time</th>
-                          <th>Goal By</th>
-                          <th>Assist(s)</th>
-                          <th />
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>Test</td>
-                          <td>Test</td>
-                          <td>Test</td>
-                          <td>PPG</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    {renderPenaltyEvents(penaltySummary, 1)}
+                    {renderPenaltyEvents(penaltySummary, 2)}
+                    {renderPenaltyEvents(penaltySummary, 3)}
                   </div>
                 </div>
               </div>
@@ -329,10 +313,17 @@ class GamePage extends React.Component {
               />
               <div className="scratches">
                 <span>Scratches: </span>
-                {pipe(
-                  filter(isScratched),
-                  map(intoLink),
-                )(boxscore.home.players)}
+                {
+                  pipe(
+                    filter(isScratched),
+                    map(p => (
+                      <PlayerName
+                        id={p.person.id}
+                        name={p.person.fullName}
+                      />
+                    )),
+                  )(boxscore.home.players)
+                }
               </div>
             </TabPanel>
           </Tabs>
