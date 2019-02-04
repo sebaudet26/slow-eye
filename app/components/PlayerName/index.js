@@ -1,8 +1,12 @@
 import React from 'react';
+import PlayerImage from '../PlayerImage';
 
-const PlayerName = ({ id, name }) => (
+const PlayerName = ({ id, name, withImage }) => (
   (
     <a href={`/player?id=${id}`} style={{ marginRight: '2%' }}>
+      { withImage ? (
+        <PlayerImage id={id} size="60x60" />
+      ) : null}
       {name}
     </a>
   )

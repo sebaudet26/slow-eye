@@ -31,6 +31,7 @@ const renderGoalInfo = goal => (
     </td>
     <td>
       <PlayerName
+        withImage
         key={goal.scorer.id}
         id={goal.scorer.id}
         name={`${goal.scorer.fullName} (${goal.scorer.seasonTotal})`}

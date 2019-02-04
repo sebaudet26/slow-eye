@@ -80,7 +80,8 @@
 
     th {
       text-align: center;
-      font-weight: 600;
+      color: $grey-2;
+      font-weight: 500;
       padding: 10px;
     }
   }
@@ -101,11 +102,15 @@
       td {
         padding: 10px 5px;
         text-align: center;
+        font-size: 24px;
+        font-weight: 500;
 
         &:first-child {
           padding-left: 10px;
           text-align: left;
           white-space: pre;
+          font-size: 16px;
+          font-weight: 400;
         }
 
         &:last-child {
@@ -127,7 +132,7 @@
       }
 
       th:nth-child(2) {
-        width: 200px;
+        width: 300px;
       }
 
       th:nth-child(3) {
@@ -138,13 +143,11 @@
         width: 200px;
       }
     }
-    tr:first-child {
-      th {
-        padding-bottom: 0px;
-      }
-    }
+
     tr:nth-child(2) {
       th {
+        background: $grey-5;
+        border-top: solid 1px $grey-4;
         color: $grey-2;
         padding: 5px 10px 5px 10px;
         font-weight: 500;
@@ -162,6 +165,12 @@
 
       td {
         white-space: pre;
+
+        img {
+          border-radius: 100%;
+          width: 40px;
+          margin-right: 10px;
+        }
       }
     }
   }
