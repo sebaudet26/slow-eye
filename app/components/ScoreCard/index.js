@@ -10,7 +10,9 @@ const ScoreCard = ({ game }) => (
         {`${game.status.detailedState}${getStatusText(game)}`}
       </div>
       <div className="game-card-team">
-        <img src={smallLogoForTeamName(game.teams.away.team.abbreviation)} alt="" />
+        <svg key={Math.random()} className="game-card-team-img">
+          <use xlinkHref={`/images/teams/season/20182019.svg#team-${game.teams.away.team.id}-20182019-light`} />
+        </svg>
         <a className="game-card-team-name" href={`/team?id=${game.teams.away.team.id}`}>
           {game.teams.away.team.name}
         </a>
@@ -23,7 +25,9 @@ const ScoreCard = ({ game }) => (
         </div>
       </div>
       <div className="game-card-team">
-        <img src={smallLogoForTeamName(game.teams.home.team.abbreviation)} alt="" />
+        <svg key={Math.random()} className="game-card-team-img">
+          <use xlinkHref={`/images/teams/season/20182019.svg#team-${game.teams.home.team.id}-20182019-light`} />
+        </svg>
         <a className="game-card-team-name" href={`/team?id=${game.teams.home.team.id}`}>
           {game.teams.home.team.name}
         </a>
