@@ -287,7 +287,9 @@ export default class PlayerPage extends React.Component {
               <GameLogTable logs={logs} info={info} />
             </TabPanel>
           ) : (
-            <div><h2>Player is retired :(</h2></div>
+            <TabPanel>
+              <div><h2>Player is retired :(</h2></div>
+            </TabPanel>
           )}
         </Tabs>
       </div>
