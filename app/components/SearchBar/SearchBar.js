@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './style.scss';
 import {
-  filter, map, pipe, take, mapObjIndexed, values,
+  filter, map, pipe, prop, take, mapObjIndexed, values,
 } from 'ramda';
 import SearchIcon from '../../images/search.svg';
 import PlayerIcon from '../PlayerIcon';
@@ -116,13 +116,16 @@ class SearchBar extends React.Component {
         cursor: prevState.cursor + 1,
       }));
     } else if (e.keyCode == 13) {
-      window.open(`/player?id=${options[cursor].id}`);
+      window.open(`/player?id=${prop('id', filter(stringMatches(query), options)[cursor])}`);
     }
   }
 
   render() {
     const { options, query, cursor } = this.state;
     console.log(this.state);
+    if (query) {
+      console.log(prop('id', filter(stringMatches(query), options)[cursor]));
+    }
     return (
       <div className="searchBar">
         <form className="searchBar-form">
