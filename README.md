@@ -14,7 +14,7 @@ TODO:
 - ~~load teams from API into the team selector in players page~~
 - ~~draft page~~
 - ~~score carousel~~
-- game summaries
+- ~~game summaries~~
 
 ----------V2----------
 
