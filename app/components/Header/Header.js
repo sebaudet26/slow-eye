@@ -21,6 +21,9 @@ class Header extends React.Component {
           <SearchBar />
           <div className="header-nav">
             <NavLink activeClassName="active" className="header-nav-item" exact to="/">
+              Home
+            </NavLink>
+            <NavLink activeClassName="active" className="header-nav-item" exact to="/standings">
               Standings
             </NavLink>
             <NavLink activeClassName="active" className="header-nav-item" to="/scores">
@@ -40,6 +43,12 @@ class Header extends React.Component {
             <ul className="header-mobile-list">
               <li>
                 <NavLink activeClassName="active" exact to="/">
+                  <StandingsIcon />
+                  Home
+                </NavLink>
+              </li>
+              <li>
+                <NavLink activeClassName="active" to="/standings">
                   <StandingsIcon />
                     Standings
                 </NavLink>
