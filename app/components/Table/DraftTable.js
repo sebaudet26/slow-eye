@@ -66,7 +66,7 @@ const DraftTable = ({
         minWidth: 175,
         Cell: row => (
           <div>
-            <TeamLogo teamId={row.original.pickedBy.id} season={Number(`${year - 1}${year}`)} />
+            <TeamLogo teamId={row.original.pickedBy.id} season={Number(`${year}${year + 1}`)} />
             {row.original.pickedBy.name}
           </div>
         ),
