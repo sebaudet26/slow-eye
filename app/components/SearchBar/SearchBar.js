@@ -4,6 +4,7 @@ import './style.scss';
 import {
   filter, map, pipe, prop, take, mapObjIndexed, values,
 } from 'ramda';
+import { push } from 'react-router-redux';
 import SearchIcon from '../../images/search.svg';
 import PlayerIcon from '../PlayerIcon';
 import graphqlApi from '../../utils/api';
@@ -34,6 +35,8 @@ const graphqlQueryTeams = `{
 
 const renderOption = cursor => (opt, i) => (
   <a
+    id={`option-${i}`}
+    key={`option-${i}`}
     href={`/${opt.linkType}?id=${opt.id}`}
     className={`options-item${cursor == i ? ' active' : ''}`}
   >
@@ -105,7 +108,7 @@ class SearchBar extends React.Component {
   }
 
   handleKeyDown(e) {
-    const { cursor, options } = this.state;
+    const { cursor, options, query } = this.state;
     // arrow up/down button should select next/previous list element
     if (e.keyCode === 38 && cursor > 0) {
       this.setState(prevState => ({
@@ -116,16 +119,13 @@ class SearchBar extends React.Component {
         cursor: prevState.cursor + 1,
       }));
     } else if (e.keyCode == 13) {
-      window.open(`/player?id=${prop('id', filter(stringMatches(query), options)[cursor])}`);
+      document.getElementById(`option-${cursor}`).click();
+      event.preventDefault();
     }
   }
 
   render() {
     const { options, query, cursor } = this.state;
-    console.log(this.state);
-    if (query) {
-      console.log(prop('id', filter(stringMatches(query), options)[cursor]));
-    }
     return (
       <div className="searchBar">
         <form className="searchBar-form">
