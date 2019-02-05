@@ -1,7 +1,120 @@
+@import '../../styles/variables.scss';
+
 .home-page {
+  h3 {
+    font-size: 16px;
+    color: $grey-2;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  &-wrapper {
+    display: flex;
+    flex-flow: wrap;
+  }
+  &-col {
+    width: 50%;
+
+    &-wrapper {
+      display: flex;
+    }
+  }
+}
+
+.card-vertical {
+  width: 33%;
+  border-radius: 6px;
+  height: 250px;
+  box-shadow: $shadow;
+  margin-right: 15px;
+  padding: 10px;
+  position: relative;
+  background-size: auto 100%;
+  background-position-x: -300px;
+  transition: 0.3s;
+
+  &.no-bam {
+    background-position-x: -150px;
+  }
+
+  &:hover {
+    box-shadow: $shadow-3;
+    transform: scale(1.025);
+  }
+
+  &::after {
+    content: '';
+    background: rgba(43, 58, 57, 0.5);
+    border-radius: 6px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+}
+
+.card {
+  border-radius: 6px;
+  height: 100px;
+  box-shadow: $shadow;
+  margin-bottom: 15px;
+  background-size: 100% auto;
+  margin-right: 15px;
+  padding: 10px;
+  position: relative;
+  background-position-x: right;
+
+  &::after {
+    content: '';
+    background: rgba(43, 58, 57, 0.5);
+    border-radius: 6px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  &-content {
+    color: $white;
+
+    &-number {
+      position: absolute;
+      font-size: 24px;
+      font-weight: 600;
+      z-index: 99;
+    }
+
+    &-name {
+      z-index: 99;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      text-align: right;
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+
+      span {
+        display: block;
+        font-size: 20px;
+        text-transform: uppercase;
+      }
+    }
+  }
 }
 
 @media screen and (max-width: 600px) {
-  home-page {
+  .home-page {
+    &-wrapper {
+      display: block;
+    }
+
+    &-col {
+      width: 100%;
+    }
   }
 }

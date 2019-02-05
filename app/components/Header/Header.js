@@ -20,9 +20,6 @@ class Header extends React.Component {
           </a>
           <SearchBar />
           <div className="header-nav">
-            <NavLink activeClassName="active" className="header-nav-item" exact to="/">
-              Home
-            </NavLink>
             <NavLink activeClassName="active" className="header-nav-item" exact to="/standings">
               Standings
             </NavLink>
