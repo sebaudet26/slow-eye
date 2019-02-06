@@ -24,10 +24,9 @@ const renderGoalInfo = goal => (
   <tr key={Math.random()}>
     <td>
       {goal.periodTime}
-      {' '}
--
-      {' '}
-      {goal.team.triCode}
+      <svg key={Math.random()}>
+        <use xlinkHref={`/images/teams/season/20182019.svg#team-${penalty.team.id}-20182019-light`} />
+      </svg>
     </td>
     <td>
       <PlayerName
@@ -55,10 +54,9 @@ const renderPenaltyInfo = penalty => (
   <tr key={Math.random()}>
     <td>
       {penalty.periodTime}
-      {' '}
--
-      {' '}
-      {penalty.team.triCode}
+      <svg key={Math.random()}>
+        <use xlinkHref={`/images/teams/season/20182019.svg#team-${penalty.team.id}-20182019-light`} />
+      </svg>
     </td>
     <td>
       <PlayerName
@@ -245,7 +243,6 @@ class GamePage extends React.Component {
                           <td>
                             <a href={`/team?id=${boxscore.away.team.id}`}>
                               {awayTeamImage}
-                              {boxscore.away.team.name}
                             </a>
                           </td>
                           <td>{boxscore.away.teamStats.shots}</td>
@@ -262,7 +259,6 @@ class GamePage extends React.Component {
                           <td>
                             <a href={`/team?id=${boxscore.home.team.id}`}>
                               {homeTeamImage}
-                              {boxscore.home.team.name}
                             </a>
                           </td>
                           <td>{boxscore.home.teamStats.shots}</td>
