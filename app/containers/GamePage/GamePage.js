@@ -25,7 +25,7 @@ const renderGoalInfo = goal => (
     <td>
       {goal.periodTime}
       <svg key={Math.random()}>
-        <use xlinkHref={`/images/teams/season/20182019.svg#team-${penalty.team.id}-20182019-light`} />
+        <use xlinkHref={`/images/teams/season/20182019.svg#team-${goal.team.id}-20182019-light`} />
       </svg>
     </td>
     <td>
