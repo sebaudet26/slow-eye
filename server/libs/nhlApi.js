@@ -1,5 +1,5 @@
 const {
-  head, contains, filter, flatten, map, mergeAll, path, prop, pipe, propOr, pathEq, mergeLeft,
+  head, contains, find, filter, flatten, last, map, mergeAll, path, prop, pipe, pathOr, propOr, propEq, pathEq, mergeLeft,
 } = require('ramda');
 const moment = require('moment');
 const fetch = require('node-fetch');
@@ -324,6 +324,32 @@ const fetchDraft = async (args) => {
   return draftResponse.data;
 };
 
+const fetchGameHighlights = async (id) => {
+  const resource = `/game/${id}/content`;
+  const gameContentResponse = await nhlStatsApi(resource, 60 * 60);
+  const goalHighlightsUrls = map(
+    pipe(
+      pathOr([], ['highlight', 'playbacks']),
+      last,
+      pathOr('', ['url']),
+    ),
+    filter(o => o.type === 'GOAL', gameContentResponse.media.milestones.items),
+  );
+  const gameRecapUrl = pipe(
+    pathOr([], ['media', 'epg']),
+    find(propEq('title', 'Recap')),
+    propOr([], ['items']),
+    last,
+    propOr({}, ['playbacks']),
+    last,
+    pathOr('', ['url']),
+  )(gameContentResponse);
+  return {
+    recap: gameRecapUrl,
+    goals: goalHighlightsUrls,
+  };
+};
+
 module.exports = {
   fetchLiveFeed,
   fetchStandings,
@@ -346,4 +372,5 @@ module.exports = {
   fetchAllYearsPlayoffStatsForPlayerId,
   fetchPlayoffGameLogsForPlayerId,
   fetchPlayersReport,
+  fetchGameHighlights,
 };

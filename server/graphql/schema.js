@@ -47,6 +47,7 @@ const {
   fetchAllYearsPlayoffStatsForPlayerId,
   fetchPlayoffGameLogsForPlayerId,
   fetchPlayersReport,
+  fetchGameHighlights,
 } = require('../libs/nhlApi');
 
 const ifNotThereFetchId = propName => async (d) => {
@@ -634,6 +635,14 @@ const Boxscore = new GraphQLObjectType({
   },
 });
 
+const GameHighlights = new GraphQLObjectType({
+  name: 'GameHighlights',
+  fields: {
+    recap: { type: GraphQLString, resolve: prop('recap') },
+    goals: { type: GraphQLList(GraphQLString), resolve: prop('goals') },
+  },
+});
+
 const Game = new GraphQLObjectType({
   name: 'Game',
   fields: {
@@ -648,7 +657,7 @@ const Game = new GraphQLObjectType({
     liveFeed: { type: LiveFeed, resolve: p => fetchLiveFeed(p.gamePk) },
     // Lazy load boxscore
     boxscore: { type: Boxscore, resolve: p => fetchBoxscore(p.gamePk) },
-    // venue: {},
+    highlights: { type: GameHighlights, resolve: p => fetchGameHighlights(p.gamePk) },
   },
 });
 
