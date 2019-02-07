@@ -1,23 +1,33 @@
 @import '../../styles/variables.scss';
 
 .video {
+  &-wrapper {
+
+  }
+
+  &-player {
+    position: fixed;
+    left: calc(50% - 315px);
+  }
+
   &-close {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    z-index: 10;
-    padding: 10px 10px 20px 20px;
-    &:hover {
-      cursor: pointer;
-    }
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.75);
+    width: 100% !important;
+    height: 100% !important;
+    top: 0;
+    left: 0;
   }
 }
 
-.recap {
-  &-link {
-    &:hover {
-      cursor: pointer;
-    }
+.play-link {
+  display: block;
+
+  img {
+    margin-right: 10px;
   }
 }
 

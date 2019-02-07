@@ -29,11 +29,10 @@ export default class HomePage extends React.Component {
               {' '}
               Who's hot? (Top 5)
             </h3>
-
             <a href="" className="card card-player" style={{ backgroundImage: 'url("https://nhl.bamcontent.com/images/actionshots/8478402_low_resolution.jpg")' }}>
               <div className="card-content">
                 <div className="card-content-name">
-                Connor
+                  Connor
                   {' '}
                   <span>McDavid</span>
                 </div>

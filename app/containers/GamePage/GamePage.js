@@ -20,6 +20,7 @@ import { saveToLS, getFromLS } from '../../utils/localStorage';
 import { getNumberWithOrdinal } from '../../utils/misc';
 import BoxTable from '../../components/Table/BoxTable';
 import PlayerName from '../../components/PlayerName';
+import PlayIcon from '../../images/play-button.svg';
 
 const renderGoalInfo = onWatchVideo => goal => (
   <tr key={Math.random()}>
@@ -49,7 +50,15 @@ const renderGoalInfo = onWatchVideo => goal => (
       }
     </td>
     <td>{goal.strength}</td>
-    { goal.videoUrl ? <td onClick={() => onWatchVideo(goal.videoUrl)}>Watch</td> : <td /> }
+    { goal.videoUrl ? (
+      <td>
+        <a className="play-link" onClick={() => onWatchVideo(goal.videoUrl)}>
+          <img src={PlayIcon} alt="Play Icon" />
+          Watch Goal
+        </a>
+      </td>
+    ) : <td />
+    }
   </tr>
 );
 
@@ -86,8 +95,7 @@ const renderGoalEvents = (events = [], videos = [], period, onWatchVideo) => (
           <th>Time</th>
           <th>Goal By</th>
           <th>Assist(s)</th>
-          <th>Goal Strength</th>
-          <th>Video</th>
+          <th />
           <th />
         </tr>
       </thead>
@@ -257,40 +265,29 @@ class GamePage extends React.Component {
           </div>
           {
             highlights && highlights.recap ? (
-              <div
-                className="recap-link"
+              <a
+                className="play-link"
                 style={{ textAlign: 'center', width: '100%', marginBottom: '20px' }}
                 onClick={() => watchVideo(highlights.recap)}
               >
-                  Watch Game Recap Video
-              </div>
+                <img src={PlayIcon} alt="Play Icon" />
+                Game Recap
+              </a>
             ) : null
           }
           {
             watchVideoUrl ? (
-              <div>
+              <div className="video-wrapper">
                 <div
                   className="video-close"
                   onClick={() => this.setState({ watchVideoUrl: null })}
-                >
-                  CLOSE VIDEO
-                </div>
+                />
                 <ReactPlayer
                   url={this.state.watchVideoUrl}
                   playing
+                  className="video-player"
                   controls
-                  muted
-                  playsinline
-                  width={window.outerWidth}
-                  height={window.outerHeight - 70}
                   loop={false}
-                  style={{
-                    position: 'absolute',
-                    top: '0',
-                    left: '0',
-                    zIndex: '5',
-                    background: 'lightgrey',
-                  }}
                 />
               </div>
             ) : null
