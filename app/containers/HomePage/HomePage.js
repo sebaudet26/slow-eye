@@ -38,11 +38,11 @@ export default class HomePage extends React.Component {
                 </div>
                 <div className="card-content-result">
                   <div className="card-content-result-item">
-                    Last 7 games
-                  </div>
-                  <div className="card-content-result-item">
-                    <span>27</span>
-                    PTS
+                    <div>Last 7 games</div>
+                    <div>
+                      <span>27</span>
+                      PTS
+                    </div>
                   </div>
                 </div>
               </div>
@@ -54,6 +54,15 @@ export default class HomePage extends React.Component {
                   {' '}
                   <span>Kane</span>
                 </div>
+                <div className="card-content-result">
+                  <div className="card-content-result-item">
+                    <div>Last 7 games</div>
+                    <div>
+                      <span>27</span>
+                      PTS
+                    </div>
+                  </div>
+                </div>
               </div>
             </a>
             <a href="" className="card" style={{ backgroundImage: 'url("https://nhl.bamcontent.com/images/actionshots/8478420_low_resolution.jpg")' }}>
@@ -62,6 +71,15 @@ export default class HomePage extends React.Component {
                   Mikko
                   {' '}
                   <span>Rantanen</span>
+                </div>
+                <div className="card-content-result">
+                  <div className="card-content-result-item">
+                    <div>Last 7 games</div>
+                    <div>
+                      <span>27</span>
+                      PTS
+                    </div>
+                  </div>
                 </div>
               </div>
             </a>
@@ -72,6 +90,15 @@ export default class HomePage extends React.Component {
                   {' '}
                   <span>Gaudreau</span>
                 </div>
+                <div className="card-content-result">
+                  <div className="card-content-result-item">
+                    <div>Last 7 games</div>
+                    <div>
+                      <span>27</span>
+                      PTS
+                    </div>
+                  </div>
+                </div>
               </div>
             </a>
             <a href="" className="card" style={{ backgroundImage: 'url("https://nhl.bamcontent.com/images/actionshots/8480829_low_resolution.jpg")' }}>
@@ -80,6 +107,15 @@ export default class HomePage extends React.Component {
                   Jesperi
                   {' '}
                   <span>Kotkaniemi</span>
+                </div>
+                <div className="card-content-result">
+                  <div className="card-content-result-item">
+                    <div>Last 7 games</div>
+                    <div>
+                      <span>27</span>
+                      PTS
+                    </div>
+                  </div>
                 </div>
               </div>
             </a>
