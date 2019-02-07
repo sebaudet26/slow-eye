@@ -635,11 +635,21 @@ const Boxscore = new GraphQLObjectType({
   },
 });
 
+const GameGoalHighlight = new GraphQLObjectType({
+  name: 'GameGoalHighlight',
+  fields: {
+    statsEventId: { type: GraphQLString, resolve: prop('statsEventId') },
+    periodTime: { type: GraphQLString, resolve: prop('periodTime') },
+    period: { type: GraphQLInt, resolve: prop('period') },
+    url: { type: GraphQLString, resolve: prop('url') },
+  },
+});
+
 const GameHighlights = new GraphQLObjectType({
   name: 'GameHighlights',
   fields: {
     recap: { type: GraphQLString, resolve: prop('recap') },
-    goals: { type: GraphQLList(GraphQLString), resolve: prop('goals') },
+    goals: { type: GraphQLList(GameGoalHighlight), resolve: prop('goals') },
   },
 });
 

@@ -1,5 +1,5 @@
 const {
-  head, contains, find, filter, flatten, last, map, mergeAll, path, prop, pipe, pathOr, propOr, propEq, pathEq, mergeLeft,
+  head, contains, find, filter, flatten, last, map, mergeAll, path, pick, prop, pipe, pathOr, propOr, propEq, pathEq, mergeLeft,
 } = require('ramda');
 const moment = require('moment');
 const fetch = require('node-fetch');
@@ -328,11 +328,18 @@ const fetchGameHighlights = async (id) => {
   const resource = `/game/${id}/content`;
   const gameContentResponse = await nhlStatsApi(resource, 60 * 60);
   const goalHighlightsUrls = map(
-    pipe(
-      pathOr([], ['highlight', 'playbacks']),
-      last,
-      pathOr('', ['url']),
-    ),
+    o => ({
+      ...pick([
+        'statsEventId',
+        'periodTime',
+        'period',
+      ], o),
+      url: pipe(
+        pathOr([], ['highlight', 'playbacks']),
+        last,
+        pathOr('', ['url']),
+      )(o),
+    }),
     filter(o => o.type === 'GOAL', gameContentResponse.media.milestones.items),
   );
   const gameRecapUrl = pipe(
@@ -342,7 +349,7 @@ const fetchGameHighlights = async (id) => {
     last,
     propOr({}, ['playbacks']),
     last,
-    pathOr('', ['url']),
+    prop(['url']),
   )(gameContentResponse);
   return {
     recap: gameRecapUrl,

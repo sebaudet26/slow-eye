@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
+import ReactPlayer from 'react-player';
 import {
-  filter, join, map, isEmpty, pick, pipe, reject, values,
+  filter, join, map, isEmpty, groupBy, mapObjIndexed, pick, pipe, prop, pathOr, propEq, reject, values,
 } from 'ramda';
 import './style.scss';
 import {
@@ -20,7 +21,7 @@ import { getNumberWithOrdinal } from '../../utils/misc';
 import BoxTable from '../../components/Table/BoxTable';
 import PlayerName from '../../components/PlayerName';
 
-const renderGoalInfo = goal => (
+const renderGoalInfo = onWatchVideo => goal => (
   <tr key={Math.random()}>
     <td>
       {goal.periodTime}
@@ -44,9 +45,11 @@ const renderGoalInfo = goal => (
             id={player.id}
             name={`${player.fullName} (${player.seasonTotal})`}
           />
-        ))}
+        ))
+      }
     </td>
     <td>{goal.strength}</td>
+    <td onClick={() => onWatchVideo(goal.videoUrl)}>Watch</td>
   </tr>
 );
 
@@ -70,7 +73,7 @@ const renderPenaltyInfo = penalty => (
   </tr>
 );
 
-const renderGoalEvents = (events, period) => (
+const renderGoalEvents = (events = [], videos = [], period, onWatchVideo) => (
   <table className="events-table">
     <thead>
       <tr>
@@ -82,11 +85,25 @@ const renderGoalEvents = (events, period) => (
         <th>Time</th>
         <th>Goal By</th>
         <th>Assist(s)</th>
+        <th>Goal Strength</th>
+        <th>Video</th>
         <th />
       </tr>
     </thead>
     <tbody>
-      {map(renderGoalInfo, filter(event => event.period === period, events))}
+      {
+        map(
+          renderGoalInfo(onWatchVideo),
+          pipe(
+            filter(propEq('period', period)),
+            mapObjIndexed((o, k) => ({
+              ...o,
+              videoUrl: pathOr('', [k, 'url'], videos),
+            })),
+            values,
+          )(events),
+        )
+      }
     </tbody>
   </table>
 );
@@ -113,6 +130,13 @@ const renderPenaltyEvents = (events, period) => (
 );
 
 class GamePage extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      watchVideoUrl: false,
+    };
+  }
+
   componentDidMount() {
     const { fetchGameBoxscore, gameId, game } = this.props;
     if (gameId && isEmpty(game)) {
@@ -127,13 +151,16 @@ class GamePage extends React.Component {
 
   render() {
     const { game } = this.props;
+    const { watchVideoUrl } = this.state;
     if (!game || !game.boxscore || !game.liveFeed) {
       return null;
     }
 
-    const { boxscore, liveFeed } = game;
-
+    const { boxscore, liveFeed, highlights } = game;
+    const groupedHighlights = groupBy(prop('period'), highlights.goals || []);
     const { goalSummary = [], penaltySummary = [], lastTenPlays = [] } = liveFeed;
+
+    const watchVideo = videoUrl => this.setState({ watchVideoUrl: videoUrl });
 
     const awayTeamImage = (
       <svg key={Math.random()} className="game-card-team-img">
@@ -170,7 +197,7 @@ class GamePage extends React.Component {
               </div>
             </div>
             <div className="summary-header-result">
-              {`${game.liveFeed.status.detailedState}${getStatusText(game)}`}
+              {`${liveFeed.status.detailedState}${getStatusText(game)}`}
             </div>
             <div className="summary-header-team">
               <div className="summary-header-team-score">
@@ -187,7 +214,46 @@ class GamePage extends React.Component {
               {homeTeamImage}
             </div>
           </div>
-
+          {
+            highlights && highlights.recap ? (
+              <div
+                className="recap-link"
+                style={{ textAlign: 'center', width: '100%', marginBottom: '20px' }}
+                onClick={() => watchVideo(highlights.recap)}
+              >
+                  Watch Game Recap Video
+              </div>
+            ) : null
+          }
+          {
+            watchVideoUrl ? (
+              <div>
+                <div
+                  className="video-close"
+                  onClick={() => this.setState({ watchVideoUrl: null })}
+                >
+                  CLOSE VIDEO
+                </div>
+                <ReactPlayer
+                  url={this.state.watchVideoUrl}
+                  playing
+                  controls
+                  muted
+                  playsinline
+                  width={window.outerWidth}
+                  height={window.outerHeight - 70}
+                  loop={false}
+                  style={{
+                    position: 'absolute',
+                    top: '0',
+                    left: '0',
+                    zIndex: '5',
+                    background: 'lightgrey',
+                  }}
+                />
+              </div>
+            ) : null
+          }
           <Tabs
             defaultIndex={Number(getFromLS('gameTabIndex')) || 1}
             onSelect={i => saveToLS('gameTabIndex', i)}
@@ -280,9 +346,9 @@ class GamePage extends React.Component {
               <div className="summary-events">
                 <div className="summary-events-wrapper">
                   <div className="summary-events-card">
-                    {renderGoalEvents(goalSummary, 1)}
-                    {renderGoalEvents(goalSummary, 2)}
-                    {renderGoalEvents(goalSummary, 3)}
+                    {renderGoalEvents(goalSummary, groupedHighlights['1'], 1, watchVideo)}
+                    {renderGoalEvents(goalSummary, groupedHighlights['2'], 2, watchVideo)}
+                    {renderGoalEvents(goalSummary, groupedHighlights['3'], 3, watchVideo)}
                   </div>
                 </div>
               </div>

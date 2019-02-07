@@ -1,5 +1,26 @@
 @import '../../styles/variables.scss';
 
+.video {
+  &-close {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 10;
+    padding: 10px 10px 20px 20px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.recap {
+  &-link {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
 .summary {
   &-header {
     padding: 15px 20px;
