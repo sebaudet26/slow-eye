@@ -83,25 +83,25 @@ const renderPenaltyInfo = penalty => (
 );
 
 const renderGoalEvents = (events = [], videos = [], period, onWatchVideo) => (
-  filter(propEq('period', period), events).length ? (
-    <table className="events-table">
-      <thead>
-        <tr>
-          <th>
-            {`${getNumberWithOrdinal(period)} Period`}
-          </th>
-        </tr>
-        <tr>
-          <th>Time</th>
-          <th>Goal By</th>
-          <th>Assist(s)</th>
-          <th />
-          <th />
-        </tr>
-      </thead>
-      <tbody>
-        {
-          map(
+  <table className="events-table">
+    <thead>
+      <tr>
+        <th>
+          {`${getNumberWithOrdinal(period)} Period`}
+        </th>
+      </tr>
+      <tr>
+        <th>Time</th>
+        <th>Goal By</th>
+        <th>Assist(s)</th>
+        <th />
+        <th />
+      </tr>
+    </thead>
+    <tbody>
+      {
+        filter(propEq('period', period), events).length
+          ? map(
             renderGoalInfo(onWatchVideo),
             pipe(
               filter(propEq('period', period)),
@@ -112,69 +112,35 @@ const renderGoalEvents = (events = [], videos = [], period, onWatchVideo) => (
               values,
             )(events),
           )
-        }
-      </tbody>
-    </table>
-  ) : (
-    <table className="events-table">
-      <thead>
-        <tr>
-          <th>
-            {`${getNumberWithOrdinal(period)} Period`}
-          </th>
-        </tr>
-        <tr>
-          <th>No Goals</th>
-          <th />
-          <th />
-          <th />
-          <th />
-          <th />
-        </tr>
-      </thead>
-    </table>
-  )
+          : <td className="non-event">No Goals</td>
+      }
+    </tbody>
+  </table>
 );
 
 const renderPenaltyEvents = (events, period) => (
-  filter(propEq('period', period), events).length ? (
-    <table className="events-table">
-      <thead>
-        <tr>
-          <th>
-            {`${getNumberWithOrdinal(period)} Period`}
-          </th>
-        </tr>
-        <tr>
-          <th>Time</th>
-          <th>By</th>
-          <th>Reason</th>
-          <th />
-        </tr>
-      </thead>
-      <tbody>
-        {map(renderPenaltyInfo, filter(event => event.period === period, events))}
-      </tbody>
-    </table>
-  ) : (
-    <table className="events-table">
-      <thead>
-        <tr>
-          <th>
-            {`${getNumberWithOrdinal(period)} Period`}
-          </th>
-        </tr>
-        <tr>
-          <th>No Penalties</th>
-          <th />
-          <th />
-          <th />
-          <th />
-          <th />
-        </tr>
-      </thead>
-    </table>
-  )
+  <table className="events-table">
+    <thead>
+      <tr>
+        <th>
+          {`${getNumberWithOrdinal(period)} Period`}
+        </th>
+      </tr>
+      <tr>
+        <th>Time</th>
+        <th>By</th>
+        <th>Reason</th>
+        <th />
+      </tr>
+    </thead>
+    <tbody>
+      {
+        filter(propEq('period', period), events).length
+          ? map(renderPenaltyInfo, filter(event => event.period === period, events))
+          : <td className="non-event">No Penalties</td>
+      }
+    </tbody>
+  </table>
 );
 
 class GamePage extends React.Component {
