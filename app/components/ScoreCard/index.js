@@ -7,7 +7,9 @@ const ScoreCard = ({ game }) => (
   <div className="game-card-wrapper">
     <div className="game-card">
       <div className="game-card-header">
-        {`${game.status.detailedState}${getStatusText(game)}`}
+        <span>{game.status.detailedState}</span>
+        {' - '}
+        <span>{getStatusText(game)}</span>
       </div>
       <div className="game-card-team">
         <svg key={Math.random()} className="game-card-team-img">

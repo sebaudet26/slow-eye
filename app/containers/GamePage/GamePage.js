@@ -49,7 +49,7 @@ const renderGoalInfo = onWatchVideo => goal => (
       }
     </td>
     <td>{goal.strength}</td>
-    <td onClick={() => onWatchVideo(goal.videoUrl)}>Watch</td>
+    { goal.videoUrl ? <td onClick={() => onWatchVideo(goal.videoUrl)}>Watch</td> : <td /> }
   </tr>
 );
 
@@ -74,59 +74,99 @@ const renderPenaltyInfo = penalty => (
 );
 
 const renderGoalEvents = (events = [], videos = [], period, onWatchVideo) => (
-  <table className="events-table">
-    <thead>
-      <tr>
-        <th>
-          {`${getNumberWithOrdinal(period)} Period`}
-        </th>
-      </tr>
-      <tr>
-        <th>Time</th>
-        <th>Goal By</th>
-        <th>Assist(s)</th>
-        <th>Goal Strength</th>
-        <th>Video</th>
-        <th />
-      </tr>
-    </thead>
-    <tbody>
-      {
-        map(
-          renderGoalInfo(onWatchVideo),
-          pipe(
-            filter(propEq('period', period)),
-            mapObjIndexed((o, k) => ({
-              ...o,
-              videoUrl: pathOr('', [k, 'url'], videos),
-            })),
-            values,
-          )(events),
-        )
-      }
-    </tbody>
-  </table>
+  filter(propEq('period', period), events).length ? (
+    <table className="events-table">
+      <thead>
+        <tr>
+          <th>
+            {`${getNumberWithOrdinal(period)} Period`}
+          </th>
+        </tr>
+        <tr>
+          <th>Time</th>
+          <th>Goal By</th>
+          <th>Assist(s)</th>
+          <th>Goal Strength</th>
+          <th>Video</th>
+          <th />
+        </tr>
+      </thead>
+      <tbody>
+        {
+          map(
+            renderGoalInfo(onWatchVideo),
+            pipe(
+              filter(propEq('period', period)),
+              mapObjIndexed((o, k) => ({
+                ...o,
+                videoUrl: pathOr('', [k, 'url'], videos),
+              })),
+              values,
+            )(events),
+          )
+        }
+      </tbody>
+    </table>
+  ) : (
+    <table className="events-table">
+      <thead>
+        <tr>
+          <th>
+            {`${getNumberWithOrdinal(period)} Period`}
+          </th>
+        </tr>
+        <tr>
+          <th>No Goals</th>
+          <th />
+          <th />
+          <th />
+          <th />
+          <th />
+        </tr>
+      </thead>
+    </table>
+  )
 );
 
 const renderPenaltyEvents = (events, period) => (
-  <table className="events-table">
-    <thead>
-      <tr>
-        <th>
-          {`${getNumberWithOrdinal(period)} Period`}
-        </th>
-      </tr>
-      <tr>
-        <th>Time</th>
-        <th>By</th>
-        <th>Reason</th>
-        <th />
-      </tr>
-    </thead>
-    <tbody>
-      {map(renderPenaltyInfo, filter(event => event.period === period, events))}
-    </tbody>
-  </table>
+  filter(propEq('period', period), events).length ? (
+    <table className="events-table">
+      <thead>
+        <tr>
+          <th>
+            {`${getNumberWithOrdinal(period)} Period`}
+          </th>
+        </tr>
+        <tr>
+          <th>Time</th>
+          <th>By</th>
+          <th>Reason</th>
+          <th />
+        </tr>
+      </thead>
+      <tbody>
+        {map(renderPenaltyInfo, filter(event => event.period === period, events))}
+      </tbody>
+    </table>
+  ) : (
+    <table className="events-table">
+      <thead>
+        <tr>
+          <th>
+            {`${getNumberWithOrdinal(period)} Period`}
+          </th>
+        </tr>
+        <tr>
+          <th>No Penalties</th>
+          <th />
+          <th />
+          <th />
+          <th />
+          <th />
+        </tr>
+      </thead>
+    </table>
+  )
 );
 
 class GamePage extends React.Component {
@@ -197,7 +237,8 @@ class GamePage extends React.Component {
               </div>
             </div>
             <div className="summary-header-result">
-              {`${liveFeed.status.detailedState}${getStatusText(game)}`}
+              <div>{liveFeed.status.detailedState}</div>
+              <div>{getStatusText(game)}</div>
             </div>
             <div className="summary-header-team">
               <div className="summary-header-team-score">
