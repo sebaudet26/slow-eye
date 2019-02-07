@@ -6,6 +6,7 @@ import ReactTable from 'react-table';
 import {
   insert, map, split, sum, pathOr, filter, prop,
 } from 'ramda';
+import isSvg from 'is-svg';
 import { sumNumbers } from '../../utils/player';
 import 'react-table/react-table.css';
 import './styles.scss';
@@ -29,7 +30,7 @@ const useAcronyms = (leagueName) => {
   return leagueName;
 };
 
-const CareerStatsTable = ({ stats, info }) => (
+const CareerStatsTable = ({ stats, info, showTotalRow }) => (
   <div>
     <ReactTable
       showPagination={false}
@@ -44,7 +45,7 @@ const CareerStatsTable = ({ stats, info }) => (
           accessor: d => insert(4, '-', split('', pathOr('-', ['season'], d))),
           maxWidth: 115,
           minWidth: 115,
-          Footer: 'Total Stats',
+          Footer: showTotalRow && 'Total Stats',
         },
         {
           Header: 'League',
@@ -61,14 +62,21 @@ const CareerStatsTable = ({ stats, info }) => (
           minWidth: 225,
           className: 'border-right text-left team-cell',
           accessor: prop('team'),
-          Cell: row => (
-            <div>
-              <svg className="team-cell-logo">
-                <use xlinkHref={`/images/teams/season/${row.original.season}.svg#team-${row.value.id}-${row.original.season}-light`} />
-              </svg>
-              {row.value.name}
-            </div>
-          ),
+          Cell: (row) => {
+            const svgLink = `/images/teams/season/${row.original.season}.svg#team-${row.value.id}-${row.original.season}-light`;
+            return (
+              <div>
+                {
+                  isSvg(svgLink) ? (
+                    <svg className="team-cell-logo">
+                      <use xlinkHref={svgLink} />
+                    </svg>
+                  ) : null
+                }
+                {row.value.name}
+              </div>
+            );
+          },
         },
         {
           Header: 'GP',
@@ -76,7 +84,7 @@ const CareerStatsTable = ({ stats, info }) => (
           maxWidth: 85,
           minWidth: 65,
           accessor: d => pathOr('-', ['stat', 'games'], d),
-          Footer: sumNumbers(stats, ['stat', 'games']),
+          Footer: showTotalRow && sumNumbers(stats, ['stat', 'games']),
         },
         {
           Header: 'G',
@@ -85,7 +93,7 @@ const CareerStatsTable = ({ stats, info }) => (
           minWidth: 55,
           show: info.primaryPosition.name !== 'Goalie',
           accessor: d => pathOr('-', ['stat', 'goals'], d),
-          Footer: sumNumbers(stats, ['stat', 'goals']),
+          Footer: showTotalRow && sumNumbers(stats, ['stat', 'goals']),
         },
         {
           Header: 'A',
@@ -94,7 +102,7 @@ const CareerStatsTable = ({ stats, info }) => (
           minWidth: 55,
           show: info.primaryPosition.name !== 'Goalie',
           accessor: d => pathOr('-', ['stat', 'assists'], d),
-          Footer: sumNumbers(stats, ['stat', 'assists']),
+          Footer: showTotalRow && sumNumbers(stats, ['stat', 'assists']),
         },
         {
           Header: 'Pts',
@@ -103,7 +111,7 @@ const CareerStatsTable = ({ stats, info }) => (
           minWidth: 65,
           show: info.primaryPosition.name !== 'Goalie',
           accessor: d => pathOr('-', ['stat', 'points'], d),
-          Footer: sumNumbers(stats, ['stat', 'points']),
+          Footer: showTotalRow && sumNumbers(stats, ['stat', 'points']),
         },
         {
           Header: '+/-',
@@ -112,7 +120,7 @@ const CareerStatsTable = ({ stats, info }) => (
           minWidth: 50,
           show: info.primaryPosition.name !== 'Goalie',
           accessor: d => pathOr('-', ['stat', 'plusMinus'], d),
-          Footer: sumNumbers(stats, ['stat', 'plusMinus']),
+          Footer: showTotalRow && sumNumbers(stats, ['stat', 'plusMinus']),
         },
         {
           Header: 'PIM',
@@ -121,7 +129,7 @@ const CareerStatsTable = ({ stats, info }) => (
           minWidth: 55,
           show: info.primaryPosition.name !== 'Goalie',
           accessor: d => pathOr('-', ['stat', 'pim'], d),
-          Footer: sumNumbers(stats, ['stat', 'pim']),
+          Footer: showTotalRow && sumNumbers(stats, ['stat', 'pim']),
         },
         {
           Header: 'Hits',
@@ -130,7 +138,7 @@ const CareerStatsTable = ({ stats, info }) => (
           minWidth: 65,
           show: info.primaryPosition.name !== 'Goalie',
           accessor: d => pathOr('-', ['stat', 'hits'], d),
-          Footer: sumNumbers(stats, ['stat', 'hits']),
+          Footer: showTotalRow && sumNumbers(stats, ['stat', 'hits']),
         },
         {
           Header: 'Bks',
@@ -139,7 +147,7 @@ const CareerStatsTable = ({ stats, info }) => (
           minWidth: 55,
           show: info.primaryPosition.name !== 'Goalie',
           accessor: d => pathOr('-', ['stat', 'blocked'], d),
-          Footer: sumNumbers(stats, ['stat', 'blocked']),
+          Footer: showTotalRow && sumNumbers(stats, ['stat', 'blocked']),
         },
         {
           Header: 'SOG',
@@ -148,7 +156,7 @@ const CareerStatsTable = ({ stats, info }) => (
           minWidth: 65,
           show: info.primaryPosition.name !== 'Goalie',
           accessor: d => pathOr('-', ['stat', 'shots'], d),
-          Footer: sumNumbers(stats, ['stat', 'shots']),
+          Footer: showTotalRow && sumNumbers(stats, ['stat', 'shots']),
         },
         {
           Header: 'S%',
@@ -160,7 +168,7 @@ const CareerStatsTable = ({ stats, info }) => (
           Cell: row => (
             <span>{typeof row.value === 'number' ? Number(row.value).toFixed(1) : '-'}</span>
           ),
-          Footer: (
+          Footer: showTotalRow && (
             calculateAverage({
               data: stats,
               pathToNumber: ['stat', 'goals'],
@@ -177,7 +185,7 @@ const CareerStatsTable = ({ stats, info }) => (
           show: info.primaryPosition.name === 'Goalie',
           filterable: false,
           accessor: d => pathOr('-', ['stat', 'wins'], d),
-          Footer: sumNumbers(stats, ['stat', 'wins']),
+          Footer: showTotalRow && sumNumbers(stats, ['stat', 'wins']),
         },
         {
           Header: 'L',
@@ -187,7 +195,7 @@ const CareerStatsTable = ({ stats, info }) => (
           show: info.primaryPosition.name === 'Goalie',
           filterable: false,
           accessor: d => pathOr('-', ['stat', 'losses'], d),
-          Footer: sumNumbers(stats, ['stat', 'losses']),
+          Footer: showTotalRow && sumNumbers(stats, ['stat', 'losses']),
         },
         {
           Header: 'OT',
@@ -197,7 +205,7 @@ const CareerStatsTable = ({ stats, info }) => (
           show: info.primaryPosition.name === 'Goalie',
           filterable: false,
           accessor: d => pathOr('-', ['stat', 'ot'], d),
-          Footer: sumNumbers(stats, ['stat', 'ot']),
+          Footer: showTotalRow && sumNumbers(stats, ['stat', 'ot']),
         },
         {
           Header: 'SO',
@@ -207,7 +215,7 @@ const CareerStatsTable = ({ stats, info }) => (
           show: info.primaryPosition.name === 'Goalie',
           filterable: false,
           accessor: d => pathOr('-', ['stat', 'shutouts'], d),
-          Footer: sumNumbers(stats, ['stat', 'shutouts']),
+          Footer: showTotalRow && sumNumbers(stats, ['stat', 'shutouts']),
         },
         {
           Header: 'SV %',
@@ -220,7 +228,7 @@ const CareerStatsTable = ({ stats, info }) => (
           Cell: row => (
             <span>{typeof row.value === 'number' ? Number(row.value).toFixed(3) : '-'}</span>
           ),
-          Footer: (sumByPath(stats, ['stat', 'saves']) / (sumByPath(stats, ['stat', 'saves']) + sumByPath(stats, ['stat', 'goalsAgainst']))).toFixed(3),
+          Footer: showTotalRow && (sumByPath(stats, ['stat', 'saves']) / (sumByPath(stats, ['stat', 'saves']) + sumByPath(stats, ['stat', 'goalsAgainst']))).toFixed(3),
         },
         {
           Header: 'GAA',
@@ -233,7 +241,7 @@ const CareerStatsTable = ({ stats, info }) => (
           Cell: row => (
             <span>{typeof row.value === 'number' ? Number(row.value).toFixed(2) : '-'}</span>
           ),
-          Footer: (sumByPath(stats, ['stat', 'goalsAgainst']) / sumByPath(stats, ['stat', 'games'])).toFixed(2),
+          Footer: showTotalRow && (sumByPath(stats, ['stat', 'goalsAgainst']) / sumByPath(stats, ['stat', 'games'])).toFixed(2),
           sortMethod: (a, b) => (a > b ? -1 : 1),
         },
         {
@@ -244,7 +252,7 @@ const CareerStatsTable = ({ stats, info }) => (
           show: info.primaryPosition.name === 'Goalie',
           filterable: false,
           accessor: d => pathOr('-', ['stat', 'saves'], d),
-          Footer: sumNumbers(stats, ['stat', 'saves']),
+          Footer: showTotalRow && sumNumbers(stats, ['stat', 'saves']),
         },
       ]}
       defaultPageSize={stats.length}

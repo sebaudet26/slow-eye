@@ -22,7 +22,7 @@ import './style.scss';
 const getIsHotText = logs => (`Hot Streak - ${pointsInLastGames(logs)} pts in last ${hotColdGames} games`);
 const getPlusMinusText = (logs, pos) => (pos === 'D' ? ` and ${cumulativePlusMinusInLastGames(logs)} ` : '');
 const getIsColdText = (logs, pos) => (`Cold Streak - ${pointsInLastGames(logs)} pts${getPlusMinusText(logs, pos)} in last ${hotColdGames} games`);
-const playerIsActiveThisYear = latestSeason => latestSeason.season === '20182019';
+const isActiveThisYear = latestSeason => latestSeason.season === '20182019';
 
 const PlayerBadges = ({ info, stats, logs }) => (
   <div className="player-badges">
@@ -44,7 +44,7 @@ const PlayerBadges = ({ info, stats, logs }) => (
         <ReactTooltip />
       </div>
     ) : null }
-    { playerIsActiveThisYear(stats[stats.length - 1])
+    { isActiveThisYear(stats[stats.length - 1])
       && isHot(logs, info.primaryPosition.abbreviation)
       ? (
         <div className="icon-wrapper" data-tip={getIsHotText(logs)}>
@@ -53,7 +53,7 @@ const PlayerBadges = ({ info, stats, logs }) => (
         </div>
       ) : null
     }
-    { playerIsActiveThisYear(stats[stats.length - 1])
+    { isActiveThisYear(stats[stats.length - 1])
       && isCold(logs, info.primaryPosition.abbreviation)
       ? (
         <div className="icon-wrapper" data-tip={getIsColdText(logs, info.primaryPosition.abbreviation)}>

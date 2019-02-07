@@ -12,24 +12,14 @@ import CareerStatsTable from '../../components/Table/CareerStatsTable';
 import GameLogTable from '../../components/Table/GameLogTable';
 import PlayerBadges from '../../components/PlayerBadges/PlayerBadges';
 import PlayerImage from '../../components/PlayerImage';
-import { sumNumbers } from '../../utils/player';
+import {
+  sumNumbers, isActiveThisYear, sumStatsByPath, hasNHLExperience,
+} from '../../utils/player';
+import { saveToLS, getFromLS } from '../../utils/localStorage';
+import { getNumberWithOrdinal } from '../../utils/misc';
 import './style.scss';
 
-const rounds = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th'];
-
 const urlParams = new URLSearchParams(window.location.search);
-
-const playerIsActiveThisYear = latestSeason => latestSeason.season === '20182019';
-const saveToLS = (name, value) => window.localStorage.setItem(name, value);
-const getFromLS = name => window.localStorage.getItem(name);
-const sumNumbersByPath = ({
-  active, isActiveThisYear, lastSeason, careerStats, pathToNumber,
-}) => {
-  if (active) {
-    return isActiveThisYear ? path(pathToNumber, lastSeason) : 0;
-  }
-  return sumNumbers(careerStats, pathToNumber);
-};
 
 export default class PlayerPage extends React.Component {
   componentDidMount() {
@@ -54,7 +44,9 @@ export default class PlayerPage extends React.Component {
       nationality,
     } = info;
     const lastSeason = careerStats[careerStats.length - 1];
-    const isActiveThisYear = playerIsActiveThisYear(lastSeason);
+    const isActive = isActiveThisYear(lastSeason);
+    const isPro = hasNHLExperience(careerStats);
+
     return (
       <div>
         <Helmet>
@@ -112,7 +104,10 @@ export default class PlayerPage extends React.Component {
                       <span className="bold">Drafted by</span>
                       {` ${draftInfo.team.name}`}
                     </p>
-                    <p>{`${rounds[draftInfo.round - 1]} Round, #${draftInfo.pickOverall} Overall, ${draftInfo.year} NHL Draft`}</p>
+                    <p>
+                      <span>{`${getNumberWithOrdinal(draftInfo.round)}  Round,`}</span>
+                      <span>{`#${draftInfo.pickOverall} Overall, ${draftInfo.year} NHL Draft`}</span>
+                    </p>
                   </div>
                 )}
 
@@ -122,9 +117,9 @@ export default class PlayerPage extends React.Component {
               <div className="player-stats-item">
                 <div className="light small-text">GP</div>
                 <div className="bold">
-                  {sumNumbersByPath({
+                  {sumStatsByPath({
                     active,
-                    isActiveThisYear,
+                    isActive,
                     lastSeason,
                     careerStats,
                     pathToNumber: ['stat', 'games'],
@@ -136,9 +131,9 @@ export default class PlayerPage extends React.Component {
                   <div className="player-stats-item">
                     <div className="light small-text">W</div>
                     <div className="bold">
-                      {sumNumbersByPath({
+                      {sumStatsByPath({
                         active,
-                        isActiveThisYear,
+                        isActive,
                         lastSeason,
                         careerStats,
                         pathToNumber: ['stat', 'wins'],
@@ -149,9 +144,9 @@ export default class PlayerPage extends React.Component {
                   <div className="player-stats-item">
                     <div className="light small-text">G</div>
                     <div className="bold">
-                      {sumNumbersByPath({
+                      {sumStatsByPath({
                         active,
-                        isActiveThisYear,
+                        isActive,
                         lastSeason,
                         careerStats,
                         pathToNumber: ['stat', 'goals'],
@@ -165,9 +160,9 @@ export default class PlayerPage extends React.Component {
                   <div className="player-stats-item">
                     <div className="light small-text">L</div>
                     <div className="bold">
-                      {sumNumbersByPath({
+                      {sumStatsByPath({
                         active,
-                        isActiveThisYear,
+                        isActive,
                         lastSeason,
                         careerStats,
                         pathToNumber: ['stat', 'losses'],
@@ -178,9 +173,9 @@ export default class PlayerPage extends React.Component {
                   <div className="player-stats-item">
                     <div className="light small-text">A</div>
                     <div className="bold">
-                      {sumNumbersByPath({
+                      {sumStatsByPath({
                         active,
-                        isActiveThisYear,
+                        isActive,
                         lastSeason,
                         careerStats,
                         pathToNumber: ['stat', 'assists'],
@@ -194,9 +189,9 @@ export default class PlayerPage extends React.Component {
                   <div className="player-stats-item">
                     <div className="light small-text">OT</div>
                     <div className="bold">
-                      {sumNumbersByPath({
+                      {sumStatsByPath({
                         active,
-                        isActiveThisYear,
+                        isActive,
                         lastSeason,
                         careerStats,
                         pathToNumber: ['stat', 'ot'],
@@ -207,9 +202,9 @@ export default class PlayerPage extends React.Component {
                   <div className="player-stats-item">
                     <div className="light small-text">Pts</div>
                     <div className="bold">
-                      {sumNumbersByPath({
+                      {sumStatsByPath({
                         active,
-                        isActiveThisYear,
+                        isActive,
                         lastSeason,
                         careerStats,
                         pathToNumber: ['stat', 'points'],
@@ -223,9 +218,9 @@ export default class PlayerPage extends React.Component {
                   <div className="player-stats-item">
                     <div className="light small-text">SO</div>
                     <div className="bold">
-                      {sumNumbersByPath({
+                      {sumStatsByPath({
                         active,
-                        isActiveThisYear,
+                        isActive,
                         lastSeason,
                         careerStats,
                         pathToNumber: ['stat', 'shutouts'],
@@ -236,9 +231,9 @@ export default class PlayerPage extends React.Component {
                   <div className="player-stats-item">
                     <div className="light small-text">+/-</div>
                     <div className="bold">
-                      {sumNumbersByPath({
+                      {sumStatsByPath({
                         active,
-                        isActiveThisYear,
+                        isActive,
                         lastSeason,
                         careerStats,
                         pathToNumber: ['stat', 'plusMinus'],
@@ -268,7 +263,13 @@ export default class PlayerPage extends React.Component {
             <h3>Season Stats</h3>
             {
               careerStats.length
-                ? <CareerStatsTable stats={careerStats} info={info} />
+                ? (
+                  <CareerStatsTable
+                    stats={careerStats}
+                    info={info}
+                    showTotalRow={isPro}
+                  />
+                )
                 : null
             }
             {
@@ -276,7 +277,11 @@ export default class PlayerPage extends React.Component {
                 ? (
                   <div>
                     <h3>Playoff Stats</h3>
-                    <CareerStatsTable stats={careerPlayoffStats} info={info} />
+                    <CareerStatsTable
+                      stats={careerPlayoffStats}
+                      info={info}
+                      showTotalRow={isPro}
+                    />
                   </div>
                 ) : null
             }

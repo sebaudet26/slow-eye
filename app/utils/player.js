@@ -1,5 +1,5 @@
 import {
-  equals, isNil, map, or, path, pipe, prop, sum, filter,
+  equals, isNil, map, or, path, pipe, prop, sum, filter, length, pathOr, some,
 } from 'ramda';
 
 export const isScratched = pipe(prop('boxscore'), isNil);
@@ -10,16 +10,19 @@ export const pointsInLatestSeason = player => (
     ? player.stats[player.stats.length - 1].stat.points
     : 0
 );
+
 export const gamesPlayedLatestSeason = player => (
   player.stats.length
     ? player.stats[player.stats.length - 1].stat.games
     : 0
 );
+
 export const positionIs = pos => player => (
   player.stats.length
     ? player.info.primaryPosition.abbreviation === pos
     : 0
 );
+
 export const shootingSideIs = side => player => (
   player.stats.length
     ? player.info.shootsCatches === side
@@ -35,3 +38,17 @@ export const sumNumbers = (data, pathToNumber) => pipe(
 export const forwardsAbbreviations = ['LW', 'C', 'RW'];
 
 export const isPosGoalie = pos => pos === 'G';
+
+export const isActiveThisYear = latestSeason => latestSeason.season === '20182019';
+
+export const sumStatsByPath = ({
+  active, isActive, lastSeason, careerStats, pathToNumber,
+}) => {
+  if (active) {
+    return isActive ? path(pathToNumber, lastSeason) : 0;
+  }
+  return sumNumbers(careerStats, pathToNumber);
+};
+
+export const hasNHLExperience = careerStats => !!careerStats
+  .filter(seasonStat => seasonStat.league.name === 'National Hockey League').length;
