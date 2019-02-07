@@ -250,18 +250,42 @@ export default class PlayerPage extends React.Component {
             </div>
           </div>
         </div>
-
-        <Tabs
-          defaultIndex={Number(getFromLS('playerTabIndex')) || 0}
-          onSelect={i => saveToLS('playerTabIndex', i)}
-        >
-          <TabList>
-            <Tab>Career Stats</Tab>
-            <Tab>Game Logs</Tab>
-          </TabList>
-          <TabPanel>
-            <h3>Season Stats</h3>
-            {
+        {
+          active === true ? (
+            <Tabs
+              defaultIndex={Number(getFromLS('playerTabIndex')) || 0}
+              onSelect={i => saveToLS('playerTabIndex', i)}
+            >
+              <TabList>
+                <Tab>Career Stats</Tab>
+                <Tab>Game Logs</Tab>
+              </TabList>
+              <TabPanel>
+                <h3>Season Stats</h3>
+                {
+                  careerStats.length
+                    ? <CareerStatsTable stats={careerStats} info={info} />
+                    : null
+                }
+                {
+                  careerPlayoffStats.length
+                    ? (
+                      <div>
+                        <h3>Playoff Stats</h3>
+                        <CareerStatsTable stats={careerPlayoffStats} info={info} />
+                      </div>
+                    ) : null
+                }
+              </TabPanel>
+              <TabPanel>
+                <h3>Game Logs</h3>
+                <GameLogTable logs={logs} info={info} />
+              </TabPanel>
+            </Tabs>
+          ) : (
+            <div>
+              <h3>Season Stats</h3>
+              {
               careerStats.length
                 ? (
                   <CareerStatsTable
@@ -271,32 +295,20 @@ export default class PlayerPage extends React.Component {
                   />
                 )
                 : null
-            }
-            {
-              careerPlayoffStats.length
-                ? (
-                  <div>
-                    <h3>Playoff Stats</h3>
-                    <CareerStatsTable
-                      stats={careerPlayoffStats}
-                      info={info}
-                      showTotalRow={isPro}
-                    />
-                  </div>
-                ) : null
-            }
-          </TabPanel>
-          { active === true ? (
-            <TabPanel>
-              <h3>Game Logs</h3>
-              <GameLogTable logs={logs} info={info} />
-            </TabPanel>
-          ) : (
-            <TabPanel>
-              <div><h2>Player is retired :(</h2></div>
-            </TabPanel>
-          )}
-        </Tabs>
+              }
+              {
+                careerPlayoffStats.length
+                  ? (
+                    <div>
+                      <h3>Playoff Stats</h3>
+                      <CareerStatsTable stats={careerPlayoffStats} info={info} showTotalRow={isPro} />
+                    </div>
+                  ) : null
+              }
+            </div>
+          )
+        }
+
       </div>
     );
   }
