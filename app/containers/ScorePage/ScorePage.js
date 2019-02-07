@@ -67,29 +67,13 @@ export default class ScorePage extends React.Component {
   handleNewDateSelected(newDate) {
     const { games, fetchGames } = this.props;
     const gamesAccessor = diff => Number(moment(newDate, storeKeyFormat).add(diff, 'days').format(storeKeyFormat));
-    if (!games[gamesAccessor(0)]) {
-      fetchGames(gamesAccessor(0));
-    }
-    if (!games[gamesAccessor(-1)]) {
-      fetchGames(gamesAccessor(-1));
-    }
-    if (!games[gamesAccessor(+1)]) {
-      fetchGames(gamesAccessor(+1));
-    }
-    if (!games[gamesAccessor(-1)]) {
-      fetchGames(gamesAccessor(-1));
-    }
-    if (!games[gamesAccessor(+2)]) {
-      fetchGames(gamesAccessor(+2));
-    }
-    if (!games[gamesAccessor(-2)]) {
-      fetchGames(gamesAccessor(-2));
-    }
-    if (!games[gamesAccessor(+3)]) {
-      fetchGames(gamesAccessor(+3));
-    }
-    if (!games[gamesAccessor(-3)]) {
-      fetchGames(gamesAccessor(-3));
+    const dayDifferentials = [
+      0, -1, 1, -2, 2, -3, 3,
+    ];
+    for (const diff of dayDifferentials) {
+      if (!games[gamesAccessor(diff)]) {
+        fetchGames(gamesAccessor(diff));
+      }
     }
     this.setState({ currentDate: newDate });
   }

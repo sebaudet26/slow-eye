@@ -6,8 +6,8 @@
     "url": "git://github.com/flexdinesh/react-redux-boilerplate.git"
   },
   "engines": {
-    "npm": ">=6",
-    "node": ">=10"
+    "npm": "latest",
+    "node": "latest"
   },
   "author": "Alexandre Sobolevski <sobolevski.a@gmail.com>",
   "scripts": {
