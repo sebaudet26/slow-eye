@@ -127,7 +127,7 @@ export default class HomePage extends React.Component {
                 <img src={PowerIcon} />
               </div>
               {' '}
-              Power Rankings
+              Power Rankings (Top 10)
             </h3>
             <a href="" className="card card-team">
               <div className="card-content">
