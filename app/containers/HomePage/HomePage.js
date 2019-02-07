@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import StandingsTable from '../../components/Table/StandingsTable';
-import FireIcon from '../../images/Fire.svg';
+import FireIcon from '../../images/fire.svg';
 import PowerIcon from '../../images/boxing.svg';
 import './style.scss';
 
