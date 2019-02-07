@@ -44,7 +44,6 @@ export default class ScorePage extends React.Component {
   }
 
   handleNewCalendarDate(newDate) {
-    console.log('*** handleNewCalendarDate', newDate);
     const { fetchGames, games } = this.props;
     this.setState({
       daysOptions: convertToOptions(
@@ -58,7 +57,6 @@ export default class ScorePage extends React.Component {
   componentWillMount() {
     const { fetchGames } = this.props;
     const middleIndex = 365;
-    console.log('*** componentWillMount');
     fetchGames(this.state.daysOptions[middleIndex].value);
     for (let i = 1; i < 3; i++) {
       fetchGames(this.state.daysOptions[middleIndex + i].value);
@@ -67,40 +65,30 @@ export default class ScorePage extends React.Component {
   }
 
   handleNewDateSelected(newDate) {
-    console.log('*** handleNewDateSelected in slick', newDate);
     const { games, fetchGames } = this.props;
     const gamesAccessor = diff => Number(moment(newDate, storeKeyFormat).add(diff, 'days').format(storeKeyFormat));
-    console.log(gamesAccessor(0));
     if (!games[gamesAccessor(0)]) {
-      console.log(`loading ${gamesAccessor(0)}`);
       fetchGames(gamesAccessor(0));
     }
     if (!games[gamesAccessor(-1)]) {
-      console.log(`loading ${gamesAccessor(-1)}`);
       fetchGames(gamesAccessor(-1));
     }
     if (!games[gamesAccessor(+1)]) {
-      console.log(`loading ${gamesAccessor(+1)}`);
       fetchGames(gamesAccessor(+1));
     }
     if (!games[gamesAccessor(-1)]) {
-      console.log(`loading ${gamesAccessor(-1)}`);
       fetchGames(gamesAccessor(-1));
     }
     if (!games[gamesAccessor(+2)]) {
-      console.log(`loading ${gamesAccessor(+2)}`);
       fetchGames(gamesAccessor(+2));
     }
     if (!games[gamesAccessor(-2)]) {
-      console.log(`loading ${gamesAccessor(-2)}`);
       fetchGames(gamesAccessor(-2));
     }
     if (!games[gamesAccessor(+3)]) {
-      console.log(`loading ${gamesAccessor(+3)}`);
       fetchGames(gamesAccessor(+3));
     }
     if (!games[gamesAccessor(-3)]) {
-      console.log(`loading ${gamesAccessor(-3)}`);
       fetchGames(gamesAccessor(-3));
     }
     this.setState({ currentDate: newDate });
@@ -109,8 +97,6 @@ export default class ScorePage extends React.Component {
   render() {
     const { games } = this.props;
     const { currentDate, daysOptions } = this.state;
-    console.log('games', games);
-    console.log('currentDate', currentDate);
     const gamesAccessor = Number(currentDate);
     return (
       <div className="score-page">
