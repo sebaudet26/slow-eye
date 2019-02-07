@@ -28,7 +28,7 @@
 .card {
   display: block;
   border-radius: 6px;
-  height: 125px;
+  height: 120px;
   box-shadow: $shadow;
   margin-bottom: 15px;
   background-size: 100% auto;
@@ -38,7 +38,7 @@
   transition: 0.3s;
 
   &:hover {
-    box-shadow: $shadow-3;
+    box-shadow: $shadow-2;
     transform: scale(1.025);
   }
 
@@ -55,17 +55,19 @@
   }
 
   &-content {
-    color: $white;
-
-    &-name {
+    * {
       z-index: 99;
       font-size: 18px;
       font-weight: 500;
+    }
+
+    &-name {
+      color: $white;
       text-transform: uppercase;
-      text-align: right;
+      text-align: left;
       position: absolute;
-      right: 10px;
-      bottom: 5px;
+      left: 15px;
+      bottom: 10px;
 
       span {
         display: block;
@@ -74,7 +76,34 @@
         text-transform: uppercase;
       }
     }
+
+    &-result {
+      position: absolute;
+      top: 0;
+      right: 0px;
+      height: 100%;
+      background: #fff;
+      width: 150px;
+      border-radius: 0 6px 6px 0;
+
+      &-item {
+        color: $black;
+        height: 60px;
+        line-height: 60px;
+        color: $grey-2;
+        text-align: center;
+
+        span {
+          color: $black;
+          font-weight: 600;
+          font-size: 24px;
+          margin-right: 10px;
+        }
+      }
+    }
   }
+
+
 }
 
 @media screen and (max-width: 600px) {

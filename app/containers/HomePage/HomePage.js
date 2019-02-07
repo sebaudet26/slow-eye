@@ -26,7 +26,7 @@ export default class HomePage extends React.Component {
                 <img src={FireIcon} />
               </div>
               {' '}
-              Who's hot?
+              Who's hot? (Top 5)
             </h3>
 
             <a href="" className="card" style={{ backgroundImage: 'url("https://nhl.bamcontent.com/images/actionshots/8478402_low_resolution.jpg")' }}>
@@ -35,6 +35,15 @@ export default class HomePage extends React.Component {
                 Connor
                   {' '}
                   <span>McDavid</span>
+                </div>
+                <div className="card-content-result">
+                  <div className="card-content-result-item">
+                    Last 7 games
+                  </div>
+                  <div className="card-content-result-item">
+                    <span>27</span>
+                    PTS
+                  </div>
                 </div>
               </div>
             </a>
