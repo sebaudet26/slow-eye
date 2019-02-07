@@ -265,7 +265,7 @@ export default class PlayerPage extends React.Component {
                 <h3>Season Stats</h3>
                 {
                   careerStats.length
-                    ? <CareerStatsTable stats={careerStats} info={info} />
+                    ? <CareerStatsTable stats={careerStats} info={info} showTotalRow={isPro} />
                     : null
                 }
                 {
@@ -273,7 +273,7 @@ export default class PlayerPage extends React.Component {
                     ? (
                       <div>
                         <h3>Playoff Stats</h3>
-                        <CareerStatsTable stats={careerPlayoffStats} info={info} />
+                        <CareerStatsTable stats={careerPlayoffStats} info={info} showTotalRow={isPro} />
                       </div>
                     ) : null
                 }
