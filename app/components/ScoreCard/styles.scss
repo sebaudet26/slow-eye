@@ -55,6 +55,17 @@
     a {
       padding: 10px 15px;
       display: inline-block;
+      color: $main;
+      display: flex;
+      align-items: center;
+
+      img {
+        margin-left: 10px;
+      }
+
+      &:hover {
+        opacity: 0.7;
+      }
     }
   }
 }
