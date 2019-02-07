@@ -3,6 +3,7 @@
 .player {
   &-header {
     display: flex;
+    padding-bottom: 10px;
     margin: 25px 0;
     position: relative;
     border-bottom: solid 1px $grey-4;
