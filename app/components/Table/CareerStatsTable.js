@@ -6,7 +6,6 @@ import ReactTable from 'react-table';
 import {
   insert, map, split, sum, pathOr, filter, prop,
 } from 'ramda';
-import isSvg from 'is-svg';
 import { sumNumbers } from '../../utils/player';
 import 'react-table/react-table.css';
 import './styles.scss';
@@ -62,21 +61,18 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
           minWidth: 225,
           className: 'border-right text-left team-cell',
           accessor: prop('team'),
-          Cell: (row) => {
-            const svgLink = `/images/teams/season/${row.original.season}.svg#team-${row.value.id}-${row.original.season}-light`;
-            return (
-              <div>
-                {
-                  isSvg(svgLink) ? (
+          Cell: row => (
+            <div>
+              {
+                  row.value.id ? (
                     <svg className="team-cell-logo">
                       <use xlinkHref={svgLink} />
                     </svg>
                   ) : null
                 }
-                {row.value.name}
-              </div>
-            );
-          },
+              {row.value.name}
+            </div>
+          ),
         },
         {
           Header: 'GP',
