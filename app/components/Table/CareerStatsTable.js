@@ -66,7 +66,7 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
               {
                   row.value.id ? (
                     <svg className="team-cell-logo">
-                      <use xlinkHref={svgLink} />
+                      <use xlinkHref={`/images/teams/season/${row.original.season}.svg#team-${row.value.id}-${row.original.season}-light`} />
                     </svg>
                   ) : null
                 }
