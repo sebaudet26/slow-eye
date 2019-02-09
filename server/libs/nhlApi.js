@@ -1,5 +1,26 @@
 const {
-  head, contains, find, filter, flatten, last, map, mergeAll, path, pick, prop, pipe, pathOr, propOr, propEq, pathEq, mergeLeft,
+  contains,
+  descend,
+  filter,
+  find,
+  flatten,
+  head,
+  last,
+  map,
+  mergeAll,
+  mergeLeft,
+  omit,
+  path,
+  pathEq,
+  pathOr,
+  pick,
+  pipe,
+  prop,
+  propEq,
+  propOr,
+  sum,
+  sortWith,
+  take,
 } = require('ramda');
 const moment = require('moment');
 const fetch = require('node-fetch');
@@ -22,7 +43,12 @@ const nhlStatsApi = async (resource, expiration, force) => {
     const response = await fetch(url);
     const data = await response.json();
     cache
-      .set(resource, JSON.stringify(data), 'EX', expiration || 60 * 60 * 12);
+      .set(
+        resource,
+        JSON.stringify(data),
+        'EX',
+        expiration || (moment().endOf('day').add(3, 'hours').valueOf() - moment().valueOf()),
+      );
     return data;
   } catch (e) {
     return console.error(e.stack || e.toString());
@@ -42,7 +68,12 @@ const nhlRecordsApi = async (resource, expiration, force) => {
     const response = await fetch(url);
     const data = await response.json();
     cache
-      .set(resource, JSON.stringify(data), 'EX', expiration || 60 * 60 * 12);
+      .set(
+        resource,
+        JSON.stringify(data),
+        'EX',
+        expiration || (moment().endOf('day').add(3, 'hours').valueOf() - moment().valueOf()),
+      );
     return data;
   } catch (e) {
     return console.error(e.stack || e.toString());
@@ -62,7 +93,12 @@ const nhlApi = async (resource, expiration, force) => {
     const response = await fetch(url);
     const data = await response.json();
     cache
-      .set(resource, JSON.stringify(data), 'EX', expiration || 60 * 60 * 12);
+      .set(
+        resource,
+        JSON.stringify(data),
+        'EX',
+        expiration || (moment().endOf('day').add(3, 'hours').valueOf() - moment().valueOf()),
+      );
     return data;
   } catch (e) {
     return console.error(e.stack || e.toString());
@@ -325,36 +361,108 @@ const fetchDraft = async (args) => {
 };
 
 const fetchGameHighlights = async (id) => {
-  const resource = `/game/${id}/content`;
-  const gameContentResponse = await nhlStatsApi(resource, 60 * 60);
-  const goalHighlightsUrls = map(
-    o => ({
-      ...pick([
-        'statsEventId',
-        'periodTime',
-        'period',
-      ], o),
-      url: pipe(
-        pathOr([], ['highlight', 'playbacks']),
-        last,
-        pathOr('', ['url']),
-      )(o),
-    }),
-    filter(o => o.type === 'GOAL', gameContentResponse.media.milestones.items),
-  );
-  const gameRecapUrl = pipe(
-    pathOr([], ['media', 'epg']),
-    find(propEq('title', 'Recap')),
-    propOr([], ['items']),
-    last,
-    propOr({}, ['playbacks']),
-    last,
-    prop(['url']),
-  )(gameContentResponse);
-  return {
-    recap: gameRecapUrl,
-    goals: goalHighlightsUrls,
-  };
+  try {
+    const resource = `/game/${id}/content`;
+    const gameContentResponse = await nhlStatsApi(resource, 60 * 60);
+    const goalHighlightsUrls = map(
+      o => ({
+        ...pick([
+          'statsEventId',
+          'periodTime',
+          'period',
+        ], o),
+        url: pipe(
+          pathOr([], ['highlight', 'playbacks']),
+          last,
+          pathOr('', ['url']),
+        )(o),
+      }),
+      filter(o => o.type === 'GOAL', gameContentResponse.media.milestones.items),
+    );
+    const gameRecapUrl = pipe(
+      pathOr([], ['media', 'epg']),
+      find(propEq('title', 'Recap')),
+      propOr([], ['items']),
+      last,
+      propOr({}, ['playbacks']),
+      last,
+      prop(['url']),
+    )(gameContentResponse);
+    return {
+      recap: gameRecapUrl,
+      goals: goalHighlightsUrls,
+    };
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const calculatePointsStreak = player => ({
+  ...player,
+  streak: {
+    points: pipe(
+      prop('logs'),
+      take(5),
+      map(path(['stat', 'points'])),
+      sum,
+    )(player),
+    goals: pipe(
+      prop('logs'),
+      take(5),
+      map(path(['stat', 'goals'])),
+      sum,
+    )(player),
+    assists: pipe(
+      prop('logs'),
+      take(5),
+      map(path(['stat', 'assists'])),
+      sum,
+    )(player),
+    games: 5,
+  },
+});
+
+const calculatePlayerStreaks = async () => {
+  try {
+    const cached = await cache.get('players_streaks');
+
+    if (cached) {
+      return JSON.parse(cached);
+    }
+
+    const players = await fetchAllPlayers();
+
+    // get game logs for all players
+    const playersLogs = await Promise.all(players.map(async (p) => {
+      const logs = await fetchGameLogsForPlayerId(p.id);
+      return {
+        ...p,
+        logs,
+      };
+    }));
+
+    // calculate streaks
+    const streaks = pipe(
+      map(calculatePointsStreak),
+      sortWith([
+        descend(path(['streak', 'points'])),
+        descend(path(['streak', 'goals'])),
+      ]),
+      take(5),
+    )(playersLogs);
+
+    cache
+      .set(
+        'players_streaks',
+        JSON.stringify(streaks),
+        'EX',
+        (moment().endOf('day').add(3, 'hours').valueOf() - moment().valueOf()),
+      );
+
+    return streaks;
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 module.exports = {
@@ -380,4 +488,5 @@ module.exports = {
   fetchPlayoffGameLogsForPlayerId,
   fetchPlayersReport,
   fetchGameHighlights,
+  calculatePlayerStreaks,
 };

@@ -7,10 +7,38 @@ import PowerIcon from '../../images/boxing.svg';
 import './style.scss';
 
 // const bg = require('https://nhl.bamcontent.com/images/actionshots/8478402.jpg');
-
+const renderPlayerCard = player => (
+  <a href="" className="card card-player" style={{ backgroundImage: `url("https://nhl.bamcontent.com/images/actionshots/${player.id}_low_resolution.jpg")` }}>
+    <div className="card-content">
+      <div className="card-content-name">
+        {player.name}
+      </div>
+      <div className="card-content-result">
+        <div className="card-content-result-item">
+          <div>Last 5 games</div>
+          <div>
+            <span>{`${player.points} PTS (${player.goals}G ${player.assists}A)`}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+);
 
 export default class HomePage extends React.Component {
+  componentWillMount() {
+    const { fetchPlayersStreaks } = this.props;
+    console.log('hop');
+    fetchPlayersStreaks();
+  }
+
   render() {
+    const { playersStreaks } = this.props;
+    console.log(playersStreaks);
+    if (!playersStreaks || !playersStreaks.length) {
+      return <div />;
+    }
+
     return (
       <div className="home-page">
         <Helmet>
@@ -29,96 +57,7 @@ export default class HomePage extends React.Component {
               {' '}
               Who's hot? (Top 5)
             </h3>
-            <a href="" className="card card-player" style={{ backgroundImage: 'url("https://nhl.bamcontent.com/images/actionshots/8478402_low_resolution.jpg")' }}>
-              <div className="card-content">
-                <div className="card-content-name">
-                  Connor
-                  {' '}
-                  <span>McDavid</span>
-                </div>
-                <div className="card-content-result">
-                  <div className="card-content-result-item">
-                    <div>Last 7 games</div>
-                    <div>
-                      <span>27</span>
-                      PTS
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </a>
-            <a href="" className="card card-player" style={{ backgroundImage: 'url("https://nhl.bamcontent.com/images/actionshots/8474141_low_resolution.jpg")' }}>
-              <div className="card-content">
-                <div className="card-content-name">
-                  Patrick
-                  {' '}
-                  <span>Kane</span>
-                </div>
-                <div className="card-content-result">
-                  <div className="card-content-result-item">
-                    <div>Last 7 games</div>
-                    <div>
-                      <span>27</span>
-                      PTS
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </a>
-            <a href="" className="card card-player" style={{ backgroundImage: 'url("https://nhl.bamcontent.com/images/actionshots/8478420_low_resolution.jpg")' }}>
-              <div className="card-content">
-                <div className="card-content-name">
-                  Mikko
-                  {' '}
-                  <span>Rantanen</span>
-                </div>
-                <div className="card-content-result">
-                  <div className="card-content-result-item">
-                    <div>Last 7 games</div>
-                    <div>
-                      <span>27</span>
-                      PTS
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </a>
-            <a href="" className="card card-player" style={{ backgroundImage: 'url("https://nhl.bamcontent.com/images/actionshots/8476346_low_resolution.jpg")' }}>
-              <div className="card-content">
-                <div className="card-content-name">
-                  Johnny
-                  {' '}
-                  <span>Gaudreau</span>
-                </div>
-                <div className="card-content-result">
-                  <div className="card-content-result-item">
-                    <div>Last 7 games</div>
-                    <div>
-                      <span>27</span>
-                      PTS
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </a>
-            <a href="" className="card card-player" style={{ backgroundImage: 'url("https://nhl.bamcontent.com/images/actionshots/8480829_low_resolution.jpg")' }}>
-              <div className="card-content">
-                <div className="card-content-name">
-                  Jesperi
-                  {' '}
-                  <span>Kotkaniemi</span>
-                </div>
-                <div className="card-content-result">
-                  <div className="card-content-result-item">
-                    <div>Last 7 games</div>
-                    <div>
-                      <span>27</span>
-                      PTS
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </a>
+            {playersStreaks.map(renderPlayerCard)}
           </div>
           <div className="home-page-col">
             <h3>

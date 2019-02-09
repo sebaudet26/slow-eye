@@ -82,7 +82,7 @@
         right: 0px;
         height: 120px;
         background: linear-gradient(270deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);
-        width: 140px;
+        width: 200px;
         border-radius: 0 6px 6px 0;
         display: flex;
         align-items: center;
@@ -92,14 +92,13 @@
 
         &-item {
           color: $white;
-          text-align: center;
+          text-align: right;
           font-weight: 400;
 
           span {
             color: $white;
             font-weight: 600;
             font-size: 24px;
-            margin-right: 10px;
           }
         }
       }
