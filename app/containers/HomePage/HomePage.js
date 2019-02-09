@@ -6,18 +6,22 @@ import FireIcon from '../../images/fire.svg';
 import PowerIcon from '../../images/boxing.svg';
 import './style.scss';
 
-// const bg = require('https://nhl.bamcontent.com/images/actionshots/8478402.jpg');
 const renderPlayerCard = player => (
   <a href="" className="card card-player" style={{ backgroundImage: `url("https://nhl.bamcontent.com/images/actionshots/${player.id}_low_resolution.jpg")` }}>
     <div className="card-content">
       <div className="card-content-name">
-        {player.name}
+        {player.name.split(' ')[0]}
+        <span>{player.name.split(' ')[1]}</span>
       </div>
       <div className="card-content-result">
         <div className="card-content-result-item">
           <div>Last 5 games</div>
           <div>
-            <span>{`${player.points} PTS (${player.goals}G ${player.assists}A)`}</span>
+            <span>
+              {`${player.points} PTS`}
+              {' '}
+            </span>
+            {`(${player.goals}G ${player.assists}A)`}
           </div>
         </div>
       </div>
