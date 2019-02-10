@@ -82,16 +82,16 @@
         background: linear-gradient(270deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);
         width: 200px;
         border-radius: 0 6px 6px 0;
-        display: flex;
-        align-items: center;
         right: 0px;
-        top: 0;
-        justify-content: center;
+        top: 0px;
 
         &-item {
           color: $white;
           text-align: right;
           font-weight: 400;
+          position: absolute;
+          right: 15px;
+          bottom: 15px;
 
           span {
             color: $white;
