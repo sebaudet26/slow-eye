@@ -7,7 +7,7 @@ import PowerIcon from '../../images/boxing.svg';
 import './style.scss';
 
 const renderPlayerCard = player => (
-  <a href="" className="card card-player" style={{ backgroundImage: `url("https://nhl.bamcontent.com/images/actionshots/${player.id}_low_resolution.jpg")` }}>
+  <a href={`/player?id=${player.id}`} className="card card-player" style={{ backgroundImage: `url("https://nhl.bamcontent.com/images/actionshots/${player.id}_low_resolution.jpg")` }}>
     <div className="card-content">
       <div className="card-content-name">
         {player.name.split(' ')[0]}
