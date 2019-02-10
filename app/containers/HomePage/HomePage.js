@@ -80,8 +80,6 @@ export default class HomePage extends React.Component {
                   <svg key={Math.random()}>
                     <use xlinkHref="/images/teams/season/20182019.svg#team-4-20182019-light" />
                   </svg>
-                  Philadelphia
-                  {' '}
                   <span>Flyers</span>
                 </div>
                 <div className="card-content-result">
@@ -103,8 +101,6 @@ export default class HomePage extends React.Component {
                   <svg key={Math.random()}>
                     <use xlinkHref="/images/teams/season/20182019.svg#team-7-20182019-light" />
                   </svg>
-                  Buffalo
-                  {' '}
                   <span>Sabres</span>
                 </div>
                 <div className="card-content-result">
