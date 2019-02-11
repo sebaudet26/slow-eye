@@ -12,6 +12,7 @@
   &-player {
     position: fixed;
     left: calc(50% - 315px);
+    z-index: 150;
   }
 
   &-close {
@@ -24,6 +25,7 @@
     height: 100% !important;
     top: 0;
     left: 0;
+    z-index: 100;
   }
 }
 
@@ -273,6 +275,7 @@
       position: fixed;
       left: 0px;
       width: 100% !important;
+      top: 50px;
     }
   }
 
