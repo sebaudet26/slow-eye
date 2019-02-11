@@ -91,7 +91,7 @@
 
         a {
           transition: 0.3s;
-          color: $grey-3;
+          color: lighten($grey-2 , 15%);
           font-size: 12px;
           text-transform: uppercase;
           font-weight: 500;
