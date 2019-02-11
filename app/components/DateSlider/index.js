@@ -14,7 +14,7 @@ function PrevArrow(props) {
       onClick={onClick}
       className="slick-arrow"
     >
-    ◀
+    &#9664;
     </div>
   );
 }
@@ -26,7 +26,7 @@ function NextArrow(props) {
       onClick={onClick}
       className="slick-arrow next"
     >
-    ▶
+    &#9654;
     </div>
   );
 }
