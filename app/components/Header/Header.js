@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import Logo from '../../images/logo.svg';
+import HomeIcon from './images/home';
 import ScoreIcon from './images/scoreboard';
 import StandingsIcon from './images/standings';
 import StatsIcon from './images/stats';
@@ -40,7 +41,7 @@ class Header extends React.Component {
             <ul className="header-mobile-list">
               <li>
                 <NavLink activeClassName="active" exact to="/">
-                  <StandingsIcon />
+                  <HomeIcon />
                   Home
                 </NavLink>
               </li>
