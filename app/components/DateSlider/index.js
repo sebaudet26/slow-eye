@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import { sortBy, prop, values } from 'ramda';
 import ScoreCard from '../ScoreCard';
+import LeftArrow from './images/left.svg';
+import RightArrow from './images/right.svg';
 import './slick-theme.min.scss';
 import './style.scss';
 
@@ -14,7 +16,7 @@ function PrevArrow(props) {
       onClick={onClick}
       className="slick-arrow"
     >
-    &#9664;
+      <img src={LeftArrow} />
     </div>
   );
 }
@@ -26,7 +28,7 @@ function NextArrow(props) {
       onClick={onClick}
       className="slick-arrow next"
     >
-    &#9654;
+      <img src={RightArrow} />
     </div>
   );
 }
