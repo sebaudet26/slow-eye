@@ -195,11 +195,11 @@ class GamePage extends React.Component {
           </title>
           <meta name="description" content={`${boxscore.away.team.teamName} vs. ${boxscore.home.team.teamName} game page. Seal Stats is the best place to view NHL stats. User-friendly and fast. `} />
         </Helmet>
-        <div className="summary">
-          <div className="summary-header">
-            <div className="summary-header-team">
+        <div className="game">
+          <div className="game-header">
+            <div className="game-header-team">
               {awayTeamImage}
-              <div className="summary-header-team-name">
+              <div className="game-header-team-name">
                 <div className="city">{boxscore.away.team.location}</div>
                 <div className="team">{boxscore.away.team.teamName}</div>
                 <div className="record">
@@ -207,18 +207,20 @@ class GamePage extends React.Component {
                   {` ${boxscore.away.seasonTeamStats.splits[0].pts}pts`}
                 </div>
               </div>
-              <div className="summary-header-team-score">
+              <div className="game-header-team-score">
                 {boxscore.away.teamStats.goals}
               </div>
             </div>
-            <div className="summary-header-result">
+            <div className="game-header-result">
               <div>{liveFeed.status.detailedState}</div>
               <div>{getStatusText(game)}</div>
               {
                 highlights && highlights.recap ? (
                   <a
                     className="play-link"
-                    style={{ textAlign: 'center', width: '100%', marginTop: '5px' }}
+                    style={{
+                      textAlign: 'center', width: '100%', marginTop: '5px',
+                    }}
                     onClick={() => watchVideo(highlights.recap)}
                   >
                     <img src={PlayIcon} alt="Play Icon" />
@@ -226,11 +228,11 @@ class GamePage extends React.Component {
                 ) : null
               }
             </div>
-            <div className="summary-header-team">
-              <div className="summary-header-team-score">
+            <div className="game-header-team">
+              <div className="game-header-team-score">
                 {boxscore.home.teamStats.goals}
               </div>
-              <div className="summary-header-team-name">
+              <div className="game-header-team-name">
                 <div className="city">{boxscore.home.team.location}</div>
                 <div className="team">{boxscore.home.team.teamName}</div>
                 <div className="record">
@@ -289,6 +291,7 @@ class GamePage extends React.Component {
                 )(boxscore.away.players)}
               </div>
             </TabPanel>
+            {/*
             <TabPanel>
               <div className="summary-overall">
                 <div className="summary-overall-wrapper">
@@ -367,6 +370,20 @@ class GamePage extends React.Component {
                 </div>
               </div>
             </TabPanel>
+            */}
+
+            <TabPanel>
+              <div className="summary">
+                <div className="summary-col">
+                test
+                </div>
+                <div className="summary-col">
+                teamStats
+                </div>
+              </div>
+            </TabPanel>
+
+
             <TabPanel>
               <BoxTable
                 players={reject(isScratchedOrGoalie, boxscore.home.players)}
