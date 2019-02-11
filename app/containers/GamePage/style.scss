@@ -27,10 +27,6 @@
 
 .play-link {
   justify-content: center;
-
-  img {
-    margin-right: 10px;
-  }
 }
 
 .game {
@@ -87,7 +83,7 @@
         }
       }
     }
-    
+
     &-wrapper {
       width: 100%;
     }
@@ -97,6 +93,83 @@
       margin: auto;
       background: $white;
       box-shadow: $shadow;
+    }
+  }
+}
+
+.summary {
+  display: flex;
+  flex-flow: wrap;
+
+  &-col:first-child {
+    width: 70%;
+  }
+
+  &-col:last-child {
+    width: 30%;
+  }
+
+  .card {
+    background: $white;
+    border-radius: 6px;
+    box-shadow: $shadow;
+    margin: 0 25px 15px 0;
+    position: relative;
+
+    &-header {
+      border-bottom: solid 1px $grey-4;
+      padding: 10px;
+      font-weight: 600;
+    }
+
+    &-cell {
+      padding: 10px;
+      border-bottom: solid 1px $grey-4;
+      display: flex;
+    }
+  }
+
+  .goal {
+    &-image {
+      position:relative;
+      margin-right: 40px;
+
+      .player-img-face {
+        width: 60px;
+        border-radius: 100%;
+      }
+
+      .icon-wrapper {
+        position:absolute;
+        top: 30px;
+        left: 40px;
+        width: 40px;
+        height: 40px;
+        padding: 5px;
+      }
+    }
+
+    &-details {
+      &-scorer {
+        font-weight: 600;
+        font-size: 18px;
+      }
+
+      a {
+        white-space: pre;
+        color: $black;
+
+        &:hover {
+          color: $main;
+        }
+      }
+    }
+
+    &-video {
+      display: flex;
+      flex-basis: auto;
+      flex-grow: 1;
+      justify-content: flex-end;
     }
   }
 }
@@ -152,88 +225,6 @@
   }
 }
 
-.events-table {
-  width: 100%;
-
-  thead {
-    tr {
-      th:first-child {
-        width: 125px;
-      }
-
-      th:nth-child(2) {
-        width: 300px;
-      }
-
-      th:nth-child(3) {
-        width: 400px;
-      }
-
-      th:nth-child(4) {
-        width: 200px;
-      }
-    }
-
-    tr:nth-child(2) {
-      th {
-        background: $grey-5;
-        border-top: solid 1px $grey-4;
-        color: $grey-2;
-        padding: 5px 10px 5px 10px;
-        font-weight: 500;
-      }
-    }
-  }
-
-  tbody {
-    tr {
-      border-top: solid 1px $grey-4;
-
-      &:last-child {
-        border-bottom: solid 1px $grey-4;
-      }
-
-      td {
-        white-space: pre;
-
-        svg {
-          width: 40px;
-          height: 40px;
-        }
-
-        img {
-          border-radius: 100%;
-          width: 40px;
-          margin-right: 10px;
-        }
-      }
-    }
-  }
-
-  thead {
-    border-top: solid 1px $grey-4;
-    border-bottom: solid 1px $grey-4;
-
-    &:first-child {
-      border-top: 0px;
-    }
-
-    th {
-      text-align: left;
-      font-weight: 600;
-      padding: 10px;
-    }
-  }
-
-  tbody {
-    tr {
-      td {
-        padding: 10px;
-      }
-    }
-  }
-}
-
 .scratches {
   &-player {
     margin: 3px;
@@ -258,10 +249,14 @@
 
 @media screen and (max-width: 800px) {
   .summary {
-    &-events, &-overall {
-      &-card {
-        overflow: scroll;
-      }
+    display: block;
+
+    &-col:first-child, &-col:last-child {
+      width: 100%;
+    }
+
+    .card {
+      margin-right: 0px;
     }
   }
 }
@@ -276,9 +271,9 @@
     }
   }
 
-  .summary {
+  .game {
     &-header {
-      padding: 0px;
+      padding: 15px 0;
 
       &-team {
         &-name {
@@ -293,7 +288,6 @@
         }
 
         &-score {
-          font-size: 24px;
           margin: 0 10px;
         }
 

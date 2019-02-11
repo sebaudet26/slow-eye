@@ -20,26 +20,32 @@ import { saveToLS, getFromLS } from '../../utils/localStorage';
 import { getNumberWithOrdinal } from '../../utils/misc';
 import BoxTable from '../../components/Table/BoxTable';
 import PlayerName from '../../components/PlayerName';
+import PlayerImage from '../../components/PlayerImage';
 import PlayIcon from '../../images/play-button.svg';
 
 const renderGoalInfo = onWatchVideo => goal => (
-  <tr key={Math.random()}>
-    <td>
-      {goal.periodTime}
-      <svg key={Math.random()}>
-        <use xlinkHref={`/images/teams/season/20182019.svg#team-${goal.team.id}-20182019-light`} />
-      </svg>
-    </td>
-    <td>
-      <PlayerName
-        withImage
-        key={goal.scorer.id}
+  <div key={Math.random()} className="card-cell">
+    <div className="goal-image card-cell-item">
+      <PlayerImage
         id={goal.scorer.id}
-        name={`${goal.scorer.fullName} (${goal.scorer.seasonTotal})`}
+        size="60x60"
       />
-    </td>
-    <td>
-      {
+      <div className="icon-wrapper">
+        <svg className="goal-image-team" key={Math.random()}>
+          <use xlinkHref={`/images/teams/season/20182019.svg#team-${goal.team.id}-20182019-light`} />
+        </svg>
+      </div>
+    </div>
+    <div className="goal-details card-cell-item">
+      <div className="goal-details-scorer">
+        <PlayerName
+          key={goal.scorer.id}
+          id={goal.scorer.id}
+          name={`${goal.scorer.fullName} (${goal.scorer.seasonTotal})`}
+        />
+      </div>
+      <div>
+        {
         goal.assists.map(player => (
           <PlayerName
             key={Math.random()}
@@ -48,17 +54,22 @@ const renderGoalInfo = onWatchVideo => goal => (
           />
         ))
       }
-    </td>
-    <td>{goal.strength}</td>
-    { goal.videoUrl ? (
-      <td>
+      </div>
+      <div>
+        {goal.periodTime}
+        {' - '}
+        {goal.strength}
+      </div>
+    </div>
+    <div className="goal-video card-cell-item">
+      { goal.videoUrl ? (
         <a className="play-link" onClick={() => onWatchVideo(goal.videoUrl)}>
           <img src={PlayIcon} alt="Play Icon" />
         </a>
-      </td>
-    ) : <td />
-    }
-  </tr>
+      ) : null
+      }
+    </div>
+  </div>
 );
 
 const renderPenaltyInfo = penalty => (
@@ -82,7 +93,28 @@ const renderPenaltyInfo = penalty => (
 );
 
 const renderGoalEvents = (events = [], videos = [], period, onWatchVideo) => (
-  <table className="events-table">
+  <div className="card">
+    <div className="card-header">
+      {`${getNumberWithOrdinal(period)} Period`}
+    </div>
+    {
+      filter(propEq('period', period), events).length
+        ? map(
+          renderGoalInfo(onWatchVideo),
+          pipe(
+            filter(propEq('period', period)),
+            mapObjIndexed((o, k) => ({
+              ...o,
+              videoUrl: pathOr('', [k, 'url'], videos),
+            })),
+            values,
+          )(events),
+        )
+        : <div className="non-event">No Goals</div>
+    }
+  </div>
+  /*
+  <div className="events-table">
     <thead>
       <tr>
         <th>
@@ -115,6 +147,7 @@ const renderGoalEvents = (events = [], videos = [], period, onWatchVideo) => (
       }
     </tbody>
   </table>
+  */
 );
 
 const renderPenaltyEvents = (events, period) => (
@@ -375,10 +408,13 @@ class GamePage extends React.Component {
             <TabPanel>
               <div className="summary">
                 <div className="summary-col">
-                test
+                  <h3>Scoring</h3>
+                  {renderGoalEvents(goalSummary, groupedHighlights['1'], 1, watchVideo)}
+                  {renderGoalEvents(goalSummary, groupedHighlights['1'], 2, watchVideo)}
+                  {renderGoalEvents(goalSummary, groupedHighlights['1'], 3, watchVideo)}
                 </div>
                 <div className="summary-col">
-                teamStats
+                  <h3>Team Stats</h3>
                 </div>
               </div>
             </TabPanel>
