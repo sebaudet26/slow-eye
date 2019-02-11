@@ -49,6 +49,7 @@ const {
   fetchPlayersReport,
   fetchGameHighlights,
   calculatePlayerStreaks,
+  calculateTeamsStreaks,
 } = require('../libs/nhlApi');
 
 const ifNotThereFetchId = propName => async (d) => {
@@ -782,6 +783,27 @@ const PlayerStreak = new GraphQLObjectType({
   },
 });
 
+const StreakTeamRecord = new GraphQLObjectType({
+  name: 'StreakTeamRecord',
+  fields: {
+  },
+});
+
+const TeamStreak = new GraphQLObjectType({
+  name: 'TeamStreak',
+  fields: {
+    id: { type: GraphQLInt, resolve: prop('id') },
+    name: { type: GraphQLString, resolve: prop('name') },
+    teamName: { type: GraphQLString, resolve: prop('teamName') },
+    abbreviation: { type: GraphQLString, resolve: prop('abbreviation') },
+    wins: { type: GraphQLInt, resolve: path(['streak', 'wins']) },
+    losses: { type: GraphQLInt, resolve: path(['streak', 'losses']) },
+    ot: { type: GraphQLInt, resolve: path(['streak', 'ot']) },
+    games: { type: GraphQLInt, resolve: path(['streak', 'games']) },
+    points: { type: GraphQLInt, resolve: path(['streak', 'points']) },
+  },
+});
+
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
@@ -846,10 +868,10 @@ const schema = new GraphQLSchema({
         type: GraphQLList(PlayerStreak),
         resolve: calculatePlayerStreaks,
       },
-      // teamStreaks: {
-      //   type: GraphQLList(TeamStreak),
-      //   resolve:
-      // }
+      teamsStreaks: {
+        type: GraphQLList(TeamStreak),
+        resolve: calculateTeamsStreaks,
+      },
     },
   }),
 });

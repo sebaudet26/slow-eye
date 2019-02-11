@@ -18,7 +18,9 @@ const {
   prop,
   propEq,
   propOr,
+  reverse,
   sum,
+  sortBy,
   sortWith,
   take,
 } = require('ramda');
@@ -29,6 +31,9 @@ const cache = require('./redisApi');
 const nhlApiBase = 'http://www.nhl.com/stats/rest';
 const nhlRecordsBase = 'https://records.nhl.com/site/api';
 const nhlStatsApiBase = 'https://statsapi.web.nhl.com/api/v1';
+
+// technically 1AM to leave some time for Western coast to be at end of day
+const getMsUntilMidnight = () => Math.round((moment().endOf('day').add(1, 'hours').valueOf() - moment().valueOf()) / 1000);
 
 // expiration is a number in seconds
 const nhlStatsApi = async (resource, expiration, force) => {
@@ -47,7 +52,7 @@ const nhlStatsApi = async (resource, expiration, force) => {
         resource,
         JSON.stringify(data),
         'EX',
-        expiration || (moment().endOf('day').add(3, 'hours').valueOf() - moment().valueOf()),
+        expiration || getMsUntilMidnight(),
       );
     return data;
   } catch (e) {
@@ -72,7 +77,7 @@ const nhlRecordsApi = async (resource, expiration, force) => {
         resource,
         JSON.stringify(data),
         'EX',
-        expiration || (moment().endOf('day').add(3, 'hours').valueOf() - moment().valueOf()),
+        expiration || getMsUntilMidnight(),
       );
     return data;
   } catch (e) {
@@ -97,7 +102,7 @@ const nhlApi = async (resource, expiration, force) => {
         resource,
         JSON.stringify(data),
         'EX',
-        expiration || (moment().endOf('day').add(3, 'hours').valueOf() - moment().valueOf()),
+        expiration || getMsUntilMidnight(),
       );
     return data;
   } catch (e) {
@@ -397,7 +402,63 @@ const fetchGameHighlights = async (id) => {
   }
 };
 
-const calculatePointsStreak = player => ({
+const getRecordForLastGames = (nbGames, team) => {
+  let thisTeam = 'away';
+  let opponent = 'home';
+  if (game.teams[thisTeam].team.id === team.id) {
+    // team was away
+  } else {
+    // team was home
+    thisTeam = 'home';
+    opponent = 'away';
+  }
+  console.log(game);
+  if (game.teams[thisTeam].score > game.teams[opponent].score) {
+    return 2;
+  }
+  if (game.status.statusCode === '7') { // Final
+    return 0;
+  }
+  console.log('something weird happened in calculating team points streak');
+};
+
+const streakNumberOfGames = 15;
+
+const calculateTeamPointsStreak = (team) => {
+  const gamesToConsider = pipe(
+    prop('schedule'),
+    reverse,
+    take(streakNumberOfGames + 1),
+    map(prop('game')),
+  )(team);
+
+  const firstGame = last(gamesToConsider);
+  const lastGame = head(gamesToConsider);
+
+  const initialRecord = firstGame.teams.home.team.id === team.id
+    ? firstGame.teams.home.leagueRecord
+    : firstGame.teams.away.leagueRecord;
+  const latestRecord = lastGame.teams.home.team.id === team.id
+    ? lastGame.teams.home.leagueRecord
+    : lastGame.teams.away.leagueRecord;
+
+  const streak = {
+    wins: latestRecord.wins - initialRecord.wins,
+    losses: latestRecord.losses - initialRecord.losses,
+    ot: latestRecord.ot - initialRecord.ot,
+    games: streakNumberOfGames,
+  };
+
+  return {
+    ...team,
+    streak: {
+      ...streak,
+      points: Math.round(streak.wins * 2 + streak.ot),
+    },
+  };
+};
+
+const calculatePlayerPointsStreak = player => ({
   ...player,
   streak: {
     points: pipe(
@@ -422,10 +483,46 @@ const calculatePointsStreak = player => ({
   },
 });
 
+const fetchTeamSchedule = async (teamId) => {
+  const resource = `/schedule?teamId=${teamId}&startDate=2018-10-01&endDate=${moment().format('YYYY-MM-DD')}`;
+  const teamSchedule = await nhlStatsApi(resource);
+  return teamSchedule.dates.map(date => ({ date: date.date, game: date.games[0] }));
+};
+
+const calculateTeamsStreaks = async () => {
+  try {
+    const cached = await cache.get('team_streaks');
+    if (cached) {
+      return JSON.parse(cached);
+    }
+
+    const teams = await fetchAllTeams();
+    const teamsRelevantInformation = map(pick(['id', 'name', 'teamName', 'abbreviation']), teams);
+
+    const teamsWithSchedules = await Promise.all(
+      teamsRelevantInformation.map(async team => ({
+        ...team,
+        schedule: await fetchTeamSchedule(team.id),
+      })),
+    );
+
+    // get game logs for all players
+    const teamsStreaks = pipe(
+      map(calculateTeamPointsStreak),
+      sortWith([
+        descend(path(['streak', 'points'])),
+      ]),
+      take(10),
+    )(teamsWithSchedules);
+    return teamsStreaks;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 const calculatePlayerStreaks = async () => {
   try {
     const cached = await cache.get('players_streaks');
-
     if (cached) {
       return JSON.parse(cached);
     }
@@ -443,7 +540,7 @@ const calculatePlayerStreaks = async () => {
 
     // calculate streaks
     const streaks = pipe(
-      map(calculatePointsStreak),
+      map(calculatePlayerPointsStreak),
       sortWith([
         descend(path(['streak', 'points'])),
         descend(path(['streak', 'goals'])),
@@ -451,12 +548,13 @@ const calculatePlayerStreaks = async () => {
       take(5),
     )(playersLogs);
 
+
     cache
       .set(
         'players_streaks',
         JSON.stringify(streaks),
         'EX',
-        (moment().endOf('day').add(3, 'hours').valueOf() - moment().valueOf()),
+        (getMsUntilMidnight()),
       );
 
     return streaks;
@@ -489,4 +587,5 @@ module.exports = {
   fetchPlayersReport,
   fetchGameHighlights,
   calculatePlayerStreaks,
+  calculateTeamsStreaks,
 };

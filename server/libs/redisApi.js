@@ -22,6 +22,10 @@ const makeCacheClient = () => {
       console.log(`Redis: Inserting a value to redis went ${rep}`);
       const val = await cache.get('test_key');
       console.log(`Redis: Value is... ${val}`);
+      // FOR DELETING ALL CACHE
+      // redisClient.flushdb((err, succeeded) => {
+      //   console.log('Flushed command was succeessful: ', succeeded);
+      // });
     } catch (e) {
       throw new Error(`Failed to insert value in redis client ${e.toString()}`);
     }

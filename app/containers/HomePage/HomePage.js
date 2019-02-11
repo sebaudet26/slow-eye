@@ -18,8 +18,7 @@ const renderPlayerCard = player => (
           <div>Last 5 games</div>
           <div>
             <span>
-              {`${player.points} PTS`}
-              {' '}
+              {`${player.points} PTS `}
             </span>
             {`(${player.goals}G ${player.assists}A)`}
           </div>
@@ -29,19 +28,39 @@ const renderPlayerCard = player => (
   </a>
 );
 
+const renderTeamCard = (team, k) => (
+  <a href={`/team?id=${team.id}`} className="card card-team">
+    <div className="card-content">
+      <div className="card-content-rank">
+        {k + 1}
+      </div>
+      <div className="card-content-team">
+        <svg key={Math.random()}>
+          <use xlinkHref={`/images/teams/season/20182019.svg#team-${team.id}-20182019-light`} />
+        </svg>
+        <span>{team.teamName}</span>
+      </div>
+      <div className="card-content-result">
+        <div className="card-content-result-item">
+          <div>{`Last ${team.games} games`}</div>
+          <div>
+            {`${team.points} PTS (${team.wins}-${team.losses}-${team.ot})`}
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+);
+
 export default class HomePage extends React.Component {
   componentWillMount() {
-    const { fetchPlayersStreaks } = this.props;
-    console.log('hop');
+    const { fetchPlayersStreaks, fetchTeamsStreaks } = this.props;
     fetchPlayersStreaks();
+    fetchTeamsStreaks();
   }
 
   render() {
-    const { playersStreaks } = this.props;
-    console.log(playersStreaks);
-    if (!playersStreaks || !playersStreaks.length) {
-      return <div />;
-    }
+    const { playersStreaks, teamsStreaks } = this.props;
 
     return (
       <div className="home-page">
@@ -49,7 +68,7 @@ export default class HomePage extends React.Component {
           <title>Home</title>
           <meta
             name="description"
-            content="Seal Stats is the best place to view NHL stats. User-friendly and fast."
+            contentx="Seal Stats is the best place to view NHL stats. User-friendly and fast."
           />
         </Helmet>
         <div className="home-page-wrapper">
@@ -61,7 +80,7 @@ export default class HomePage extends React.Component {
               {' '}
               Who's hot? (Top 5)
             </h3>
-            {playersStreaks.map(renderPlayerCard)}
+            {playersStreaks && playersStreaks.map(renderPlayerCard)}
           </div>
           <div className="home-page-col">
             <h3>
@@ -71,48 +90,7 @@ export default class HomePage extends React.Component {
               {' '}
               Power Rankings (Top 10)
             </h3>
-            <a href="" className="card card-team">
-              <div className="card-content">
-                <div className="card-content-rank">
-                  01
-                </div>
-                <div className="card-content-team">
-                  <svg key={Math.random()}>
-                    <use xlinkHref="/images/teams/season/20182019.svg#team-4-20182019-light" />
-                  </svg>
-                  <span>Flyers</span>
-                </div>
-                <div className="card-content-result">
-                  <div className="card-content-result-item">
-                    <div>Last 15 games</div>
-                    <div>
-                      12-1-2
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </a>
-            <a href="" className="card card-team">
-              <div className="card-content">
-                <div className="card-content-rank">
-                  02
-                </div>
-                <div className="card-content-team">
-                  <svg key={Math.random()}>
-                    <use xlinkHref="/images/teams/season/20182019.svg#team-7-20182019-light" />
-                  </svg>
-                  <span>Sabres</span>
-                </div>
-                <div className="card-content-result">
-                  <div className="card-content-result-item">
-                    <div>Last 15 games</div>
-                    <div>
-                      12-1-2
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </a>
+            {renderTeamCard && teamsStreaks.map(renderTeamCard)}
           </div>
         </div>
       </div>
