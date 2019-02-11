@@ -41,7 +41,11 @@
       position: absolute;
       right: 15px;
       font-weight: 500;
-      font-size: $h4;
+      font-size: $h3;
+    }
+
+    a {
+      color: $black;
     }
   }
 
@@ -51,16 +55,23 @@
 
   &-footer {
     border-top: solid 1px $grey-4;
+    display: flex;
 
     a {
       padding: 10px 15px;
+      border-right: solid 1px $grey-4;
       display: inline-block;
       color: $main;
       display: flex;
       align-items: center;
 
       img {
-        margin-left: 10px;
+        margin-right: 10px;
+        width: 20px;
+      }
+
+      &:hover {
+        opacity: 0.7;
       }
     }
   }

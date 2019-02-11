@@ -1,6 +1,8 @@
 import React from 'react';
 import { isScheduled, getStatusText } from '../../utils/game';
 import { smallLogoForTeamName, calculatePoints } from '../../utils/team';
+import SummaryIcon from '../../images/ice-skate.svg';
+import PlayIcon from '../../images/play-button.svg';
 import './styles.scss';
 
 const ScoreCard = ({ game }) => (
@@ -44,7 +46,12 @@ const ScoreCard = ({ game }) => (
       {game.status.detailedState === 'Scheduled' ? null : (
         <div className="game-card-footer">
           <a href={`/game?id=${game.id}`}>
-            Game Summary
+            <img src={SummaryIcon} />
+            Summary
+          </a>
+          <a href={`/game?id=${game.id}`}>
+            <img src={PlayIcon} />
+            Watch Recap
           </a>
         </div>
       )}
