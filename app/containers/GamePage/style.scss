@@ -126,6 +126,44 @@
       padding: 10px;
       border-bottom: solid 1px $grey-4;
       display: flex;
+      align-items: center;
+
+      &-item {
+        .penalty-img {
+          width: 30px;
+          height: 30px;
+          margin-right: 15px;
+        }
+
+        a {
+          white-space: pre;
+        }
+
+       &.penalty-team {
+         display: flex;
+         align-items: center;
+       }
+
+       &.penalty-player {
+         margin: 0 25px;
+
+         a {
+           color: $black;
+
+           &:hover {
+             color: $main;
+           }
+         }
+       }
+
+       &.penalty-info {
+         display: flex;
+         flex-basis: auto;
+         flex-grow: 1;
+         justify-content: flex-end;
+         margin-right: 10px;
+       }
+      }
     }
   }
 
@@ -258,6 +296,27 @@
 
     .card {
       margin-right: 0px;
+
+      &-cell-item {
+        a {
+          white-space: pre-wrap;
+        }
+      }
+    }
+
+    .goal {
+      &-image {
+        margin-right: 15px;
+
+        .icon-wrapper {
+          display: none;
+        }
+
+        .player-img-face {
+          width: 50px;
+        }
+      }
+
     }
   }
 }

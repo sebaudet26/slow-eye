@@ -73,23 +73,26 @@ const renderGoalInfo = onWatchVideo => goal => (
 );
 
 const renderPenaltyInfo = penalty => (
-  <tr key={Math.random()}>
-    <td>
-      {penalty.periodTime}
-      <svg key={Math.random()}>
+  <div key={Math.random()} className="card-cell ">
+    <div className="card-cell-item penalty-team">
+      <svg className="penalty-img" key={Math.random()}>
         <use xlinkHref={`/images/teams/season/20182019.svg#team-${penalty.team.id}-20182019-light`} />
       </svg>
-    </td>
-    <td>
+      {penalty.periodTime}
+    </div>
+    <div className="card-cell-item penalty-player">
       <PlayerName
         key={Math.random()}
         id={penalty.receiver.id}
         name={penalty.receiver.fullName}
       />
-    </td>
-    <td>{penalty.type}</td>
-    <td>{`${penalty.minutes} mins`}</td>
-  </tr>
+    </div>
+    <div className="card-cell-item penalty-info">
+      {penalty.type}
+      {' - '}
+      {`${penalty.minutes} mins`}
+    </div>
+  </div>
 );
 
 const renderGoalEvents = (events = [], videos = [], period, onWatchVideo) => (
@@ -113,66 +116,19 @@ const renderGoalEvents = (events = [], videos = [], period, onWatchVideo) => (
         : <div className="non-event">No Goals</div>
     }
   </div>
-  /*
-  <div className="events-table">
-    <thead>
-      <tr>
-        <th>
-          {`${getNumberWithOrdinal(period)} Period`}
-        </th>
-      </tr>
-      <tr>
-        <th>Time</th>
-        <th>Goal By</th>
-        <th>Assist(s)</th>
-        <th />
-        <th />
-      </tr>
-    </thead>
-    <tbody>
-      {
-        filter(propEq('period', period), events).length
-          ? map(
-            renderGoalInfo(onWatchVideo),
-            pipe(
-              filter(propEq('period', period)),
-              mapObjIndexed((o, k) => ({
-                ...o,
-                videoUrl: pathOr('', [k, 'url'], videos),
-              })),
-              values,
-            )(events),
-          )
-          : <td className="non-event">No Goals</td>
-      }
-    </tbody>
-  </table>
-  */
 );
 
 const renderPenaltyEvents = (events, period) => (
-  <table className="events-table">
-    <thead>
-      <tr>
-        <th>
-          {`${getNumberWithOrdinal(period)} Period`}
-        </th>
-      </tr>
-      <tr>
-        <th>Time</th>
-        <th>By</th>
-        <th>Reason</th>
-        <th />
-      </tr>
-    </thead>
-    <tbody>
-      {
-        filter(propEq('period', period), events).length
-          ? map(renderPenaltyInfo, filter(event => event.period === period, events))
-          : <td className="non-event">No Penalties</td>
-      }
-    </tbody>
-  </table>
+  <div className="card">
+    <div className="card-header">
+      {`${getNumberWithOrdinal(period)} Period`}
+    </div>
+    {
+      filter(propEq('period', period), events).length
+        ? map(renderPenaltyInfo, filter(event => event.period === period, events))
+        : <td className="non-event">No Penalties</td>
+    }
+  </div>
 );
 
 class GamePage extends React.Component {
@@ -412,6 +368,10 @@ class GamePage extends React.Component {
                   {renderGoalEvents(goalSummary, groupedHighlights['1'], 1, watchVideo)}
                   {renderGoalEvents(goalSummary, groupedHighlights['1'], 2, watchVideo)}
                   {renderGoalEvents(goalSummary, groupedHighlights['1'], 3, watchVideo)}
+                  <h3>Penalties</h3>
+                  {renderPenaltyEvents(penaltySummary, 1)}
+                  {renderPenaltyEvents(penaltySummary, 2)}
+                  {renderPenaltyEvents(penaltySummary, 3)}
                 </div>
                 <div className="summary-col">
                   <h3>Team Stats</h3>
