@@ -55,7 +55,7 @@ const renderGoalInfo = onWatchVideo => goal => (
         ))
       }
       </div>
-      <div>
+      <div className="goal-details-time">
         {goal.periodTime}
         {' - '}
         {goal.strength}
@@ -66,7 +66,7 @@ const renderGoalInfo = onWatchVideo => goal => (
         <a className="play-link" onClick={() => onWatchVideo(goal.videoUrl)}>
           <img src={PlayIcon} alt="Play Icon" />
         </a>
-      ) : null
+      ) : (<div />)
       }
     </div>
   </div>
@@ -280,87 +280,6 @@ class GamePage extends React.Component {
                 )(boxscore.away.players)}
               </div>
             </TabPanel>
-            {/*
-            <TabPanel>
-              <div className="summary-overall">
-                <div className="summary-overall-wrapper">
-                  <div className="summary-overall-card">
-                    <table className="overall-table">
-                      <thead>
-                        <tr>
-                          <th />
-                          <th>Shots</th>
-                          <th>PIM</th>
-                          <th>PP</th>
-                          <th>Hits</th>
-                          <th>Fo%</th>
-                          <th>TK</th>
-                          <th>GV</th>
-                          <th>Bks</th>
-                          <th>Goals</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>
-                            <a href={`/team?id=${boxscore.away.team.id}`}>
-                              {awayTeamImage}
-                            </a>
-                          </td>
-                          <td>{boxscore.away.teamStats.shots}</td>
-                          <td>{boxscore.away.teamStats.pim}</td>
-                          <td>{`${boxscore.away.teamStats.powerPlayGoals}/${boxscore.away.teamStats.powerPlayOpportunities}`}</td>
-                          <td>{boxscore.away.teamStats.hits}</td>
-                          <td>{boxscore.away.teamStats.faceOffWinPercentage.toFixed()}</td>
-                          <td>{boxscore.away.teamStats.takeaways}</td>
-                          <td>{boxscore.away.teamStats.giveaways}</td>
-                          <td>{boxscore.away.teamStats.blocked}</td>
-                          <td>{boxscore.away.teamStats.goals}</td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <a href={`/team?id=${boxscore.home.team.id}`}>
-                              {homeTeamImage}
-                            </a>
-                          </td>
-                          <td>{boxscore.home.teamStats.shots}</td>
-                          <td>{boxscore.home.teamStats.pim}</td>
-                          <td>{`${boxscore.home.teamStats.powerPlayGoals}/${boxscore.home.teamStats.powerPlayOpportunities}`}</td>
-                          <td>{boxscore.home.teamStats.hits}</td>
-                          <td>{boxscore.home.teamStats.faceOffWinPercentage.toFixed()}</td>
-                          <td>{boxscore.home.teamStats.takeaways}</td>
-                          <td>{boxscore.home.teamStats.giveaways}</td>
-                          <td>{boxscore.home.teamStats.blocked}</td>
-                          <td>{boxscore.home.teamStats.goals}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <h3>Scoring Summary</h3>
-              <div className="summary-events">
-                <div className="summary-events-wrapper">
-                  <div className="summary-events-card">
-                    {renderGoalEvents(goalSummary, groupedHighlights['1'], 1, watchVideo)}
-                    {renderGoalEvents(goalSummary, groupedHighlights['2'], 2, watchVideo)}
-                    {renderGoalEvents(goalSummary, groupedHighlights['3'], 3, watchVideo)}
-                  </div>
-                </div>
-              </div>
-              <h3>Penalties</h3>
-              <div className="summary-events">
-                <div className="summary-events-wrapper">
-                  <div className="summary-events-card">
-                    {renderPenaltyEvents(penaltySummary, 1)}
-                    {renderPenaltyEvents(penaltySummary, 2)}
-                    {renderPenaltyEvents(penaltySummary, 3)}
-                  </div>
-                </div>
-              </div>
-            </TabPanel>
-            */}
-
             <TabPanel>
               <div className="summary">
                 <div className="summary-col">
@@ -375,6 +294,73 @@ class GamePage extends React.Component {
                 </div>
                 <div className="summary-col">
                   <h3>Team Stats</h3>
+                  <table className="overall-table">
+                    <thead>
+                      <tr>
+                        <th />
+                        <th>{awayTeamImage}</th>
+                        <th>{homeTeamImage}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          Shots
+                        </td>
+                        <td>{boxscore.away.teamStats.shots}</td>
+                        <td>{boxscore.home.teamStats.shots}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          PIM
+                        </td>
+                        <td>{boxscore.away.teamStats.pim}</td>
+                        <td>{boxscore.home.teamStats.pim}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          PP
+                        </td>
+                        <td>{`${boxscore.away.teamStats.powerPlayGoals}/${boxscore.away.teamStats.powerPlayOpportunities}`}</td>
+                        <td>{`${boxscore.home.teamStats.powerPlayGoals}/${boxscore.home.teamStats.powerPlayOpportunities}`}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          Hits
+                        </td>
+                        <td>{boxscore.away.teamStats.hits}</td>
+                        <td>{boxscore.home.teamStats.hits}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          FO%
+                        </td>
+                        <td>{boxscore.away.teamStats.faceOffWinPercentage.toFixed()}</td>
+                        <td>{boxscore.home.teamStats.faceOffWinPercentage.toFixed()}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          TK
+                        </td>
+                        <td>{boxscore.away.teamStats.takeaways}</td>
+                        <td>{boxscore.home.teamStats.takeaways}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          GV
+                        </td>
+                        <td>{boxscore.away.teamStats.giveaways}</td>
+                        <td>{boxscore.home.teamStats.giveaways}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          GV
+                        </td>
+                        <td>{boxscore.away.teamStats.blocked}</td>
+                        <td>{boxscore.home.teamStats.blocked}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </TabPanel>
