@@ -94,6 +94,26 @@
   height: 64px;
 }
 
+.slick-arrow {
+  position: absolute;
+  z-index: 5;
+  width: 50px;
+  height: 100%;
+  background: $white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px 0 0 6px;
+  cursor: pointer;
+
+  &.next {
+    right: 0px;
+    top: 0px;
+    border-radius: 0 6px 6px 0;
+    border-left: solid 1px $grey-4;
+  }
+}
+
 .slick-slider {
   height: 64px;
   background: #f9fcff;
