@@ -4,7 +4,7 @@
   &-header {
     display: flex;
     padding-bottom: 10px;
-    margin: 25px 0;
+    margin: 15px 0 25px 0;
     position: relative;
     border-bottom: solid 1px $grey-4;
   }
@@ -96,6 +96,7 @@
     &-header {
       margin-top: 0px;
       display: block;
+      text-align: center;
     }
 
     &-info {
@@ -115,6 +116,8 @@
     }
 
     &-stats {
+      margin: 25px 25px 0 25px;
+
       &-item {
         margin: auto;
 
