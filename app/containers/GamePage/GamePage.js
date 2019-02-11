@@ -54,7 +54,6 @@ const renderGoalInfo = onWatchVideo => goal => (
       <td>
         <a className="play-link" onClick={() => onWatchVideo(goal.videoUrl)}>
           <img src={PlayIcon} alt="Play Icon" />
-          Watch Goal
         </a>
       </td>
     ) : <td />
@@ -215,6 +214,17 @@ class GamePage extends React.Component {
             <div className="summary-header-result">
               <div>{liveFeed.status.detailedState}</div>
               <div>{getStatusText(game)}</div>
+              {
+                highlights && highlights.recap ? (
+                  <a
+                    className="play-link"
+                    style={{ textAlign: 'center', width: '100%', marginTop: '5px' }}
+                    onClick={() => watchVideo(highlights.recap)}
+                  >
+                    <img src={PlayIcon} alt="Play Icon" />
+                  </a>
+                ) : null
+              }
             </div>
             <div className="summary-header-team">
               <div className="summary-header-team-score">
@@ -231,18 +241,6 @@ class GamePage extends React.Component {
               {homeTeamImage}
             </div>
           </div>
-          {
-            highlights && highlights.recap ? (
-              <a
-                className="play-link"
-                style={{ textAlign: 'center', width: '100%', marginBottom: '20px' }}
-                onClick={() => watchVideo(highlights.recap)}
-              >
-                <img src={PlayIcon} alt="Play Icon" />
-                Game Recap
-              </a>
-            ) : null
-          }
           {
             watchVideoUrl ? (
               <div className="video-wrapper">
