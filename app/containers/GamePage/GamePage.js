@@ -3,7 +3,19 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import ReactPlayer from 'react-player';
 import {
-  filter, join, map, isEmpty, groupBy, mapObjIndexed, pick, pipe, prop, pathOr, propEq, reject, values,
+  filter,
+  join,
+  map,
+  isEmpty,
+  groupBy,
+  mapObjIndexed,
+  pick,
+  pipe,
+  prop,
+  pathOr,
+  propEq,
+  reject,
+  values,
 } from 'ramda';
 import './style.scss';
 import {
@@ -154,6 +166,7 @@ class GamePage extends React.Component {
   render() {
     const { game } = this.props;
     const { watchVideoUrl } = this.state;
+
     if (!game || !game.boxscore || !game.liveFeed) {
       return null;
     }
@@ -161,7 +174,7 @@ class GamePage extends React.Component {
     const { boxscore, liveFeed, highlights } = game;
     const groupedHighlights = groupBy(prop('period'), highlights.goals || []);
     const { goalSummary = [], penaltySummary = [], lastTenPlays = [] } = liveFeed;
-
+    console.log('groupedHighlights', groupedHighlights);
     const watchVideo = videoUrl => this.setState({ watchVideoUrl: videoUrl });
 
     const awayTeamImage = (
@@ -285,8 +298,8 @@ class GamePage extends React.Component {
                 <div className="summary-col">
                   <h3>Scoring</h3>
                   {renderGoalEvents(goalSummary, groupedHighlights['1'], 1, watchVideo)}
-                  {renderGoalEvents(goalSummary, groupedHighlights['1'], 2, watchVideo)}
-                  {renderGoalEvents(goalSummary, groupedHighlights['1'], 3, watchVideo)}
+                  {renderGoalEvents(goalSummary, groupedHighlights['2'], 2, watchVideo)}
+                  {renderGoalEvents(goalSummary, groupedHighlights['3'], 3, watchVideo)}
                   <h3>Penalties</h3>
                   {renderPenaltyEvents(penaltySummary, 1)}
                   {renderPenaltyEvents(penaltySummary, 2)}
