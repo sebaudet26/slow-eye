@@ -36,6 +36,22 @@ const HotTable = ({ players, position }) => (
           minWidth: 150,
         },
         {
+          Header: 'Pos',
+          id: 'position',
+          className: 'text-left hidden-mobile',
+          maxWidth: 50,
+          minWidth: 50,
+          fixed: 'left',
+        },
+        {
+          Header: 'Team',
+          id: 'team',
+          className: 'text-left team-cell sm-margin hidden-mobile',
+          maxWidth: 85,
+          minWidth: 75,
+          fixed: 'left',
+        },
+        {
           Header: 'GP',
           id: 'games',
           maxWidth: 75,
@@ -57,13 +73,13 @@ const HotTable = ({ players, position }) => (
           Header: 'Pts',
           id: 'points',
           maxWidth: 75,
-          minWidth: 50,
+          minWidth: 45,
         },
         {
           Header: 'Pts/GP',
           id: 'pointsPerGame',
           maxWidth: 75,
-          minWidth: 50,
+          minWidth: 60,
         },
         {
           Header: '+/-',
@@ -89,18 +105,7 @@ const HotTable = ({ players, position }) => (
           maxWidth: 75,
           minWidth: 50,
         },
-        {
-          Header: 'Hits',
-          id: 'hits',
-          maxWidth: 75,
-          minWidth: 50,
-        },
-        {
-          Header: 'Bks',
-          id: 'blocked',
-          maxWidth: 75,
-          minWidth: 50,
-        },
+
         {
           Header: 'SOG',
           id: 'shots',
@@ -114,13 +119,6 @@ const HotTable = ({ players, position }) => (
           maxWidth: 75,
           minWidth: 55,
         },
-        {
-          Header: 'TOI/GP',
-          id: 'timeOnIcePerGame',
-          show: position !== 'G',
-          maxWidth: 75,
-          minWidth: 65,
-        },
       ]}
       defaultSorted={[
         {
@@ -129,7 +127,7 @@ const HotTable = ({ players, position }) => (
         },
       ]}
       defaultSortDesc
-      className="-striped rosterStats"
+      className="-striped roster-stats"
       defaultPageSize="31"
     />
   </div>
