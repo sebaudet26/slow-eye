@@ -1,4 +1,12 @@
 @import '../../styles/variables.scss';
 
 .hotPlayers-page {
+  h2 {
+    display: flex;
+    align-items: center;
+
+    .icon-wrapper {
+      margin-right: 15px;
+    }
+  }
 }

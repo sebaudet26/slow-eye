@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import FireIcon from '../../images/fire.svg';
+import HotTable from '../../components/Table/HotTable';
+import './style.scss';
 
 class HotPlayersPage extends Component {
   render() {
@@ -13,7 +16,13 @@ class HotPlayersPage extends Component {
             content="Who's hot in the NHL right now?"
           />
         </Helmet>
-        <h2>Who's hot?</h2>
+        <h2>
+          <div className="icon-wrapper">
+            <img src={FireIcon} />
+          </div>
+            Who's hot?
+        </h2>
+        <HotTable />
       </div>
     );
   }
