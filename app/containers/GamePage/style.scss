@@ -175,6 +175,10 @@
       position: relative;
       margin-right: 40px;
 
+      &-team {
+        height: 30px;
+      }
+
       .player-img-face {
         width: 60px;
         border-radius: 100%;
@@ -194,6 +198,7 @@
       &-scorer {
         font-weight: 600;
         font-size: 18px;
+        white-space: pre;
       }
 
       a {
@@ -308,8 +313,15 @@
       &-image {
         margin-right: 15px;
 
+        &-team {
+          height: 30px;
+        }
+
         .icon-wrapper {
-          display: none;
+          background: none;
+          box-shadow: none;
+          left: 25px;
+          top: 25px;
         }
 
         .player-img-face {
@@ -322,6 +334,25 @@
 }
 
 @media screen and (max-width: 600px) {
+  .summary {
+    .goal {
+      &-details {
+        &-assist {
+          font-size: 14px;
+          white-space: pre;
+        }
+
+        &-time {
+          font-size: 14px;
+        }
+      }
+
+      &-video {
+        position: absolute;
+        right: 5px;
+      }
+    }
+  }
   .video {
     &-player {
       position: fixed;

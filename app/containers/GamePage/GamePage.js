@@ -44,7 +44,7 @@ const renderGoalInfo = onWatchVideo => goal => (
           name={`${goal.scorer.fullName} (${goal.scorer.seasonTotal})`}
         />
       </div>
-      <div>
+      <div className="goal-details-assist">
         {
         goal.assists.map(player => (
           <PlayerName
