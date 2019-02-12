@@ -21,11 +21,11 @@ class Header extends React.Component {
           </a>
           <SearchBar />
           <div className="header-nav">
+            <NavLink activeClassName="active" className="header-nav-item" to="/scores">
+              Scores
+            </NavLink>
             <NavLink activeClassName="active" className="header-nav-item" exact to="/standings">
               Standings
-            </NavLink>
-            <NavLink activeClassName="active" className="header-nav-item" to="/scores">
-                Scores
             </NavLink>
             <NavLink activeClassName="active" className="header-nav-item" to="/playerstats">
                 Player Stats
@@ -46,15 +46,15 @@ class Header extends React.Component {
                 </NavLink>
               </li>
               <li>
-                <NavLink activeClassName="active" to="/standings">
-                  <StandingsIcon />
-                    Standings
-                </NavLink>
-              </li>
-              <li>
                 <NavLink activeClassName="active" to="/scores">
                   <ScoreIcon />
                       Scores
+                </NavLink>
+              </li>
+              <li>
+                <NavLink activeClassName="active" to="/standings">
+                  <StandingsIcon />
+                    Standings
                 </NavLink>
               </li>
               <li>
