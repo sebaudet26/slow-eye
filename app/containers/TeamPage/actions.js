@@ -60,84 +60,85 @@ const makeTeamQuery = id => `
 const makePlayerQuery = id => `
 {
   player (id: ${id}) {
-    id,
+    id
     info {
-      firstName,
-      lastName,
-      shootsCatches,
-      birthDate,
-      birthCity,
-      birthStateProvince,
-      birthCountry,
-      nationality,
-      height,
-      weight,
-      captain,
-      rookie,
-      fullName,
-      currentAge,
-      rosterStatus,
+      firstName
+      lastName
+      shootsCatches
+      birthDate
+      birthCity
+      birthStateProvince
+      birthCountry
+      nationality
+      height
+      weight
+      captain
+      rookie
+      fullName
+      currentAge
+      rosterStatus
       primaryNumber
       currentTeamInfo {
-        name,
-        teamName,
+        name
+        teamName
         abbreviation
-      },
+      }
       primaryPosition {
-        name,
+        name
         abbreviation
-      },
+      }
       draftInfo {
-        year,
-        round,
-        pickOverall,
-        pickInRound,
+        year
+        round
+        pickOverall
+        pickInRound
         team {
           name
           abbreviation
         }
       }
-    },
+    }
     stats {
-      season,
+      season
       team {
         name
         abbreviation
-      },
+      }
       league {
         name
-      },
+      }
       stat {
-        assists,
-        goals,
-        points,
-        games,
-        plusMinus,
-        shots,
-        shotPct,
-        hits,
-        pim,
-        blocked,
-        timeOnIcePerGame,
-        savePercentage,
-        goalsAgainst,
-        saves,
-        shutouts,
-        goalAgainstAverage,
-        powerPlayGoals,
-        shortHandedGoals,
-        gameWinningGoals,
-        gamesStarted,
-        wins,
-        losses,
+        assists
+        goals
+        points
+        games
+        plusMinus
+        shots
+        shotPct
+        hits
+        pim
+        blocked
+        timeOnIcePerGame
+        savePercentage
+        goalsAgainst
+        saves
+        shutouts
+        goalAgainstAverage
+        powerPlayGoals
+        shortHandedGoals
+        gameWinningGoals
+        gamesStarted
+        wins
+        losses
         ot
       }
-    },
-    logs (lastFive: true){
-      date,
+    }
+    logs (lastTen: true){
+      date
       stat {
-        points,
+        points
         plusMinus
+        timeOnIce
       }
     }
   }

@@ -461,11 +461,13 @@ const Player = new GraphQLObjectType({
     logs: {
       args: {
         lastFive: { type: GraphQLBoolean },
+        lastTen: { type: GraphQLBoolean },
       },
       type: GraphQLList(SeasonStat),
       resolve: (p, args) =>
         fetchGameLogsForPlayerId(p.id)
-          .then(logs => (args.lastFive ? take(5, logs) : logs)),
+          .then(logs => (args.lastFive ? take(5, logs) : logs))
+          .then(logs => (args.lastTen ? take(10, logs) : logs)),
     },
     // Lazy load game logs
     playoffLogs: {

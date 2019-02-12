@@ -1,32 +1,71 @@
 import {
-  take, map, path, sum, pathOr,
+  reject,
+  isNil,
+  take,
+  map,
+  path,
+  sum,
+  pathOr,
+  pipe,
+  prop,
 } from 'ramda';
+import {
+  timeOnIceToSeconds,
+} from './misc';
 
-export const hotColdGames = 5;
-const pointsPerMatchThresholdForHot = {
-  C: 1.25,
-  LW: 1.25,
-  RW: 1.25,
-  D: 0.75,
-  G: 0.25,
+export const hotColdGames = 10;
+const pointsPerThousandSecondsToBeCold = {
+  C: 0.25,
+  LW: 0.25,
+  RW: 0.25,
+  D: 0.16,
 };
-const pointsPerMatchThresholdForCold = {
-  C: 0.20,
-  LW: 0.20,
-  RW: 0.20,
-  D: 0.25,
+const pointsPerThousandSecondsToBeHot = {
+  C: 0.9,
+  LW: 0.9,
+  RW: 0.9,
+  D: 0.5,
 };
-const plusMinusColdThreshold = -3;
-const pointsToBeHot = pos => hotColdGames * pointsPerMatchThresholdForHot[pos];
-const pointsToBeCold = pos => hotColdGames * pointsPerMatchThresholdForCold[pos];
+const plusMinusColdThreshold = -5;
 const veteranGames = 500;
 
-export const pointsInLastGames = gameLogs => sum(map(path(['stat', 'points']), take(hotColdGames, gameLogs)));
-export const cumulativePlusMinusInLastGames = gameLogs => sum(map(path(['stat', 'plusMinus']), take(hotColdGames, gameLogs)));
+export const getPointsInLastGames = pipe(
+  take(hotColdGames),
+  map(path(['stat', 'points'])),
+  sum,
+);
 
-export const isHot = (gameLogs, pos) => pointsInLastGames(gameLogs) >= pointsToBeHot(pos);
-export const isCold = (gameLogs, pos) => (pointsInLastGames(gameLogs) <= pointsToBeCold(pos)
-  && (pos === 'D' ? cumulativePlusMinusInLastGames(gameLogs) < plusMinusColdThreshold : true));
+export const getSecondsPlayedInLastGames = pipe(
+  take(hotColdGames),
+  map(path(['stat', 'timeOnIce'])),
+  map(timeOnIceToSeconds),
+  sum,
+);
+
+export const cumulativePlusMinusInLastGames = pipe(
+  take(hotColdGames),
+  map(path(['stat', 'plusMinus'])),
+  sum,
+);
+
+export const isHot = (gameLogs, pos) => {
+  console.log(gameLogs);
+  const secondInLastGames = getSecondsPlayedInLastGames(gameLogs);
+  console.log('points per 1000seconds', (getPointsInLastGames(gameLogs) / secondInLastGames * 1000));
+  console.log('threshhold for hot is ', pointsPerThousandSecondsToBeHot[pos]);
+  return (getPointsInLastGames(gameLogs) / secondInLastGames * 1000) >= pointsPerThousandSecondsToBeHot[pos];
+};
+
+export const isCold = (gameLogs, pos) => {
+  console.log(gameLogs);
+  const secondInLastGames = getSecondsPlayedInLastGames(gameLogs);
+  console.log('points per 1000seconds', (getPointsInLastGames(gameLogs) / secondInLastGames * 1000));
+  console.log('threshhold for hot is ', pointsPerThousandSecondsToBeCold[pos]);
+  return (
+    (getPointsInLastGames(gameLogs) / secondInLastGames * 1000) <= pointsPerThousandSecondsToBeCold[pos]
+    && (pos === 'D' ? cumulativePlusMinusInLastGames(gameLogs) < plusMinusColdThreshold : true)
+  );
+};
 
 export const isInjured = info => info.rosterStatus === 'I';
 export const isVeteran = stats => sum(map(pathOr(0, ['stat', 'games']), stats)) > veteranGames;
