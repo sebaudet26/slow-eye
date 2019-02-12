@@ -4,7 +4,7 @@ import graphqlApi from '../../utils/api';
 
 const makePlayersStreaksQuery = () => `
 {
-	playerStreaks {
+	playerStreaks (limit: 10) {
     id
     name
     games
@@ -19,7 +19,7 @@ const makePlayersStreaksQuery = () => `
 
 const makeTeamsStreaksQuery = () => `
 {
-	teamsStreaks {
+	teamsStreaks (limit: 10) {
     id
     teamName
     abbreviation

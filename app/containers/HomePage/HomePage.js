@@ -1,10 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
+import { take } from 'ramda';
 import StandingsTable from '../../components/Table/StandingsTable';
 import FireIcon from '../../images/fire.svg';
 import PowerIcon from '../../images/boxing.svg';
 import './style.scss';
+
+const HOT_PLAYERS_LIMIT = 5;
+const HOT_TEAMS_LIMIT = 10;
 
 const renderPlayerCard = player => (
   <a href={`/player?id=${player.id}`} className="card card-player" style={{ backgroundImage: `url("https://nhl.bamcontent.com/images/actionshots/${player.id}_low_resolution.jpg")` }}>
@@ -78,11 +82,10 @@ export default class HomePage extends React.Component {
               <div className="icon-wrapper">
                 <img src={FireIcon} />
               </div>
-              {' '}
-              Who's hot?
+              {' Who\'s hot?'}
               <a href="/hotplayers">View Full List</a>
             </h3>
-            {playersStreaks && playersStreaks.map(renderPlayerCard)}
+            {playersStreaks && take(HOT_PLAYERS_LIMIT, playersStreaks).map(renderPlayerCard)}
 
           </div>
           <div className="home-page-col">
@@ -90,11 +93,10 @@ export default class HomePage extends React.Component {
               <div className="icon-wrapper">
                 <img src={PowerIcon} />
               </div>
-              {' '}
-              Power Rankings
+              {' Power Rankings'}
               <a href="/powerrankings">View Full List</a>
             </h3>
-            {renderTeamCard && teamsStreaks.map(renderTeamCard)}
+            {renderTeamCard && take(HOT_TEAMS_LIMIT, teamsStreaks).map(renderTeamCard)}
           </div>
         </div>
       </div>

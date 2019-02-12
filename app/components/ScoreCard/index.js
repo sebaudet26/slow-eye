@@ -9,7 +9,7 @@ const ScoreCard = ({ game }) => (
     <div className="game-card">
       <div className="game-card-header">
         <span>{game.status.detailedState}</span>
-        {' - '}
+        {' '}
         <span>{getStatusText(game)}</span>
       </div>
       <div className="game-card-team">
