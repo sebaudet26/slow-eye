@@ -10,6 +10,8 @@ import TeamStatsPage from '../TeamStatsPage/Loadable';
 import ScorePage from '../ScorePage/Loadable';
 import GamePage from '../GamePage/Loadable';
 import ContributorsPage from '../Contributors/Loadable';
+import HotPlayersPage from '../HotPlayersPage/Loadable';
+import PowerRankingsPage from '../PowerRankingsPage/Loadable';
 import BlogPage from '../Blog/Loadable';
 import BlogPost from '../Post/Loadable';
 import NotFoundPage from '../NotFoundPage/Loadable';
@@ -39,6 +41,8 @@ const App = () => (
         <Route path="/game" component={GamePage} />
         <Route path="/drafts" component={DraftPage} />
         <Route path="/contributors" component={ContributorsPage} />
+        <Route path="/powerrankings" component={PowerRankingsPage} />
+        <Route path="/hotplayers" component={HotPlayersPage} />
         <Route path="/blog" component={BlogPage} />
         <Route path="/post" component={BlogPost} />
         <Route path="" component={NotFoundPage} />
