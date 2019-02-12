@@ -865,12 +865,14 @@ const schema = new GraphQLSchema({
         resolve: (root, args) => fetchDraft(args),
       },
       playerStreaks: {
+        args: { limit: { type: GraphQLInt } },
         type: GraphQLList(PlayerStreak),
-        resolve: calculatePlayerStreaks,
+        resolve: (r, args) => calculatePlayerStreaks(args),
       },
       teamsStreaks: {
+        args: { limit: { type: GraphQLInt } },
         type: GraphQLList(TeamStreak),
-        resolve: calculateTeamsStreaks,
+        resolve: (r, args) => calculateTeamsStreaks(args),
       },
     },
   }),

@@ -402,33 +402,16 @@ const fetchGameHighlights = async (id) => {
   }
 };
 
-const getRecordForLastGames = (nbGames, team) => {
-  let thisTeam = 'away';
-  let opponent = 'home';
-  if (game.teams[thisTeam].team.id === team.id) {
-    // team was away
-  } else {
-    // team was home
-    thisTeam = 'home';
-    opponent = 'away';
-  }
-  console.log(game);
-  if (game.teams[thisTeam].score > game.teams[opponent].score) {
-    return 2;
-  }
-  if (game.status.statusCode === '7') { // Final
-    return 0;
-  }
-  console.log('something weird happened in calculating team points streak');
-};
-
-const streakNumberOfGames = 15;
+const teamStreakDefaultNumberOfGames = 15;
+const playerStreakDefaultNumberOfGames = 5;
+const defaultTeamsLimit = 10;
+const defaultPlayersLimit = 5;
 
 const calculateTeamPointsStreak = (team) => {
   const gamesToConsider = pipe(
     prop('schedule'),
     reverse,
-    take(streakNumberOfGames + 1),
+    take(teamStreakDefaultNumberOfGames + 1),
     map(prop('game')),
   )(team);
 
@@ -446,7 +429,7 @@ const calculateTeamPointsStreak = (team) => {
     wins: latestRecord.wins - initialRecord.wins,
     losses: latestRecord.losses - initialRecord.losses,
     ot: latestRecord.ot - initialRecord.ot,
-    games: streakNumberOfGames,
+    games: teamStreakDefaultNumberOfGames,
   };
 
   return {
@@ -463,23 +446,23 @@ const calculatePlayerPointsStreak = player => ({
   streak: {
     points: pipe(
       prop('logs'),
-      take(5),
+      take(playerStreakDefaultNumberOfGames),
       map(path(['stat', 'points'])),
       sum,
     )(player),
     goals: pipe(
       prop('logs'),
-      take(5),
+      take(playerStreakDefaultNumberOfGames),
       map(path(['stat', 'goals'])),
       sum,
     )(player),
     assists: pipe(
       prop('logs'),
-      take(5),
+      take(playerStreakDefaultNumberOfGames),
       map(path(['stat', 'assists'])),
       sum,
     )(player),
-    games: 5,
+    games: playerStreakDefaultNumberOfGames,
   },
 });
 
@@ -489,7 +472,7 @@ const fetchTeamSchedule = async (teamId) => {
   return teamSchedule.dates.map(date => ({ date: date.date, game: date.games[0] }));
 };
 
-const calculateTeamsStreaks = async () => {
+const calculateTeamsStreaks = async (args = {}) => {
   try {
     const cached = await cache.get('team_streaks');
     if (cached) {
@@ -512,7 +495,7 @@ const calculateTeamsStreaks = async () => {
       sortWith([
         descend(path(['streak', 'points'])),
       ]),
-      take(10),
+      take(args.limit || defaultTeamsLimit),
     )(teamsWithSchedules);
     return teamsStreaks;
   } catch (e) {
@@ -520,7 +503,7 @@ const calculateTeamsStreaks = async () => {
   }
 };
 
-const calculatePlayerStreaks = async () => {
+const calculatePlayerStreaks = async (args = {}) => {
   try {
     const cached = await cache.get('players_streaks');
     if (cached) {
@@ -545,7 +528,7 @@ const calculatePlayerStreaks = async () => {
         descend(path(['streak', 'points'])),
         descend(path(['streak', 'goals'])),
       ]),
-      take(5),
+      take(args.limit || defaultPlayersLimit),
     )(playersLogs);
 
 
