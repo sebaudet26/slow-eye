@@ -79,8 +79,10 @@ export default class HomePage extends React.Component {
               </div>
               {' '}
               Who's hot? (Top 5)
+              <a href="">View Full List</a>
             </h3>
             {playersStreaks && playersStreaks.map(renderPlayerCard)}
+
           </div>
           <div className="home-page-col">
             <h3>
@@ -89,6 +91,7 @@ export default class HomePage extends React.Component {
               </div>
               {' '}
               Power Rankings (Top 10)
+              <a href="">View Full List</a>
             </h3>
             {renderTeamCard && teamsStreaks.map(renderTeamCard)}
           </div>
