@@ -97,7 +97,7 @@
           font-weight: 400;
           position: absolute;
           right: 15px;
-          bottom: 15px;
+          bottom: 10px;
 
           span {
             color: $white;
@@ -122,6 +122,7 @@
         font-size: 24px;
         font-weight: 500;
         color: $grey-3;
+        width: 30px;
       }
 
       &-team {
@@ -154,9 +155,14 @@
           }
 
           div:nth-child(2) {
-            color: $black;
-            font-size: 20px;
-            font-weight: 600;
+            color: $grey-2;
+            font-weight: 500;
+
+            span {
+              color: $black;
+              font-size: 20px;
+              font-weight: 600;
+            }
           }
         }
       }
@@ -185,6 +191,24 @@
 
     &-col {
       width: 100%;
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .card {
+    &-content {
+
+      &-team {
+        svg {
+          width: 50px !important;
+          height: 50px !important;;
+        }
+        span {
+          text-transform: capitalize;
+          font-size: 18px;
+        }
+      }
     }
   }
 }

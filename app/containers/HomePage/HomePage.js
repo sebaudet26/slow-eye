@@ -44,7 +44,8 @@ const renderTeamCard = (team, k) => (
         <div className="card-content-result-item">
           <div>{`Last ${team.games} games`}</div>
           <div>
-            {`${team.points} PTS (${team.wins}-${team.losses}-${team.ot})`}
+            <span>{`${team.points} PTS `}</span>
+            {`(${team.wins}-${team.losses}-${team.ot})`}
           </div>
         </div>
       </div>
@@ -78,7 +79,7 @@ export default class HomePage extends React.Component {
                 <img src={FireIcon} />
               </div>
               {' '}
-              Who's hot? (Top 5)
+              Who's hot?
               <a href="/hotplayers">View Full List</a>
             </h3>
             {playersStreaks && playersStreaks.map(renderPlayerCard)}
@@ -90,7 +91,7 @@ export default class HomePage extends React.Component {
                 <img src={PowerIcon} />
               </div>
               {' '}
-              Power Rankings (Top 10)
+              Power Rankings
               <a href="/powerrankings">View Full List</a>
             </h3>
             {renderTeamCard && teamsStreaks.map(renderTeamCard)}
