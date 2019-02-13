@@ -585,6 +585,22 @@ const PenaltyGameEvent = new GraphQLObjectType({
   },
 });
 
+const ShootoutScore = new GraphQLObjectType({
+  name: 'ShootoutScore',
+  fields: {
+    scores: { type: GraphQLInt, resolve: prop('scores') },
+    attempts: { type: GraphQLInt, resolve: prop('attempts') },
+  },
+});
+
+const Shootout = new GraphQLObjectType({
+  name: 'Shootout',
+  fields: {
+    away: { type: ShootoutScore, resolve: prop('away') },
+    home: { type: ShootoutScore, resolve: prop('home') },
+  },
+});
+
 const LiveFeed = new GraphQLObjectType({
   name: 'LiveFeed',
   fields: {
@@ -609,6 +625,10 @@ const LiveFeed = new GraphQLObjectType({
         pathOr([], ['liveData', 'plays', 'allPlays']),
         filter(d => d.result.eventTypeId === 'PENALTY'),
       ),
+    },
+    shootoutSummary: {
+      type: Shootout,
+      resolve: pathOr({}, ['liveData', 'linescore', 'shootoutInfo']),
     },
   },
 });

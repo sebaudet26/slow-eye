@@ -4,15 +4,16 @@ import { Helmet } from 'react-helmet';
 import ReactPlayer from 'react-player';
 import {
   filter,
-  join,
-  map,
-  isEmpty,
   groupBy,
+  isEmpty,
+  join,
+  last,
+  map,
   mapObjIndexed,
+  pathOr,
   pick,
   pipe,
   prop,
-  pathOr,
   propEq,
   reject,
   values,
@@ -35,7 +36,7 @@ import PlayerName from '../../components/PlayerName';
 import PlayerImage from '../../components/PlayerImage';
 import PlayIcon from '../../images/play-button.svg';
 
-const renderGoalInfo = onWatchVideo => goal => (
+const renderGoalInfo = (onWatchVideo, isShootout) => goal => (
   <div key={Math.random()} className="card-cell">
     <div className="goal-image card-cell-item">
       <PlayerImage
@@ -53,7 +54,10 @@ const renderGoalInfo = onWatchVideo => goal => (
         <PlayerName
           key={goal.scorer.id}
           id={goal.scorer.id}
-          name={`${goal.scorer.fullName} (${goal.scorer.seasonTotal})`}
+          name={[
+            goal.scorer.fullName,
+            isShootout ? '' : `(${goal.scorer.seasonTotal})`,
+          ].join(' ')}
         />
       </div>
       <div className="goal-details-assist">
@@ -67,11 +71,15 @@ const renderGoalInfo = onWatchVideo => goal => (
         ))
       }
       </div>
-      <div className="goal-details-time">
-        {goal.periodTime}
-        {' - '}
-        {goal.strength}
-      </div>
+      {
+        !isShootout
+          ? (
+            <div className="goal-details-time">
+              {`${goal.periodTime} - ${goal.strength}`}
+            </div>
+          )
+          : null
+      }
     </div>
     <div className="goal-video card-cell-item">
       { goal.videoUrl ? (
@@ -112,12 +120,16 @@ const renderPenaltyInfo = penalty => (
 const renderGoalEvents = (events = [], videos = [], period, onWatchVideo) => (
   <div className="card">
     <div className="card-header">
-      {`${getNumberWithOrdinal(period)} Period`}
+      {
+        period === 5 ? 'Shootout'
+          : period === 4 ? 'Overtime'
+            : `${getNumberWithOrdinal(period)} Period`
+      }
     </div>
     {
       filter(propEq('period', period), events).length
         ? map(
-          renderGoalInfo(onWatchVideo),
+          renderGoalInfo(onWatchVideo, period === 5),
           pipe(
             filter(propEq('period', period)),
             mapObjIndexed((o, k) => ({
@@ -135,7 +147,7 @@ const renderGoalEvents = (events = [], videos = [], period, onWatchVideo) => (
 const renderPenaltyEvents = (events, period) => (
   <div className="card">
     <div className="card-header">
-      {`${getNumberWithOrdinal(period)} Period`}
+      {period === 4 ? 'Overtime' : `${getNumberWithOrdinal(period)} Period`}
     </div>
     {
       filter(propEq('period', period), events).length
@@ -175,8 +187,10 @@ class GamePage extends React.Component {
 
     const { boxscore, liveFeed, highlights } = game;
     const groupedHighlights = groupBy(prop('period'), highlights.goals || []);
-    const { goalSummary = [], penaltySummary = [], lastTenPlays = [] } = liveFeed;
-    console.log('groupedHighlights', groupedHighlights);
+    const {
+      goalSummary = [], penaltySummary = [], lastTenPlays = [], shootoutSummary,
+    } = liveFeed;
+
     const watchVideo = videoUrl => this.setState({ watchVideoUrl: videoUrl });
 
     const awayTeamImage = (
@@ -212,12 +226,15 @@ class GamePage extends React.Component {
                 </div>
               </div>
               <div className="game-header-team-score">
-                {boxscore.away.teamStats.goals}
+                {boxscore.away.teamStats.goals + (shootoutSummary && shootoutSummary.away.scores > shootoutSummary.home.scores ? 1 : 0)}
               </div>
             </div>
             <div className="game-header-result">
               <div>{liveFeed.status.detailedState}</div>
-              <div>{getStatusText(game)}</div>
+              <div>
+                {getStatusText(game)}
+                {last(lastTenPlays) && last(lastTenPlays).period === 5 ? 'S/O' : null}
+              </div>
               {
                 highlights && highlights.recap ? (
                   <a
@@ -234,7 +251,7 @@ class GamePage extends React.Component {
             </div>
             <div className="game-header-team">
               <div className="game-header-team-score">
-                {boxscore.home.teamStats.goals}
+                {boxscore.home.teamStats.goals + (shootoutSummary && shootoutSummary.home.scores > shootoutSummary.away.scores ? 1 : 0)}
               </div>
               <div className="game-header-team-name">
                 <div className="city">{boxscore.home.team.location}</div>
@@ -302,11 +319,26 @@ class GamePage extends React.Component {
                   {renderGoalEvents(goalSummary, groupedHighlights['1'], 1, watchVideo)}
                   {renderGoalEvents(goalSummary, groupedHighlights['2'], 2, watchVideo)}
                   {renderGoalEvents(goalSummary, groupedHighlights['3'], 3, watchVideo)}
-                  {renderGoalEvents(goalSummary, groupedHighlights['4'], 4, watchVideo)}
+                  {
+                    last(lastTenPlays)
+                      && (last(lastTenPlays).period === 4 || last(lastTenPlays).period === 5)
+                      ? renderGoalEvents(goalSummary, groupedHighlights['4'], 4, watchVideo)
+                      : null
+                  }
+                  {
+                    last(lastTenPlays) && last(lastTenPlays).period === 5
+                      ? renderGoalEvents(goalSummary, groupedHighlights['5'], 5, watchVideo)
+                      : null
+                  }
                   <h3>Penalties</h3>
                   {renderPenaltyEvents(penaltySummary, 1)}
                   {renderPenaltyEvents(penaltySummary, 2)}
                   {renderPenaltyEvents(penaltySummary, 3)}
+                  {
+                    last(lastTenPlays) && (last(lastTenPlays).period === 4 || last(lastTenPlays).period === 5)
+                      ? renderPenaltyEvents(penaltySummary, 4)
+                      : null
+                  }
                 </div>
                 <div className="summary-col">
                   <h3>Team Stats</h3>
