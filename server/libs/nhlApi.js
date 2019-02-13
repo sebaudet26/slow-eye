@@ -378,7 +378,6 @@ const fetchDraft = async (args) => {
 const fetchGameHighlights = async (id) => {
   try {
     const resource = `/game/${id}/content`;
-    console.log(resource);
     const gameContentResponse = await nhlStatsApi(resource, 60 * 60);
     const goalHighlightsUrls = map(
       o => ({
@@ -409,7 +408,7 @@ const fetchGameHighlights = async (id) => {
       goals: goalHighlightsUrls,
     };
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 };
 

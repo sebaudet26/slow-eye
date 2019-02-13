@@ -29,7 +29,7 @@ import {
 import { logoForTeamName } from '../../utils/team';
 import { getStatusText } from '../../utils/game';
 import { saveToLS, getFromLS } from '../../utils/localStorage';
-import { getNumberWithOrdinal } from '../../utils/misc';
+import { toOrdinal } from '../../utils/misc';
 import BoxTable from '../../components/Table/BoxTable';
 import PlayerName from '../../components/PlayerName';
 import PlayerImage from '../../components/PlayerImage';
@@ -117,7 +117,7 @@ const renderGoalEvents = (events = [], videos = [], period) => (
       {
         period === 5 ? 'Shootout'
           : period === 4 ? 'Overtime'
-            : `${getNumberWithOrdinal(period)} Period`
+            : `${toOrdinal(period)} Period`
       }
     </div>
     {
@@ -141,7 +141,7 @@ const renderGoalEvents = (events = [], videos = [], period) => (
 const renderPenaltyEvents = (events, period) => (
   <div className="card">
     <div className="card-header">
-      {period === 4 ? 'Overtime' : `${getNumberWithOrdinal(period)} Period`}
+      {period === 4 ? 'Overtime' : `${toOrdinal(period)} Period`}
     </div>
     {
       filter(propEq('period', period), events).length

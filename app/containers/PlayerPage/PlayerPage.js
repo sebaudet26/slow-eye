@@ -16,7 +16,7 @@ import {
   sumNumbers, isActiveThisYear, sumStatsByPath, hasNHLExperience,
 } from '../../utils/player';
 import { saveToLS, getFromLS } from '../../utils/localStorage';
-import { getNumberWithOrdinal } from '../../utils/misc';
+import { toOrdinal } from '../../utils/misc';
 import './style.scss';
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -110,7 +110,7 @@ export default class PlayerPage extends React.Component {
                       {` ${draftInfo.team.name}`}
                     </p>
                     <p>
-                      <span>{`${getNumberWithOrdinal(draftInfo.round)}  Round,`}</span>
+                      <span>{`${toOrdinal(draftInfo.round)}  Round,`}</span>
                       <span>{`#${draftInfo.pickOverall} Overall, ${draftInfo.year} NHL Draft`}</span>
                     </p>
                   </div>
