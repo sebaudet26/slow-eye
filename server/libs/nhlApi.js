@@ -173,7 +173,7 @@ const fetchAllYearsStatsForPlayerId = async (playerId) => {
     const internationalCompetitions = playerStatsData.stats[0].splits.filter(stat => contains(stat.league.name, internationalLeagueNames));
     // if nhler, return nhl seasons and international competitions only
     if (nhlSeasons.length) {
-      return [...nhlSeasons, ...internationalCompetitions];
+      return [...internationalCompetitions, ...nhlSeasons];
     }
     // if not, return everything we have
     return path(['stats', 0, 'splits'], playerStatsData);
@@ -184,7 +184,6 @@ const fetchAllYearsStatsForPlayerId = async (playerId) => {
 
 const fetchAllYearsPlayoffStatsForPlayerId = async (playerId) => {
   const resource = `/people/${playerId}/stats?stats=yearByYearPlayoffs`;
-  console.log(resource);
   const playerStatsData = await nhlStatsApi(resource);
   const usefulLeagueIds = [133];
   const isStatUseful = seasonStat => contains(path(['league', 'id'], seasonStat), usefulLeagueIds);
