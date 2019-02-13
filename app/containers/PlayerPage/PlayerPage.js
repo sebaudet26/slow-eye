@@ -257,41 +257,49 @@ export default class PlayerPage extends React.Component {
           </div>
         </div>
         {
-          <Tabs
-            defaultIndex={Number(getFromLS('playerTabIndex')) || 0}
-            onSelect={i => saveToLS('playerTabIndex', i)}
-          >
-            <TabList>
-              <Tab>Regular Season</Tab>
-              {careerPlayoffStats.length ? <Tab>Playoffs</Tab> : null}
-              {internationalStats.length ? <Tab>International</Tab> : null}
-              {logs.length ? <Tab>Game Logs</Tab> : null}
-            </TabList>
-            {careerStats.length && (
-            <TabPanel>
-              <h3>Regular Season</h3>
+          internationalStats.length || logs.length ? (
+            <Tabs
+              defaultIndex={Number(getFromLS('playerTabIndex')) || 0}
+              onSelect={i => saveToLS('playerTabIndex', i)}
+            >
+              <TabList>
+                <Tab>Career Stats</Tab>
+                {internationalStats.length ? <Tab>International</Tab> : null}
+                {logs.length ? <Tab>Game Logs</Tab> : null}
+              </TabList>
+              {careerStats.length && (
+              <TabPanel>
+                <h3>Season Stats</h3>
+                <CareerStatsTable stats={proStats} info={info} showTotalRow={isPro} />
+                {careerPlayoffStats.length ? (
+                  <div>
+                    <h3>Playoff Stats</h3>
+                    <CareerStatsTable stats={careerPlayoffStats} info={info} showTotalRow={isPro} />
+                  </div>
+                ) : null}
+              </TabPanel>
+              )}
+              {internationalStats.length ? (
+                <TabPanel>
+                  <h3>International</h3>
+                  <CareerStatsTable stats={internationalStats} info={info} showTotalRow={false} />
+                </TabPanel>
+              ) : null}
+              {logs.length ? (
+                <TabPanel>
+                  <h3>Game Logs</h3>
+                  <GameLogTable logs={logs} info={info} />
+                </TabPanel>
+              ) : null}
+            </Tabs>
+          ) : (
+            <div>
+              <h3>Season Stats</h3>
               <CareerStatsTable stats={proStats} info={info} showTotalRow={isPro} />
-            </TabPanel>
-            )}
-            {careerPlayoffStats.length ? (
-              <TabPanel>
-                <h3>Playoffs</h3>
-                <CareerStatsTable stats={careerPlayoffStats} info={info} showTotalRow={isPro} />
-              </TabPanel>
-            ) : null}
-            {internationalStats.length ? (
-              <TabPanel>
-                <h3>International</h3>
-                <CareerStatsTable stats={internationalStats} info={info} showTotalRow={false} />
-              </TabPanel>
-            ) : null}
-            {logs.length ? (
-              <TabPanel>
-                <h3>Game Logs</h3>
-                <GameLogTable logs={logs} info={info} />
-              </TabPanel>
-            ) : null}
-          </Tabs>
+              <h3>Playoff Stats</h3>
+              <CareerStatsTable stats={careerPlayoffStats} info={info} showTotalRow={isPro} />
+            </div>
+          )
         }
 
       </div>
