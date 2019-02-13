@@ -116,12 +116,11 @@
 
 .slick-slider {
   height: 64px;
-  background: #f9fcff;
   box-shadow: $shadow;
   border-radius: 6px;
 
   .slick-slide {
-    background: #f9fcff;
+    background: $white;
     height: 64px;
     display: flex;
     align-items: center;
