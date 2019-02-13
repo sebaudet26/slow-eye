@@ -12,6 +12,7 @@ import GamePage from '../GamePage/Loadable';
 import ContributorsPage from '../Contributors/Loadable';
 import HotPlayersPage from '../HotPlayersPage/Loadable';
 import PowerRankingsPage from '../PowerRankingsPage/Loadable';
+import SealPage from '../SealPage/Loadable';
 import BlogPage from '../Blog/Loadable';
 import BlogPost from '../Post/Loadable';
 import NotFoundPage from '../NotFoundPage/Loadable';
@@ -43,6 +44,7 @@ const App = () => (
         <Route path="/contributors" component={ContributorsPage} />
         <Route path="/powerrankings" component={PowerRankingsPage} />
         <Route path="/hotplayers" component={HotPlayersPage} />
+        <Route path="/seal" component={SealPage} />
         <Route path="/blog" component={BlogPage} />
         <Route path="/post" component={BlogPost} />
         <Route path="" component={NotFoundPage} />
