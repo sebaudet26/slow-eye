@@ -49,18 +49,12 @@ export const cumulativePlusMinusInLastGames = pipe(
 );
 
 export const isHot = (gameLogs, pos) => {
-  console.log(gameLogs);
   const secondInLastGames = getSecondsPlayedInLastGames(gameLogs);
-  console.log('points per 1000seconds', (getPointsInLastGames(gameLogs) / secondInLastGames * 1000));
-  console.log('threshhold for hot is ', pointsPerThousandSecondsToBeHot[pos]);
   return (getPointsInLastGames(gameLogs) / secondInLastGames * 1000) >= pointsPerThousandSecondsToBeHot[pos];
 };
 
 export const isCold = (gameLogs, pos) => {
-  console.log(gameLogs);
   const secondInLastGames = getSecondsPlayedInLastGames(gameLogs);
-  console.log('points per 1000seconds', (getPointsInLastGames(gameLogs) / secondInLastGames * 1000));
-  console.log('threshhold for hot is ', pointsPerThousandSecondsToBeCold[pos]);
   return (
     (getPointsInLastGames(gameLogs) / secondInLastGames * 1000) <= pointsPerThousandSecondsToBeCold[pos]
     && (pos === 'D' ? cumulativePlusMinusInLastGames(gameLogs) < plusMinusColdThreshold : true)

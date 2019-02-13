@@ -12,7 +12,7 @@ import 'react-table/react-table.css';
 import './styles.scss';
 
 const DraftTable = ({
-  draft, filters, year, round,
+  draft, filters, year, round, pageLength,
 }) => (
   <ReactTable
     data={draft}
@@ -85,8 +85,8 @@ const DraftTable = ({
         id: 'position',
         accessor: prop('position'),
         className: 'text-left',
-        maxWidth: 75,
-        minWidth: 50,
+        maxWidth: 85,
+        minWidth: 85,
         filterMethod: (filter, row) => {
           if (filter.value === 'S') {
             return row[filter.id] !== 'G';
@@ -150,7 +150,8 @@ const DraftTable = ({
     defaultSortAsc
     showPagination
     className="-striped draft-table"
-    defaultPageSize={31}
+    pageSize={pageLength || 30}
+    defaultPageSize={30}
   />
 );
 

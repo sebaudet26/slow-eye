@@ -1,18 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import ReactPlayer from 'react-player';
 import {
   filter,
-  join,
-  map,
-  isEmpty,
   groupBy,
+  isEmpty,
+  join,
+  last,
+  map,
   mapObjIndexed,
+  pathOr,
   pick,
   pipe,
   prop,
-  pathOr,
   propEq,
   reject,
   values,
@@ -29,13 +29,13 @@ import {
 import { logoForTeamName } from '../../utils/team';
 import { getStatusText } from '../../utils/game';
 import { saveToLS, getFromLS } from '../../utils/localStorage';
-import { getNumberWithOrdinal } from '../../utils/misc';
+import { toOrdinal } from '../../utils/misc';
 import BoxTable from '../../components/Table/BoxTable';
 import PlayerName from '../../components/PlayerName';
 import PlayerImage from '../../components/PlayerImage';
-import PlayIcon from '../../images/play-button.svg';
+import VideoPlayer from '../../components/VideoPlayer';
 
-const renderGoalInfo = onWatchVideo => goal => (
+const renderGoalInfo = isShootout => goal => (
   <div key={Math.random()} className="card-cell">
     <div className="goal-image card-cell-item">
       <PlayerImage
@@ -53,7 +53,10 @@ const renderGoalInfo = onWatchVideo => goal => (
         <PlayerName
           key={goal.scorer.id}
           id={goal.scorer.id}
-          name={`${goal.scorer.fullName} (${goal.scorer.seasonTotal})`}
+          name={[
+            goal.scorer.fullName,
+            isShootout ? '' : `(${goal.scorer.seasonTotal})`,
+          ].join(' ')}
         />
       </div>
       <div className="goal-details-assist">
@@ -67,19 +70,18 @@ const renderGoalInfo = onWatchVideo => goal => (
         ))
       }
       </div>
-      <div className="goal-details-time">
-        {goal.periodTime}
-        {' - '}
-        {goal.strength}
-      </div>
+      {
+        !isShootout
+          ? (
+            <div className="goal-details-time">
+              {`${goal.periodTime} - ${goal.strength}`}
+            </div>
+          )
+          : null
+      }
     </div>
     <div className="goal-video card-cell-item">
-      { goal.videoUrl ? (
-        <a className="play-link" onClick={() => onWatchVideo(goal.videoUrl)}>
-          <img src={PlayIcon} alt="Play Icon" />
-        </a>
-      ) : (<div />)
-      }
+      {goal.videoUrl ? <VideoPlayer url={goal.videoUrl} /> : (<div />)}
     </div>
   </div>
 );
@@ -109,15 +111,19 @@ const renderPenaltyInfo = penalty => (
   </div>
 );
 
-const renderGoalEvents = (events = [], videos = [], period, onWatchVideo) => (
+const renderGoalEvents = (events = [], videos = [], period) => (
   <div className="card">
     <div className="card-header">
-      {`${getNumberWithOrdinal(period)} Period`}
+      {
+        period === 5 ? 'Shootout'
+          : period === 4 ? 'Overtime'
+            : `${toOrdinal(period)} Period`
+      }
     </div>
     {
       filter(propEq('period', period), events).length
         ? map(
-          renderGoalInfo(onWatchVideo),
+          renderGoalInfo(period === 5),
           pipe(
             filter(propEq('period', period)),
             mapObjIndexed((o, k) => ({
@@ -135,7 +141,7 @@ const renderGoalEvents = (events = [], videos = [], period, onWatchVideo) => (
 const renderPenaltyEvents = (events, period) => (
   <div className="card">
     <div className="card-header">
-      {`${getNumberWithOrdinal(period)} Period`}
+      {period === 4 ? 'Overtime' : `${toOrdinal(period)} Period`}
     </div>
     {
       filter(propEq('period', period), events).length
@@ -146,13 +152,6 @@ const renderPenaltyEvents = (events, period) => (
 );
 
 class GamePage extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      watchVideoUrl: false,
-    };
-  }
-
   componentDidMount() {
     const { fetchGameBoxscore, gameId, game } = this.props;
     if (gameId && isEmpty(game)) {
@@ -167,7 +166,6 @@ class GamePage extends React.Component {
 
   render() {
     const { game } = this.props;
-    const { watchVideoUrl } = this.state;
 
     if (!game || !game.boxscore || !game.liveFeed) {
       return null;
@@ -175,9 +173,9 @@ class GamePage extends React.Component {
 
     const { boxscore, liveFeed, highlights } = game;
     const groupedHighlights = groupBy(prop('period'), highlights.goals || []);
-    const { goalSummary = [], penaltySummary = [], lastTenPlays = [] } = liveFeed;
-    console.log('groupedHighlights', groupedHighlights);
-    const watchVideo = videoUrl => this.setState({ watchVideoUrl: videoUrl });
+    const {
+      goalSummary = [], penaltySummary = [], lastTenPlays = [], shootoutSummary,
+    } = liveFeed;
 
     const awayTeamImage = (
       <svg key={Math.random()} className="game-card-team-img">
@@ -212,29 +210,27 @@ class GamePage extends React.Component {
                 </div>
               </div>
               <div className="game-header-team-score">
-                {boxscore.away.teamStats.goals}
+                {boxscore.away.teamStats.goals + (shootoutSummary && shootoutSummary.away.scores > shootoutSummary.home.scores ? 1 : 0)}
               </div>
             </div>
             <div className="game-header-result">
               <div>{liveFeed.status.detailedState}</div>
-              <div>{getStatusText(game)}</div>
+              <div>
+                {getStatusText(game)}
+                {last(lastTenPlays) && last(lastTenPlays).period === 5 ? 'S/O' : null}
+              </div>
               {
                 highlights && highlights.recap ? (
-                  <a
-                    className="play-link"
-                    style={{
-                      textAlign: 'center', width: '100%', marginTop: '5px',
-                    }}
-                    onClick={() => watchVideo(highlights.recap)}
-                  >
-                    <img src={PlayIcon} alt="Play Icon" />
-                  </a>
+                  <VideoPlayer
+                    url={highlights.recap}
+                    styles={{ textAlign: 'center', width: '100%', marginTop: '5px' }}
+                  />
                 ) : null
               }
             </div>
             <div className="game-header-team">
               <div className="game-header-team-score">
-                {boxscore.home.teamStats.goals}
+                {boxscore.home.teamStats.goals + (shootoutSummary && shootoutSummary.home.scores > shootoutSummary.away.scores ? 1 : 0)}
               </div>
               <div className="game-header-team-name">
                 <div className="city">{boxscore.home.team.location}</div>
@@ -247,23 +243,6 @@ class GamePage extends React.Component {
               {homeTeamImage}
             </div>
           </div>
-          {
-            watchVideoUrl ? (
-              <div className="video-wrapper">
-                <div
-                  className="video-close"
-                  onClick={() => this.setState({ watchVideoUrl: null })}
-                />
-                <ReactPlayer
-                  url={this.state.watchVideoUrl}
-                  playing
-                  className="video-player"
-                  controls
-                  loop={false}
-                />
-              </div>
-            ) : null
-          }
           <Tabs
             defaultIndex={Number(getFromLS('gameTabIndex')) || 1}
             onSelect={i => saveToLS('gameTabIndex', i)}
@@ -299,13 +278,29 @@ class GamePage extends React.Component {
               <div className="summary">
                 <div className="summary-col">
                   <h3>Scoring</h3>
-                  {renderGoalEvents(goalSummary, groupedHighlights['1'], 1, watchVideo)}
-                  {renderGoalEvents(goalSummary, groupedHighlights['2'], 2, watchVideo)}
-                  {renderGoalEvents(goalSummary, groupedHighlights['3'], 3, watchVideo)}
+                  {renderGoalEvents(goalSummary, groupedHighlights['1'], 1)}
+                  {renderGoalEvents(goalSummary, groupedHighlights['2'], 2)}
+                  {renderGoalEvents(goalSummary, groupedHighlights['3'], 3)}
+                  {
+                    last(lastTenPlays)
+                      && (last(lastTenPlays).period === 4 || last(lastTenPlays).period === 5)
+                      ? renderGoalEvents(goalSummary, groupedHighlights['4'], 4)
+                      : null
+                  }
+                  {
+                    last(lastTenPlays) && last(lastTenPlays).period === 5
+                      ? renderGoalEvents(goalSummary, groupedHighlights['5'], 5)
+                      : null
+                  }
                   <h3>Penalties</h3>
                   {renderPenaltyEvents(penaltySummary, 1)}
                   {renderPenaltyEvents(penaltySummary, 2)}
                   {renderPenaltyEvents(penaltySummary, 3)}
+                  {
+                    last(lastTenPlays) && (last(lastTenPlays).period === 4 || last(lastTenPlays).period === 5)
+                      ? renderPenaltyEvents(penaltySummary, 4)
+                      : null
+                  }
                 </div>
                 <div className="summary-col">
                   <h3>Team Stats</h3>

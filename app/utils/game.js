@@ -1,6 +1,7 @@
 import { last } from 'ramda';
 import moment from 'moment';
-//
+import { toOrdinal } from './misc';
+
 // export const gameStatusLabels = {
 //   1: 'Scheduled',
 //   2: 'Pregame',
@@ -18,6 +19,9 @@ export const calculateGameTime = (lastEvent) => {
   }
   if (lastEvent.period === 4) {
     return `Overtime ${lastEvent.periodTimeRemaining}`;
+  }
+  if (lastEvent.periodTimeRemaining === '00:00') {
+    return `${toOrdinal(lastEvent.period)} Intermission`;
   }
   return `Period ${lastEvent.period} ${lastEvent.periodTimeRemaining}`;
 };

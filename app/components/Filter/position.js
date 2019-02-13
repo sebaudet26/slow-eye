@@ -2,12 +2,16 @@ import React from 'react';
 import positions from '../../constants/positions';
 import BaseFilter from './base';
 
+const all = {
+  value: '',
+  label: 'All',
+};
 
-const PositionFilter = ({ selected, onChange }) => (
+const PositionFilter = ({ selected, onChange, enableAllOption }) => (
   <BaseFilter
     selected={selected}
     onChange={onChange}
-    options={positions}
+    options={enableAllOption ? [all, ...positions] : positions}
     label="Filter By Position"
   />
 );

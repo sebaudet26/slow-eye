@@ -160,7 +160,7 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
           maxWidth: 85,
           minWidth: 60,
           show: info.primaryPosition.name !== 'Goalie',
-          accessor: sumNumbers('-', ['stat', 'shotPct']),
+          accessor: pathOr('-', ['stat', 'shotPct']),
           Cell: row => (
             <span>{typeof row.value === 'number' ? Number(row.value).toFixed(1) : '-'}</span>
           ),

@@ -16,6 +16,16 @@ const makeGameBoxscoreQuery = id => `
       }
     }
     liveFeed {
+      shootoutSummary {
+        away {
+          scores
+          attempts
+        }
+        home {
+          scores
+          attempts
+        }
+      }
       penaltySummary {
         type
         severity

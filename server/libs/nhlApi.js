@@ -154,30 +154,40 @@ const fetchPlayoffStatsForPlayerId = async (playerId, args) => {
   return path(['stats', 0, 'splits'], playerStatsData);
 };
 
+// NHL = 133
+// AHL = 153
+// International leagues have no id, so we have to use the names
+// WJC-A
+// WC-A
+// Olympics
+const internationalLeagueNames = ['WJC-A', 'WC-A', 'Olympics'];
+
 const fetchAllYearsStatsForPlayerId = async (playerId) => {
-  const resource = `/people/${playerId}/stats?stats=yearByYear`;
-  const playerStatsData = await nhlStatsApi(resource);
-  // NHL = 133
-  // AHL = 153
-  const usefulLeagueIds = [133];
-  const isStatUseful = seasonStat => contains(path(['league', 'id'], seasonStat), usefulLeagueIds);
-  const nhlSeasons = filter(isStatUseful, path(['stats', 0, 'splits'], playerStatsData));
-  // if nhler, return nhl seasons only
-  if (nhlSeasons.length) {
-    return nhlSeasons;
+  try {
+    const resource = `/people/${playerId}/stats?stats=yearByYear`;
+    const playerStatsData = await nhlStatsApi(resource);
+    const usefulLeagueIds = [133];
+    const isStatUseful = seasonStat => contains(path(['league', 'id'], seasonStat), usefulLeagueIds);
+    const isStatInternational = stat => contains(path(['league', 'name', stat], internationalLeagueNames));
+    const nhlSeasons = filter(isStatUseful, path(['stats', 0, 'splits'], playerStatsData));
+    const internationalCompetitions = playerStatsData.stats[0].splits.filter(stat => contains(stat.league.name, internationalLeagueNames));
+    // if nhler, return nhl seasons and international competitions only
+    if (nhlSeasons.length) {
+      return [...internationalCompetitions, ...nhlSeasons];
+    }
+    // if not, return everything we have
+    return path(['stats', 0, 'splits'], playerStatsData);
+  } catch (e) {
+    console.error(e);
   }
-  // if not, return everything we have
-  return path(['stats', 0, 'splits'], playerStatsData);
 };
 
 const fetchAllYearsPlayoffStatsForPlayerId = async (playerId) => {
   const resource = `/people/${playerId}/stats?stats=yearByYearPlayoffs`;
   const playerStatsData = await nhlStatsApi(resource);
-  // NHL = 133
-  // AHL = 153
   const usefulLeagueIds = [133];
   const isStatUseful = seasonStat => contains(path(['league', 'id'], seasonStat), usefulLeagueIds);
-  return filter(isStatUseful, path(['stats', 0, 'splits'], playerStatsData));
+  return filter(isStatUseful, path(['stats', 0, 'splits'], playerStatsData)) || [];
 };
 
 const fetchStatsForTeamId = async (teamId) => {
@@ -382,7 +392,7 @@ const fetchGameHighlights = async (id) => {
           pathOr('', ['url']),
         )(o),
       }),
-      filter(o => o.type === 'GOAL', gameContentResponse.media.milestones.items),
+      filter(o => o.type === 'GOAL', pathOr([], ['media', 'milestones', 'items'], gameContentResponse)),
     );
     const gameRecapUrl = pipe(
       pathOr([], ['media', 'epg']),
@@ -398,7 +408,7 @@ const fetchGameHighlights = async (id) => {
       goals: goalHighlightsUrls,
     };
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 };
 
