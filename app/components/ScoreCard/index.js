@@ -58,7 +58,7 @@ const ScoreCard = ({ game }) => (
           pathOr(false, ['highlights', 'recap'], game)
             ? (
               <span>
-                <VideoPlayer url={game.highlights.recap} callToAction="Watch Video" />
+                <VideoPlayer url={game.highlights.recap} callToAction="Game Recap" />
               </span>
             )
             : null
