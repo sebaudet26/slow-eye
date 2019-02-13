@@ -4,31 +4,6 @@
   padding: 10px;
 }
 
-.video {
-  &-player {
-    position: fixed;
-    left: calc(50% - 315px);
-    z-index: 150;
-  }
-
-  &-close {
-    position: fixed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.75);
-    width: 100% !important;
-    height: 100% !important;
-    top: 0;
-    left: 0;
-    z-index: 100;
-  }
-}
-
-.play-link {
-  justify-content: center;
-}
-
 .game {
   &-header {
     padding: 15px 20px;

@@ -378,6 +378,7 @@ const fetchDraft = async (args) => {
 const fetchGameHighlights = async (id) => {
   try {
     const resource = `/game/${id}/content`;
+    console.log(resource);
     const gameContentResponse = await nhlStatsApi(resource, 60 * 60);
     const goalHighlightsUrls = map(
       o => ({
@@ -392,7 +393,7 @@ const fetchGameHighlights = async (id) => {
           pathOr('', ['url']),
         )(o),
       }),
-      filter(o => o.type === 'GOAL', gameContentResponse.media.milestones.items),
+      filter(o => o.type === 'GOAL', pathOr([], ['media', 'milestones', 'items'], gameContentResponse)),
     );
     const gameRecapUrl = pipe(
       pathOr([], ['media', 'epg']),

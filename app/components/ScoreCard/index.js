@@ -1,6 +1,8 @@
 import React from 'react';
+import { pathOr } from 'ramda';
 import { isScheduled, getStatusText } from '../../utils/game';
 import { smallLogoForTeamName, calculatePoints } from '../../utils/team';
+import VideoPlayer from '../VideoPlayer';
 import PlayIcon from '../../images/play-button.svg';
 import './styles.scss';
 
@@ -42,17 +44,26 @@ const ScoreCard = ({ game }) => (
           }
         </div>
       </div>
-      {game.status.detailedState === 'Scheduled' ? null : (
-        <div className="game-card-footer">
-          <a href={`/game?id=${game.id}`}>
-            Summary
-          </a>
-          <a href={`/game?id=${game.id}`}>
-            <img src={PlayIcon} />
-            Watch Recap
-          </a>
-        </div>
-      )}
+      <div className="game-card-footer">
+        {
+          game.status.detailedState === 'Scheduled'
+            ? null
+            : (
+              <a href={`/game?id=${game.id}`}>
+              Summary
+              </a>
+            )
+        }
+        {
+          pathOr(false, ['highlights', 'recap'], game)
+            ? (
+              <span>
+                <VideoPlayer url={game.highlights.recap} callToAction="Watch Video" />
+              </span>
+            )
+            : null
+        }
+      </div>
     </div>
   </div>
 );
