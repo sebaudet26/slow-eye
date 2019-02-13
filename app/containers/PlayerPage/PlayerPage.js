@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import {
-  isEmpty, path,
+  isEmpty, path, reject, filter, contains,
 } from 'ramda';
 import {
   Tab, Tabs, TabList, TabPanel,
@@ -29,6 +29,7 @@ export default class PlayerPage extends React.Component {
 
   render() {
     const { player } = this.props;
+    console.log(player);
     if (isEmpty(player)) {
       return (<div />);
     }
@@ -46,6 +47,10 @@ export default class PlayerPage extends React.Component {
     const lastSeason = careerStats[careerStats.length - 1];
     const isActive = isActiveThisYear(lastSeason);
     const isPro = hasNHLExperience(careerStats);
+    const internationalLeagueNames = ['WJC-A', 'WC-A', 'Olympics'];
+    const proStats = reject(stat => contains(stat.league.name, internationalLeagueNames))(careerStats);
+    const internationalStats = filter(stat => contains(stat.league.name, internationalLeagueNames))(careerStats);
+    console.log('internationalStats', internationalStats);
 
     return (
       <div>
@@ -252,62 +257,41 @@ export default class PlayerPage extends React.Component {
           </div>
         </div>
         {
-          active === true ? (
-            <Tabs
-              defaultIndex={Number(getFromLS('playerTabIndex')) || 0}
-              onSelect={i => saveToLS('playerTabIndex', i)}
-            >
-              <TabList>
-                <Tab>Career Stats</Tab>
-                <Tab>Game Logs</Tab>
-              </TabList>
+          <Tabs
+            defaultIndex={Number(getFromLS('playerTabIndex')) || 0}
+            onSelect={i => saveToLS('playerTabIndex', i)}
+          >
+            <TabList>
+              <Tab>Regular Season</Tab>
+              {careerPlayoffStats.length ? <Tab>Playoffs</Tab> : null}
+              {internationalStats.length ? <Tab>International</Tab> : null}
+              {logs.length ? <Tab>Game Logs</Tab> : null}
+            </TabList>
+            {careerStats.length && (
+            <TabPanel>
+              <h3>Regular Season</h3>
+              <CareerStatsTable stats={proStats} info={info} showTotalRow={isPro} />
+            </TabPanel>
+            )}
+            {careerPlayoffStats.length ? (
               <TabPanel>
-                <h3>Season Stats</h3>
-                {
-                  careerStats.length
-                    ? <CareerStatsTable stats={careerStats} info={info} showTotalRow={isPro} />
-                    : null
-                }
-                {
-                  careerPlayoffStats.length
-                    ? (
-                      <div>
-                        <h3>Playoff Stats</h3>
-                        <CareerStatsTable stats={careerPlayoffStats} info={info} showTotalRow={isPro} />
-                      </div>
-                    ) : null
-                }
+                <h3>Playoffs</h3>
+                <CareerStatsTable stats={careerPlayoffStats} info={info} showTotalRow={isPro} />
               </TabPanel>
+            ) : null}
+            {internationalStats.length ? (
+              <TabPanel>
+                <h3>International</h3>
+                <CareerStatsTable stats={internationalStats} info={info} showTotalRow={false} />
+              </TabPanel>
+            ) : null}
+            {logs.length ? (
               <TabPanel>
                 <h3>Game Logs</h3>
                 <GameLogTable logs={logs} info={info} />
               </TabPanel>
-            </Tabs>
-          ) : (
-            <div>
-              <h3>Season Stats</h3>
-              {
-              careerStats.length
-                ? (
-                  <CareerStatsTable
-                    stats={careerStats}
-                    info={info}
-                    showTotalRow={isPro}
-                  />
-                )
-                : null
-              }
-              {
-                careerPlayoffStats.length
-                  ? (
-                    <div>
-                      <h3>Playoff Stats</h3>
-                      <CareerStatsTable stats={careerPlayoffStats} info={info} showTotalRow={isPro} />
-                    </div>
-                  ) : null
-              }
-            </div>
-          )
+            ) : null}
+          </Tabs>
         }
 
       </div>
