@@ -85,7 +85,7 @@ const renderGoalInfo = onWatchVideo => goal => (
 );
 
 const renderPenaltyInfo = penalty => (
-  <div key={Math.random()} className="card-cell ">
+  <div key={Math.random()} className="card-cell penalty">
     <div className="card-cell-item penalty-team">
       <svg className="penalty-img" key={Math.random()}>
         <use xlinkHref={`/images/teams/season/20182019.svg#team-${penalty.team.id}-20182019-light`} />
@@ -100,8 +100,10 @@ const renderPenaltyInfo = penalty => (
       />
     </div>
     <div className="card-cell-item penalty-info">
-      {penalty.type}
-      {' - '}
+      <span className="hidden-mobile">
+        {penalty.type}
+        {' - '}
+      </span>
       {`${penalty.minutes} mins`}
     </div>
   </div>
