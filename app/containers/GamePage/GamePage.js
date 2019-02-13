@@ -302,6 +302,7 @@ class GamePage extends React.Component {
                   {renderGoalEvents(goalSummary, groupedHighlights['1'], 1, watchVideo)}
                   {renderGoalEvents(goalSummary, groupedHighlights['2'], 2, watchVideo)}
                   {renderGoalEvents(goalSummary, groupedHighlights['3'], 3, watchVideo)}
+                  {renderGoalEvents(goalSummary, groupedHighlights['4'], 4, watchVideo)}
                   <h3>Penalties</h3>
                   {renderPenaltyEvents(penaltySummary, 1)}
                   {renderPenaltyEvents(penaltySummary, 2)}

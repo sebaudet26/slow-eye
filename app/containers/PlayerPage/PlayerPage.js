@@ -29,7 +29,7 @@ export default class PlayerPage extends React.Component {
 
   render() {
     const { player } = this.props;
-    console.log(player);
+    console.log('player', player);
     if (isEmpty(player)) {
       return (<div />);
     }
@@ -45,7 +45,6 @@ export default class PlayerPage extends React.Component {
       nationality,
     } = info;
     const lastSeason = careerStats[careerStats.length - 1];
-    console.log(lastSeason);
     const isActive = isActiveThisYear(lastSeason);
     const isPro = hasNHLExperience(careerStats);
     const internationalLeagueNames = ['WJC-A', 'WC-A', 'Olympics'];
