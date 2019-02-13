@@ -44,12 +44,30 @@
       width: 400px;
       justify-content: center;
 
+      &:first-child {
+        justify-content: flex-end;
+
+        .game-header-team-score {
+          margin-right: 25px;
+        }
+      }
+
+      &:last-child {
+        text-align: right;
+        justify-content: flex-start;
+
+        .game-header-team-score {
+          margin-left: 25px;
+        }
+      }
+
       svg {
         width: 100px;
         height: 100px;
       }
 
       &-name {
+        width: 150px;
 
         .team {
           font-weight: 500;
@@ -62,14 +80,9 @@
         }
       }
 
-      &:last-child {
-        text-align: right;
-      }
-
       &-score {
         font-size: $h1;
         font-weight: 500;
-        margin: 0 25px;
       }
     }
 
@@ -301,6 +314,19 @@
 }
 
 @media screen and (max-width: 800px) {
+  .game {
+    &-header {
+      &-team {
+        &-name {
+          width:auto;
+        }
+
+        &-score {
+          margin: 0 25px;
+        }
+      }
+    }
+  }
   .summary {
     display: block;
 
