@@ -193,7 +193,7 @@ class GamePage extends React.Component {
       <div>
         <Helmet>
           <title>
-            {`${boxscore.away.team.teamName} @ ${boxscore.home.team.teamName}`}
+            {`${boxscore.away.team.teamName} @ ${boxscore.home.team.teamName} - SealStats.com`}
           </title>
           <meta name="description" content={`${boxscore.away.team.teamName} vs. ${boxscore.home.team.teamName} game page. Seal Stats is the best place to view NHL stats. User-friendly and fast. `} />
         </Helmet>

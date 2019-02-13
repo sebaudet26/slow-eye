@@ -62,7 +62,7 @@ export default class TeamPage extends React.Component {
     return (isEmpty(team) ? null : (
       <div className="team-page">
         <Helmet>
-          <title>{team.name}</title>
+          <title>{`${team.name} - SealStats.com`}</title>
           <meta
             name="description"
             content={`${team.name} roster and stats. Seal Stats is the best place to view NHL stats. User-friendly and fast. `}

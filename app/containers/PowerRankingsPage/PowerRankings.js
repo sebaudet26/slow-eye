@@ -10,7 +10,7 @@ class PowerRankingsPage extends Component {
     return (
       <div className="powerRankings-page">
         <Helmet>
-          <title>Power Rankings</title>
+          <title>Power Rankings - SealStats.com</title>
           <meta
             name="description"
             content="Power Rankings"

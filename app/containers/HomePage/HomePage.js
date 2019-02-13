@@ -70,10 +70,10 @@ export default class HomePage extends React.Component {
     return (
       <div className="home-page">
         <Helmet>
-          <title>Home</title>
+          <title>Home - SealStats.com</title>
           <meta
             name="description"
-            contentx="Seal Stats is the best place to view NHL stats. User-friendly and fast."
+            content="Seal Stats is the best place to view NHL stats. User-friendly and fast."
           />
         </Helmet>
         <div className="home-page-wrapper">

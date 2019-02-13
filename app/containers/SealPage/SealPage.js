@@ -16,7 +16,7 @@ class SealPage extends Component {
     return (
       <div>
         <Helmet>
-          <title>Seal</title>
+          <title>Seal - SealStats.com</title>
           <meta
             name="description"
             content="Seal is the best singer of all time."

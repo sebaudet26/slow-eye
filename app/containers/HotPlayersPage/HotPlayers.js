@@ -10,7 +10,7 @@ class HotPlayersPage extends Component {
     return (
       <div className="hotPlayers-page">
         <Helmet>
-          <title>Who's hot?</title>
+          <title>Who's hot? - SealStats.com</title>
           <meta
             name="description"
             content="Who's hot in the NHL right now?"

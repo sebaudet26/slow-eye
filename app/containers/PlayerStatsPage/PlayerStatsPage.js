@@ -12,7 +12,7 @@ class PlayerStatsPage extends React.PureComponent {
     return (
       <article>
         <Helmet>
-          <title>Player Stats</title>
+          <title>Player Stats - SealStats.com</title>
           <meta name="description" content="View NHL Players Stats. Leaderboards. Historical Stats. It's all here. Seal Stats is the best place to view NHL stats. User-friendly and fast." />
         </Helmet>
         <div className="playerStats-page">

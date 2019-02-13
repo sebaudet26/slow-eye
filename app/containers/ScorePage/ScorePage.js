@@ -85,7 +85,7 @@ export default class ScorePage extends React.Component {
     return (
       <div className="score-page">
         <Helmet>
-          <title>Scores</title>
+          <title>NHL Scores - SealStats.com</title>
           <meta
             name="description"
             content="View Live NHL Scores. Seal Stats is the best place to view NHL stats. User-friendly and fast."

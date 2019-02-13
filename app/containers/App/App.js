@@ -24,8 +24,7 @@ import './style.scss';
 const App = () => (
   <div>
     <Helmet
-      titleTemplate="%s - Seal Stats"
-      defaultTitle="Seal Stats"
+      defaultTitle="SealStats.com"
     >
       <meta name="description" content="Seal Stats - Hockey Stats" />
     </Helmet>
