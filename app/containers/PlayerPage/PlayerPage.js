@@ -282,7 +282,7 @@ export default class PlayerPage extends React.Component {
               {internationalStats.length ? (
                 <TabPanel>
                   <h3>International</h3>
-                  <CareerStatsTable stats={internationalStats} info={info} showTotalRow={false} />
+                  <CareerStatsTable stats={internationalStats} info={info} showTotalRow />
                 </TabPanel>
               ) : null}
               {logs.length ? (
