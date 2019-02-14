@@ -31,7 +31,7 @@ iframe {
       height: 60px;
       position: absolute;
       top: 150px;
-      right: 15px;
+      right: 25px;
 
       img {
         width: 35px;
@@ -139,11 +139,11 @@ iframe {
       margin-right: 0px;
 
       &-country {
-        left: 15%;
+        left: 25%;
       }
 
       &-team {
-        right: 15%;
+        right: 25%;
       }
 
       img {
@@ -153,6 +153,20 @@ iframe {
 
     &-badges {
       display: none;
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  .player {
+    &-img {
+     &-country {
+       left: 15%;
+     }
+
+     &-team {
+       right: 15%;
+     }
     }
   }
 }
