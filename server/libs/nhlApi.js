@@ -472,6 +472,36 @@ const calculatePlayerPointsStreak = player => ({
       map(path(['stat', 'assists'])),
       sum,
     )(player),
+    shots: pipe(
+      prop('logs'),
+      take(playerStreakDefaultNumberOfGames),
+      map(path(['stat', 'shots'])),
+      sum,
+    )(player),
+    hits: pipe(
+      prop('logs'),
+      take(playerStreakDefaultNumberOfGames),
+      map(path(['stat', 'hits'])),
+      sum,
+    )(player),
+    pim: pipe(
+      prop('logs'),
+      take(playerStreakDefaultNumberOfGames),
+      map(path(['stat', 'penaltyMinutes'])),
+      sum,
+    )(player),
+    powerPlayPoints: pipe(
+      prop('logs'),
+      take(playerStreakDefaultNumberOfGames),
+      map(path(['stat', 'powerPlayPoints'])),
+      sum,
+    )(player),
+    plusMinus: pipe(
+      prop('logs'),
+      take(playerStreakDefaultNumberOfGames),
+      map(path(['stat', 'plusMinus'])),
+      sum,
+    )(player),
     games: playerStreakDefaultNumberOfGames,
   },
 });
@@ -517,7 +547,7 @@ const calculatePlayerStreaks = async (args = {}) => {
   try {
     const cached = await cache.get('players_streaks');
     if (cached) {
-      return JSON.parse(cached);
+      return take(args.limit || defaultPlayersLimit, JSON.parse(cached));
     }
 
     const players = await fetchAllPlayers();
@@ -538,9 +568,8 @@ const calculatePlayerStreaks = async (args = {}) => {
         descend(path(['streak', 'points'])),
         descend(path(['streak', 'goals'])),
       ]),
-      take(args.limit || defaultPlayersLimit),
+      map(omit(['logs'])),
     )(playersLogs);
-
 
     cache
       .set(
@@ -550,7 +579,7 @@ const calculatePlayerStreaks = async (args = {}) => {
         (getMsUntilMidnight()),
       );
 
-    return streaks;
+    return take(args.limit || defaultPlayersLimit, streaks);
   } catch (e) {
     console.error(e);
   }

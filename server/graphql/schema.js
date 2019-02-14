@@ -798,10 +798,15 @@ const PlayerStreak = new GraphQLObjectType({
     games: { type: GraphQLInt, resolve: path(['streak', 'games']) },
     goals: { type: GraphQLInt, resolve: path(['streak', 'goals']) },
     assists: { type: GraphQLInt, resolve: path(['streak', 'assists']) },
+    shots: { type: GraphQLInt, resolve: path(['streak', 'shots']) },
     points: { type: GraphQLInt, resolve: path(['streak', 'points']) },
+    shots: { type: GraphQLInt, resolve: path(['streak', 'shots']) },
+    hits: { type: GraphQLInt, resolve: path(['streak', 'hits']) },
+    pim: { type: GraphQLInt, resolve: path(['streak', 'pim']) },
+    powerPlayPoints: { type: GraphQLInt, resolve: path(['streak', 'powerPlayPoints']) },
+    plusMinus: { type: GraphQLInt, resolve: path(['streak', 'plusMinus']) },
     teamId: { type: GraphQLInt, resolve: prop('teamId') },
     positionCode: { type: GraphQLString, resolve: path(['position', 'code']) },
-    streak: { type: GraphQLInt, resolve: prop('streak') },
   },
 });
 

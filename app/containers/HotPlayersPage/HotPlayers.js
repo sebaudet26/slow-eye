@@ -6,7 +6,14 @@ import HotTable from '../../components/Table/HotTable';
 import './style.scss';
 
 class HotPlayersPage extends Component {
+  componentWillMount() {
+    const { fetchHotPlayers } = this.props;
+    fetchHotPlayers();
+  }
+
   render() {
+    const { hotPlayers } = this.props;
+    console.log('hotPlayers', hotPlayers);
     return (
       <div className="hotPlayers-page">
         <Helmet>
@@ -22,7 +29,7 @@ class HotPlayersPage extends Component {
           </div>
             Who's hot?
         </h2>
-        <HotTable />
+        <HotTable players={hotPlayers} />
       </div>
     );
   }

@@ -2,19 +2,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  last, pipe, pathOr, invoker,
+  last,
+  map,
+  pipe,
+  pathOr,
+  invoker,
+  prop,
 } from 'ramda';
 import ReactTable from 'react-table';
 import withFixedColumns from 'react-table-hoc-fixed-columns';
+import PlayerName from '../PlayerName';
+import TeamLogo from '../TeamLogo';
 import 'react-table/react-table.css';
 import './styles.scss';
 
 const ReactTableFixedColumns = withFixedColumns(ReactTable);
 
-const HotTable = ({ players, position }) => (
+const HotTable = ({ players }) => (
   <div>
     <ReactTableFixedColumns
       resizable={false}
+      data={players}
       noDataText="Loading all good stuff..."
       columns={[
         {
@@ -31,6 +39,9 @@ const HotTable = ({ players, position }) => (
           Header: 'Name',
           id: 'fullName',
           className: 'text-left',
+          Cell: row => <PlayerName id={row.original.id} name={row.value} />,
+          accessor: prop('name'),
+          className: 'text-left border-mobile',
           fixed: 'left',
           maxWidth: 200,
           minWidth: 150,
@@ -39,6 +50,7 @@ const HotTable = ({ players, position }) => (
           Header: 'Pos',
           id: 'position',
           className: 'text-left hidden-mobile',
+          accessor: prop('positionCode'),
           maxWidth: 50,
           minWidth: 50,
           fixed: 'left',
@@ -47,77 +59,81 @@ const HotTable = ({ players, position }) => (
           Header: 'Team',
           id: 'team',
           className: 'text-left team-cell sm-margin hidden-mobile',
+          accessor: prop('teamId'),
           maxWidth: 85,
           minWidth: 75,
           fixed: 'left',
+          Cell: row => <TeamLogo key={row.value} teamId={row.value} season="20182019" />,
         },
         {
           Header: 'GP',
           id: 'games',
+          accessor: prop('games'),
           maxWidth: 75,
           minWidth: 35,
         },
         {
           Header: 'G',
           id: 'goals',
+          accessor: prop('goals'),
           maxWidth: 75,
           minWidth: 35,
         },
         {
           Header: 'A',
           id: 'assists',
+          accessor: prop('assists'),
           maxWidth: 75,
           minWidth: 35,
         },
         {
           Header: 'Pts',
           id: 'points',
+          accessor: prop('points'),
           maxWidth: 75,
           minWidth: 45,
         },
         {
           Header: 'Pts/GP',
           id: 'pointsPerGame',
+          accessor: d => (d.points / d.games).toFixed(2),
           maxWidth: 75,
           minWidth: 60,
         },
         {
           Header: '+/-',
           id: 'plusMinus',
+          accessor: prop('plusMinus'),
           maxWidth: 75,
           minWidth: 50,
         },
         {
           Header: 'PIM',
           id: 'pim',
+          accessor: prop('pim'),
           maxWidth: 55,
           minWidth: 50,
         },
         {
-          Header: 'PPG',
-          id: 'powerPlayGoals',
+          Header: 'PPP',
+          id: 'powerPlayPoints',
+          accessor: prop('powerPlayPoints'),
           maxWidth: 75,
           minWidth: 50,
         },
-        {
-          Header: 'SHG',
-          id: 'shortHandedGoals',
-          maxWidth: 75,
-          minWidth: 50,
-        },
-
         {
           Header: 'SOG',
           id: 'shots',
+          accessor: prop('shots'),
           maxWidth: 75,
           minWidth: 50,
         },
         {
-          Header: 'S%',
-          id: 'shotPct',
-          show: position !== 'G',
+          Header: 'Hits',
+          id: 'hits',
+          accessor: prop('hits'),
           maxWidth: 75,
-          minWidth: 55,
+          minWidth: 50,
         },
       ]}
       defaultSorted={[
@@ -128,7 +144,7 @@ const HotTable = ({ players, position }) => (
       ]}
       defaultSortDesc
       className="-striped roster-stats"
-      defaultPageSize="31"
+      defaultPageSize={10}
     />
   </div>
 );

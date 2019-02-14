@@ -195,7 +195,6 @@ class PlayersTable extends React.PureComponent {
               minWidth: 110,
               fixed: 'left',
               Cell: row => <PlayerName id={row.original.id} name={row.value} />,
-
             },
             {
               Header: 'Pos',
