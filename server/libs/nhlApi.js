@@ -516,7 +516,7 @@ const calculateTeamsStreaks = async (args = {}) => {
   try {
     const cached = await cache.get('team_streaks');
     if (cached) {
-      return JSON.parse(cached);
+      return take(args.limit || defaultTeamsLimit, JSON.parse(cached));
     }
 
     const teams = await fetchAllTeams();
@@ -535,9 +535,9 @@ const calculateTeamsStreaks = async (args = {}) => {
       sortWith([
         descend(path(['streak', 'points'])),
       ]),
-      take(args.limit || defaultTeamsLimit),
     )(teamsWithSchedules);
-    return teamsStreaks;
+
+    return take(args.limit || defaultTeamsLimit, teamsStreaks);
   } catch (e) {
     console.error(e);
   }
