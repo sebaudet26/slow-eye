@@ -111,7 +111,30 @@
 
   &.card-team {
     background: $white;
+    padding: 5.5px 15px;
     margin-right: 0px;
+    margin-bottom: 0px;
+    border-radius: 0px;
+    box-shadow: none;
+    border-bottom: solid 1px $grey-4;
+
+    &:first-child {
+      border-radius: 6px 6px 0 0;
+    }
+
+    &:last-child {
+      border-radius: 0 0 6px 6px;
+      border-bottom: none;
+    }
+
+    &:hover {
+      transform: scale(1);
+      box-shadow: none;
+
+      .card-content-team {
+        color: $main;
+      }
+    }
 
     .card-content {
       display: flex;
@@ -128,7 +151,7 @@
       &-team {
         color: $black;
         font-size: 16px;
-        text-transform: uppercase;
+        transition: 0.3s;
 
         span {
           font-size: 20px;
@@ -136,7 +159,7 @@
         }
 
         svg {
-          height: 50px;
+          height: 40px;
           width: 75px;
         }
       }
@@ -173,10 +196,12 @@
     box-shadow: $shadow-2;
     transform: scale(1.025);
   }
+}
 
-
-
-
+.power-container {
+  background: $white;
+  border-radius: 6px;
+  box-shadow: $shadow;
 }
 
 @media screen and (max-width: 800px) {

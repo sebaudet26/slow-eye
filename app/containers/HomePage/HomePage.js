@@ -96,7 +96,9 @@ export default class HomePage extends React.Component {
               {' Power Rankings'}
               <a href="/powerrankings">View Full List</a>
             </h3>
-            {renderTeamCard && take(HOT_TEAMS_LIMIT, teamsStreaks).map(renderTeamCard)}
+            <div className="power-container">
+              {renderTeamCard && take(HOT_TEAMS_LIMIT, teamsStreaks).map(renderTeamCard)}
+            </div>
           </div>
         </div>
       </div>
