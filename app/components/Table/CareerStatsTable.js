@@ -4,7 +4,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import {
-  insert, map, split, sum, pathOr, filter, prop,
+  filter,
+  insert,
+  map,
+  mean,
+  reject,
+  isNil,
+  pathOr,
+  pipe,
+  prop,
+  split,
+  sum,
 } from 'ramda';
 import { sumNumbers } from '../../utils/player';
 import 'react-table/react-table.css';
@@ -164,14 +174,13 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
           Cell: row => (
             <span>{typeof row.value === 'number' ? Number(row.value).toFixed(1) : '-'}</span>
           ),
-          Footer: showTotalRow && (
-            calculateAverage({
-              data: stats,
-              pathToNumber: ['stat', 'goals'],
-              pathToDividend: ['stat', 'shots'],
-              percentage: true,
-            })
-          ),
+          Footer: showTotalRow && pipe(
+            map(pathOr(null, ['stat', 'shotPct'])),
+            reject(isNil),
+            map(Number),
+            mean,
+            d => (d == 0 ? '-' : d.toFixed(1)),
+          )(stats),
         },
         {
           Header: 'W',
