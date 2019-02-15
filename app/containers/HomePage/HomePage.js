@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { take } from 'ramda';
 import StandingsTable from '../../components/Table/StandingsTable';
-import FireIcon from '../../images/fire.svg';
-import PowerIcon from '../../images/boxing.svg';
 import './style.scss';
 
 const HOT_PLAYERS_LIMIT = 5;
@@ -79,9 +77,6 @@ export default class HomePage extends React.Component {
         <div className="home-page-wrapper">
           <div className="home-page-col">
             <h3>
-              <div className="icon-wrapper">
-                <img src={FireIcon} />
-              </div>
               {' Who\'s hot?'}
               <a href="/hotplayers">View Full List</a>
             </h3>
@@ -90,9 +85,6 @@ export default class HomePage extends React.Component {
           </div>
           <div className="home-page-col">
             <h3>
-              <div className="icon-wrapper">
-                <img src={PowerIcon} />
-              </div>
               {' Power Rankings'}
               <a href="/powerrankings">View Full List</a>
             </h3>
