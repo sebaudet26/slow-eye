@@ -8,6 +8,7 @@ const port = require('./util//port');
 const setup = require('./middlewares/frontendMiddleware');
 const api = require('./middlewares/api');
 const graphql = require('./middlewares/graphql');
+const redisApi = require('./libs/redisApi');
 
 const app = express();
 
@@ -24,7 +25,6 @@ setup(app, {
   outputPath: resolve(process.cwd(), 'build'),
   publicPath: '/',
 });
-
 
 // get the intended host and port number, use localhost and port 3000 if not provided
 const customHost = argv.host || process.env.HOST;

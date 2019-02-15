@@ -22,6 +22,7 @@ const {
   sum,
   sortBy,
   sortWith,
+  tail,
   take,
 } = require('ramda');
 const moment = require('moment');
@@ -33,7 +34,7 @@ const nhlRecordsBase = 'https://records.nhl.com/site/api';
 const nhlStatsApiBase = 'https://statsapi.web.nhl.com/api/v1';
 
 // technically 1AM to leave some time for Western coast to be at end of day
-const getMsUntilMidnight = () => Math.round((moment().endOf('day').add(1, 'hours').valueOf() - moment().valueOf()) / 1000);
+const getSecondsUntilMidnight = () => Math.round((moment().endOf('day').add(1, 'hours').valueOf() - moment().valueOf()) / 1000);
 
 // expiration is a number in seconds
 const nhlStatsApi = async (resource, expiration, force) => {
@@ -45,6 +46,7 @@ const nhlStatsApi = async (resource, expiration, force) => {
       }
     }
     const url = `${nhlStatsApiBase}${resource}`;
+    console.log(url);
     const response = await fetch(url);
     const data = await response.json();
     cache
@@ -52,7 +54,7 @@ const nhlStatsApi = async (resource, expiration, force) => {
         resource,
         JSON.stringify(data),
         'EX',
-        expiration || getMsUntilMidnight(),
+        expiration || getSecondsUntilMidnight(),
       );
     return data;
   } catch (e) {
@@ -70,6 +72,7 @@ const nhlRecordsApi = async (resource, expiration, force) => {
       }
     }
     const url = `${nhlRecordsBase}${resource}`;
+    console.log(url);
     const response = await fetch(url);
     const data = await response.json();
     cache
@@ -77,7 +80,7 @@ const nhlRecordsApi = async (resource, expiration, force) => {
         resource,
         JSON.stringify(data),
         'EX',
-        expiration || getMsUntilMidnight(),
+        expiration || getSecondsUntilMidnight(),
       );
     return data;
   } catch (e) {
@@ -95,6 +98,7 @@ const nhlApi = async (resource, expiration, force) => {
       }
     }
     const url = `${nhlApiBase}${resource}`;
+    console.log(url);
     const response = await fetch(url);
     const data = await response.json();
     cache
@@ -102,7 +106,7 @@ const nhlApi = async (resource, expiration, force) => {
         resource,
         JSON.stringify(data),
         'EX',
-        expiration || getMsUntilMidnight(),
+        expiration || getSecondsUntilMidnight(),
       );
     return data;
   } catch (e) {
@@ -417,6 +421,9 @@ const playerStreakDefaultNumberOfGames = 5;
 const defaultTeamsLimit = 10;
 const defaultPlayersLimit = 5;
 
+const takeHomeTeam = path(['teams', 'home']);
+const takeAwayTeam = path(['teams', 'away']);
+
 const calculateTeamPointsStreak = (team) => {
   const gamesToConsider = pipe(
     prop('schedule'),
@@ -424,6 +431,20 @@ const calculateTeamPointsStreak = (team) => {
     take(teamStreakDefaultNumberOfGames + 1),
     map(prop('game')),
   )(team);
+
+  const goalsFor = pipe(
+    tail,
+    map(game => (game.teams.home.team.id === team.id ? takeHomeTeam(game) : takeAwayTeam(game))),
+    map(prop('score')),
+    sum,
+  )(gamesToConsider);
+
+  const goalsAgainst = pipe(
+    tail,
+    map(game => (game.teams.home.team.id !== team.id ? takeHomeTeam(game) : takeAwayTeam(game))),
+    map(prop('score')),
+    sum,
+  )(gamesToConsider);
 
   const firstGame = last(gamesToConsider);
   const lastGame = head(gamesToConsider);
@@ -440,6 +461,8 @@ const calculateTeamPointsStreak = (team) => {
     losses: latestRecord.losses - initialRecord.losses,
     ot: latestRecord.ot - initialRecord.ot,
     games: teamStreakDefaultNumberOfGames,
+    goalsAgainst,
+    goalsFor,
   };
 
   return {
@@ -535,7 +558,16 @@ const calculateTeamsStreaks = async (args = {}) => {
       sortWith([
         descend(path(['streak', 'points'])),
       ]),
+      map(omit(['schedule'])),
     )(teamsWithSchedules);
+
+    cache
+      .set(
+        'team_streaks',
+        JSON.stringify(teamsStreaks),
+        'EX',
+        (getSecondsUntilMidnight()),
+      );
 
     return take(args.limit || defaultTeamsLimit, teamsStreaks);
   } catch (e) {
@@ -576,7 +608,7 @@ const calculatePlayerStreaks = async (args = {}) => {
         'players_streaks',
         JSON.stringify(streaks),
         'EX',
-        (getMsUntilMidnight()),
+        (getSecondsUntilMidnight()),
       );
 
     return take(args.limit || defaultPlayersLimit, streaks);

@@ -5,7 +5,13 @@ import PowerRankingsTable from '../../components/Table/PowerRankingsTable';
 import './style.scss';
 
 class PowerRankingsPage extends Component {
+  componentWillMount() {
+    const { fetchTeamsStreaks } = this.props;
+    fetchTeamsStreaks();
+  }
+
   render() {
+    const { teamsStreaks } = this.props;
     return (
       <div className="powerRankings-page">
         <Helmet>
@@ -18,7 +24,7 @@ class PowerRankingsPage extends Component {
         <h2>
             Power Rankings
         </h2>
-        <PowerRankingsTable />
+        <PowerRankingsTable teams={teamsStreaks} />
       </div>
     );
   }

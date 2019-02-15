@@ -810,12 +810,6 @@ const PlayerStreak = new GraphQLObjectType({
   },
 });
 
-const StreakTeamRecord = new GraphQLObjectType({
-  name: 'StreakTeamRecord',
-  fields: {
-  },
-});
-
 const TeamStreak = new GraphQLObjectType({
   name: 'TeamStreak',
   fields: {
@@ -828,6 +822,8 @@ const TeamStreak = new GraphQLObjectType({
     ot: { type: GraphQLInt, resolve: path(['streak', 'ot']) },
     games: { type: GraphQLInt, resolve: path(['streak', 'games']) },
     points: { type: GraphQLInt, resolve: path(['streak', 'points']) },
+    goalsFor: { type: GraphQLInt, resolve: path(['streak', 'goalsFor']) },
+    goalsAgainst: { type: GraphQLInt, resolve: path(['streak', 'goalsAgainst']) },
   },
 });
 

@@ -35,16 +35,15 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         minWidth: 125,
         fixed: 'left',
         Cell: row => (
-          <a href={`./team?id=${row.value.split('+')[2]}`}>
+          <a href={`./team?id=${row.original.id}`}>
             <svg key={Math.random()} className="team-cell-logo">
-              <use xlinkHref={`/images/teams/season/20182019.svg#team-${row.value.split('+')[2]}-20182019-light`} />
+              <use xlinkHref={`/images/teams/season/20182019.svg#team-${row.original.id}-20182019-light`} />
             </svg>
-            <span className="hidden-mobile">{row.value.split('+')[0]}</span>
-            <span className="hidden-desktop">{row.value.split('+')[1]}</span>
+            <span className="hidden-mobile">{row.original.name}</span>
+            <span className="hidden-desktop">{row.original.abbreviation}</span>
           </a>
         ),
       },
-
       {
         Header: 'GP',
         id: 'games',
