@@ -12,10 +12,11 @@ import 'react-table/react-table.css';
 import './styles.scss';
 
 const DraftTable = ({
-  draft, filters, year, round, pageLength,
+  draft, filters, year, round, pageLength, loading,
 }) => (
   <ReactTable
     data={draft}
+    loading={loading}
     resizable={false}
     filtered={[
       {
@@ -39,7 +40,7 @@ const DraftTable = ({
         value: filters.teamSelected,
       },
     ]}
-    noDataText="Loading all dat good data stuff..."
+    noDataText="No draft picks found for criteria"
     columns={[
       {
         Header: 'Rd.',

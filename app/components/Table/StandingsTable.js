@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import {
-  isEmpty, pathOr, pipe, pick, join, values,
+  isEmpty, pathOr, pipe, pick, join, values, prop,
 } from 'ramda';
 import withFixedColumns from 'react-table-hoc-fixed-columns';
 import 'react-table/react-table.css';
@@ -30,17 +30,17 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         Header: isWildCardTable ? 'Wild Card' : subStandings.division.name,
         id: 'name',
         className: 'text-left team-cell',
-        accessor: d => `${d.team.name}+${d.team.abbreviation}+${d.team.id}`,
+        accessor: prop('team'),
         maxWidth: 300,
         minWidth: 125,
         fixed: 'left',
         Cell: row => (
-          <a href={`./team?id=${row.original.id}`}>
+          <a href={`./team?id=${row.value.id}`}>
             <svg key={Math.random()} className="team-cell-logo">
-              <use xlinkHref={`/images/teams/season/20182019.svg#team-${row.original.id}-20182019-light`} />
+              <use xlinkHref={`/images/teams/season/20182019.svg#team-${row.value.id}-20182019-light`} />
             </svg>
-            <span className="hidden-mobile">{row.original.name}</span>
-            <span className="hidden-desktop">{row.original.abbreviation}</span>
+            <span className="hidden-mobile">{row.value.name}</span>
+            <span className="hidden-desktop">{row.value.abbreviation}</span>
           </a>
         ),
       },

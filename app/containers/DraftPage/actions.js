@@ -1,5 +1,5 @@
 /* global fetch */
-import { FETCH_DRAFT } from './constants';
+import { FETCH_DRAFT, SET_LOADING } from './constants';
 import graphqlApi from '../../utils/api';
 
 const makeDraftQuery = year => `
@@ -36,6 +36,13 @@ const makeDraftQuery = year => `
   }
 }
 `;
+
+export const setLoading = () => async dispatch => dispatch({
+  type: SET_LOADING,
+  payload: {
+    loading: true,
+  },
+});
 
 export const fetchDraftForYear = year => async (dispatch) => {
   try {

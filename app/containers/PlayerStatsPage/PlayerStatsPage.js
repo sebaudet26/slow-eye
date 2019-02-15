@@ -7,7 +7,7 @@ import './style.scss';
 class PlayerStatsPage extends React.PureComponent {
   render() {
     const {
-      players, fetchPlayers, fetchTeams, teams,
+      players, fetchPlayers, fetchTeams, teams, setLoading, loading,
     } = this.props;
     return (
       <article>
@@ -23,6 +23,8 @@ class PlayerStatsPage extends React.PureComponent {
           fetchPlayers={fetchPlayers}
           fetchTeams={fetchTeams}
           teams={teams}
+          setLoading={setLoading}
+          loading={loading}
         />
       </article>
     );

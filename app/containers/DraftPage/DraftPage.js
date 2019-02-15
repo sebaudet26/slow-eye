@@ -55,7 +55,8 @@ export default class StandingsPage extends React.Component {
   }
 
   handleYearChange(target) {
-    const { fetchDraft } = this.props;
+    const { fetchDraft, setLoading } = this.props;
+    setLoading();
     fetchDraft(target.value);
     this.setState({ yearSelected: target.value });
   }
@@ -73,8 +74,9 @@ export default class StandingsPage extends React.Component {
   }
 
   componentWillMount() {
-    const { fetchDraft } = this.props;
+    const { fetchDraft, setLoading } = this.props;
     const { yearSelected } = this.state;
+    setLoading();
     fetchDraft(yearSelected);
   }
 
@@ -83,7 +85,7 @@ export default class StandingsPage extends React.Component {
   }
 
   render() {
-    const { drafts } = this.props;
+    const { drafts, loading } = this.props;
     const {
       posSelected,
       yearSelected,
@@ -154,6 +156,7 @@ export default class StandingsPage extends React.Component {
                 filters={filters}
                 year={yearSelected}
                 pageLength={pageLength}
+                loading={loading}
               />
             )
             : null

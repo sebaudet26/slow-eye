@@ -11,3 +11,8 @@ export const makeSelectTeams = () => createSelector(
   selectHome,
   homeState => homeState.get('teams') || [],
 );
+
+export const makeSelectLoading = () => createSelector(
+  selectHome,
+  homeState => homeState.getIn(['loading']),
+);
