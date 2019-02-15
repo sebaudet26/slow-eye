@@ -32,8 +32,8 @@ const HotTable = ({ players }) => (
           className: 'text-left',
           sortable: false,
           fixed: 'left',
-          maxWidth: 30,
-          minWidth: 30,
+          maxWidth: 35,
+          minWidth: 35,
         },
         {
           Header: 'Name',
@@ -143,8 +143,8 @@ const HotTable = ({ players }) => (
         },
       ]}
       defaultSortDesc
-      className="-striped roster-stats"
-      defaultPageSize={10}
+      className="-striped hotStats"
+      defaultPageSize={20}
     />
   </div>
 );
