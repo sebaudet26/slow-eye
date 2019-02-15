@@ -2,13 +2,15 @@ require('./util/loadDevEnv');
 const express = require('express');
 const { resolve } = require('path');
 const bodyParser = require('body-parser');
-const logger = require('./util//logger');
+const logger = require('./util/logger');
 const argv = require('./util/argv');
-const port = require('./util//port');
+const port = require('./util/port');
 const setup = require('./middlewares/frontendMiddleware');
 const api = require('./middlewares/api');
 const graphql = require('./middlewares/graphql');
 const redisApi = require('./libs/redisApi');
+
+require('./libs/automatedJobs');
 
 const app = express();
 
