@@ -22,7 +22,6 @@ const makeTeamsStreaksQuery = () => `
 
 export const fetchTeamsStreaks = () => async (dispatch) => {
   try {
-    console.log('holaaaa');
     const data = await graphqlApi(makeTeamsStreaksQuery());
     return dispatch({
       type: FETCH_TEAMS_STREAKS,

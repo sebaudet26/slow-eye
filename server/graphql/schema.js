@@ -793,8 +793,8 @@ const PlayerReport = new GraphQLObjectType({
 const PlayerStreak = new GraphQLObjectType({
   name: 'PlayerStreak',
   fields: {
-    id: { type: GraphQLInt, resolve: prop('id') },
-    name: { type: GraphQLString, resolve: path(['person', 'fullName']) },
+    id: { type: GraphQLInt, resolve: prop('playerId') },
+    name: { type: GraphQLString, resolve: prop('playerName') },
     games: { type: GraphQLInt, resolve: path(['streak', 'games']) },
     goals: { type: GraphQLInt, resolve: path(['streak', 'goals']) },
     assists: { type: GraphQLInt, resolve: path(['streak', 'assists']) },
@@ -805,8 +805,19 @@ const PlayerStreak = new GraphQLObjectType({
     pim: { type: GraphQLInt, resolve: path(['streak', 'pim']) },
     powerPlayPoints: { type: GraphQLInt, resolve: path(['streak', 'powerPlayPoints']) },
     plusMinus: { type: GraphQLInt, resolve: path(['streak', 'plusMinus']) },
-    teamId: { type: GraphQLInt, resolve: prop('teamId') },
-    positionCode: { type: GraphQLString, resolve: path(['position', 'code']) },
+    teamId: {
+      type: GraphQLList(GraphQLInt),
+      resolve: pipe(
+        prop('playerTeamsPlayedFor'),
+        replace(/\s/g, ''),
+        split(','),
+        head,
+        teamAbr => find(propEq('abbreviation', teamAbr))(TEAMS),
+        prop('id'),
+      ),
+    },
+    // teamId: { type: GraphQLInt, resolve: prop('teamId') },
+    positionCode: { type: GraphQLString, resolve: prop('playerPositionCode') },
   },
 });
 

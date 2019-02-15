@@ -24,6 +24,7 @@ const {
   sortWith,
   tail,
   take,
+  takeLast,
 } = require('ramda');
 const moment = require('moment');
 const fetch = require('node-fetch');
@@ -575,23 +576,38 @@ const calculateTeamsStreaks = async (args = {}) => {
   }
 };
 
+const fetchByTen = async (cumulative, players) => {
+  const batch = take(10, players);
+  console.log(cumulative.length, players.length);
+  const responses = await Promise.all(batch.map(async (p) => {
+    const logs = await fetchGameLogsForPlayerId(p.playerId);
+    return {
+      ...p,
+      logs,
+    };
+  }));
+  const newCumulative = [...cumulative, ...responses];
+  if (players.length <= 10) {
+    console.log('done!');
+    return newCumulative;
+  }
+  const final = await fetchByTen(newCumulative, takeLast(players.length - 10, players));
+  return final;
+};
+
 const calculatePlayerStreaks = async (args = {}) => {
   try {
     const cached = await cache.get('players_streaks');
     if (cached) {
       return take(args.limit || defaultPlayersLimit, JSON.parse(cached));
     }
+    const skatersummaryAll = '/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&cayenneExp=gameTypeId=2%20and%20seasonId%3E=20182019%20and%20seasonId%3C=20182019&sort=[{%22property%22:%22playerId%22}]';
 
-    const players = await fetchAllPlayers();
+    const players = await nhlApi(skatersummaryAll, 60 * 60 * 24, true);
 
     // get game logs for all players
-    const playersLogs = await Promise.all(players.map(async (p) => {
-      const logs = await fetchGameLogsForPlayerId(p.id);
-      return {
-        ...p,
-        logs,
-      };
-    }));
+    const playersLogs = await fetchByTen([], players.data);
+    console.log(`${playersLogs.length} players have logs`);
 
     // calculate streaks
     const streaks = pipe(
