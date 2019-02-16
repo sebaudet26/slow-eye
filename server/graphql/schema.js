@@ -806,7 +806,7 @@ const PlayerStreak = new GraphQLObjectType({
     powerPlayPoints: { type: GraphQLInt, resolve: path(['streak', 'powerPlayPoints']) },
     plusMinus: { type: GraphQLInt, resolve: path(['streak', 'plusMinus']) },
     teamId: {
-      type: GraphQLList(GraphQLInt),
+      type: GraphQLInt,
       resolve: pipe(
         prop('playerTeamsPlayedFor'),
         replace(/\s/g, ''),
