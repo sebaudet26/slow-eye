@@ -94,14 +94,33 @@
   height: 64px;
 }
 
+.slick-arrow {
+  position: absolute;
+  z-index: 5;
+  width: 50px;
+  height: 100%;
+  background: $white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px 0 0 6px;
+  cursor: pointer;
+
+  &.next {
+    right: 0px;
+    top: 0px;
+    border-radius: 0 6px 6px 0;
+    border-left: solid 1px $grey-4;
+  }
+}
+
 .slick-slider {
   height: 64px;
-  background: #f9fcff;
   box-shadow: $shadow;
   border-radius: 6px;
 
   .slick-slide {
-    background: #f9fcff;
+    background: $white;
     height: 64px;
     display: flex;
     align-items: center;
@@ -143,6 +162,7 @@
     box-shadow: $shadow-2;
     background: $white;
     position: relative;
+    border-bottom: solid 3px $main;
 
     .slick-slide-date {
       font-size: 16px;

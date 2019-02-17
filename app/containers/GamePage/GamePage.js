@@ -2,7 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import {
-  filter, join, map, isEmpty, pick, pipe, reject, values,
+  filter,
+  groupBy,
+  isEmpty,
+  join,
+  last,
+  map,
+  mapObjIndexed,
+  pathOr,
+  pick,
+  pipe,
+  prop,
+  propEq,
+  reject,
+  values,
 } from 'ramda';
 import './style.scss';
 import {
@@ -16,102 +29,126 @@ import {
 import { logoForTeamName } from '../../utils/team';
 import { getStatusText } from '../../utils/game';
 import { saveToLS, getFromLS } from '../../utils/localStorage';
-import { getNumberWithOrdinal } from '../../utils/misc';
+import { toOrdinal } from '../../utils/misc';
 import BoxTable from '../../components/Table/BoxTable';
 import PlayerName from '../../components/PlayerName';
+import PlayerImage from '../../components/PlayerImage';
+import VideoPlayer from '../../components/VideoPlayer';
 
-const renderGoalInfo = goal => (
-  <tr key={Math.random()}>
-    <td>
-      {goal.periodTime}
-      {' '}
--
-      {' '}
-      {goal.team.triCode}
-    </td>
-    <td>
-      <PlayerName
-        withImage
-        key={goal.scorer.id}
+const renderGoalInfo = isShootout => goal => (
+  <div key={Math.random()} className="card-cell">
+    <div className="goal-image card-cell-item">
+      <PlayerImage
         id={goal.scorer.id}
-        name={`${goal.scorer.fullName} (${goal.scorer.seasonTotal})`}
+        size="60x60"
       />
-    </td>
-    <td>
-      {
+      <div className="icon-wrapper">
+        <svg className="goal-image-team" key={Math.random()}>
+          <use xlinkHref={`/images/teams/season/20182019.svg#team-${goal.team.id}-20182019-light`} />
+        </svg>
+      </div>
+    </div>
+    <div className="goal-details card-cell-item">
+      <div className="goal-details-scorer">
+        <PlayerName
+          key={goal.scorer.id}
+          id={goal.scorer.id}
+          name={[
+            goal.scorer.fullName,
+            isShootout ? '' : `(${goal.scorer.seasonTotal})`,
+          ].join(' ')}
+        />
+      </div>
+      <div className="goal-details-assist">
+        {
         goal.assists.map(player => (
           <PlayerName
             key={Math.random()}
             id={player.id}
             name={`${player.fullName} (${player.seasonTotal})`}
           />
-        ))}
-    </td>
-    <td>{goal.strength}</td>
-  </tr>
+        ))
+      }
+      </div>
+      {
+        !isShootout
+          ? (
+            <div className="goal-details-time">
+              {`${goal.periodTime} - ${goal.strength}`}
+            </div>
+          )
+          : null
+      }
+    </div>
+    <div className="goal-video card-cell-item">
+      {goal.videoUrl ? <VideoPlayer url={goal.videoUrl} /> : (<div />)}
+    </div>
+  </div>
 );
 
 const renderPenaltyInfo = penalty => (
-  <tr key={Math.random()}>
-    <td>
+  <div key={Math.random()} className="card-cell penalty">
+    <div className="card-cell-item penalty-team">
+      <svg className="penalty-img" key={Math.random()}>
+        <use xlinkHref={`/images/teams/season/20182019.svg#team-${penalty.team.id}-20182019-light`} />
+      </svg>
       {penalty.periodTime}
-      {' '}
--
-      {' '}
-      {penalty.team.triCode}
-    </td>
-    <td>
+    </div>
+    <div className="card-cell-item penalty-player">
       <PlayerName
         key={Math.random()}
         id={penalty.receiver.id}
         name={penalty.receiver.fullName}
       />
-    </td>
-    <td>{penalty.type}</td>
-    <td>{`${penalty.minutes} mins`}</td>
-  </tr>
+    </div>
+    <div className="card-cell-item penalty-info">
+      <span className="hidden-mobile">
+        {penalty.type}
+        {' - '}
+      </span>
+      {`${penalty.minutes} mins`}
+    </div>
+  </div>
 );
 
-const renderGoalEvents = (events, period) => (
-  <table className="events-table">
-    <thead>
-      <tr>
-        <th>
-          {`${getNumberWithOrdinal(period)} Period`}
-        </th>
-      </tr>
-      <tr>
-        <th>Time</th>
-        <th>Goal By</th>
-        <th>Assist(s)</th>
-        <th />
-      </tr>
-    </thead>
-    <tbody>
-      {map(renderGoalInfo, filter(event => event.period === period, events))}
-    </tbody>
-  </table>
+const renderGoalEvents = (events = [], videos = [], period) => (
+  <div className="card">
+    <div className="card-header">
+      {
+        period === 5 ? 'Shootout'
+          : period === 4 ? 'Overtime'
+            : `${toOrdinal(period)} Period`
+      }
+    </div>
+    {
+      filter(propEq('period', period), events).length
+        ? map(
+          renderGoalInfo(period === 5),
+          pipe(
+            filter(propEq('period', period)),
+            mapObjIndexed((o, k) => ({
+              ...o,
+              videoUrl: pathOr('', [k, 'url'], videos),
+            })),
+            values,
+          )(events),
+        )
+        : <div className="non-event">No Goals</div>
+    }
+  </div>
 );
 
 const renderPenaltyEvents = (events, period) => (
-  <table className="events-table">
-    <thead>
-      <tr>
-        <th>
-          {`${getNumberWithOrdinal(period)} Period`}
-        </th>
-      </tr>
-      <tr>
-        <th>Time</th>
-        <th>By</th>
-        <th>Reason</th>
-        <th />
-      </tr>
-    </thead>
-    <tbody>
-      {map(renderPenaltyInfo, filter(event => event.period === period, events))}
-    </tbody>
-  </table>
+  <div className="card">
+    <div className="card-header">
+      {period === 4 ? 'Overtime' : `${toOrdinal(period)} Period`}
+    </div>
+    {
+      filter(propEq('period', period), events).length
+        ? map(renderPenaltyInfo, filter(event => event.period === period, events))
+        : <td className="non-event">No Penalties</td>
+    }
+  </div>
 );
 
 class GamePage extends React.Component {
@@ -129,13 +166,16 @@ class GamePage extends React.Component {
 
   render() {
     const { game } = this.props;
+
     if (!game || !game.boxscore || !game.liveFeed) {
       return null;
     }
 
-    const { boxscore, liveFeed } = game;
-
-    const { goalSummary = [], penaltySummary = [], lastTenPlays = [] } = liveFeed;
+    const { boxscore, liveFeed, highlights } = game;
+    const groupedHighlights = groupBy(prop('period'), highlights.goals || []);
+    const {
+      goalSummary = [], penaltySummary = [], lastTenPlays = [], shootoutSummary,
+    } = liveFeed;
 
     const awayTeamImage = (
       <svg key={Math.random()} className="game-card-team-img">
@@ -152,14 +192,16 @@ class GamePage extends React.Component {
     return (
       <div>
         <Helmet>
-          <title>Game Page</title>
+          <title>
+            {`${boxscore.away.team.teamName} @ ${boxscore.home.team.teamName} - SealStats.com`}
+          </title>
           <meta name="description" content={`${boxscore.away.team.teamName} vs. ${boxscore.home.team.teamName} game page. Seal Stats is the best place to view NHL stats. User-friendly and fast. `} />
         </Helmet>
-        <div className="summary">
-          <div className="summary-header">
-            <div className="summary-header-team">
+        <div className="game">
+          <div className="game-header">
+            <div className="game-header-team">
               {awayTeamImage}
-              <div className="summary-header-team-name">
+              <div className="game-header-team-name">
                 <div className="city">{boxscore.away.team.location}</div>
                 <div className="team">{boxscore.away.team.teamName}</div>
                 <div className="record">
@@ -167,18 +209,30 @@ class GamePage extends React.Component {
                   {` ${boxscore.away.seasonTeamStats.splits[0].pts}pts`}
                 </div>
               </div>
-              <div className="summary-header-team-score">
-                {boxscore.away.teamStats.goals}
+              <div className="game-header-team-score">
+                {boxscore.away.teamStats.goals + (shootoutSummary && shootoutSummary.away.scores > shootoutSummary.home.scores ? 1 : 0)}
               </div>
             </div>
-            <div className="summary-header-result">
-              {`${game.liveFeed.status.detailedState}${getStatusText(game)}`}
-            </div>
-            <div className="summary-header-team">
-              <div className="summary-header-team-score">
-                {boxscore.home.teamStats.goals}
+            <div className="game-header-result">
+              <div>{liveFeed.status.detailedState}</div>
+              <div>
+                {getStatusText(game)}
+                {last(lastTenPlays) && last(lastTenPlays).period === 5 ? 'S/O' : null}
               </div>
-              <div className="summary-header-team-name">
+              {
+                highlights && highlights.recap ? (
+                  <VideoPlayer
+                    url={highlights.recap}
+                    styles={{ textAlign: 'center', width: '100%', marginTop: '5px' }}
+                  />
+                ) : null
+              }
+            </div>
+            <div className="game-header-team">
+              <div className="game-header-team-score">
+                {boxscore.home.teamStats.goals + (shootoutSummary && shootoutSummary.home.scores > shootoutSummary.away.scores ? 1 : 0)}
+              </div>
+              <div className="game-header-team-name">
                 <div className="city">{boxscore.home.team.location}</div>
                 <div className="team">{boxscore.home.team.teamName}</div>
                 <div className="record">
@@ -189,7 +243,6 @@ class GamePage extends React.Component {
               {homeTeamImage}
             </div>
           </div>
-
           <Tabs
             defaultIndex={Number(getFromLS('gameTabIndex')) || 1}
             onSelect={i => saveToLS('gameTabIndex', i)}
@@ -222,85 +275,107 @@ class GamePage extends React.Component {
               </div>
             </TabPanel>
             <TabPanel>
-              <div className="summary-overall">
-                <div className="summary-overall-wrapper">
-                  <div className="summary-overall-card">
-                    <table className="overall-table">
-                      <thead>
-                        <tr>
-                          <th />
-                          <th>Shots</th>
-                          <th>PIM</th>
-                          <th>PP</th>
-                          <th>Hits</th>
-                          <th>Fo%</th>
-                          <th>TK</th>
-                          <th>GV</th>
-                          <th>Bks</th>
-                          <th>Goals</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>
-                            <a href={`/team?id=${boxscore.away.team.id}`}>
-                              {awayTeamImage}
-                              {boxscore.away.team.name}
-                            </a>
-                          </td>
-                          <td>{boxscore.away.teamStats.shots}</td>
-                          <td>{boxscore.away.teamStats.pim}</td>
-                          <td>{`${boxscore.away.teamStats.powerPlayGoals}/${boxscore.away.teamStats.powerPlayOpportunities}`}</td>
-                          <td>{boxscore.away.teamStats.hits}</td>
-                          <td>{boxscore.away.teamStats.faceOffWinPercentage.toFixed()}</td>
-                          <td>{boxscore.away.teamStats.takeaways}</td>
-                          <td>{boxscore.away.teamStats.giveaways}</td>
-                          <td>{boxscore.away.teamStats.blocked}</td>
-                          <td>{boxscore.away.teamStats.goals}</td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <a href={`/team?id=${boxscore.home.team.id}`}>
-                              {homeTeamImage}
-                              {boxscore.home.team.name}
-                            </a>
-                          </td>
-                          <td>{boxscore.home.teamStats.shots}</td>
-                          <td>{boxscore.home.teamStats.pim}</td>
-                          <td>{`${boxscore.home.teamStats.powerPlayGoals}/${boxscore.home.teamStats.powerPlayOpportunities}`}</td>
-                          <td>{boxscore.home.teamStats.hits}</td>
-                          <td>{boxscore.home.teamStats.faceOffWinPercentage.toFixed()}</td>
-                          <td>{boxscore.home.teamStats.takeaways}</td>
-                          <td>{boxscore.home.teamStats.giveaways}</td>
-                          <td>{boxscore.home.teamStats.blocked}</td>
-                          <td>{boxscore.home.teamStats.goals}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+              <div className="summary">
+                <div className="summary-col">
+                  <h3>Scoring</h3>
+                  {renderGoalEvents(goalSummary, groupedHighlights['1'], 1)}
+                  {renderGoalEvents(goalSummary, groupedHighlights['2'], 2)}
+                  {renderGoalEvents(goalSummary, groupedHighlights['3'], 3)}
+                  {
+                    last(lastTenPlays)
+                      && (last(lastTenPlays).period === 4 || last(lastTenPlays).period === 5)
+                      ? renderGoalEvents(goalSummary, groupedHighlights['4'], 4)
+                      : null
+                  }
+                  {
+                    last(lastTenPlays) && last(lastTenPlays).period === 5
+                      ? renderGoalEvents(goalSummary, groupedHighlights['5'], 5)
+                      : null
+                  }
+                  <h3>Penalties</h3>
+                  {renderPenaltyEvents(penaltySummary, 1)}
+                  {renderPenaltyEvents(penaltySummary, 2)}
+                  {renderPenaltyEvents(penaltySummary, 3)}
+                  {
+                    last(lastTenPlays) && (last(lastTenPlays).period === 4 || last(lastTenPlays).period === 5)
+                      ? renderPenaltyEvents(penaltySummary, 4)
+                      : null
+                  }
                 </div>
-              </div>
-              <h3>Scoring Summary</h3>
-              <div className="summary-events">
-                <div className="summary-events-wrapper">
-                  <div className="summary-events-card">
-                    {renderGoalEvents(goalSummary, 1)}
-                    {renderGoalEvents(goalSummary, 2)}
-                    {renderGoalEvents(goalSummary, 3)}
-                  </div>
-                </div>
-              </div>
-              <h3>Penalties</h3>
-              <div className="summary-events">
-                <div className="summary-events-wrapper">
-                  <div className="summary-events-card">
-                    {renderPenaltyEvents(penaltySummary, 1)}
-                    {renderPenaltyEvents(penaltySummary, 2)}
-                    {renderPenaltyEvents(penaltySummary, 3)}
-                  </div>
+                <div className="summary-col">
+                  <h3>Team Stats</h3>
+                  <table className="overall-table">
+                    <thead>
+                      <tr>
+                        <th />
+                        <th>{awayTeamImage}</th>
+                        <th>{homeTeamImage}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          Shots
+                        </td>
+                        <td>{boxscore.away.teamStats.shots}</td>
+                        <td>{boxscore.home.teamStats.shots}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          PIM
+                        </td>
+                        <td>{boxscore.away.teamStats.pim}</td>
+                        <td>{boxscore.home.teamStats.pim}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          PP
+                        </td>
+                        <td>{`${boxscore.away.teamStats.powerPlayGoals}/${boxscore.away.teamStats.powerPlayOpportunities}`}</td>
+                        <td>{`${boxscore.home.teamStats.powerPlayGoals}/${boxscore.home.teamStats.powerPlayOpportunities}`}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          Hits
+                        </td>
+                        <td>{boxscore.away.teamStats.hits}</td>
+                        <td>{boxscore.home.teamStats.hits}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          FO%
+                        </td>
+                        <td>{boxscore.away.teamStats.faceOffWinPercentage.toFixed()}</td>
+                        <td>{boxscore.home.teamStats.faceOffWinPercentage.toFixed()}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          TK
+                        </td>
+                        <td>{boxscore.away.teamStats.takeaways}</td>
+                        <td>{boxscore.home.teamStats.takeaways}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          GV
+                        </td>
+                        <td>{boxscore.away.teamStats.giveaways}</td>
+                        <td>{boxscore.home.teamStats.giveaways}</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          GV
+                        </td>
+                        <td>{boxscore.away.teamStats.blocked}</td>
+                        <td>{boxscore.home.teamStats.blocked}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </TabPanel>
+
+
             <TabPanel>
               <BoxTable
                 players={reject(isScratchedOrGoalie, boxscore.home.players)}

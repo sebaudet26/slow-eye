@@ -1,6 +1,7 @@
 import { last } from 'ramda';
 import moment from 'moment';
-//
+import { toOrdinal } from './misc';
+
 // export const gameStatusLabels = {
 //   1: 'Scheduled',
 //   2: 'Pregame',
@@ -17,9 +18,12 @@ export const calculateGameTime = (lastEvent) => {
     return 'Starting Soon';
   }
   if (lastEvent.period === 4) {
-    return `Overtime, ${lastEvent.periodTime}`;
+    return `Overtime ${lastEvent.periodTimeRemaining}`;
   }
-  return `Period ${lastEvent.period}, ${lastEvent.periodTime}`;
+  if (lastEvent.periodTimeRemaining === '00:00') {
+    return `${toOrdinal(lastEvent.period)} Intermission`;
+  }
+  return `Period ${lastEvent.period} ${lastEvent.periodTimeRemaining}`;
 };
 
 export const getStatusText = (game) => {
@@ -29,11 +33,11 @@ export const getStatusText = (game) => {
 
   switch (statusCode) {
     case '1':
-      return ` - ${moment(game.gameDate).format('h:mm')} PM`;
+      return `${moment(game.gameDate).format('h:mm A')}`;
     case '3':
-      return ` - ${calculateGameTime(last(game.liveFeed.lastTenPlays))}`;
+      return `${calculateGameTime(last(game.liveFeed.lastTenPlays))}`;
     case '4':
-      return ` - ${calculateGameTime(last(game.liveFeed.lastTenPlays))}`;
+      return `${calculateGameTime(last(game.liveFeed.lastTenPlays))}`;
     default:
       return '';
   }

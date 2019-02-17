@@ -1,7 +1,18 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import {
-  uniq, concat, pipe, prop, uniqBy, map, filter, sortBy, path,
+  concat,
+  filter,
+  length,
+  map,
+  path,
+  pipe,
+  prop,
+  propEq,
+  sortBy,
+  takeWhile,
+  uniqBy,
+  uniq,
 } from 'ramda';
 import DraftTable from '../../components/Table/DraftTable';
 import PositionFilter from '../../components/Filter/position';
@@ -44,7 +55,8 @@ export default class StandingsPage extends React.Component {
   }
 
   handleYearChange(target) {
-    const { fetchDraft } = this.props;
+    const { fetchDraft, setLoading } = this.props;
+    setLoading();
     fetchDraft(target.value);
     this.setState({ yearSelected: target.value });
   }
@@ -62,8 +74,9 @@ export default class StandingsPage extends React.Component {
   }
 
   componentWillMount() {
-    const { fetchDraft } = this.props;
+    const { fetchDraft, setLoading } = this.props;
     const { yearSelected } = this.state;
+    setLoading();
     fetchDraft(yearSelected);
   }
 
@@ -72,7 +85,7 @@ export default class StandingsPage extends React.Component {
   }
 
   render() {
-    const { drafts } = this.props;
+    const { drafts, loading } = this.props;
     const {
       posSelected,
       yearSelected,
@@ -81,7 +94,7 @@ export default class StandingsPage extends React.Component {
       teamSelected,
     } = this.state;
 
-    const draft = drafts[yearSelected];
+    const draft = drafts[yearSelected] || [];
 
     const filters = {
       posSelected,
@@ -90,13 +103,20 @@ export default class StandingsPage extends React.Component {
       teamSelected,
     };
 
+    const pageLength = pipe(
+      takeWhile(propEq('round', 1)),
+      length,
+    )(draft);
+
+    console.log('pageLength', pageLength);
+
     const rounds = pipe(
       map(prop('round')),
       uniq,
       sortBy(prop('name')),
       map(round => ({ value: round, label: round })),
       concat([{ value: '', label: 'All' }]),
-    )(draft || []);
+    )(draft);
 
     const teams = pipe(
       map(prop('pickedBy')),
@@ -104,12 +124,12 @@ export default class StandingsPage extends React.Component {
       sortBy(prop('name')),
       map(team => ({ value: team.abbreviation, label: team.name })),
       concat([{ value: '', label: 'All' }]),
-    )(draft || []);
+    )(draft);
 
     return (
       <div className="draft-page">
         <Helmet>
-          <title>Draft</title>
+          <title>Draft - SealStats.com</title>
           <meta
             name="description"
             content="View Drafts by Year. Seal Stats is the best place to view NHL stats. User-friendly and fast."
@@ -121,13 +141,26 @@ export default class StandingsPage extends React.Component {
           Show/Hide Filters
         </div>
         <div className="filters">
-          <YearFilter selected={yearSelected} onChange={this.handleYearChange} />
+          <YearFilter selected={yearSelected} onChange={this.handleYearChange} startYear={1963} />
           <RoundFilter selected={roundSelected} onChange={this.handleRoundChange} options={rounds} />
           <TeamFilter selected={teamSelected} onChange={this.handleTeamChange} options={teams} />
-          <PositionFilter selected={posSelected} onChange={this.handlePosChange} />
+          <PositionFilter selected={posSelected} onChange={this.handlePosChange} enableAllOption />
           <NationalityFilter selected={natSelected} onChange={this.handleNatChange} />
         </div>
-        { draft ? <DraftTable round={roundSelected} draft={draft} filters={filters} year={yearSelected} /> : null }
+        {
+          draft
+            ? (
+              <DraftTable
+                round={roundSelected}
+                draft={draft}
+                filters={filters}
+                year={yearSelected}
+                pageLength={pageLength}
+                loading={loading}
+              />
+            )
+            : null
+        }
       </div>
     );
   }

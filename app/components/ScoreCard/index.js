@@ -1,13 +1,18 @@
 import React from 'react';
+import { pathOr } from 'ramda';
 import { isScheduled, getStatusText } from '../../utils/game';
 import { smallLogoForTeamName, calculatePoints } from '../../utils/team';
+import VideoPlayer from '../VideoPlayer';
+import PlayIcon from '../../images/play-button.svg';
 import './styles.scss';
 
 const ScoreCard = ({ game }) => (
   <div className="game-card-wrapper">
     <div className="game-card">
       <div className="game-card-header">
-        {`${game.status.detailedState}${getStatusText(game)}`}
+        <span>{game.status.detailedState}</span>
+        {' '}
+        <span>{getStatusText(game)}</span>
       </div>
       <div className="game-card-team">
         <svg key={Math.random()} className="game-card-team-img">
@@ -39,13 +44,26 @@ const ScoreCard = ({ game }) => (
           }
         </div>
       </div>
-      {game.status.detailedState === 'Scheduled' ? null : (
-        <div className="game-card-footer">
-          <a href={`/game?id=${game.id}`}>
-            Game Summary
-          </a>
-        </div>
-      )}
+      <div className="game-card-footer">
+        {
+          game.status.detailedState === 'Scheduled'
+            ? null
+            : (
+              <a href={`/game?id=${game.id}`}>
+              Summary
+              </a>
+            )
+        }
+        {
+          pathOr(false, ['highlights', 'recap'], game)
+            ? (
+              <span>
+                <VideoPlayer url={game.highlights.recap} callToAction="Game Recap" />
+              </span>
+            )
+            : null
+        }
+      </div>
     </div>
   </div>
 );

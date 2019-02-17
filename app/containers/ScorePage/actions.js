@@ -7,15 +7,21 @@ const makeScoresQuery = date => `
   games (date: "${date}"){
     id,
     gameDate
-    liveFeed {
-      lastTenPlays {
-        period
-        periodTimeRemaining
-        periodType
-        periodTime
-        description
-      }
-    }
+    ${!moment(date, 'YYYYMMDD').isAfter() ?
+    `
+        highlights {
+          recap
+        }
+        liveFeed {
+          lastTenPlays {
+            period
+            periodTimeRemaining
+            periodType
+            periodTime
+            description
+          }
+        }
+      ` : ''}
     status {
       abstractGameState,
       codedGameState,
@@ -24,28 +30,28 @@ const makeScoresQuery = date => `
     },
     teams {
       away {
-        score,
+        score
         leagueRecord {
-          wins,
-          losses,
+          wins
+          losses
           ot
-        },
+        }
         team {
-          name,
-          id,
+          name
+          id
           abbreviation
         }
-      },
+      }
       home {
-        score,
+        score
         leagueRecord {
-          wins,
-          losses,
+          wins
+          losses
           ot
-        },
+        }
         team {
-          name,
-          id,
+          name
+          id
           abbreviation
         }
       }
@@ -57,6 +63,8 @@ export const fetchGames = date => async (dispatch) => {
   try {
     console.log('date', date);
     const properlyFormattedDate = moment(date, 'YYYYMMDD').format('YYYY-MM-DD');
+    const isFuture = moment(date, 'YYYYMMDD').isAfter();
+    console.log(date, `is Future ${isFuture}`);
     console.log('properlyFormattedDate', properlyFormattedDate);
     const data = await graphqlApi(makeScoresQuery(properlyFormattedDate));
     return dispatch({

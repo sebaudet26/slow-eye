@@ -10,7 +10,7 @@
   }
 
   &-header {
-    margin: 25px 0;
+    margin: 15px 0 25px 0;
     padding: 15px 0;
     position: relative;
     border-bottom: solid 1px $grey-4;
@@ -100,6 +100,13 @@
 
       &-title {
         display: block;
+        text-align: center;
+      }
+
+      .dropdownMenu {
+        &-trigger {
+          justify-content: center;
+        }
       }
     }
 
@@ -109,6 +116,7 @@
 
     &-info {
       display: block;
+      margin: 0 25px;
     }
 
     &-stats {

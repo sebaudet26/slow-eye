@@ -47,6 +47,9 @@ const {
   fetchAllYearsPlayoffStatsForPlayerId,
   fetchPlayoffGameLogsForPlayerId,
   fetchPlayersReport,
+  fetchGameHighlights,
+  calculatePlayerStreaks,
+  calculateTeamsStreaks,
 } = require('../libs/nhlApi');
 
 const ifNotThereFetchId = propName => async (d) => {
@@ -458,11 +461,13 @@ const Player = new GraphQLObjectType({
     logs: {
       args: {
         lastFive: { type: GraphQLBoolean },
+        lastTen: { type: GraphQLBoolean },
       },
       type: GraphQLList(SeasonStat),
       resolve: (p, args) =>
         fetchGameLogsForPlayerId(p.id)
-          .then(logs => (args.lastFive ? take(5, logs) : logs)),
+          .then(logs => (args.lastFive ? take(5, logs) : logs))
+          .then(logs => (args.lastTen ? take(10, logs) : logs)),
     },
     // Lazy load game logs
     playoffLogs: {
@@ -580,6 +585,22 @@ const PenaltyGameEvent = new GraphQLObjectType({
   },
 });
 
+const ShootoutScore = new GraphQLObjectType({
+  name: 'ShootoutScore',
+  fields: {
+    scores: { type: GraphQLInt, resolve: prop('scores') },
+    attempts: { type: GraphQLInt, resolve: prop('attempts') },
+  },
+});
+
+const Shootout = new GraphQLObjectType({
+  name: 'Shootout',
+  fields: {
+    away: { type: ShootoutScore, resolve: prop('away') },
+    home: { type: ShootoutScore, resolve: prop('home') },
+  },
+});
+
 const LiveFeed = new GraphQLObjectType({
   name: 'LiveFeed',
   fields: {
@@ -604,6 +625,10 @@ const LiveFeed = new GraphQLObjectType({
         pathOr([], ['liveData', 'plays', 'allPlays']),
         filter(d => d.result.eventTypeId === 'PENALTY'),
       ),
+    },
+    shootoutSummary: {
+      type: Shootout,
+      resolve: pathOr({}, ['liveData', 'linescore', 'shootoutInfo']),
     },
   },
 });
@@ -634,6 +659,24 @@ const Boxscore = new GraphQLObjectType({
   },
 });
 
+const GameGoalHighlight = new GraphQLObjectType({
+  name: 'GameGoalHighlight',
+  fields: {
+    statsEventId: { type: GraphQLString, resolve: prop('statsEventId') },
+    periodTime: { type: GraphQLString, resolve: prop('periodTime') },
+    period: { type: GraphQLInt, resolve: prop('period') },
+    url: { type: GraphQLString, resolve: prop('url') },
+  },
+});
+
+const GameHighlights = new GraphQLObjectType({
+  name: 'GameHighlights',
+  fields: {
+    recap: { type: GraphQLString, resolve: prop('recap') },
+    goals: { type: GraphQLList(GameGoalHighlight), resolve: prop('goals') },
+  },
+});
+
 const Game = new GraphQLObjectType({
   name: 'Game',
   fields: {
@@ -648,7 +691,7 @@ const Game = new GraphQLObjectType({
     liveFeed: { type: LiveFeed, resolve: p => fetchLiveFeed(p.gamePk) },
     // Lazy load boxscore
     boxscore: { type: Boxscore, resolve: p => fetchBoxscore(p.gamePk) },
-    // venue: {},
+    highlights: { type: GameHighlights, resolve: p => fetchGameHighlights(p.gamePk) },
   },
 });
 
@@ -747,6 +790,54 @@ const PlayerReport = new GraphQLObjectType({
   },
 });
 
+const PlayerStreak = new GraphQLObjectType({
+  name: 'PlayerStreak',
+  fields: {
+    id: { type: GraphQLInt, resolve: prop('playerId') },
+    name: { type: GraphQLString, resolve: prop('playerName') },
+    games: { type: GraphQLInt, resolve: path(['streak', 'games']) },
+    goals: { type: GraphQLInt, resolve: path(['streak', 'goals']) },
+    assists: { type: GraphQLInt, resolve: path(['streak', 'assists']) },
+    shots: { type: GraphQLInt, resolve: path(['streak', 'shots']) },
+    points: { type: GraphQLInt, resolve: path(['streak', 'points']) },
+    shots: { type: GraphQLInt, resolve: path(['streak', 'shots']) },
+    hits: { type: GraphQLInt, resolve: path(['streak', 'hits']) },
+    pim: { type: GraphQLInt, resolve: path(['streak', 'pim']) },
+    powerPlayPoints: { type: GraphQLInt, resolve: path(['streak', 'powerPlayPoints']) },
+    plusMinus: { type: GraphQLInt, resolve: path(['streak', 'plusMinus']) },
+    teamId: {
+      type: GraphQLInt,
+      resolve: pipe(
+        prop('playerTeamsPlayedFor'),
+        replace(/\s/g, ''),
+        split(','),
+        head,
+        teamAbr => find(propEq('abbreviation', teamAbr))(TEAMS),
+        prop('id'),
+      ),
+    },
+    // teamId: { type: GraphQLInt, resolve: prop('teamId') },
+    positionCode: { type: GraphQLString, resolve: prop('playerPositionCode') },
+  },
+});
+
+const TeamStreak = new GraphQLObjectType({
+  name: 'TeamStreak',
+  fields: {
+    id: { type: GraphQLInt, resolve: prop('id') },
+    name: { type: GraphQLString, resolve: prop('name') },
+    teamName: { type: GraphQLString, resolve: prop('teamName') },
+    abbreviation: { type: GraphQLString, resolve: prop('abbreviation') },
+    wins: { type: GraphQLInt, resolve: path(['streak', 'wins']) },
+    losses: { type: GraphQLInt, resolve: path(['streak', 'losses']) },
+    ot: { type: GraphQLInt, resolve: path(['streak', 'ot']) },
+    games: { type: GraphQLInt, resolve: path(['streak', 'games']) },
+    points: { type: GraphQLInt, resolve: path(['streak', 'points']) },
+    goalsFor: { type: GraphQLInt, resolve: path(['streak', 'goalsFor']) },
+    goalsAgainst: { type: GraphQLInt, resolve: path(['streak', 'goalsAgainst']) },
+  },
+});
+
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
@@ -806,6 +897,16 @@ const schema = new GraphQLSchema({
         args: { year: { type: GraphQLInt } },
         type: GraphQLList(DraftPick),
         resolve: (root, args) => fetchDraft(args),
+      },
+      playerStreaks: {
+        args: { limit: { type: GraphQLInt } },
+        type: GraphQLList(PlayerStreak),
+        resolve: (r, args) => calculatePlayerStreaks(args),
+      },
+      teamsStreaks: {
+        args: { limit: { type: GraphQLInt } },
+        type: GraphQLList(TeamStreak),
+        resolve: (r, args) => calculateTeamsStreaks(args),
       },
     },
   }),

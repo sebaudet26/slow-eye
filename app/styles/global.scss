@@ -117,6 +117,21 @@ a {
 
   &:visited {
   }
+
+  &.play-link {
+    cursor: pointer;
+    color: $grey-2;
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 25px !important;
+    }
+
+    &:hover {
+      opacity: 0.75;
+    }
+  }
 }
 
 ul {

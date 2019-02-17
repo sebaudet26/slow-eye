@@ -5,15 +5,6 @@
   border-radius: $radius;
   box-shadow: $shadow;
 
-  &-wrapper {
-    padding: 0 25px 25px 0;
-    width: 50%;
-
-    &:nth-child(even) {
-      padding-right: 0px;
-    }
-  }
-
   &-header {
     padding: 10px 15px;
     border-bottom: solid 1px $grey-4;
@@ -31,8 +22,8 @@
     }
 
     &-img {
-      width: 40px;
-      height: 40px;
+      width: 50px;
+      height: 50px;
       position: relative;
       left: -5px;
     }
@@ -43,6 +34,10 @@
       font-weight: 500;
       font-size: $h4;
     }
+
+    a {
+      color: $black;
+    }
   }
 
   &-links {
@@ -51,10 +46,49 @@
 
   &-footer {
     border-top: solid 1px $grey-4;
+    display: flex;
 
     a {
       padding: 10px 15px;
-      display: inline-block;
+      border-right: solid 1px $grey-4;
+      color: $main;
+      display: flex;
+      align-items: center;
+
+      img {
+        margin-right: 10px;
+        width: 20px !important;
+      }
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+}
+
+@media (min-width: 1201px) {
+  .game-card {
+    &-wrapper {
+      width: 33.33%;
+      padding: 0 25px 25px 0;
+
+      &:nth-child(3), &:nth-child(6), &:nth-child(9), , &:nth-child(12) {
+        padding-right: 0px;
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .game-card {
+    &-wrapper {
+      width: 50%;
+      padding: 0 25px 25px 0;
+
+      &:nth-child(even){
+        padding-right: 0px;
+      }
     }
   }
 }

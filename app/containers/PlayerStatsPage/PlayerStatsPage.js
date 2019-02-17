@@ -7,12 +7,12 @@ import './style.scss';
 class PlayerStatsPage extends React.PureComponent {
   render() {
     const {
-      players, fetchPlayers, fetchTeams, teams,
+      players, fetchPlayers, fetchTeams, teams, setLoading, loading,
     } = this.props;
     return (
       <article>
         <Helmet>
-          <title>Player Stats</title>
+          <title>Player Stats - SealStats.com</title>
           <meta name="description" content="View NHL Players Stats. Leaderboards. Historical Stats. It's all here. Seal Stats is the best place to view NHL stats. User-friendly and fast." />
         </Helmet>
         <div className="playerStats-page">
@@ -23,6 +23,8 @@ class PlayerStatsPage extends React.PureComponent {
           fetchPlayers={fetchPlayers}
           fetchTeams={fetchTeams}
           teams={teams}
+          setLoading={setLoading}
+          loading={loading}
         />
       </article>
     );

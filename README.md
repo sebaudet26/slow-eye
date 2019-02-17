@@ -18,8 +18,16 @@ TODO:
 
 ----------V2----------
 
+- Home Page
+- Line Combinations
+- Schedule Tab for Teams
+- Corsica Rating for Players
 - video
+- Starting Lineups
+- Starting Goalies
 - standings history
 - team stats history
 - team page for any season
+
 https://statsapi.web.nhl.com/api/v1/teams?expand=team.roster&season=20022003
+http://statsapi.web.nhl.com/api/v1/game/2018020789/content

@@ -4,8 +4,34 @@ import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import { sortBy, prop, values } from 'ramda';
 import ScoreCard from '../ScoreCard';
+import LeftArrow from './images/left.svg';
+import RightArrow from './images/right.svg';
 import './slick-theme.min.scss';
 import './style.scss';
+
+function PrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      onClick={onClick}
+      className="slick-arrow"
+    >
+      <img src={LeftArrow} />
+    </div>
+  );
+}
+
+function NextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      onClick={onClick}
+      className="slick-arrow next"
+    >
+      <img src={RightArrow} />
+    </div>
+  );
+}
 
 const renderSlide = (opt, games) => (
   <div className="slick-slide-content" key={Math.random()}>
@@ -51,6 +77,8 @@ class DateSlider extends React.Component {
       slidesToScroll: 1,
       initialSlide: Math.round(daysOptions.length / 2),
       centerMode: true,
+      prevArrow: <PrevArrow />,
+      nextArrow: <NextArrow />,
       responsive: [
         {
           breakpoint: 1024,

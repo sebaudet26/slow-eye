@@ -19,7 +19,7 @@ import {
   shootingSideIs,
   forwardsAbbreviations,
 } from '../../utils/player';
-import { getNumberWithOrdinal } from '../../utils/misc';
+import { toOrdinal } from '../../utils/misc';
 import {
   saveToLS,
   getFromLS,
@@ -62,7 +62,7 @@ export default class TeamPage extends React.Component {
     return (isEmpty(team) ? null : (
       <div className="team-page">
         <Helmet>
-          <title>{team.name}</title>
+          <title>{`${team.name} - SealStats.com`}</title>
           <meta
             name="description"
             content={`${team.name} roster and stats. Seal Stats is the best place to view NHL stats. User-friendly and fast. `}
@@ -79,9 +79,9 @@ export default class TeamPage extends React.Component {
               <Dropdown name={team.name} />
               <p>
                 <span>
-                  {`${getNumberWithOrdinal(team.ranking.division)} Division, `}
-                  {`${getNumberWithOrdinal(team.ranking.conference)} Conference, `}
-                  {`${getNumberWithOrdinal(team.ranking.league)} League`}
+                  {`${toOrdinal(team.ranking.division)} Division, `}
+                  {`${toOrdinal(team.ranking.conference)} Conference, `}
+                  {`${toOrdinal(team.ranking.league)} League`}
                 </span>
               </p>
             </div>

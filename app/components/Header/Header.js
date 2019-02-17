@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import Logo from '../../images/logo.svg';
+import HomeIcon from './images/home';
 import ScoreIcon from './images/scoreboard';
 import StandingsIcon from './images/standings';
 import StatsIcon from './images/stats';
@@ -20,11 +21,11 @@ class Header extends React.Component {
           </a>
           <SearchBar />
           <div className="header-nav">
-            <NavLink activeClassName="active" className="header-nav-item" exact to="/">
-              Standings
-            </NavLink>
             <NavLink activeClassName="active" className="header-nav-item" to="/scores">
-                Scores
+              Scores
+            </NavLink>
+            <NavLink activeClassName="active" className="header-nav-item" exact to="/standings">
+              Standings
             </NavLink>
             <NavLink activeClassName="active" className="header-nav-item" to="/playerstats">
                 Player Stats
@@ -40,14 +41,20 @@ class Header extends React.Component {
             <ul className="header-mobile-list">
               <li>
                 <NavLink activeClassName="active" exact to="/">
-                  <StandingsIcon />
-                    Standings
+                  <HomeIcon />
+                  Home
                 </NavLink>
               </li>
               <li>
                 <NavLink activeClassName="active" to="/scores">
                   <ScoreIcon />
                       Scores
+                </NavLink>
+              </li>
+              <li>
+                <NavLink activeClassName="active" to="/standings">
+                  <StandingsIcon />
+                    Standings
                 </NavLink>
               </li>
               <li>

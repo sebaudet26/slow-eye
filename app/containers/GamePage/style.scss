@@ -1,11 +1,15 @@
 @import '../../styles/variables.scss';
 
-.summary {
+.non-event {
+  padding: 10px;
+}
+
+.game {
   &-header {
     padding: 15px 20px;
     display: flex;
     max-width: 800px;
-    margin: 0 auto 15px auto;
+    margin: 0 auto;
     align-items: center;
 
     &-team {
@@ -15,16 +19,34 @@
       width: 400px;
       justify-content: center;
 
+      &:first-child {
+        justify-content: flex-end;
+
+        .game-header-team-score {
+          margin-right: 25px;
+        }
+      }
+
+      &:last-child {
+        text-align: right;
+        justify-content: flex-start;
+
+        .game-header-team-score {
+          margin-left: 25px;
+        }
+      }
+
       svg {
         width: 100px;
         height: 100px;
       }
 
       &-name {
+        width: 150px;
 
         .team {
           font-weight: 500;
-          font-size: $h3;
+          font-size: 20px;
         }
 
         .record {
@@ -33,26 +55,22 @@
         }
       }
 
-      &:last-child {
-        text-align: right;
-      }
-
       &-score {
         font-size: $h1;
         font-weight: 500;
-        margin: 0 25px;
       }
     }
 
     &-result {
       font-weight: 500;
       text-align: center;
-    }
-  }
 
-  &-overall, &-events {
-    display: flex;
-    margin-top: 25px;
+      .play-link {
+        img {
+          margin-right: 0px;
+        }
+      }
+    }
 
     &-wrapper {
       width: 100%;
@@ -67,27 +85,164 @@
   }
 }
 
+.summary {
+  display: flex;
+  flex-flow: wrap;
+
+  &-col:first-child {
+    width: 75%;
+  }
+
+  &-col:last-child {
+    width: 25%;
+  }
+
+  .card {
+    background: $white;
+    border-radius: 6px;
+    box-shadow: $shadow;
+    margin: 0 25px 15px 0;
+    position: relative;
+
+    &-header {
+      border-bottom: solid 1px $grey-4;
+      padding: 10px;
+      font-weight: 600;
+    }
+
+    &-cell {
+      padding: 10px;
+      border-bottom: solid 1px $grey-4;
+      display: flex;
+
+      &.penalty {
+        align-items: center;
+      }
+
+      &:last-child {
+        border-bottom: 0px;
+      }
+
+      &-item {
+        .penalty-img {
+          width: 30px;
+          height: 30px;
+          margin-right: 15px;
+        }
+
+       &.penalty-team {
+         display: flex;
+         align-items: center;
+       }
+
+       &.penalty-player {
+         margin: 0 25px;
+
+         a {
+           color: $black;
+           white-space: pre;
+
+           &:hover {
+             color: $main;
+           }
+         }
+       }
+
+       &.penalty-info {
+         display: flex;
+         flex-basis: auto;
+         flex-grow: 1;
+         justify-content: flex-end;
+         margin-right: 10px;
+       }
+      }
+    }
+  }
+
+  .goal {
+    &-image {
+      position: relative;
+      margin-right: 40px;
+
+      &-team {
+        height: 30px;
+      }
+
+      .player-img-face {
+        width: 60px;
+        border-radius: 100%;
+      }
+
+      .icon-wrapper {
+        position:absolute;
+        top: 30px;
+        left: 40px;
+        width: 40px;
+        height: 40px;
+        padding: 5px;
+      }
+    }
+
+    &-details {
+      a {
+        color: $black;
+
+        &:hover {
+          color: $main;
+        }
+      }
+
+      &-scorer {
+        font-weight: 600;
+        font-size: 18px;
+
+        a {
+          white-space: pre;
+        }
+      }
+
+      &-assist {
+        a {
+          white-space: pre;
+        }
+      }
+
+      &-time {
+        margin-top: 10px;
+      }
+    }
+
+    &-video {
+      margin-top: 5px;
+      margin-right: 10px;
+      display: flex;
+      flex-basis: auto;
+      flex-grow: 1;
+      justify-content: flex-end;
+    }
+  }
+}
+
 .overall-table {
   width: 100%;
+  background: $white;
+  border-radius: 6px;
+  box-shadow: $shadow;
 
   thead {
     border-bottom: solid 1px $grey-4;
 
     th {
-      text-align: center;
-      color: $grey-2;
-      font-weight: 500;
       padding: 10px;
+
+      svg {
+        width: 50px;
+        height: 50px;
+      }
     }
   }
 
   tbody {
-    svg {
-      height: 50px;
-      width: 50px;
-      margin-right: 10px;
-    }
-
     tr {
       border-bottom: solid 1px $grey-4;
 
@@ -98,98 +253,15 @@
       td {
         padding: 10px 5px;
         text-align: center;
-        font-size: 24px;
-        font-weight: 500;
+        font-size: 16px;
 
         &:first-child {
           padding-left: 10px;
           text-align: left;
           white-space: pre;
           font-size: 16px;
-          font-weight: 400;
-        }
-
-        &:last-child {
-          padding-right: 0px;
           font-weight: 600;
         }
-      }
-    }
-  }
-}
-
-.events-table {
-  width: 100%;
-
-  thead {
-    tr {
-      th:first-child {
-        width: 125px;
-      }
-
-      th:nth-child(2) {
-        width: 300px;
-      }
-
-      th:nth-child(3) {
-        width: 400px;
-      }
-
-      th:nth-child(4) {
-        width: 200px;
-      }
-    }
-
-    tr:nth-child(2) {
-      th {
-        background: $grey-5;
-        border-top: solid 1px $grey-4;
-        color: $grey-2;
-        padding: 5px 10px 5px 10px;
-        font-weight: 500;
-      }
-    }
-  }
-
-  tbody {
-    tr {
-      border-top: solid 1px $grey-4;
-
-      &:last-child {
-        border-bottom: solid 1px $grey-4;
-      }
-
-      td {
-        white-space: pre;
-
-        img {
-          border-radius: 100%;
-          width: 40px;
-          margin-right: 10px;
-        }
-      }
-    }
-  }
-
-  thead {
-    border-top: solid 1px $grey-4;
-    border-bottom: solid 1px $grey-4;
-
-    &:first-child {
-      border-top: 0px;
-    }
-
-    th {
-      text-align: left;
-      font-weight: 600;
-      padding: 10px;
-    }
-  }
-
-  tbody {
-    tr {
-      td {
-        padding: 10px;
       }
     }
   }
@@ -218,22 +290,99 @@
 }
 
 @media screen and (max-width: 800px) {
-  .summary {
-    &-events, &-overall {
-      &-card {
-        overflow: scroll;
+  .game {
+    &-header {
+      &-team {
+        &-name {
+          width:auto;
+        }
+
+        &-score {
+          margin: 0 25px;
+        }
       }
+    }
+  }
+  .summary {
+    display: block;
+
+    &-col:first-child, &-col:last-child {
+      width: 100%;
+    }
+
+    .card {
+      margin-right: 0px;
+    }
+
+    .goal {
+      &-details {
+        &-assist {
+          a {
+            white-space: pre-wrap;
+          }
+        }
+      }
+      &-image {
+        margin-right: 15px;
+
+        &-team {
+          height: 30px;
+        }
+
+        .icon-wrapper {
+          background: none;
+          box-shadow: none;
+          left: 25px;
+          top: 25px;
+        }
+
+        .player-img-face {
+          width: 50px;
+        }
+      }
+
     }
   }
 }
 
 @media screen and (max-width: 600px) {
   .summary {
+    .goal {
+      &-details {
+        &-assist {
+          font-size: 14px;
+          white-space: pre;
+        }
+
+        &-time {
+          font-size: 14px;
+        }
+      }
+
+      &-video {
+        margin-top: 0px;
+        position: absolute;
+        right: 5px;
+      }
+    }
+  }
+  .video {
+
+    &-player {
+      position: fixed;
+      left: 0px;
+      width: 100% !important;
+      top: 50px;
+    }
+  }
+
+  .game {
     &-header {
-      padding: 0px;
+      padding: 15px 0;
 
       &-team {
         &-name {
+          display: none;
           .team {
             font-size: 16px;
           }
@@ -244,13 +393,12 @@
         }
 
         &-score {
-          font-size: 24px;
           margin: 0 10px;
         }
 
         svg {
-          width: 70px;
-          height: 70px;
+          width: 80px;
+          height: 80px;
 
           &:first-child {
             margin-right: 10px;

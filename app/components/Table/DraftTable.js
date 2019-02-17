@@ -12,10 +12,11 @@ import 'react-table/react-table.css';
 import './styles.scss';
 
 const DraftTable = ({
-  draft, filters, year, round,
+  draft, filters, year, round, pageLength, loading,
 }) => (
   <ReactTable
     data={draft}
+    loading={loading}
     resizable={false}
     filtered={[
       {
@@ -39,7 +40,7 @@ const DraftTable = ({
         value: filters.teamSelected,
       },
     ]}
-    noDataText="Loading all dat good data stuff..."
+    noDataText="No draft picks found for criteria"
     columns={[
       {
         Header: 'Rd.',
@@ -66,7 +67,7 @@ const DraftTable = ({
         minWidth: 175,
         Cell: row => (
           <div>
-            <TeamLogo teamId={row.original.pickedBy.id} season={Number(`${year - 1}${year}`)} />
+            <TeamLogo teamId={row.original.pickedBy.id} season={Number(`${year}${year + 1}`)} />
             {row.original.pickedBy.name}
           </div>
         ),
@@ -85,8 +86,8 @@ const DraftTable = ({
         id: 'position',
         accessor: prop('position'),
         className: 'text-left',
-        maxWidth: 75,
-        minWidth: 50,
+        maxWidth: 85,
+        minWidth: 85,
         filterMethod: (filter, row) => {
           if (filter.value === 'S') {
             return row[filter.id] !== 'G';
@@ -150,7 +151,8 @@ const DraftTable = ({
     defaultSortAsc
     showPagination
     className="-striped draft-table"
-    defaultPageSize={31}
+    pageSize={pageLength || 30}
+    defaultPageSize={30}
   />
 );
 

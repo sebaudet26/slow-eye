@@ -68,7 +68,8 @@ class PlayersTable extends React.PureComponent {
 
   componentDidMount() {
     const { seasonSelected } = this.state;
-    const { fetchPlayers, fetchTeams } = this.props;
+    const { fetchPlayers, fetchTeams, setLoading } = this.props;
+    setLoading();
     fetchPlayers(seasonSelected || seasons[0].value);
     fetchTeams(seasonSelected || seasons[0].value);
   }
@@ -78,10 +79,11 @@ class PlayersTable extends React.PureComponent {
   }
 
   handleSeasonChange(target) {
-    const { fetchPlayers, fetchTeams } = this.props;
+    const { fetchPlayers, fetchTeams, setLoading } = this.props;
     this.setState({
       seasonSelected: target.value,
     });
+    setLoading();
     fetchPlayers(target.value);
     fetchTeams(target.value);
   }
@@ -117,7 +119,7 @@ class PlayersTable extends React.PureComponent {
 
   // TODO: selectors should live in the container and pass down their state
   render() {
-    const { players, teams } = this.props;
+    const { players, teams, loading } = this.props;
     console.log(this.state);
     const {
       seasonSelected, posSelected, natSelected, teamSelected, XPSelected,
@@ -163,8 +165,9 @@ class PlayersTable extends React.PureComponent {
             },
           ]}
           data={players}
+          loading={loading}
           resizable={false}
-          noDataText="Loading all that good stuff..."
+          noDataText="No players match the criteria"
           filterable
           defaultFilterMethod={toLowerCaseAndMatch}
           getTdProps={(state, rowInfo, column, instance) => ({
@@ -195,7 +198,6 @@ class PlayersTable extends React.PureComponent {
               minWidth: 110,
               fixed: 'left',
               Cell: row => <PlayerName id={row.original.id} name={row.value} />,
-
             },
             {
               Header: 'Pos',

@@ -33,7 +33,7 @@ const RosterStatsTable = ({ players, position }) => (
           Header: 'Name',
           id: 'fullName',
           accessor: d => `${d.player.info.fullName}+${d.player.id}`,
-          className: 'text-left border-mobile',
+          className: 'text-left',
           fixed: 'left',
           maxWidth: 200,
           minWidth: 150,
@@ -42,15 +42,6 @@ const RosterStatsTable = ({ players, position }) => (
               {row.value.split('+')[0]}
             </a>
           ),
-        },
-        {
-          Header: 'Age',
-          id: 'age',
-          className: 'border-right hidden-mobile',
-          maxWidth: 65,
-          minWidth: 50,
-          fixed: 'left',
-          accessor: d => d.player.info.currentAge,
         },
         {
           Header: 'GP',
@@ -160,8 +151,8 @@ const RosterStatsTable = ({ players, position }) => (
           Header: 'PIM',
           id: 'pim',
           accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'pim'])),
-          show: position === 'G',
-          maxWidth: 75,
+          show: position !== 'G',
+          maxWidth: 55,
           minWidth: 50,
         },
         {

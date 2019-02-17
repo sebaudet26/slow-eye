@@ -6,7 +6,26 @@ const makeGameBoxscoreQuery = id => `
 {
   game (id: "${id}") {
     id
+    highlights {
+      recap
+      goals {
+        statsEventId
+        periodTime
+        period
+        url
+      }
+    }
     liveFeed {
+      shootoutSummary {
+        away {
+          scores
+          attempts
+        }
+        home {
+          scores
+          attempts
+        }
+      }
       penaltySummary {
         type
         severity

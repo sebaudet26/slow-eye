@@ -1,5 +1,13 @@
 const redis = require('redis');
+const moment = require('moment');
 const { promisify } = require('util');
+
+const getMsUntilFourAM = () => Math.round(
+  moment()
+    .endOf('week')
+    .add(4, 'hours')
+    .valueOf() - moment().valueOf(),
+);
 
 const makeCacheClient = () => {
   const redisClient = redis.createClient({
@@ -22,6 +30,15 @@ const makeCacheClient = () => {
       console.log(`Redis: Inserting a value to redis went ${rep}`);
       const val = await cache.get('test_key');
       console.log(`Redis: Value is... ${val}`);
+
+      // FOR DELETING ALL CACHE
+      console.log(`Cache will be cleared in ${(getMsUntilFourAM() / 1000 / 60 / 60).toFixed(1)} hours`);
+      setTimeout(
+        () => redisClient.flushdb((err, succeeded) => {
+          console.log('Flushed command was succeessful: ', succeeded);
+        }),
+        getMsUntilFourAM(),
+      );
     } catch (e) {
       throw new Error(`Failed to insert value in redis client ${e.toString()}`);
     }
