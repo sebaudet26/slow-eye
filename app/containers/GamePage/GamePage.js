@@ -5,6 +5,7 @@ import {
   filter,
   groupBy,
   isEmpty,
+  isNil,
   join,
   last,
   map,
@@ -244,7 +245,7 @@ class GamePage extends React.Component {
             </div>
           </div>
           <Tabs
-            defaultIndex={Number(getFromLS('gameTabIndex')) || 1}
+            defaultIndex={isNil(getFromLS('gameTabIndex')) ? 1 : Number(getFromLS('gameTabIndex'))}
             onSelect={i => saveToLS('gameTabIndex', i)}
           >
             <TabList>
