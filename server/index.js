@@ -2,6 +2,7 @@ require('./util/loadDevEnv');
 const express = require('express');
 const { resolve } = require('path');
 const bodyParser = require('body-parser');
+const fs = require('fs');
 const logger = require('./util/logger');
 const port = require('./util/port');
 const setup = require('./middlewares/frontendMiddleware');
