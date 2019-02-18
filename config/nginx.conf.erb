@@ -40,6 +40,9 @@ http {
       index index.html;
       try_files $uri $uri/ /index.html;
     }
+    location ~ "^/images/(?<image>.+)$" {
+      alias /app/images/$image;
+    }
     location /graphql {
       index index.html;
       try_files $uri $uri/ @express; # instead of 404, proxy back to express using a named location block;
