@@ -41,7 +41,7 @@ http {
       try_files $uri $uri/ /index.html;
     }
     location ~ "^/images/(?<image>.+)$" {
-      alias /app/images/$image;
+      alias app/images/$image;
     }
     location /graphql {
       index index.html;
