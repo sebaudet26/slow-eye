@@ -1,1 +1,1 @@
-web: npm run start:production
+web: ls && bin/start-nginx npm run start:production
