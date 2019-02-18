@@ -1,3 +1,6 @@
-const argv = require('./argv');
 
-module.exports = parseInt(argv.port || process.env.PORT || '3000', 10);
+module.exports = parseInt(
+  process.env.NODE_ENV === 'production'
+    ? '3000'
+    : (process.env.PORT || '3000'), 10,
+);
