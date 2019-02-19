@@ -78,7 +78,7 @@
     bottom: 0;
     width: 100%;
     left: 0;
-    background: $white;
+    background: $black;
     z-index: 99;
     border-top: solid 1px $grey-4;
 
@@ -88,6 +88,8 @@
 
       li {
         margin: auto;
+        width: 20%;
+        text-align: center;
 
         a {
           transition: 0.3s;
@@ -97,7 +99,7 @@
           font-weight: 500;
 
           &.active {
-            color: $black;
+            color: $white;
           }
 
           .icon {
