@@ -86,14 +86,14 @@
       height: 70px;
 
       li {
-        margin: auto;
+        margin: 11px auto;
         width: 20%;
         text-align: center;
 
         a {
           transition: 0.3s;
           color: lighten($grey-2 , 15%);
-          font-size: 12px;
+          font-size: 11px;
           text-transform: uppercase;
           font-weight: 500;
 
