@@ -17,7 +17,7 @@ class Header extends React.Component {
         <div className="header-wrapper">
           <a className="header-logo" href="/">
             <img src={Logo} alt="" />
-            <span className="header-brand">Seal Stats</span>
+            <span className="header-brand">Sealstats</span>
           </a>
           <SearchBar />
           <div className="header-nav">
