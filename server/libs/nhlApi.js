@@ -26,7 +26,7 @@ const {
   take,
   takeLast,
 } = require('ramda');
-const moment = require('moment');
+const moment = require('moment-timezone');
 const fetch = require('node-fetch');
 const cache = require('./redisApi');
 
@@ -34,8 +34,8 @@ const nhlApiBase = 'http://www.nhl.com/stats/rest';
 const nhlRecordsBase = 'https://records.nhl.com/site/api';
 const nhlStatsApiBase = 'https://statsapi.web.nhl.com/api/v1';
 
-// technically 1AM to leave some time for Western coast to be at end of day
-const getSecondsUntilMidnight = () => Math.round((moment().endOf('day').add(1, 'hours').valueOf() - moment().valueOf()) / 1000);
+// technically 2AM to leave some time for Western coast to be at end of day
+const getSecondsUntilMidnight = () => Math.round((moment.tz('America/New_York').endOf('day').add(2, 'hours').valueOf() - moment.tz('America/New_York').valueOf()) / 1000);
 
 // expiration is a number in seconds
 const nhlStatsApi = async (resource, expiration, force) => {
