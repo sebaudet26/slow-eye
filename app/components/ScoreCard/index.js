@@ -44,26 +44,24 @@ const ScoreCard = ({ game }) => (
           }
         </div>
       </div>
-      <div className="game-card-footer">
-        {
-          game.status.detailedState === 'Scheduled'
-            ? null
-            : (
-              <a href={`/game?id=${game.id}`}>
-              Summary
-              </a>
-            )
-        }
-        {
-          pathOr(false, ['highlights', 'recap'], game)
-            ? (
-              <span>
-                <VideoPlayer url={game.highlights.recap} callToAction="Game Recap" />
-              </span>
-            )
-            : null
-        }
-      </div>
+      {
+        game.status.detailedState === 'Scheduled' ? null : (
+          <div className="game-card-footer">
+            <a href={`/game?id=${game.id}`}>
+                Summary
+            </a>
+            {
+              pathOr(false, ['highlights', 'recap'], game)
+                ? (
+                  <span>
+                    <VideoPlayer url={game.highlights.recap} callToAction="Game Recap" />
+                  </span>
+                )
+                : null
+            }
+          </div>
+        )
+      }
     </div>
   </div>
 );
