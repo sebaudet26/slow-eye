@@ -531,7 +531,7 @@ const calculatePlayerPointsStreak = player => ({
 });
 
 const fetchTeamSchedule = async (teamId) => {
-  const resource = `/schedule?teamId=${teamId}&startDate=2018-10-01&endDate=${moment().format('YYYY-MM-DD')}`;
+  const resource = `/schedule?teamId=${teamId}&startDate=2018-10-01&endDate=${moment.tz('America/New_York').subtract(1, 'day').endOf('day').format('YYYY-MM-DD')}`;
   const teamSchedule = await nhlStatsApi(resource);
   return teamSchedule.dates.map(date => ({ date: date.date, game: date.games[0] }));
 };
@@ -561,7 +561,7 @@ const calculateTeamsStreaks = async (args = {}) => {
       ]),
       map(omit(['schedule'])),
     )(teamsWithSchedules);
-    console.log(`Saving streaks for the next ${getSecondsUntilMidnight() / 60 / 60} hours`);
+    console.log(`Saving streaks for the next ${(getSecondsUntilMidnight() / 60 / 60).toFixed(1)} hours`);
     cache
       .set(
         'team_streaks',
