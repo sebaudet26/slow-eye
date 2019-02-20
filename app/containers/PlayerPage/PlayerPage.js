@@ -50,7 +50,6 @@ export default class PlayerPage extends React.Component {
     const internationalLeagueNames = ['WJC-A', 'WC-A', 'Olympics'];
     const proStats = reject(stat => contains(stat.league.name, internationalLeagueNames))(careerStats);
     const internationalStats = filter(stat => contains(stat.league.name, internationalLeagueNames))(careerStats);
-    console.log('internationalStats', internationalStats);
 
     return (
       <div>
@@ -259,8 +258,8 @@ export default class PlayerPage extends React.Component {
         {
           internationalStats.length || logs.length ? (
             <Tabs
-              defaultIndex={Number(getFromLS('playerTabIndex')) || 0}
-              onSelect={i => saveToLS('playerTabIndex', i)}
+              defaultIndex={Number(getFromLS(`playerTabIndex${urlParams.get('id')}`)) || 0}
+              onSelect={i => saveToLS(`playerTabIndex${urlParams.get('id')}`, i)}
             >
               <TabList>
                 <Tab>Career Stats</Tab>

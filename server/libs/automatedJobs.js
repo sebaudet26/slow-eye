@@ -16,8 +16,8 @@ console.log(`Will re-calculate streaks in ${(getMsUntilFourAM() / 1000 / 60 / 60
 setTimeout(
   () => {
     logger.info('Calculating streaks');
-    calculateTeamsStreaks();
-    calculatePlayerStreaks();
+    calculateTeamsStreaks({ forced: true });
+    calculatePlayerStreaks({ forced: true });
   },
   getMsUntilFourAM(),
 );

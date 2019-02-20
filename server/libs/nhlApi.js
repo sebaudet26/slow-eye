@@ -539,7 +539,7 @@ const fetchTeamSchedule = async (teamId) => {
 const calculateTeamsStreaks = async (args = {}) => {
   try {
     const cached = await cache.get('team_streaks');
-    if (cached) {
+    if (cached && !args.forced) {
       return take(args.limit || defaultTeamsLimit, JSON.parse(cached));
     }
 
@@ -561,13 +561,11 @@ const calculateTeamsStreaks = async (args = {}) => {
       ]),
       map(omit(['schedule'])),
     )(teamsWithSchedules);
-
+    console.log(`Saving streaks for the next ${getSecondsUntilMidnight() / 60 / 60} hours`);
     cache
       .set(
         'team_streaks',
         JSON.stringify(teamsStreaks),
-        'EX',
-        (getSecondsUntilMidnight()),
       );
 
     return take(args.limit || defaultTeamsLimit, teamsStreaks);
@@ -598,7 +596,7 @@ const fetchByTen = async (cumulative, players) => {
 const calculatePlayerStreaks = async (args = {}) => {
   try {
     const cached = await cache.get('players_streaks');
-    if (cached) {
+    if (cached && !args.forced) {
       return take(args.limit || defaultPlayersLimit, JSON.parse(cached));
     }
     const skatersummaryAll = '/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&cayenneExp=gameTypeId=2%20and%20seasonId%3E=20182019%20and%20seasonId%3C=20182019&sort=[{%22property%22:%22playerId%22}]';
@@ -618,13 +616,11 @@ const calculatePlayerStreaks = async (args = {}) => {
       ]),
       map(omit(['logs'])),
     )(playersLogs);
-
+    console.log(`Saving streaks for the next ${getSecondsUntilMidnight() / 60 / 60} hours`);
     cache
       .set(
         'players_streaks',
         JSON.stringify(streaks),
-        'EX',
-        (getSecondsUntilMidnight()),
       );
 
     return take(args.limit || defaultPlayersLimit, streaks);

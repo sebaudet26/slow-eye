@@ -166,7 +166,7 @@ class GamePage extends React.Component {
   }
 
   render() {
-    const { game } = this.props;
+    const { game, gameId } = this.props;
 
     if (!game || !game.boxscore || !game.liveFeed) {
       return null;
@@ -245,8 +245,8 @@ class GamePage extends React.Component {
             </div>
           </div>
           <Tabs
-            defaultIndex={isNil(getFromLS('gameTabIndex')) ? 1 : Number(getFromLS('gameTabIndex'))}
-            onSelect={i => saveToLS('gameTabIndex', i)}
+            defaultIndex={isNil(getFromLS(`gameTabIndex${gameId}`)) ? 1 : Number(getFromLS(`gameTabIndex${gameId}`))}
+            onSelect={i => saveToLS(`gameTabIndex${gameId}`, i)}
           >
             <TabList>
               <Tab>{boxscore.away.team.teamName}</Tab>
