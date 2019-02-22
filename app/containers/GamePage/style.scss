@@ -290,6 +290,13 @@
 }
 
 @media screen and (max-width: 800px) {
+  .video {
+    &-player {
+      left: 0px !important;
+      width: 100% !important;
+    }
+  }
+
   .game {
     &-header {
       &-team {
@@ -364,15 +371,6 @@
         position: absolute;
         right: 5px;
       }
-    }
-  }
-  .video {
-
-    &-player {
-      position: fixed;
-      left: 0px;
-      width: 100% !important;
-      top: 50px;
     }
   }
 

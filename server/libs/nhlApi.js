@@ -26,7 +26,7 @@ const {
   take,
   takeLast,
 } = require('ramda');
-const moment = require('moment');
+const moment = require('moment-timezone');
 const fetch = require('node-fetch');
 const cache = require('./redisApi');
 
@@ -34,8 +34,8 @@ const nhlApiBase = 'http://www.nhl.com/stats/rest';
 const nhlRecordsBase = 'https://records.nhl.com/site/api';
 const nhlStatsApiBase = 'https://statsapi.web.nhl.com/api/v1';
 
-// technically 1AM to leave some time for Western coast to be at end of day
-const getSecondsUntilMidnight = () => Math.round((moment().endOf('day').add(1, 'hours').valueOf() - moment().valueOf()) / 1000);
+// technically 2AM to leave some time for Western coast to be at end of day
+const getSecondsUntilMidnight = () => Math.round((moment.tz('America/New_York').endOf('day').add(2, 'hours').valueOf() - moment.tz('America/New_York').valueOf()) / 1000);
 
 // expiration is a number in seconds
 const nhlStatsApi = async (resource, expiration, force) => {
@@ -531,7 +531,7 @@ const calculatePlayerPointsStreak = player => ({
 });
 
 const fetchTeamSchedule = async (teamId) => {
-  const resource = `/schedule?teamId=${teamId}&startDate=2018-10-01&endDate=${moment().format('YYYY-MM-DD')}`;
+  const resource = `/schedule?teamId=${teamId}&startDate=2018-10-01&endDate=${moment.tz('America/New_York').subtract(1, 'day').endOf('day').format('YYYY-MM-DD')}`;
   const teamSchedule = await nhlStatsApi(resource);
   return teamSchedule.dates.map(date => ({ date: date.date, game: date.games[0] }));
 };
@@ -539,7 +539,7 @@ const fetchTeamSchedule = async (teamId) => {
 const calculateTeamsStreaks = async (args = {}) => {
   try {
     const cached = await cache.get('team_streaks');
-    if (cached) {
+    if (cached && !args.forced) {
       return take(args.limit || defaultTeamsLimit, JSON.parse(cached));
     }
 
@@ -561,13 +561,11 @@ const calculateTeamsStreaks = async (args = {}) => {
       ]),
       map(omit(['schedule'])),
     )(teamsWithSchedules);
-
+    console.log(`Saving streaks for the next ${(getSecondsUntilMidnight() / 60 / 60).toFixed(1)} hours`);
     cache
       .set(
         'team_streaks',
         JSON.stringify(teamsStreaks),
-        'EX',
-        (getSecondsUntilMidnight()),
       );
 
     return take(args.limit || defaultTeamsLimit, teamsStreaks);
@@ -598,7 +596,7 @@ const fetchByTen = async (cumulative, players) => {
 const calculatePlayerStreaks = async (args = {}) => {
   try {
     const cached = await cache.get('players_streaks');
-    if (cached) {
+    if (cached && !args.forced) {
       return take(args.limit || defaultPlayersLimit, JSON.parse(cached));
     }
     const skatersummaryAll = '/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&cayenneExp=gameTypeId=2%20and%20seasonId%3E=20182019%20and%20seasonId%3C=20182019&sort=[{%22property%22:%22playerId%22}]';
@@ -618,13 +616,11 @@ const calculatePlayerStreaks = async (args = {}) => {
       ]),
       map(omit(['logs'])),
     )(playersLogs);
-
+    console.log(`Saving streaks for the next ${getSecondsUntilMidnight() / 60 / 60} hours`);
     cache
       .set(
         'players_streaks',
         JSON.stringify(streaks),
-        'EX',
-        (getSecondsUntilMidnight()),
       );
 
     return take(args.limit || defaultPlayersLimit, streaks);

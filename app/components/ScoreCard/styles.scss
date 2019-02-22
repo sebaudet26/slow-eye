@@ -94,6 +94,12 @@
 }
 
 @media (max-width: 700px) {
+  .video {
+    &-player {
+      width: 100% !important;
+      left: 0;
+    }
+  }
   .game-card-wrapper {
     width: 100%;
     padding-right: 0px;

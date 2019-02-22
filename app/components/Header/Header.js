@@ -17,7 +17,7 @@ class Header extends React.Component {
         <div className="header-wrapper">
           <a className="header-logo" href="/">
             <img src={Logo} alt="" />
-            <span className="header-brand">Seal Stats</span>
+            <span className="header-brand">Sealstats</span>
           </a>
           <SearchBar />
           <div className="header-nav">
@@ -48,25 +48,25 @@ class Header extends React.Component {
               <li>
                 <NavLink activeClassName="active" to="/scores">
                   <ScoreIcon />
-                      Scores
+                  Scores
                 </NavLink>
               </li>
               <li>
                 <NavLink activeClassName="active" to="/standings">
                   <StandingsIcon />
-                    Standings
+                  Standings
                 </NavLink>
               </li>
               <li>
                 <NavLink activeClassName="active" to="/playerstats">
                   <StatsIcon />
-                      Player Stats
+                    Players
                 </NavLink>
               </li>
               <li>
                 <NavLink activeClassName="active" to="/teamstats">
                   <TeamsIcon />
-                      Team Stats
+                    Teams
                 </NavLink>
               </li>
             </ul>

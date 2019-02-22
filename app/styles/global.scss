@@ -114,6 +114,7 @@ a {
   text-decoration: none;
   transition: 0.3s;
   color: $main;
+  -webkit-tap-highlight-color: transparent;
 
   &:visited {
   }
