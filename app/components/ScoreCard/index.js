@@ -10,7 +10,7 @@ const ScoreCard = ({ game }) => (
   <div className="game-card-wrapper">
     <div className="game-card">
       <div className="game-card-header">
-        <span>{game.status.detailedState}</span>
+        { game.status.detailedState === 'Scheduled' ? null : (<span>{game.status.detailedState}</span>) }
         {' '}
         <span>{getStatusText(game)}</span>
       </div>
