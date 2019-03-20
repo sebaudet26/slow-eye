@@ -41,3 +41,8 @@ TODO:
 
 https://statsapi.web.nhl.com/api/v1/teams?expand=team.roster&season=20022003
 http://statsapi.web.nhl.com/api/v1/game/2018020789/content
+
+
+MLB
+https://appac.github.io/mlb-data-api-docs/
+https://github.com/baseballhackday/data-and-resources/wiki/Resources-and-ideas
