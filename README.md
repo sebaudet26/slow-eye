@@ -20,15 +20,24 @@ TODO:
 
 - ~~video~~
 - ~~home page~~
-- Line Combinations
+- Add Tabs to Standings Page (Wild Card Tab, League Tab, Conference Tab)
+- Remove Draft Page from Main Menu
+- Put Player Stats and Team Stats under Stats dropdown
+- Beautify Footer
 - Algorithm for Hot Players and Power Rankings
 - Schedule Page, Schedule Tab for Team page
-- Corsica Rating for Players
-- Starting Lineups
-- Starting Goalies
+- 3 stars to game page
 - Standings history
 - Team stats history
 - Team page for any season
+
+
+----------Other Ideas----------
+
+- Line Combinations
+- Corsica Ratings for Players, Advanced Stats
+- Starting Lineups
+- Starting Goalies
 
 https://statsapi.web.nhl.com/api/v1/teams?expand=team.roster&season=20022003
 http://statsapi.web.nhl.com/api/v1/game/2018020789/content
