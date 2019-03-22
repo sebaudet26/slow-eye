@@ -22,7 +22,7 @@ class HotPlayersPage extends Component {
           />
         </Helmet>
         <h2>
-          {`Who's hot? ${this.props.features.someFlag && 'Seb is Fucking hot'}`}
+          {`Who's hot?${this.props.features.someFlag ? ' Seb is Fucking hot' : ''}`}
         </h2>
         <HotTable players={hotPlayers} />
       </div>
