@@ -11,6 +11,7 @@
  */
 
 import { fromJS } from 'immutable';
+import { FETCH_FEATURES } from './constants';
 
 // The initial state of the App
 const initialState = fromJS({
@@ -20,10 +21,15 @@ const initialState = fromJS({
   userData: {
     repositories: false,
   },
+  features: {
+
+  },
 });
 
 function appReducer(state = initialState, action) {
   switch (action.type) {
+    case FETCH_FEATURES:
+      return initialState.set('features', action.payload);
     default:
       return state;
   }

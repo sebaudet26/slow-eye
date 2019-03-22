@@ -6,9 +6,9 @@ const fs = require('fs');
 const logger = require('./util/logger');
 const port = require('./util/port');
 const setup = require('./middlewares/frontendMiddleware');
-const api = require('./middlewares/api');
 const graphql = require('./middlewares/graphql');
-const redisApi = require('./libs/redisApi');
+require('./libs/redisApi');
+const features = require('./features');
 
 require('./libs/automatedJobs');
 
@@ -18,8 +18,14 @@ app.use('/images', express.static('app/images'));
 
 app.use(bodyParser.json());
 
-app.use('/api', api);
 app.use('/graphql', graphql);
+
+app.get('/features', (req, res) => {
+  if (process.env.NODE_ENV === 'production') {
+    return res.json(features.production);
+  }
+  return res.json(features.development);
+});
 
 setup(app, {
   outputPath: resolve(process.cwd(), 'build'),

@@ -10,5 +10,6 @@
  */
 
 export const DEFAULT_LOCALE = 'en';
+export const FETCH_FEATURES = 'FETCH_FEATURES';
 
 export default null;

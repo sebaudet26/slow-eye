@@ -33,8 +33,14 @@ const makeSelectLocation = () => createSelector(
   routeState => routeState.get('location').toJS(),
 );
 
+const makeSelectFeatures = () => createSelector(
+  selectGlobal,
+  globalState => globalState.get('features'),
+);
+
 export {
   selectGlobal,
+  makeSelectFeatures,
   makeSelectCurrentUser,
   makeSelectLoading,
   makeSelectError,

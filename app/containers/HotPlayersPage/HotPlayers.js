@@ -12,7 +12,6 @@ class HotPlayersPage extends Component {
 
   render() {
     const { hotPlayers } = this.props;
-    console.log('hotPlayers', hotPlayers);
     return (
       <div className="hotPlayers-page">
         <Helmet>
@@ -23,7 +22,7 @@ class HotPlayersPage extends Component {
           />
         </Helmet>
         <h2>
-            Who's hot?
+          {`Who's hot? ${this.props.features.someFlag && 'Seb is Fucking hot'}`}
         </h2>
         <HotTable players={hotPlayers} />
       </div>
