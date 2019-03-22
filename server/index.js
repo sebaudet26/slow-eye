@@ -8,7 +8,6 @@ const port = require('./util/port');
 const setup = require('./middlewares/frontendMiddleware');
 const graphql = require('./middlewares/graphql');
 require('./libs/redisApi');
-const features = require('./features');
 
 require('./libs/automatedJobs');
 
@@ -19,15 +18,6 @@ app.use('/images', express.static('app/images'));
 app.use(bodyParser.json());
 
 app.use('/graphql', graphql);
-
-app.get('/api/features', (req, res) => {
-  console.log('is production env', process.env.NODE_ENV === 'production');
-  console.log('is qa', process.env.QA);
-  if (process.env.NODE_ENV === 'production' && !process.env.QA) {
-    return res.json(features.production);
-  }
-  return res.json(features.development);
-});
 
 setup(app, {
   outputPath: resolve(process.cwd(), 'build'),
