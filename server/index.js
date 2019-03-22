@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 
 app.use('/graphql', graphql);
 
-app.get('/features', (req, res) => {
+app.get('/api/features', (req, res) => {
   console.log('is production env', process.env.NODE_ENV === 'production');
   console.log('is qa', process.env.QA);
   if (process.env.NODE_ENV === 'production' && !process.env.QA) {
