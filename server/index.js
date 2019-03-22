@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use('/graphql', graphql);
 
 app.get('/features', (req, res) => {
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === 'production' && !process.env.QA) {
     return res.json(features.production);
   }
   return res.json(features.development);
