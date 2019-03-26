@@ -20,6 +20,7 @@ TODO:
 
 - ~~video~~
 - ~~home page~~
+- Game Page When game isn't started (show matchup)
 - Add Tabs to Standings Page (Wild Card Tab, League Tab, Conference Tab)
 - Remove Draft Page from Main Menu
 - Put Player Stats and Team Stats under Stats dropdown
