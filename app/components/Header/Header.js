@@ -33,9 +33,6 @@ class Header extends React.Component {
             <NavLink activeClassName="active" className="header-nav-item" to="/teamstats">
                 Team Stats
             </NavLink>
-            <NavLink activeClassName="active" className="header-nav-item" to="/drafts">
-                Drafts
-            </NavLink>
           </div>
           <div className="header-mobile">
             <ul className="header-mobile-list">
