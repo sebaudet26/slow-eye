@@ -3,6 +3,7 @@
 .header {
   display: flex;
   height: 64px;
+  background: $alt;
 
   &-wrapper {
     max-width: 1200px;
@@ -16,9 +17,10 @@
   &-logo {
     font-size: 20px;
     font-weight: 600;
-    color: $black;
+    color: $white;
     display: flex;
     align-items: center;
+    font-family: Futura;
 
     img {
       margin-right: 10px;
@@ -37,7 +39,7 @@
 
     &-item {
       margin-left: 15px;
-      color: $black;
+      color: $white;
       font-size: $link;
       font-weight: 500;
       white-space: pre;
@@ -53,7 +55,7 @@
         left: 0;
         height: 2px;
         width: 100%;
-        background: $black;
+        background: $white;
         opacity: 0;
       }
 
@@ -65,7 +67,6 @@
     }
 
     .active {
-      color: $black;
 
       &::after {
         opacity: 1;

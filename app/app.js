@@ -68,28 +68,31 @@ const render = () => {
     <Provider store={store}>
       {/* <LanguageProvider messages={messages}> */}
       <ConnectedRouter history={history}>
-        <div className="app-wrapper">
-          <App />
+        <div>
           <Header />
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route path="/standings" component={StandingsPage} />
-            <Route path="/playerstats" component={PlayerStatsPage} />
-            <Route path="/player" component={PlayerPage} />
-            <Route path="/team" component={TeamPage} />
-            <Route path="/teamstats" component={TeamStatsPage} />
-            <Route path="/scores" component={ScorePage} />
-            <Route path="/game" component={GamePage} />
-            <Route path="/drafts" component={DraftPage} />
-            <Route path="/contributors" component={ContributorsPage} />
-            <Route path="/powerrankings" component={PowerRankingsPage} />
-            <Route path="/hotplayers" component={HotPlayersPage} />
-            <Route path="/seal" component={SealPage} />
-            <Route path="/blog" component={BlogPage} />
-            <Route path="/post" component={BlogPost} />
-            <Route path="" component={NotFoundPage} />
-          </Switch>
-          <Footer />
+          <div className="app-wrapper">
+            <App />
+
+            <Switch>
+              <Route exact path="/" component={HomePage} />
+              <Route path="/standings" component={StandingsPage} />
+              <Route path="/playerstats" component={PlayerStatsPage} />
+              <Route path="/player" component={PlayerPage} />
+              <Route path="/team" component={TeamPage} />
+              <Route path="/teamstats" component={TeamStatsPage} />
+              <Route path="/scores" component={ScorePage} />
+              <Route path="/game" component={GamePage} />
+              <Route path="/drafts" component={DraftPage} />
+              <Route path="/contributors" component={ContributorsPage} />
+              <Route path="/powerrankings" component={PowerRankingsPage} />
+              <Route path="/hotplayers" component={HotPlayersPage} />
+              <Route path="/seal" component={SealPage} />
+              <Route path="/blog" component={BlogPage} />
+              <Route path="/post" component={BlogPost} />
+              <Route path="" component={NotFoundPage} />
+            </Switch>
+            <Footer />
+          </div>
         </div>
       </ConnectedRouter>
       {/* </LanguageProvider> */}
