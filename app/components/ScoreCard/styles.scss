@@ -105,3 +105,22 @@
     padding-right: 0px;
   }
 }
+
+@media (max-width: 600px) {
+  .game-card {
+    box-shadow: none;
+    border-top: solid 1px $grey-4;
+    border-bottom: solid 1px $grey-4;
+
+    &-wrapper {
+      padding-right: 0px;
+      padding-bottom: 15px;
+    }
+
+    &-team {
+      &:nth-child(2) {
+        border-bottom: 0px;
+      }
+    }
+  }
+}
