@@ -199,6 +199,7 @@ class GamePage extends React.Component {
           <meta name="description" content={`${boxscore.away.team.teamName} vs. ${boxscore.home.team.teamName} game page. Seal Stats is the best place to view NHL stats. User-friendly and fast. `} />
         </Helmet>
         <div className="game-page container">
+          <div className="game-mobile-details">{getStatusText(game)}</div>
           <div className="game-header">
             <div className="game-header-team">
               {awayTeamImage}
@@ -215,10 +216,12 @@ class GamePage extends React.Component {
               </div>
             </div>
             <div className="game-header-result">
-              <div>{ liveFeed.status.detailedState === 'In Progress' | liveFeed.status.detailedState === 'In Progress - Critical' ? null : liveFeed.status.detailedState}</div>
-              <div>
-                {getStatusText(game)}
-                {last(lastTenPlays) && last(lastTenPlays).period === 5 ? 'S/O' : null}
+              <div className="hidden-mobile">
+                <div>{ liveFeed.status.detailedState === 'In Progress' | liveFeed.status.detailedState === 'In Progress - Critical' ? null : liveFeed.status.detailedState}</div>
+                <div>
+                  {getStatusText(game)}
+                  {last(lastTenPlays) && last(lastTenPlays).period === 5 ? 'S/O' : null}
+                </div>
               </div>
               {
                 highlights && highlights.recap ? (
@@ -226,7 +229,11 @@ class GamePage extends React.Component {
                     url={highlights.recap}
                     styles={{ textAlign: 'center', width: '100%', marginTop: '5px' }}
                   />
-                ) : null
+                ) : (
+                  <div className="game-mobile-result">
+                  :
+                  </div>
+                )
               }
             </div>
             <div className="game-header-team">
@@ -278,6 +285,7 @@ class GamePage extends React.Component {
             <TabPanel>
               <div className="summary">
                 <div className="summary-col">
+                  <h3>Scoring</h3>
                   {renderGoalEvents(goalSummary, groupedHighlights['1'], 1)}
                   {renderGoalEvents(goalSummary, groupedHighlights['2'], 2)}
                   {renderGoalEvents(goalSummary, groupedHighlights['3'], 3)}
