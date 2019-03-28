@@ -83,7 +83,7 @@ export default class ScorePage extends React.Component {
     const { currentDate, daysOptions } = this.state;
     const gamesAccessor = Number(currentDate);
     return (
-      <div className="score-page">
+      <div className="score-page container">
         <Helmet>
           <title>NHL Scores - SealStats.com</title>
           <meta

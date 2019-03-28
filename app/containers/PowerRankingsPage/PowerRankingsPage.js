@@ -13,7 +13,7 @@ class PowerRankingsPage extends Component {
   render() {
     const { teamsStreaks } = this.props;
     return (
-      <div className="powerRankings-page">
+      <div className="powerRankings-page container">
         <Helmet>
           <title>Power Rankings - SealStats.com</title>
           <meta

@@ -198,7 +198,7 @@ class GamePage extends React.Component {
           </title>
           <meta name="description" content={`${boxscore.away.team.teamName} vs. ${boxscore.home.team.teamName} game page. Seal Stats is the best place to view NHL stats. User-friendly and fast. `} />
         </Helmet>
-        <div className="game">
+        <div className="game-page container">
           <div className="game-header">
             <div className="game-header-team">
               {awayTeamImage}

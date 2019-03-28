@@ -70,9 +70,8 @@ const render = () => {
       <ConnectedRouter history={history}>
         <div>
           <Header />
+          <App />
           <div className="app-wrapper">
-            <App />
-
             <Switch>
               <Route exact path="/" component={HomePage} />
               <Route path="/standings" component={StandingsPage} />

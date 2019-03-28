@@ -60,7 +60,7 @@ export default class TeamPage extends React.Component {
     const team = teams[urlParams.get('id')] || {};
     const roster = rosters[urlParams.get('id')] || {};
     return (isEmpty(team) ? null : (
-      <div className="team-page">
+      <div className="team-page container">
         <Helmet>
           <title>{`${team.name} - SealStats.com`}</title>
           <meta

@@ -52,7 +52,7 @@ export default class PlayerPage extends React.Component {
     const internationalStats = filter(stat => contains(stat.league.name, internationalLeagueNames))(careerStats);
 
     return (
-      <div>
+      <div className="player-page container">
         <Helmet>
           <title>{`${info.firstName} ${info.lastName} - SealStats.com`}</title>
           <meta

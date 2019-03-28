@@ -127,7 +127,7 @@ export default class StandingsPage extends React.Component {
     )(draft);
 
     return (
-      <div className="draft-page">
+      <div className="draft-page container">
         <Helmet>
           <title>Draft - SealStats.com</title>
           <meta

@@ -13,7 +13,7 @@ class HotPlayersPage extends Component {
   render() {
     const { hotPlayers } = this.props;
     return (
-      <div className="hotPlayers-page">
+      <div className="hotPlayers-page container">
         <Helmet>
           <title>Who's hot? - SealStats.com</title>
           <meta

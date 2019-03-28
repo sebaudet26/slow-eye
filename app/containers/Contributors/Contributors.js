@@ -6,7 +6,7 @@ import PatreonLogo from './images/patreon.svg';
 export default class ContributorsPage extends React.Component {
   render() {
     return (
-      <div className="contributor-page">
+      <div className="contributor-page container">
         <Helmet>
           <title>Contributors</title>
           <meta
