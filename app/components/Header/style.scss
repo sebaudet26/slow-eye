@@ -79,27 +79,30 @@
     bottom: 0;
     width: 100%;
     left: 0;
-    background: $black;
+    background: $white;
     z-index: 99;
+    box-shadow: $shadow;
 
     &-list {
       display: flex;
-      height: 70px;
+      height: 64px;
 
       li {
         margin: 11px auto;
         width: 20%;
-        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         a {
           transition: 0.3s;
-          color: lighten($grey-2 , 15%);
+          color: lighten($grey-2 , 35%);
           font-size: 11px;
           text-transform: uppercase;
           font-weight: 500;
 
           &.active {
-            color: $white;
+            color: $alt;
           }
 
           .icon {
