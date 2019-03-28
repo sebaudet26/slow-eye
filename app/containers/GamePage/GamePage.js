@@ -278,7 +278,6 @@ class GamePage extends React.Component {
             <TabPanel>
               <div className="summary">
                 <div className="summary-col">
-                  <h3>Scoring</h3>
                   {renderGoalEvents(goalSummary, groupedHighlights['1'], 1)}
                   {renderGoalEvents(goalSummary, groupedHighlights['2'], 2)}
                   {renderGoalEvents(goalSummary, groupedHighlights['3'], 3)}
