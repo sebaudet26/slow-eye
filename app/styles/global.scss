@@ -208,3 +208,9 @@ li {
   padding: 0 7.5px;
   flex-direction: column;
 }
+
+@media screen and (max-width: 600px) {
+  .app-wrapper {
+    padding: 0px;
+  }
+}
