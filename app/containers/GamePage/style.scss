@@ -391,19 +391,20 @@
         }
 
         &-score {
-          margin: 0 10px;
+          margin: 0px;
+          font-size: 32px;
         }
 
         svg {
-          width: 80px;
-          height: 80px;
+          width: 75px;
+          height: 75px;
 
           &:first-child {
-            margin-right: 10px;
+            margin-right: 5px;
           }
 
           &:last-child {
-            margin-left: 10px;
+            margin-left: 5px;
           }
         }
       }
