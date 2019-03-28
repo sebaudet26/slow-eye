@@ -215,7 +215,7 @@ class GamePage extends React.Component {
               </div>
             </div>
             <div className="game-header-result">
-              <div>{ liveFeed.status.detailedState === 'In Progress' ? null : liveFeed.status.detailedState}</div>
+              <div>{ liveFeed.status.detailedState === 'In Progress' | liveFeed.status.detailedState === 'In Progress - Critical' ? null : liveFeed.status.detailedState}</div>
               <div>
                 {getStatusText(game)}
                 {last(lastTenPlays) && last(lastTenPlays).period === 5 ? 'S/O' : null}
