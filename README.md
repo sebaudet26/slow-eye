@@ -32,6 +32,7 @@ TODO:
 - Standings history
 - Team stats history
 - Team page for any season
+- Player Contracts
 
 
 ----------Other Ideas----------
