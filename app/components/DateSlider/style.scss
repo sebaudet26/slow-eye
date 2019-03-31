@@ -169,8 +169,10 @@
 
 @media screen and (max-width: 600px) {
   .slick-slider {
-    box-shadow: none;
     border-radius: 0px;
+    width: 100vw;
+    position: relative;
+    left: -7.5px;
   }
 
   .slick-arrow {
@@ -184,7 +186,7 @@
   .scoreboard-header {
     margin: 0px;
   }
-  
+
   .score-page {
     h2 {
       display: none;
