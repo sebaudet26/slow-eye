@@ -7,8 +7,10 @@
 
   &-header {
     padding: 10px 15px;
-    font-weight: 400;
+    font-weight: 500;
     color: $grey-2;
+    font-size: 14px;
+    text-transform: uppercase;
     border-bottom: solid 1px $grey-4;
   }
 
@@ -53,6 +55,7 @@
       color: $main;
       display: flex;
       align-items: center;
+      white-space: pre;
 
       img {
         margin-right: 10px;
@@ -107,13 +110,17 @@
 
 @media (max-width: 600px) {
   .game-card {
-
-
-
-
     &-wrapper {
       padding-right: 0px;
       padding-bottom: 15px;
+    }
+  }
+
+  .game-card {
+    &-footer {
+      a {
+        width: 50%;
+      }
     }
   }
 }
