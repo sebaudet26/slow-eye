@@ -75,6 +75,7 @@ export default class HomePage extends React.Component {
           />
         </Helmet>
         <div className="home-page-wrapper">
+          <h1>The simplest and fastest NHL stats website.</h1>
           <div className="home-page-col">
             <h3>
               {' Who\'s hot?'}
