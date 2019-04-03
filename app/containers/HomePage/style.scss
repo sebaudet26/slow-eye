@@ -1,6 +1,11 @@
 @import '../../styles/variables.scss';
 
 .home-page {
+  h1 {
+    width: 75%;
+    margin-bottom: 0px;
+  }
+
   h3 {
     font-size: 24px;
     font-weight: 500;
@@ -202,6 +207,10 @@
 
 @media screen and (max-width: 800px) {
   .home-page {
+    h1 {
+      text-align: center;
+      width: 100%;
+    }
     .card {
       margin-right: 0px;
     }
