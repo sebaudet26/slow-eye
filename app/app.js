@@ -37,8 +37,6 @@ import ContributorsPage from './containers/Contributors/Loadable';
 import HotPlayersPage from './containers/HotPlayersPage/Loadable';
 import PowerRankingsPage from './containers/PowerRankingsPage/Loadable';
 import SealPage from './containers/SealPage/Loadable';
-import BlogPage from './containers/Blog/Loadable';
-import BlogPost from './containers/Post/Loadable';
 import NotFoundPage from './containers/NotFoundPage/Loadable';
 import DraftPage from './containers/DraftPage/Loadable';
 
@@ -86,8 +84,6 @@ const render = () => {
               <Route path="/powerrankings" component={PowerRankingsPage} />
               <Route path="/hotplayers" component={HotPlayersPage} />
               <Route path="/seal" component={SealPage} />
-              <Route path="/blog" component={BlogPage} />
-              <Route path="/post" component={BlogPost} />
               <Route path="" component={NotFoundPage} />
             </Switch>
             <Footer />
