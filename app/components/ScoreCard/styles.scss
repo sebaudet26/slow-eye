@@ -7,8 +7,11 @@
 
   &-header {
     padding: 10px 15px;
-    border-bottom: solid 1px $grey-4;
     font-weight: 500;
+    color: $grey-2;
+    font-size: 14px;
+    text-transform: uppercase;
+    border-bottom: solid 1px $grey-4;
   }
 
   &-team {
@@ -18,7 +21,6 @@
     position: relative;
 
     &:nth-child(2) {
-      border-bottom: solid 1px $grey-4;
     }
 
     &-img {
@@ -45,15 +47,15 @@
   }
 
   &-footer {
-    border-top: solid 1px $grey-4;
     display: flex;
+    border-top: solid 1px $grey-4;
 
     a {
       padding: 10px 15px;
-      border-right: solid 1px $grey-4;
       color: $main;
       display: flex;
       align-items: center;
+      white-space: pre;
 
       img {
         margin-right: 10px;
@@ -103,5 +105,22 @@
   .game-card-wrapper {
     width: 100%;
     padding-right: 0px;
+  }
+}
+
+@media (max-width: 600px) {
+  .game-card {
+    &-wrapper {
+      padding-right: 0px;
+      padding-bottom: 15px;
+    }
+  }
+
+  .game-card {
+    &-footer {
+      a {
+        width: 50%;
+      }
+    }
   }
 }

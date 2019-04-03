@@ -66,7 +66,7 @@ export default class HomePage extends React.Component {
     const { playersStreaks, teamsStreaks } = this.props;
 
     return (
-      <div className="home-page">
+      <div className="home-page container">
         <Helmet>
           <title>Home - SealStats.com</title>
           <meta

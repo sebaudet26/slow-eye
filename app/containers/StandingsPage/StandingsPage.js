@@ -14,7 +14,7 @@ export default class StandingsPage extends React.Component {
   render() {
     const { standings } = this.props;
     return (
-      <div className="standings-page">
+      <div className="standings-page container">
         <Helmet>
           <title>NHL Standings - SealStats.com</title>
           <meta

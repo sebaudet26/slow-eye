@@ -112,7 +112,7 @@ const RosterStatsTable = ({ players, position }) => (
           accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'savePercentage']), invoker(1, 'toFixed')(3)),
           show: position === 'G',
           maxWidth: 75,
-          minWidth: 50,
+          minWidth: 60,
         },
         {
           Header: 'GAA',
@@ -120,7 +120,7 @@ const RosterStatsTable = ({ players, position }) => (
           accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'goalAgainstAverage'])),
           show: position === 'G',
           maxWidth: 75,
-          minWidth: 50,
+          minWidth: 60,
           sortMethod: (a, b) => (a > b ? -1 : 1),
         },
         {

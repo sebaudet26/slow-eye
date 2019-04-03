@@ -17,13 +17,22 @@ export const calculateGameTime = (lastEvent) => {
   if (!lastEvent) {
     return 'Starting Soon';
   }
-  if (lastEvent.period === 4) {
-    return `Overtime ${lastEvent.periodTimeRemaining}`;
-  }
   if (lastEvent.periodTimeRemaining === '00:00') {
     return `${toOrdinal(lastEvent.period)} Intermission`;
   }
-  return `Period ${lastEvent.period} ${lastEvent.periodTimeRemaining}`;
+  if (lastEvent.period === 1) {
+    return `${lastEvent.period}st Period - ${lastEvent.periodTimeRemaining}`;
+  }
+  if (lastEvent.period === 2) {
+    return `${lastEvent.period}nd Period - ${lastEvent.periodTimeRemaining}`;
+  }
+  if (lastEvent.period === 3) {
+    return `${lastEvent.period}rd Period - ${lastEvent.periodTimeRemaining}`;
+  }
+  if (lastEvent.period === 4) {
+    return `Overtime ${lastEvent.periodTimeRemaining}`;
+  }
+  return `${lastEvent.period} - ${lastEvent.periodTimeRemaining}`;
 };
 
 export const getStatusText = (game) => {

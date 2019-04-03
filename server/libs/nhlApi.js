@@ -47,7 +47,6 @@ const nhlStatsApi = async (resource, expiration, force) => {
       }
     }
     const url = `${nhlStatsApiBase}${resource}`;
-    console.log(url);
     const response = await fetch(url);
     const data = await response.json();
     cache
@@ -196,13 +195,12 @@ const fetchAllYearsPlayoffStatsForPlayerId = async (playerId) => {
 };
 
 const fetchStatsForTeamId = async (teamId) => {
-  let resource = `/teams/${teamId}/stats?stats=statsSingleSeason`;
+  const resource = `/teams/${teamId}/stats?stats=statsSingleSeason`;
   const teamInfo = await nhlStatsApi(resource, 60 * 60);
   let stats = path(['stats', 0], teamInfo);
   if (!stats) {
-    resource = `/teams/${teamId}?expand=team.stats`;
-    await nhlStatsApi(resource, 60 * 60);
-    stats = path(['teams', 0, 'teamStats', 0], teamInfo);
+    teamInfo = await nhlStatsApi(resource, 60 * 60, true);
+    stats = path(['stats', 0], teamInfo);
   }
   return stats;
 };

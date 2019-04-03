@@ -42,7 +42,7 @@
       }
 
       &-name {
-        width: 150px;
+        width: 175px;
 
         .team {
           font-weight: 500;
@@ -81,6 +81,12 @@
       margin: auto;
       background: $white;
       box-shadow: $shadow;
+    }
+  }
+
+  &-mobile {
+    &-details, &-result {
+      display: none;
     }
   }
 }
@@ -391,7 +397,8 @@
         }
 
         &-score {
-          margin: 0 10px;
+          margin: 0px;
+          font-size: 32px;
         }
 
         svg {
@@ -399,13 +406,30 @@
           height: 80px;
 
           &:first-child {
-            margin-right: 10px;
+            margin-right: 15px;
           }
 
           &:last-child {
-            margin-left: 10px;
+            margin-left: 15px;
           }
         }
+      }
+    }
+
+    &-mobile {
+      &-details {
+        display: block;
+        text-align: center;
+        position: relative;
+        top: 30px;
+        color: $grey-2;
+        font-weight: 500;
+        font-size: 15px;
+      }
+
+      &-result {
+        display: block;
+        font-size: 32px;
       }
     }
   }

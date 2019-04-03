@@ -199,3 +199,15 @@ li {
     margin: auto;
   }
 }
+
+.app-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  min-height: 100%;
+  padding: 0 7.5px;
+  flex-direction: column;
+}
+
+@media screen and (max-width: 600px) {
+}

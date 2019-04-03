@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import Logo from '../../images/logo.svg';
+import Logo from '../../images/logoWhite.svg';
 import HomeIcon from './images/home';
 import ScoreIcon from './images/scoreboard';
 import StandingsIcon from './images/standings';
@@ -42,31 +42,21 @@ class Header extends React.Component {
               <li>
                 <NavLink activeClassName="active" exact to="/">
                   <HomeIcon />
-                  Home
                 </NavLink>
               </li>
               <li>
                 <NavLink activeClassName="active" to="/scores">
                   <ScoreIcon />
-                  Scores
                 </NavLink>
               </li>
               <li>
                 <NavLink activeClassName="active" to="/standings">
                   <StandingsIcon />
-                  Standings
                 </NavLink>
               </li>
               <li>
                 <NavLink activeClassName="active" to="/playerstats">
                   <StatsIcon />
-                    Players
-                </NavLink>
-              </li>
-              <li>
-                <NavLink activeClassName="active" to="/teamstats">
-                  <TeamsIcon />
-                    Teams
                 </NavLink>
               </li>
             </ul>
