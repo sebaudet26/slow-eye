@@ -74,7 +74,6 @@ export default class HomePage extends React.Component {
             content="Seal Stats is the best place to view NHL stats. User-friendly and fast."
           />
         </Helmet>
-        <h1>The fastest and simplest NHL Stats website out there.</h1>
         <div className="home-page-wrapper">
           <div className="home-page-col">
             <h3>
