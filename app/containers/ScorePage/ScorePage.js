@@ -117,6 +117,7 @@ export default class ScorePage extends React.Component {
         />
         <div className="scoreboard-results">
           {
+
             games[gamesAccessor]
               ? games[gamesAccessor].map(game => (<ScoreCard key={Math.random()} game={game} />))
               : null

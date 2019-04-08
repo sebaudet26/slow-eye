@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { take } from 'ramda';
-import StandingsTable from '../../components/Table/StandingsTable';
 import './style.scss';
 
 const HOT_PLAYERS_LIMIT = 5;
