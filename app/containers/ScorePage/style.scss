@@ -11,3 +11,67 @@ button {
   outline: none;
   cursor: pointer;
 }
+
+
+.scoreboard {
+
+  &-header {
+    display: flex;
+    align-items: center;
+    margin-top: 1.66em;
+    margin-bottom: 5px;
+
+    h2 {
+      margin: 0;
+    }
+  }
+
+  &-datePicker {
+    position: relative;
+    top: -3px;
+
+    label {
+      width: 150px;
+      margin-left: 10px;
+    }
+
+    .react-datepicker__input-container {
+      input {
+        margin-left: 10px;
+        text-transform: uppercase;
+        font-size: 14px;
+        color: $black !important;
+        font-weight: 500;
+        outline: none;
+        position: relative;
+        top: 1px;
+        cursor: pointer;
+        transition: 0.3s;
+        width: 90px;
+
+        &:hover {
+          opacity: 0.75;
+        }
+      }
+    }
+
+    &-calendar {
+      cursor: pointer;
+      transition: 0.3s;
+
+      &:hover {
+        opacity: 0.75;
+      }
+    }
+  }
+
+  &-wrapper {
+    margin-top: 25px;
+
+    &-results {
+      align-items: center;
+      flex-flow: wrap;
+      display: flex;
+    }
+  }
+}
