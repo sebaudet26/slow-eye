@@ -149,7 +149,8 @@ export default class ScorePage extends React.Component {
           {
             [
               'Scheduled',
-              'Live',
+              'Pre-Game',
+              'In Progress',
               'Final',
             ].map(renderGamesForType(games, gamesAccessor))
           }
