@@ -84,7 +84,7 @@ export default class HomePage extends React.Component {
           </div>
           <div className="home-page-col">
             <h3>
-              {' Power Rankings'}
+              {' Hot Teams'}
               <a href="/powerrankings">View Full List</a>
             </h3>
             <div className="power-container">

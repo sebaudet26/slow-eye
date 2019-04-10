@@ -22,7 +22,7 @@ class PowerRankingsPage extends Component {
           />
         </Helmet>
         <h2>
-            Power Rankings
+            Hot Teams
         </h2>
         <PowerRankingsTable teams={teamsStreaks} />
       </div>
