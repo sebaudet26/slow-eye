@@ -49,3 +49,6 @@ http://statsapi.web.nhl.com/api/v1/game/2018020789/content
 MLB
 https://appac.github.io/mlb-data-api-docs/
 https://github.com/baseballhackday/data-and-resources/wiki/Resources-and-ideas
+
+CHL - Scores
+https://lscluster.hockeytech.com/feed/index.php?feed=modulekit&key=f322673b6bcae299&site_id=2&client_code=lhjmq&lang=en&view=scorebar&numberofdaysahead=3&numberofdaysback=3&league_code=&fmt=json
