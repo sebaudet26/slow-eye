@@ -81,7 +81,7 @@
     left: 0;
     background: $white;
     z-index: 99;
-    box-shadow: $shadow;
+    box-shadow: $shadow-invert;
 
     &-list {
       display: flex;
@@ -96,18 +96,19 @@
 
         a {
           transition: 0.3s;
-          color: lighten($grey-2 , 35%);
+          color: lighten($grey-2 , 20%);
           font-size: 11px;
           text-transform: uppercase;
           font-weight: 500;
 
           &.active {
-            color: $alt;
+            color: $main;
           }
 
           .icon {
             display: block;
             margin: auto;
+            margin-bottom: 5px;
           }
         }
       }

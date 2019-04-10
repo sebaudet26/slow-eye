@@ -76,7 +76,7 @@ export default class HomePage extends React.Component {
         <div className="home-page-wrapper">
           <div className="home-page-col">
             <h3>
-              {' Who\'s hot?'}
+              {' Hot Players'}
               <a href="/hotplayers">View Full List</a>
             </h3>
             {playersStreaks && take(HOT_PLAYERS_LIMIT, playersStreaks).map(renderPlayerCard)}

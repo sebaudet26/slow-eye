@@ -42,21 +42,25 @@ class Header extends React.Component {
               <li>
                 <NavLink activeClassName="active" exact to="/">
                   <HomeIcon />
+                  Home
                 </NavLink>
               </li>
               <li>
                 <NavLink activeClassName="active" to="/scores">
                   <ScoreIcon />
+                  Scores
                 </NavLink>
               </li>
               <li>
                 <NavLink activeClassName="active" to="/standings">
                   <StandingsIcon />
+                  Standings
                 </NavLink>
               </li>
               <li>
                 <NavLink activeClassName="active" to="/playerstats">
                   <StatsIcon />
+                  Leaders
                 </NavLink>
               </li>
             </ul>
