@@ -29,7 +29,6 @@ export default class PlayerPage extends React.Component {
 
   render() {
     const { player } = this.props;
-    console.log('player', player);
     if (isEmpty(player)) {
       return (<div />);
     }
@@ -44,8 +43,7 @@ export default class PlayerPage extends React.Component {
       shootsCatches,
       nationality,
     } = info;
-    const lastSeason = careerStats[careerStats.length - 1];
-    const isActive = isActiveThisYear(lastSeason);
+
     const isPro = hasNHLExperience(careerStats);
     const internationalLeagueNames = ['WJC-A', 'WC-A', 'Olympics'];
     const proStats = reject(stat => contains(stat.league.name, internationalLeagueNames))(careerStats);
@@ -123,8 +121,6 @@ export default class PlayerPage extends React.Component {
                   <div className="bold">
                     {sumStatsByPath({
                       active,
-                      isActive,
-                      lastSeason,
                       careerStats,
                       pathToNumber: ['stat', 'games'],
                     })}
@@ -137,8 +133,6 @@ export default class PlayerPage extends React.Component {
                       <div className="bold">
                         {sumStatsByPath({
                           active,
-                          isActive,
-                          lastSeason,
                           careerStats,
                           pathToNumber: ['stat', 'wins'],
                         })}
@@ -150,8 +144,6 @@ export default class PlayerPage extends React.Component {
                       <div className="bold">
                         {sumStatsByPath({
                           active,
-                          isActive,
-                          lastSeason,
                           careerStats,
                           pathToNumber: ['stat', 'goals'],
                         })}
@@ -166,8 +158,6 @@ export default class PlayerPage extends React.Component {
                       <div className="bold">
                         {sumStatsByPath({
                           active,
-                          isActive,
-                          lastSeason,
                           careerStats,
                           pathToNumber: ['stat', 'losses'],
                         })}
@@ -179,8 +169,6 @@ export default class PlayerPage extends React.Component {
                       <div className="bold">
                         {sumStatsByPath({
                           active,
-                          isActive,
-                          lastSeason,
                           careerStats,
                           pathToNumber: ['stat', 'assists'],
                         })}
@@ -195,8 +183,6 @@ export default class PlayerPage extends React.Component {
                       <div className="bold">
                         {sumStatsByPath({
                           active,
-                          isActive,
-                          lastSeason,
                           careerStats,
                           pathToNumber: ['stat', 'ot'],
                         })}
@@ -208,8 +194,6 @@ export default class PlayerPage extends React.Component {
                       <div className="bold">
                         {sumStatsByPath({
                           active,
-                          isActive,
-                          lastSeason,
                           careerStats,
                           pathToNumber: ['stat', 'points'],
                         })}
@@ -224,8 +208,6 @@ export default class PlayerPage extends React.Component {
                       <div className="bold">
                         {sumStatsByPath({
                           active,
-                          isActive,
-                          lastSeason,
                           careerStats,
                           pathToNumber: ['stat', 'shutouts'],
                         })}
@@ -237,8 +219,6 @@ export default class PlayerPage extends React.Component {
                       <div className="bold">
                         {sumStatsByPath({
                           active,
-                          isActive,
-                          lastSeason,
                           careerStats,
                           pathToNumber: ['stat', 'plusMinus'],
                         })}

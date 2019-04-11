@@ -42,10 +42,22 @@ export const isPosGoalie = pos => pos === 'G';
 export const isActiveThisYear = latestSeason => latestSeason.season === '20182019';
 
 export const sumStatsByPath = ({
-  active, isActive, lastSeason, careerStats, pathToNumber,
+  active, lastSeason, careerStats, pathToNumber,
 }) => {
   if (active) {
-    return isActive ? path(pathToNumber, lastSeason) : 0;
+    let fullLastSeason = 0;
+    if (!isActiveThisYear(careerStats[careerStats.length - 1])) {
+      return fullLastSeason;
+    }
+    let index = careerStats.length - 1;
+    while (
+      careerStats[index] &&
+      (careerStats[careerStats.length - 1].season == careerStats[index].season)
+    ) {
+      fullLastSeason += path(pathToNumber, careerStats[index]);
+      index -= 1;
+    }
+    return fullLastSeason;
   }
   return sumNumbers(careerStats, pathToNumber);
 };
