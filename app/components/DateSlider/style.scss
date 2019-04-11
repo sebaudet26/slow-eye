@@ -89,8 +89,6 @@
 }
 
 @media screen and (max-width: 650px) {
-
-
   .scoreboard-selector {
     &-item {
       padding: 0 5px;
@@ -119,16 +117,6 @@
 
     &.next {
       border-radius: 0px;
-    }
-  }
-
-  .scoreboard-header {
-    margin: 0px;
-  }
-
-  .score-page {
-    h2 {
-      display: none;
     }
   }
 }

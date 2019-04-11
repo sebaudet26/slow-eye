@@ -14,7 +14,6 @@ button {
 
 
 .scoreboard {
-
   &-header {
     display: flex;
     align-items: center;
@@ -67,11 +66,37 @@ button {
 
   &-wrapper {
     margin-top: 25px;
+  }
+
+  &-section {
+    &-name {
+      padding: 10px 0;
+      color: $grey-2;
+      border-top: dashed 1px $grey-4;
+    }
 
     &-results {
       align-items: center;
       flex-flow: wrap;
       display: flex;
     }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .scoreboard-header {
+    margin: 0px;
+  }
+
+  .score-page {
+    h2 {
+      display: none;
+    }
+  }
+
+  .scoreboard-section-name {
+    border-top: 0px;
+    padding: 0px;
+    margin-bottom: 10px;
   }
 }
