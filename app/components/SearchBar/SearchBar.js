@@ -59,6 +59,12 @@ const renderOption = cursor => (opt, i) => (
 const stringMatches =
   query => opt => new RegExp(query, 'i').test(opt.string);
 
+const initialState = {
+  cursor: 0,
+  options: [],
+  query: '',
+};
+
 class SearchBar extends React.Component {
   constructor(props) {
     super(props);
@@ -134,6 +140,7 @@ class SearchBar extends React.Component {
             onChange={this.handleInputChange}
             onKeyDown={this.handleKeyDown}
             onFocus={this.handleFocus}
+            onBlur={() => this.setState({ query: '' })}
           />
           <label>
             <img src={SearchIcon} alt="" />
