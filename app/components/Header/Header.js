@@ -28,13 +28,13 @@ class Header extends React.Component {
               Standings
             </NavLink>
             <NavLink activeClassName="active" className="header-nav-item" to="/playerstats">
-                Player Stats
+              Player Stats
             </NavLink>
             <NavLink activeClassName="active" className="header-nav-item" to="/teamstats">
-                Team Stats
+              Team Stats
             </NavLink>
             <NavLink activeClassName="active" className="header-nav-item" to="/drafts">
-                Drafts
+              Drafts
             </NavLink>
           </div>
           <div className="header-mobile">
