@@ -148,10 +148,10 @@ export default class ScorePage extends React.Component {
         <div className="scoreboard-wrapper">
           {
             [
-              'Scheduled',
-              'Pre-Game',
               'In Progress',
               'Final',
+              'Pre-Game',
+              'Scheduled',
             ].map(renderGamesForType(games, gamesAccessor))
           }
         </div>

@@ -26,8 +26,8 @@
 
 .slick-slider {
   height: 64px;
-  box-shadow: $shadow;
   border-radius: $radius;
+  border: solid 1px $grey-4;
 
   .slick-slide {
     background: $white;
@@ -37,6 +37,7 @@
     border-left: solid 1px $grey-4;
     cursor: pointer;
     transition: 0.3s;
+    border-bottom: solid 1px $grey-4;
 
     div {
       margin: auto;

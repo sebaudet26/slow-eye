@@ -3,7 +3,7 @@
 .player-card {
   display: block;
   background: $white;
-  box-shadow: $shadow;
+  border: solid 1px $grey-4;
   border-radius: 6px;
   margin-top: 10px;
   padding: 5px;

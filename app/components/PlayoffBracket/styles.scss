@@ -28,7 +28,7 @@ h2 {
     background: $white;
     margin-bottom: 15px;
     border-radius: $radius;
-    box-shadow: $shadow;
+    border: solid 1px $grey-4;
 
     &-row {
       display: flex;
