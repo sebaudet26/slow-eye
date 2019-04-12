@@ -23,7 +23,6 @@ TODO:
 - Game Page When game isn't started (show matchup)
 - Leaders Page for Mobile
 - Add Tabs to Standings Page (Playoff Picture, Wild Card Tab, League Tab, Conference Tab)
-- Remove Draft Page from Main Menu
 - Put Player Stats and Team Stats under Stats dropdown
 - Beautify Footer
 - Algorithm for Hot Players and Power Rankings
