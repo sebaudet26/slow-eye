@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { take } from 'ramda';
-import PlayoffBracket from '../../components/PlayoffBracket';
 import './style.scss';
 
 const HOT_PLAYERS_LIMIT = 5;
@@ -74,7 +73,6 @@ export default class HomePage extends React.Component {
             content="Seal Stats is the best place to view NHL stats. User-friendly and fast."
           />
         </Helmet>
-        <PlayoffBracket />
         <div className="home-page-wrapper">
           <div className="home-page-col">
             <h3>
