@@ -80,7 +80,7 @@
       border-radius: 6px;
       margin: auto;
       background: $white;
-      box-shadow: $shadow;
+      border: solid 1px $grey-4;;
     }
   }
 
@@ -105,8 +105,8 @@
 
   .card {
     background: $white;
-    border-radius: 6px;
-    box-shadow: $shadow;
+    border-radius: $radius;
+    border: solid 1px $grey-4;
     margin: 0 25px 15px 0;
     position: relative;
 
@@ -232,8 +232,8 @@
 .overall-table {
   width: 100%;
   background: $white;
-  border-radius: 6px;
-  box-shadow: $shadow;
+  border-radius: $radius;
+  border: solid 1px $grey-4;
 
   thead {
     border-bottom: solid 1px $grey-4;
