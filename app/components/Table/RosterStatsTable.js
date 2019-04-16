@@ -235,7 +235,7 @@ const RosterStatsTable = ({ players, position }) => (
       ]}
       defaultSortDesc
       showPagination={false}
-      className="-striped rosterStats"
+      className="rosterStats"
       defaultPageSize={players.length}
     />
   </div>

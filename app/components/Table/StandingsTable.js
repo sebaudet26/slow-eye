@@ -142,7 +142,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
       },
     ]}
     defaultPageSize={subStandings.teamRecords.length}
-    className="-striped standings-stats"
+    className="standings-stats"
   />
 );
 

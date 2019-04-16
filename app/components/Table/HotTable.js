@@ -143,7 +143,7 @@ const HotTable = ({ players }) => (
         },
       ]}
       defaultSortDesc
-      className="-striped hotStats"
+      className="hotStats"
       defaultPageSize={20}
     />
   </div>

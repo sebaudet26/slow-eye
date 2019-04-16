@@ -203,7 +203,7 @@ const GameLogTable = ({ logs, info }) => {
         ]}
         defaultSortDesc
         showPagination
-        className="-striped gameLog-table"
+        className="gameLog-table"
       />
     </div>
   );

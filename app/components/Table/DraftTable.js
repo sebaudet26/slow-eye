@@ -150,7 +150,7 @@ const DraftTable = ({
     ]}
     defaultSortAsc
     showPagination
-    className="-striped draft-table"
+    className="draft-table"
     pageSize={pageLength || 30}
     defaultPageSize={30}
   />

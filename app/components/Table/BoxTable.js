@@ -214,7 +214,7 @@ const BoxTable = ({ players, goalieMode }) => (
       ]}
       defaultPageSize={players.length}
       defaultSortDesc
-      className="-striped boxscore"
+      className="boxscore"
       showPagination={false}
     />
   </div>

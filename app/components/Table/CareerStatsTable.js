@@ -261,7 +261,7 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
         },
       ]}
       defaultPageSize={stats.length}
-      className="-striped career-stats"
+      className="career-stats"
     />
   </div>
 );
