@@ -18,7 +18,7 @@
   &-wrapper {
     display: flex;
   }
-  
+
   &-col {
     width: 50%;
 
@@ -39,7 +39,6 @@
 .card {
   display: block;
   border-radius: 6px;
-  box-shadow: $shadow;
   margin-bottom: 15px;
   background-size: 100% auto;
   padding: 15px;
@@ -204,8 +203,8 @@
 
 .power-container {
   background: $white;
-  border-radius: 6px;
-  box-shadow: $shadow;
+  border-radius: $radius;
+  border: solid 1px $grey-4;
 }
 
 @media screen and (max-width: 800px) {
