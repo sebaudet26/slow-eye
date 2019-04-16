@@ -311,73 +311,75 @@ class GamePage extends React.Component {
                 </div>
                 <div className="summary-col">
                   <h3>Team Stats</h3>
-                  <table className="overall-table">
-                    <thead>
-                      <tr>
-                        <th />
-                        <th>{awayTeamImage}</th>
-                        <th>{homeTeamImage}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
+                  <div className="overall-wrapper">
+                    <table className="overall-table">
+                      <thead>
+                        <tr>
+                          <th />
+                          <th>{awayTeamImage}</th>
+                          <th>{homeTeamImage}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
                           Shots
-                        </td>
-                        <td>{boxscore.away.teamStats.shots}</td>
-                        <td>{boxscore.home.teamStats.shots}</td>
-                      </tr>
-                      <tr>
-                        <td>
+                          </td>
+                          <td>{boxscore.away.teamStats.shots}</td>
+                          <td>{boxscore.home.teamStats.shots}</td>
+                        </tr>
+                        <tr>
+                          <td>
                           PIM
-                        </td>
-                        <td>{boxscore.away.teamStats.pim}</td>
-                        <td>{boxscore.home.teamStats.pim}</td>
-                      </tr>
-                      <tr>
-                        <td>
+                          </td>
+                          <td>{boxscore.away.teamStats.pim}</td>
+                          <td>{boxscore.home.teamStats.pim}</td>
+                        </tr>
+                        <tr>
+                          <td>
                           PP
-                        </td>
-                        <td>{`${boxscore.away.teamStats.powerPlayGoals}/${boxscore.away.teamStats.powerPlayOpportunities}`}</td>
-                        <td>{`${boxscore.home.teamStats.powerPlayGoals}/${boxscore.home.teamStats.powerPlayOpportunities}`}</td>
-                      </tr>
-                      <tr>
-                        <td>
+                          </td>
+                          <td>{`${boxscore.away.teamStats.powerPlayGoals}/${boxscore.away.teamStats.powerPlayOpportunities}`}</td>
+                          <td>{`${boxscore.home.teamStats.powerPlayGoals}/${boxscore.home.teamStats.powerPlayOpportunities}`}</td>
+                        </tr>
+                        <tr>
+                          <td>
                           Hits
-                        </td>
-                        <td>{boxscore.away.teamStats.hits}</td>
-                        <td>{boxscore.home.teamStats.hits}</td>
-                      </tr>
-                      <tr>
-                        <td>
+                          </td>
+                          <td>{boxscore.away.teamStats.hits}</td>
+                          <td>{boxscore.home.teamStats.hits}</td>
+                        </tr>
+                        <tr>
+                          <td>
                           FO%
-                        </td>
-                        <td>{boxscore.away.teamStats.faceOffWinPercentage.toFixed()}</td>
-                        <td>{boxscore.home.teamStats.faceOffWinPercentage.toFixed()}</td>
-                      </tr>
-                      <tr>
-                        <td>
+                          </td>
+                          <td>{boxscore.away.teamStats.faceOffWinPercentage.toFixed()}</td>
+                          <td>{boxscore.home.teamStats.faceOffWinPercentage.toFixed()}</td>
+                        </tr>
+                        <tr>
+                          <td>
                           TK
-                        </td>
-                        <td>{boxscore.away.teamStats.takeaways}</td>
-                        <td>{boxscore.home.teamStats.takeaways}</td>
-                      </tr>
-                      <tr>
-                        <td>
+                          </td>
+                          <td>{boxscore.away.teamStats.takeaways}</td>
+                          <td>{boxscore.home.teamStats.takeaways}</td>
+                        </tr>
+                        <tr>
+                          <td>
                           GV
-                        </td>
-                        <td>{boxscore.away.teamStats.giveaways}</td>
-                        <td>{boxscore.home.teamStats.giveaways}</td>
-                      </tr>
-                      <tr>
-                        <td>
+                          </td>
+                          <td>{boxscore.away.teamStats.giveaways}</td>
+                          <td>{boxscore.home.teamStats.giveaways}</td>
+                        </tr>
+                        <tr>
+                          <td>
                           GV
-                        </td>
-                        <td>{boxscore.away.teamStats.blocked}</td>
-                        <td>{boxscore.home.teamStats.blocked}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                          </td>
+                          <td>{boxscore.away.teamStats.blocked}</td>
+                          <td>{boxscore.home.teamStats.blocked}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </TabPanel>
