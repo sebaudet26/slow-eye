@@ -106,6 +106,8 @@ class SearchBar extends React.Component {
   handleInputChange(e) {
     const newValue = e.target.value;
     debounce(() => this.setState({ query: newValue }), 200);
+
+    this.setState({ showOptions: true });
   }
 
   handleClick(e) {

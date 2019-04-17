@@ -59,6 +59,11 @@ export default class HomePage extends React.Component {
     const { fetchPlayersStreaks, fetchTeamsStreaks } = this.props;
     fetchPlayersStreaks();
     fetchTeamsStreaks();
+    document.body.classList.add('home');
+  }
+
+  componentWillUnmount() {
+    document.body.classList.remove('home');
   }
 
   render() {
