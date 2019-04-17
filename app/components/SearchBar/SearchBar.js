@@ -39,6 +39,7 @@ const renderOption = cursor => (opt, i) => (
     key={`option-${i}`}
     href={`/${opt.linkType}?id=${opt.id}`}
     className={`options-item${cursor == i ? ' active' : ''}`}
+
   >
     {
       opt.linkType === 'player'
@@ -56,8 +57,13 @@ const renderOption = cursor => (opt, i) => (
   </a>
 );
 
-const stringMatches =
-  query => opt => new RegExp(query, 'i').test(opt.string);
+const stringMatches = query => opt => new RegExp(query, 'i').test(opt.string);
+
+const initialState = {
+  cursor: 0,
+  options: [],
+  query: '',
+};
 
 class SearchBar extends React.Component {
   constructor(props) {
@@ -66,10 +72,13 @@ class SearchBar extends React.Component {
       cursor: 0,
       options: [],
       query: '',
+      showOptions: false,
     };
     this.getPlayersShortList = this.getPlayersShortList.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.showOptions = this.showOptions.bind(this);
+    this.closeOptions = this.closeOptions.bind(this);
   }
 
   componentWillMount() {
@@ -78,10 +87,6 @@ class SearchBar extends React.Component {
 
   componentWillUnmount() {
     clearTimeout(action);
-  }
-
-  componentWillReceiveProps() {
-
   }
 
   async getPlayersShortList() {
@@ -103,7 +108,7 @@ class SearchBar extends React.Component {
     debounce(() => this.setState({ query: newValue }), 200);
   }
 
-  handleFocus(e) {
+  handleClick(e) {
     event.target.select();
   }
 
@@ -124,6 +129,24 @@ class SearchBar extends React.Component {
     }
   }
 
+  showOptions(e) {
+    event.target.select();
+    event.preventDefault();
+
+    this.setState({ showOptions: true }, () => {
+      document.addEventListener('click', this.closeOptions);
+    });
+  }
+
+  closeOptions(e) {
+    if (!this.optionsList.contains(event.target)) {
+      this.setState({ showOptions: false }, () => {
+        document.removeEventListener('click', this.closeOptions);
+      });
+    }
+  }
+
+
   render() {
     const { options, query, cursor } = this.state;
     return (
@@ -133,23 +156,33 @@ class SearchBar extends React.Component {
             placeholder="Search For Player"
             onChange={this.handleInputChange}
             onKeyDown={this.handleKeyDown}
-            onFocus={this.handleFocus}
+            onClick={this.showOptions}
           />
           <label>
             <img src={SearchIcon} alt="" />
           </label>
-          <div className="options">
-            {
-              query
-                ? pipe(
-                  filter(stringMatches(query)),
-                  take(5),
-                  mapObjIndexed(renderOption(cursor)),
-                  values,
-                )(options)
-                : null
-            }
-          </div>
+          {
+          this.state.showOptions
+            ? (
+              <div
+                className="options"
+                ref={(element) => {
+                  this.optionsList = element;
+                }}
+              >
+                {
+                query
+                  ? pipe(
+                    filter(stringMatches(query)),
+                    take(5),
+                    mapObjIndexed(renderOption(cursor)),
+                    values,
+                  )(options)
+                  : null
+              }
+              </div>
+            ) : null
+          }
         </form>
 
       </div>

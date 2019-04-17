@@ -3,7 +3,7 @@
 .game-card {
   background: $white;
   border-radius: $radius;
-  box-shadow: $shadow;
+  border: solid 1px $grey-4;
 
   &-header {
     padding: 10px 15px;

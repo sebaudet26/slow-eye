@@ -80,7 +80,7 @@
       border-radius: 6px;
       margin: auto;
       background: $white;
-      box-shadow: $shadow;
+      border: solid 1px $grey-4;;
     }
   }
 
@@ -105,8 +105,8 @@
 
   .card {
     background: $white;
-    border-radius: 6px;
-    box-shadow: $shadow;
+    border-radius: $radius;
+    border: solid 1px $grey-4;
     margin: 0 25px 15px 0;
     position: relative;
 
@@ -229,44 +229,49 @@
   }
 }
 
-.overall-table {
-  width: 100%;
-  background: $white;
-  border-radius: 6px;
-  box-shadow: $shadow;
-
-  thead {
-    border-bottom: solid 1px $grey-4;
-
-    th {
-      padding: 10px;
-
-      svg {
-        width: 50px;
-        height: 50px;
-      }
-    }
+.overall {
+  &-wrapper {
+    background: $white;
+    border-radius: $radius;
+    border: solid 1px $grey-4;
   }
 
-  tbody {
-    tr {
+  &-table {
+    width: 100%;
+
+    thead {
       border-bottom: solid 1px $grey-4;
 
-      &:last-child {
-        border-bottom: 0px;
+      th {
+        padding: 10px;
+
+        svg {
+          width: 50px;
+          height: 50px;
+        }
       }
+    }
 
-      td {
-        padding: 10px 5px;
-        text-align: center;
-        font-size: 16px;
+    tbody {
+      tr {
+        border-bottom: solid 1px $grey-4;
 
-        &:first-child {
-          padding-left: 10px;
-          text-align: left;
-          white-space: pre;
+        &:last-child {
+          border-bottom: 0px;
+        }
+
+        td {
+          padding: 10px 5px;
+          text-align: center;
           font-size: 16px;
-          font-weight: 600;
+
+          &:first-child {
+            padding-left: 10px;
+            text-align: left;
+            white-space: pre;
+            font-size: 16px;
+            font-weight: 600;
+          }
         }
       }
     }

@@ -489,7 +489,7 @@ class PlayersTable extends React.PureComponent {
           ]}
           defaultPageSize={20}
           defaultSortDesc
-          className="-striped player-stats"
+          className="player-stats"
         />
       </div>
     );

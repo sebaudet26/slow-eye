@@ -31,6 +31,52 @@ const convertToOptions = moments => moments.map(moment => ({
   label: moment.format(dayLabelFormat),
 }));
 
+const extractGamesByType = (games, type) => {
+  if (!games || !games.length) {
+    return [];
+  }
+  return games.filter(g => g.status.detailedState === type);
+};
+
+const renderGamesSection = (games, type) => (
+  (games && games.length) ? (
+    <div className="scoreboard-section">
+      {
+        (type == 'In Progress' || type == 'In Progress - Critical' || type == 'Pre-Game') ? (
+          <div>
+            <div className="scoreboard-section-name">In Progress</div>
+            <div className="scoreboard-section-results">
+              {
+              games.map(game => (
+                <ScoreCard key={Math.random()} game={game} />
+              ))
+            }
+            </div>
+          </div>
+        ) : (
+          <div>
+            <div className="scoreboard-section-name">{type}</div>
+            <div className="scoreboard-section-results">
+              {
+              games.map(game => (
+                <ScoreCard key={Math.random()} game={game} />
+              ))
+            }
+            </div>
+          </div>
+        )
+      }
+    </div>
+  ) : null
+);
+
+const renderGamesForType = (games, gamesAccessor) => type => (
+  extractGamesByType(games[gamesAccessor], type)
+    ? (
+      renderGamesSection(extractGamesByType(games[gamesAccessor], type), type)
+    ) : null
+);
+
 export default class ScorePage extends React.Component {
   constructor(props) {
     super(props);
@@ -82,6 +128,7 @@ export default class ScorePage extends React.Component {
     const { games } = this.props;
     const { currentDate, daysOptions } = this.state;
     const gamesAccessor = Number(currentDate);
+    console.log('games', games);
     return (
       <div className="score-page container">
         <Helmet>
@@ -115,11 +162,15 @@ export default class ScorePage extends React.Component {
           games={games}
           slickCurrentSlide={findIndex(propEq('value', currentDate))(daysOptions)}
         />
-        <div className="scoreboard-results">
+        <div className="scoreboard-wrapper">
           {
-            games[gamesAccessor]
-              ? games[gamesAccessor].map(game => (<ScoreCard key={Math.random()} game={game} />))
-              : null
+            [
+              'In Progress',
+              'In Progress - Critical',
+              'Final',
+              'Pre-Game',
+              'Scheduled',
+            ].map(renderGamesForType(games, gamesAccessor))
           }
         </div>
       </div>

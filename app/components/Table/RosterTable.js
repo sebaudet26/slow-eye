@@ -129,7 +129,7 @@ class RosterTable extends React.PureComponent {
           ]}
           defaultSortAsc
           showPagination={false}
-          className="-striped roster"
+          className="roster"
           defaultPageSize={players.length}
         />
       </div>

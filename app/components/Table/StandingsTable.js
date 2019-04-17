@@ -82,7 +82,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         className: 'text-center',
         accessor: pathOr(0, ['points']),
         maxWidth: 65,
-        minWidth: 40,
+        minWidth: 50,
       },
       {
         Header: 'GF',
@@ -142,7 +142,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
       },
     ]}
     defaultPageSize={subStandings.teamRecords.length}
-    className="-striped standings-stats"
+    className="standings-stats"
   />
 );
 

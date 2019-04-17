@@ -52,4 +52,25 @@ export const getStatusText = (game) => {
   }
 };
 
+export const getFinalPeriod = (game) => {
+  if (
+    !game.liveFeed.lastTenPlays
+    || !game.liveFeed.lastTenPlays.length
+    || !last(game.liveFeed.lastTenPlays).period
+  ) {
+    return '';
+  }
+
+  switch (last(game.liveFeed.lastTenPlays).period) {
+    case 3:
+      return '';
+    case 4:
+      return '(OT)';
+    case 5:
+      return '(S/O)';
+    default:
+      return '';
+  }
+};
+
 export default null;

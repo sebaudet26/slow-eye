@@ -152,7 +152,7 @@ class TeamsTable extends React.PureComponent {
               desc: true,
             },
           ]}
-          className="-striped teams-table"
+          className="teams-table"
         />
       </div>
     );

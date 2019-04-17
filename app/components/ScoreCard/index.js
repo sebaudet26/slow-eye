@@ -1,6 +1,6 @@
 import React from 'react';
 import { pathOr } from 'ramda';
-import { isScheduled, getStatusText } from '../../utils/game';
+import { isScheduled, getStatusText, getFinalPeriod } from '../../utils/game';
 import { smallLogoForTeamName, calculatePoints } from '../../utils/team';
 import VideoPlayer from '../VideoPlayer';
 import PlayIcon from '../../images/play-button.svg';
@@ -13,7 +13,10 @@ const ScoreCard = ({ game }) => (
 
         { game.status.detailedState === 'In Progress' | game.status.detailedState === 'Scheduled' | game.status.detailedState === 'In Progress - Critical' ? null : (<span>{game.status.detailedState}</span>) }
         {' '}
-        <span>{getStatusText(game)}</span>
+        <span>
+          {getStatusText(game)}
+          {getFinalPeriod(game)}
+        </span>
       </div>
       <div className="game-card-team">
         <svg key={Math.random()} className="game-card-team-img">

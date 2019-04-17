@@ -28,13 +28,13 @@ class Header extends React.Component {
               Standings
             </NavLink>
             <NavLink activeClassName="active" className="header-nav-item" to="/playerstats">
-                Player Stats
+              Player Stats
             </NavLink>
             <NavLink activeClassName="active" className="header-nav-item" to="/teamstats">
-                Team Stats
+              Team Stats
             </NavLink>
             <NavLink activeClassName="active" className="header-nav-item" to="/drafts">
-                Drafts
+              Drafts
             </NavLink>
           </div>
           <div className="header-mobile">
@@ -42,21 +42,25 @@ class Header extends React.Component {
               <li>
                 <NavLink activeClassName="active" exact to="/">
                   <HomeIcon />
+                  Home
                 </NavLink>
               </li>
               <li>
                 <NavLink activeClassName="active" to="/scores">
                   <ScoreIcon />
+                  Scores
                 </NavLink>
               </li>
               <li>
                 <NavLink activeClassName="active" to="/standings">
                   <StandingsIcon />
+                  Standings
                 </NavLink>
               </li>
               <li>
                 <NavLink activeClassName="active" to="/playerstats">
                   <StatsIcon />
+                  Leaders
                 </NavLink>
               </li>
             </ul>

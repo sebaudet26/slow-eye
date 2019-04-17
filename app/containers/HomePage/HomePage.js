@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { take } from 'ramda';
-import StandingsTable from '../../components/Table/StandingsTable';
 import './style.scss';
 
 const HOT_PLAYERS_LIMIT = 5;
@@ -77,7 +76,7 @@ export default class HomePage extends React.Component {
         <div className="home-page-wrapper">
           <div className="home-page-col">
             <h3>
-              {' Who\'s hot?'}
+              {' Hot Players'}
               <a href="/hotplayers">View Full List</a>
             </h3>
             {playersStreaks && take(HOT_PLAYERS_LIMIT, playersStreaks).map(renderPlayerCard)}
@@ -85,7 +84,7 @@ export default class HomePage extends React.Component {
           </div>
           <div className="home-page-col">
             <h3>
-              {' Power Rankings'}
+              {' Hot Teams'}
               <a href="/powerrankings">View Full List</a>
             </h3>
             <div className="power-container">

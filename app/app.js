@@ -34,6 +34,7 @@ import TeamStatsPage from './containers/TeamStatsPage/Loadable';
 import ScorePage from './containers/ScorePage/Loadable';
 import GamePage from './containers/GamePage/Loadable';
 import ContributorsPage from './containers/Contributors/Loadable';
+import TestPage from './containers/Test/Loadable';
 import HotPlayersPage from './containers/HotPlayersPage/Loadable';
 import PowerRankingsPage from './containers/PowerRankingsPage/Loadable';
 import SealPage from './containers/SealPage/Loadable';
@@ -84,6 +85,7 @@ const render = () => {
               <Route path="/powerrankings" component={PowerRankingsPage} />
               <Route path="/hotplayers" component={HotPlayersPage} />
               <Route path="/seal" component={SealPage} />
+              <Route path="/test" component={TestPage} />
               <Route path="" component={NotFoundPage} />
             </Switch>
             <Footer />

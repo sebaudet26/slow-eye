@@ -2,8 +2,7 @@
 
 
 .ReactTable {
-  box-shadow: $shadow;
-  border: 0px;
+  border: solid 1px $grey-4;
   border-radius: $radius;
   background: $white;
 
@@ -138,14 +137,6 @@
 
     .css-9za7aq {
       border-right: solid 1px $grey-4 !important;
-    }
-
-    .rt-tr.-odd {
-      background: #f9fcff;
-
-      .rt-td {
-        background: #f9fcff;
-      }
     }
 
     .rt-tr-group {

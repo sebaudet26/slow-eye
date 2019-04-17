@@ -1,66 +1,5 @@
 @import '../../styles/variables.scss';
 
-.scoreboard {
-
-  &-header {
-    display: flex;
-    align-items: center;
-    margin-top: 1.66em;
-    margin-bottom: 5px;
-
-    h2 {
-      margin: 0;
-    }
-  }
-
-  &-datePicker {
-    position: relative;
-    top: -3px;
-
-    label {
-      width: 150px;
-      margin-left: 10px;
-    }
-
-    .react-datepicker__input-container {
-      input {
-        margin-left: 10px;
-        text-transform: uppercase;
-        font-size: 14px;
-        color: $black !important;
-        font-weight: 500;
-        outline: none;
-        position: relative;
-        top: 1px;
-        cursor: pointer;
-        transition: 0.3s;
-        width: 90px;
-
-        &:hover {
-          opacity: 0.75;
-        }
-      }
-    }
-
-    &-calendar {
-      cursor: pointer;
-      transition: 0.3s;
-
-      &:hover {
-        opacity: 0.75;
-      }
-    }
-  }
-
-  &-results {
-    display: flex;
-    flex-flow: wrap;
-    align-items: center;
-    margin-top: 25px;
-  }
-}
-
-
 .slick-track {
   height: 64px;
 }
@@ -87,8 +26,8 @@
 
 .slick-slider {
   height: 64px;
-  box-shadow: $shadow;
   border-radius: $radius;
+  border: solid 1px $grey-4;
 
   .slick-slide {
     background: $white;
@@ -98,6 +37,7 @@
     border-left: solid 1px $grey-4;
     cursor: pointer;
     transition: 0.3s;
+    border-bottom: solid 1px $grey-4;
 
     div {
       margin: auto;
@@ -150,8 +90,6 @@
 }
 
 @media screen and (max-width: 650px) {
-
-
   .scoreboard-selector {
     &-item {
       padding: 0 5px;
@@ -180,16 +118,6 @@
 
     &.next {
       border-radius: 0px;
-    }
-  }
-
-  .scoreboard-header {
-    margin: 0px;
-  }
-
-  .score-page {
-    h2 {
-      display: none;
     }
   }
 }
