@@ -41,14 +41,31 @@ const extractGamesByType = (games, type) => {
 const renderGamesSection = (games, type) => (
   (games && games.length) ? (
     <div className="scoreboard-section">
-      <div className="scoreboard-section-name">{type}</div>
-      <div className="scoreboard-section-results">
-        {
-          games.map(game => (
-            <ScoreCard key={Math.random()} game={game} />
-          ))
-        }
-      </div>
+      {
+        (type == 'In Progress' || type == 'In Progress - Critical' || type == 'Pre-Game') ? (
+          <div>
+            <div className="scoreboard-section-name">In Progress</div>
+            <div className="scoreboard-section-results">
+              {
+              games.map(game => (
+                <ScoreCard key={Math.random()} game={game} />
+              ))
+            }
+            </div>
+          </div>
+        ) : (
+          <div>
+            <div className="scoreboard-section-name">{type}</div>
+            <div className="scoreboard-section-results">
+              {
+              games.map(game => (
+                <ScoreCard key={Math.random()} game={game} />
+              ))
+            }
+            </div>
+          </div>
+        )
+      }
     </div>
   ) : null
 );
@@ -149,6 +166,7 @@ export default class ScorePage extends React.Component {
           {
             [
               'In Progress',
+              'In Progress - Critical',
               'Final',
               'Pre-Game',
               'Scheduled',
