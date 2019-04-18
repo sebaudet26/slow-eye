@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import { propEq, findIndex } from 'ramda';
+import { propEq, findIndex, flatten } from 'ramda';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import DateSlider from '../../components/DateSlider';
@@ -38,44 +38,33 @@ const extractGamesByType = (games, type) => {
   return games.filter(g => g.status.detailedState === type);
 };
 
-const renderGamesSection = (games, type) => (
-  (games && games.length) ? (
-    <div className="scoreboard-section">
-      {
-        (type == 'In Progress' || type == 'In Progress - Critical' || type == 'Pre-Game') ? (
-          <div>
-            <div className="scoreboard-section-name">In Progress</div>
-            <div className="scoreboard-section-results">
-              {
-              games.map(game => (
-                <ScoreCard key={Math.random()} game={game} />
-              ))
-            }
-            </div>
-          </div>
-        ) : (
-          <div>
-            <div className="scoreboard-section-name">{type}</div>
-            <div className="scoreboard-section-results">
-              {
-              games.map(game => (
-                <ScoreCard key={Math.random()} game={game} />
-              ))
-            }
-            </div>
-          </div>
-        )
-      }
-    </div>
-  ) : null
+const renderGamesSection = (games, label) => (
+  <div className="scoreboard-section">
+    {
+      <div>
+        <div className="scoreboard-section-name">{label}</div>
+        <div className="scoreboard-section-results">
+          {
+          games.map(game => (
+            <ScoreCard key={Math.random()} game={game} />
+          ))
+        }
+        </div>
+      </div>
+    }
+  </div>
 );
 
-const renderGamesForType = (games, gamesAccessor) => type => (
-  extractGamesByType(games[gamesAccessor], type)
-    ? (
-      renderGamesSection(extractGamesByType(games[gamesAccessor], type), type)
-    ) : null
-);
+const renderGames = ({
+  validGameStates, games, gamesAccessor, labelAs,
+}) => {
+  const gamesAccessed = games[gamesAccessor];
+  const gamesToShow = flatten(validGameStates.map(state => extractGamesByType(gamesAccessed, state)));
+  if (!gamesToShow || !gamesToShow.length) {
+    return null;
+  }
+  return renderGamesSection(gamesToShow, labelAs);
+};
 
 export default class ScorePage extends React.Component {
   constructor(props) {
@@ -164,13 +153,36 @@ export default class ScorePage extends React.Component {
         />
         <div className="scoreboard-wrapper">
           {
-            [
-              'In Progress',
-              'In Progress - Critical',
-              'Final',
-              'Pre-Game',
-              'Scheduled',
-            ].map(renderGamesForType(games, gamesAccessor))
+            renderGames({
+              validGameStates: [
+                'In Progress - Critical',
+                'In Progress',
+                'Pre-Game',
+              ],
+              labelAs: 'In Progress',
+              games,
+              gamesAccessor,
+            })
+          }
+          {
+            renderGames({
+              validGameStates: [
+                'Final',
+              ],
+              labelAs: 'Final',
+              games,
+              gamesAccessor,
+            })
+          }
+          {
+            renderGames({
+              validGameStates: [
+                'Scheduled',
+              ],
+              labelAs: 'Scheduled',
+              games,
+              gamesAccessor,
+            })
           }
         </div>
       </div>
