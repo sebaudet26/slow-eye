@@ -4,6 +4,14 @@
   background: $white;
   border-radius: $radius;
   border: solid 1px $grey-4;
+  position: relative;
+
+  &-series {
+    &-summary {
+      position: absolute;
+      right: 15px;
+    }
+  }
 
   &-header {
     padding: 10px 15px;

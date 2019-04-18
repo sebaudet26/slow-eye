@@ -677,6 +677,20 @@ const GameHighlights = new GraphQLObjectType({
   },
 });
 
+const SeriesSummary = new GraphQLObjectType({
+  name: 'SeriesSummary',
+  fields: {
+    gamePk: { type: GraphQLInt, resolve: prop('gamePk') },
+    gameNumber: { type: GraphQLInt, resolve: prop('gameNumber') },
+    gameLabel: { type: GraphQLString, resolve: prop('gameLabel') },
+    necessary: { type: GraphQLBoolean, resolve: prop('necessary') },
+    gameCode: { type: GraphQLInt, resolve: prop('gameCode') },
+    gameTime: { type: GraphQLString, resolve: prop('gameTime') },
+    seriesStatus: { type: GraphQLString, resolve: prop('seriesStatus') },
+    seriesStatusShort: { type: GraphQLString, resolve: prop('seriesStatusShort') },
+  },
+});
+
 const Game = new GraphQLObjectType({
   name: 'Game',
   fields: {
@@ -692,6 +706,8 @@ const Game = new GraphQLObjectType({
     // Lazy load boxscore
     boxscore: { type: Boxscore, resolve: p => fetchBoxscore(p.gamePk) },
     highlights: { type: GameHighlights, resolve: p => fetchGameHighlights(p.gamePk) },
+    // Playoffs series
+    seriesSummary: { type: SeriesSummary, resolve: prop('seriesSummary') },
   },
 });
 

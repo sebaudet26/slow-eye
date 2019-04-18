@@ -10,12 +10,12 @@ const ScoreCard = ({ game }) => (
   <div className="game-card-wrapper">
     <div className="game-card">
       <div className="game-card-header">
-
         { game.status.detailedState === 'In Progress' | game.status.detailedState === 'Scheduled' | game.status.detailedState === 'In Progress - Critical' ? null : (<span>{game.status.detailedState}</span>) }
         {' '}
         <span>
           {getStatusText(game)}
           {getFinalPeriod(game)}
+          <span className="game-card-series-summary">{game.seriesSummary.seriesStatusShort || ''}</span>
         </span>
       </div>
       <div className="game-card-team">
@@ -26,11 +26,7 @@ const ScoreCard = ({ game }) => (
           {game.teams.away.team.name}
         </a>
         <div className="game-card-team-score">
-          {
-            isScheduled(game)
-              ? calculatePoints(game.teams.away)
-              : game.teams.away.score
-          }
+          {game.teams.away.score}
         </div>
       </div>
       <div className="game-card-team">
@@ -41,11 +37,7 @@ const ScoreCard = ({ game }) => (
           {game.teams.home.team.name}
         </a>
         <div className="game-card-team-score">
-          {
-            isScheduled(game)
-              ? calculatePoints(game.teams.home)
-              : game.teams.home.score
-          }
+          {game.teams.home.score}
         </div>
       </div>
       {

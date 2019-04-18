@@ -20,5 +20,6 @@ export const findTeamRecordInStandings = standings => teamId =>
     head,
   )(standings);
 
+export const calculateSeriesWins = team => `${team.leagueRecord.wins + team.leagueRecord.ot}`;
 
 export default null;
