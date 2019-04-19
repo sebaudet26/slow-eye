@@ -54,7 +54,8 @@ export const getStatusText = (game) => {
 
 export const getFinalPeriod = (game) => {
   if (
-    !game.liveFeed.lastTenPlays
+    !game.liveFeed
+    || !game.liveFeed.lastTenPlays
     || !game.liveFeed.lastTenPlays.length
     || !last(game.liveFeed.lastTenPlays).period
   ) {

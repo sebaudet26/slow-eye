@@ -34,6 +34,9 @@ const nhlApiBase = 'http://www.nhl.com/stats/rest';
 const nhlRecordsBase = 'https://records.nhl.com/site/api';
 const nhlStatsApiBase = 'https://statsapi.web.nhl.com/api/v1';
 
+// TODO: hardcoded feature flag lol
+const IS_PLAYOFFS_TIME = true;
+
 // technically 2AM to leave some time for Western coast to be at end of day
 const getSecondsUntilMidnight = () => Math.round((moment.tz('America/New_York').endOf('day').add(2, 'hours').valueOf() - moment.tz('America/New_York').valueOf()) / 1000);
 
@@ -268,6 +271,10 @@ const fetchGames = async (args) => {
   } else {
     resource += `?date=${moment().format('YYYY-MM-DD')}`;
   }
+
+  if (IS_PLAYOFFS_TIME) {
+    resource += '&hydrate=game(seriesSummary),seriesSummary(series)';
+  }
   const gamesResponse = await nhlStatsApi(resource, cacheExp || 60, true);
   const games = flatten(map(propOr({}, 'games'), gamesResponse.dates || []));
   return games;
@@ -460,6 +467,7 @@ const calculateTeamPointsStreak = (team) => {
     losses: latestRecord.losses - initialRecord.losses,
     ot: latestRecord.ot - initialRecord.ot,
     games: teamStreakDefaultNumberOfGames,
+    isValid: latestRecord.wins >= initialRecord.wins,
     goalsAgainst,
     goalsFor,
   };
@@ -554,6 +562,7 @@ const calculateTeamsStreaks = async (args = {}) => {
     // get game logs for all players
     const teamsStreaks = pipe(
       map(calculateTeamPointsStreak),
+      filter(team => team.streak.isValid),
       sortWith([
         descend(path(['streak', 'points'])),
       ]),

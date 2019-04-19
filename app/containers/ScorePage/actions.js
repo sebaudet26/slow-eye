@@ -23,11 +23,16 @@ const makeScoresQuery = date => `
         }
       ` : ''}
     status {
-      abstractGameState,
-      codedGameState,
-      detailedState,
+      abstractGameState
+      codedGameState
+      detailedState
       statusCode
-    },
+    }
+    seriesSummary {
+      gameLabel
+      seriesStatus
+      seriesStatusShort
+    }
     teams {
       away {
         score
