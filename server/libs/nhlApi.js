@@ -467,6 +467,7 @@ const calculateTeamPointsStreak = (team) => {
     losses: latestRecord.losses - initialRecord.losses,
     ot: latestRecord.ot - initialRecord.ot,
     games: teamStreakDefaultNumberOfGames,
+    isValid: latestRecord.wins >= initialRecord.wins,
     goalsAgainst,
     goalsFor,
   };
@@ -561,6 +562,7 @@ const calculateTeamsStreaks = async (args = {}) => {
     // get game logs for all players
     const teamsStreaks = pipe(
       map(calculateTeamPointsStreak),
+      filter(team => team.streak.isValid),
       sortWith([
         descend(path(['streak', 'points'])),
       ]),
