@@ -636,6 +636,16 @@ const calculatePlayerStreaks = async (args = {}) => {
   }
 };
 
+const drewDebug = async (playerId) => {
+  console.log('hey');
+  console.log('hello drew');
+  const resource = `/people/${playerId}`;
+  console.log(resource);
+  const playerInfoData = await nhlStatsApi(resource, 1);
+  console.log(playerInfoData);
+  return 'drew';
+};
+
 module.exports = {
   fetchLiveFeed,
   fetchStandings,
@@ -661,4 +671,5 @@ module.exports = {
   fetchGameHighlights,
   calculatePlayerStreaks,
   calculateTeamsStreaks,
+  drewDebug,
 };

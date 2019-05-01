@@ -8,6 +8,7 @@ const port = require('./util/port');
 const setup = require('./middlewares/frontendMiddleware');
 const graphql = require('./middlewares/graphql');
 require('./libs/redisApi');
+require('./libs/nhlApi');
 
 require('./libs/automatedJobs');
 
