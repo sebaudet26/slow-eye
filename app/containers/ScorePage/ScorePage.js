@@ -38,7 +38,6 @@ const extractGamesByType = (games, type) => {
   return games.filter(g => g.status.detailedState === type);
 };
 
-<<<<<<< HEAD
 const renderGamesSection = (games, label) => (
   <div className="scoreboard-section">
     {
@@ -54,23 +53,6 @@ const renderGamesSection = (games, label) => (
       </div>
     }
   </div>
-=======
-const renderGamesSection = (games, type) => (
-  (games && games.length && type) ? (
-    <div className="scoreboard-section">
-      <div>
-        <div className="scoreboard-section-name">{type}</div>
-        <div className="scoreboard-section-results">
-          {
-              games.map(game => (
-                <ScoreCard key={Math.random()} game={game} />
-              ))
-            }
-        </div>
-      </div>
-    </div>
-  ) : null
->>>>>>> Remove App-wrapper
 );
 
 const renderGames = ({
