@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import Logo from '../../images/logoWhite.svg';
+import Logo from '../../images/logo.svg';
 import HomeIcon from './images/home';
 import ScoreIcon from './images/scoreboard';
 import StandingsIcon from './images/standings';
