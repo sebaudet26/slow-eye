@@ -76,7 +76,7 @@ export default class HomePage extends React.Component {
             <h1>The best place to view the NHL's latest scores and stats.</h1>
             <div className="home-header-featured">
               <div>This Week's Featured Player</div>
-              <a href="/player?id=8477511" className="home-header-featured-name">Teuvo Teravainen</a>
+              <a href="/player?id=8476882" className="home-header-featured-name">Teuvo Teravainen</a>
             </div>
           </div>
         </div>
