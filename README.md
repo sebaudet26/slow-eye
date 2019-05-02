@@ -10,7 +10,6 @@ TODO:
 - Leaders Page for Mobile
 - Add Tabs to Standings Page (Playoff Picture, Wild Card Tab, League Tab, Conference Tab)
 - Put Player Stats and Team Stats under Stats dropdown
-- Beautify Footer
 - Algorithm for Hot Players and Power Rankings
 - Schedule Page, Schedule Tab for Team page
 - 3 stars to game page
