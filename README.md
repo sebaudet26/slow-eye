@@ -6,9 +6,6 @@ https://github.com/dword4/nhlapi
 
 TODO:
 ----------V2----------
-
-- ~~video~~
-- ~~home page~~
 - Game Page When game isn't started (show matchup)
 - Leaders Page for Mobile
 - Add Tabs to Standings Page (Playoff Picture, Wild Card Tab, League Tab, Conference Tab)
