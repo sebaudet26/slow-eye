@@ -70,30 +70,33 @@ export default class HomePage extends React.Component {
     const { playersStreaks, teamsStreaks } = this.props;
 
     return (
-      <div className="home-page container">
-        <Helmet>
-          <title>Home - SealStats.com</title>
-          <meta
-            name="description"
-            content="Seal Stats is the best place to view NHL stats. User-friendly and fast."
-          />
-        </Helmet>
-        <div className="home-page-wrapper">
-          <div className="home-page-col">
-            <h3>
-              {' Hot Players'}
-              <a href="/hotplayers">View Full List</a>
-            </h3>
-            {playersStreaks && take(HOT_PLAYERS_LIMIT, playersStreaks).map(renderPlayerCard)}
+      <div className="home-page">
+        <div className="home-header" />
+        <div className="container">
+          <Helmet>
+            <title>Home - SealStats.com</title>
+            <meta
+              name="description"
+              content="Seal Stats is the best place to view NHL stats. User-friendly and fast."
+            />
+          </Helmet>
+          <div className="home-page-wrapper">
+            <div className="home-page-col">
+              <h3>
+                {' Hot Players'}
+                <a href="/hotplayers">View Full List</a>
+              </h3>
+              {playersStreaks && take(HOT_PLAYERS_LIMIT, playersStreaks).map(renderPlayerCard)}
 
-          </div>
-          <div className="home-page-col">
-            <h3>
-              {' Hot Teams'}
-              <a href="/powerrankings">View Full List</a>
-            </h3>
-            <div className="power-container">
-              {renderTeamCard && take(HOT_TEAMS_LIMIT, teamsStreaks).map(renderTeamCard)}
+            </div>
+            <div className="home-page-col">
+              <h3>
+                {' Hot Teams'}
+                <a href="/powerrankings">View Full List</a>
+              </h3>
+              <div className="power-container">
+                {renderTeamCard && take(HOT_TEAMS_LIMIT, teamsStreaks).map(renderTeamCard)}
+              </div>
             </div>
           </div>
         </div>
