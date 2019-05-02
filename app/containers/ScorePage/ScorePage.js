@@ -58,31 +58,16 @@ const renderGamesSection = (games, label) => (
 const renderGamesSection = (games, type) => (
   (games && games.length && type) ? (
     <div className="scoreboard-section">
-      {
-        (type == 'In Progress' || type == 'In Progress - Critical' || type == 'Pre-Game') ? (
-          <div>
-            <div className="scoreboard-section-name">In Progress</div>
-            <div className="scoreboard-section-results">
-              {
+      <div>
+        <div className="scoreboard-section-name">{type}</div>
+        <div className="scoreboard-section-results">
+          {
               games.map(game => (
                 <ScoreCard key={Math.random()} game={game} />
               ))
             }
-            </div>
-          </div>
-        ) : (
-          <div>
-            <div className="scoreboard-section-name">{type}</div>
-            <div className="scoreboard-section-results">
-              {
-              games.map(game => (
-                <ScoreCard key={Math.random()} game={game} />
-              ))
-            }
-            </div>
-          </div>
-        )
-      }
+        </div>
+      </div>
     </div>
   ) : null
 >>>>>>> Remove App-wrapper
