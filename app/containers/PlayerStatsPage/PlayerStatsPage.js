@@ -17,15 +17,16 @@ class PlayerStatsPage extends React.PureComponent {
         </Helmet>
         <div className="playerStats-page container">
           <h2>Player Stats</h2>
+          <PlayersTable
+            players={players}
+            fetchPlayers={fetchPlayers}
+            fetchTeams={fetchTeams}
+            teams={teams}
+            setLoading={setLoading}
+            loading={loading}
+          />
         </div>
-        <PlayersTable
-          players={players}
-          fetchPlayers={fetchPlayers}
-          fetchTeams={fetchTeams}
-          teams={teams}
-          setLoading={setLoading}
-          loading={loading}
-        />
+
       </article>
     );
   }

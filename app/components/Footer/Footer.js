@@ -5,24 +5,17 @@ import PatreonLogo from './images/patreon.svg';
 
 const Footer = () => (
   <footer className="footer">
-    <div>
-      {'Made with'}
-      <span role="img" aria-label="heart-emoji"> ❤️ </span>
-      {'by '}
-      <span className="bold">SE</span>
+    <div className="container">
+      <div>
+        {'Made with'}
+        <span role="img" aria-label="heart-emoji"> ❤️ </span>
+        {'by '}
+        <span className="bold">SE</span>
 b and
-      {' '}
-      <span className="bold">AL</span>
+        {' '}
+        <span className="bold">AL</span>
 ex
-    </div>
-    <div className="footer-links">
-      <a href="https://www.patreon.com/user?u=12219574" target="_blank">
-        <img src={PatreonLogo} alt="Patreon Logo" />
-        Support us on Patreon
-      </a>
-      <Link to="/contributors">
-        Contributors
-      </Link>
+      </div>
     </div>
   </footer>
 );

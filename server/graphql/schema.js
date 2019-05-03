@@ -50,6 +50,7 @@ const {
   fetchGameHighlights,
   calculatePlayerStreaks,
   calculateTeamsStreaks,
+  drewDebug,
 } = require('../libs/nhlApi');
 
 const ifNotThereFetchId = propName => async (d) => {
@@ -923,6 +924,10 @@ const schema = new GraphQLSchema({
         args: { limit: { type: GraphQLInt } },
         type: GraphQLList(TeamStreak),
         resolve: (r, args) => calculateTeamsStreaks(args),
+      },
+      drewStuff: {
+        type: GraphQLString,
+        resolve: (r, args) => drewDebug(args),
       },
     },
   }),
