@@ -3,9 +3,10 @@
   &-header {
     width: 100%;
     height: 400px;
+    margin: auto;
     display: block;
     background-size: 100% auto;
-    background-position: right;
+    background-position: top right;
     position: relative;
     align-items: center;
 
@@ -266,6 +267,9 @@
   }
 }
 
+@media screen and (max-width: 1000px) {
+}
+
 @media screen and (max-width: 800px) {
   .home-page {
     .card {
@@ -286,7 +290,8 @@
   }
 
   .home-header {
-    height: 250px;
+    height: 300px;
+    background-position: right;
 
     .container {
       h1 {

@@ -5,7 +5,7 @@
   width: 35%;
 
   form {
-    background: $white;
+    background: $grey-5;
     height: 38px;
     line-height: 38px;
     border-radius: $radius;
@@ -14,24 +14,25 @@
     max-width: 400px;
     display: flex;
     position: relative;
-    border: solid 1px $grey-4;
-
-
 
     label {
       padding: 0 12px;
-      border-left: solid 1px $grey-4;
       display: flex;
+      position: absolute;
+      height: 100%;
     }
 
     input {
-      padding-left: 8px;
+      padding-left: 42px;
       outline: none;
       width: 100%;
       transition: 0.3s;
+      border-radius: $radius;
+      border: solid 1px $grey-4;
 
       &:focus {
-        box-shadow: $shadow;
+        border: solid 1px $black;
+        background: $white;
       }
     }
   }
@@ -58,7 +59,7 @@
     }
 
     &:hover {
-      background: $grey-5;
+      color: $main;
     }
 
     &.active {
