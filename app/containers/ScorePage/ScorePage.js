@@ -119,7 +119,7 @@ export default class ScorePage extends React.Component {
     const gamesAccessor = Number(currentDate);
     console.log('games', games);
     return (
-      <div>
+      <div className="score-page">
         <div className="page-header">
           <div className="container">
             <div className="scoreboard-header">
@@ -148,7 +148,7 @@ export default class ScorePage extends React.Component {
             />
           </div>
         </div>
-        <div className="score-page container">
+        <div className="container">
           <Helmet>
             <title>NHL Scores - SealStats.com</title>
             <meta
