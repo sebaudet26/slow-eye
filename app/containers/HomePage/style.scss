@@ -104,7 +104,7 @@
 
     &::after {
       content: '';
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(43, 49, 58, 0.7);
       border-radius: 6px;
       position: absolute;
       top: 0;
@@ -142,7 +142,7 @@
         position: absolute;
         z-index: 5;
         height: 120px;
-        background: linear-gradient(270deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);
+        background: linear-gradient(270deg, rgba(43, 49, 58, 0.7) 0%, rgba(0,0,0,0) 100%);
         width: 200px;
         border-radius: 0 6px 6px 0;
         right: 0px;
