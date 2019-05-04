@@ -89,7 +89,7 @@ class DateSlider extends React.Component {
         {
           breakpoint: 1024,
           settings: {
-            slidesToShow: 3,
+            slidesToShow: 5,
             slidesToScroll: 1,
           },
         },

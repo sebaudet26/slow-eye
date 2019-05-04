@@ -48,6 +48,7 @@
     cursor: pointer;
     transition: 0.3s;
     opacity: 1;
+    border-bottom: solid 3px rgba(255,255,255,0);
 
     div {
       margin: auto;
@@ -60,19 +61,20 @@
     }
 
     &-date {
-      font-weight: 500;
-      color: $grey-2;
+      font-weight: 400;
+      color: $grey-3;
       transition: 0.3s;
     }
 
     &-games {
       font-size: 14px;
-      color: $grey-2;
+      color: $grey-3;
     }
 
     &:hover {
       .slick-slide-date {
         color: $main;
+        font-weight: 500;
       }
     }
   }
@@ -89,6 +91,7 @@
     .slick-slide-date {
       font-size: 16px;
       color: $main;
+      font-weight: 500;
     }
   }
 }
@@ -117,6 +120,13 @@
 }
 
 @media screen and (max-width: 600px) {
+  .slick-slider {
+    height: 50px;
+
+    .slick-track, .slick-slide {
+      height: 50px;
+    }
+  }
   .slick-slide-games {
     display: none;
   }
