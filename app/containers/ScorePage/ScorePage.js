@@ -119,40 +119,47 @@ export default class ScorePage extends React.Component {
     const gamesAccessor = Number(currentDate);
     console.log('games', games);
     return (
-      <div className="score-page container">
-        <Helmet>
-          <title>NHL Scores - SealStats.com</title>
-          <meta
-            name="description"
-            content="View Live NHL Scores. Seal Stats is the best place to view NHL stats. User-friendly and fast."
-          />
-        </Helmet>
-        <div className="scoreboard-header">
-          <h2>Scores</h2>
-          <div className="scoreboard-datePicker">
-            <label>
-              <img
-                src={CalendarIcon}
-                className="scoreboard-datePicker-calendar"
-                alt=""
-              />
-              <DatePicker
-                selected={moment(currentDate, storeKeyFormat).toDate()}
-                dateFormat="eee MMM dd"
-                todayButton="Today"
-                onChange={this.handleNewCalendarDate}
-              />
-            </label>
+      <div>
+        <div className="page-header">
+          <div className="container">
+            <div className="scoreboard-header">
+              <h2>Scores</h2>
+              <div className="scoreboard-datePicker">
+                <label>
+                  <img
+                    src={CalendarIcon}
+                    className="scoreboard-datePicker-calendar"
+                    alt=""
+                  />
+                  <DatePicker
+                    selected={moment(currentDate, storeKeyFormat).toDate()}
+                    dateFormat="eee MMM dd"
+                    todayButton="Today"
+                    onChange={this.handleNewCalendarDate}
+                  />
+                </label>
+              </div>
+            </div>
+            <DateSlider
+              daysOptions={daysOptions}
+              handleNewDateSelected={index => this.handleNewDateSelected(daysOptions[index].value)}
+              games={games}
+              slickCurrentSlide={findIndex(propEq('value', currentDate))(daysOptions)}
+            />
           </div>
         </div>
-        <DateSlider
-          daysOptions={daysOptions}
-          handleNewDateSelected={index => this.handleNewDateSelected(daysOptions[index].value)}
-          games={games}
-          slickCurrentSlide={findIndex(propEq('value', currentDate))(daysOptions)}
-        />
-        <div className="scoreboard-wrapper">
-          {
+        <div className="score-page container">
+          <Helmet>
+            <title>NHL Scores - SealStats.com</title>
+            <meta
+              name="description"
+              content="View Live NHL Scores. Seal Stats is the best place to view NHL stats. User-friendly and fast."
+            />
+          </Helmet>
+
+
+          <div className="scoreboard-wrapper">
+            {
             renderGames({
               validGameStates: [
                 'In Progress - Critical',
@@ -164,7 +171,7 @@ export default class ScorePage extends React.Component {
               gamesAccessor,
             })
           }
-          {
+            {
             renderGames({
               validGameStates: [
                 'Final',
@@ -174,7 +181,7 @@ export default class ScorePage extends React.Component {
               gamesAccessor,
             })
           }
-          {
+            {
             renderGames({
               validGameStates: [
                 'Scheduled',
@@ -184,6 +191,7 @@ export default class ScorePage extends React.Component {
               gamesAccessor,
             })
           }
+          </div>
         </div>
       </div>
     );
