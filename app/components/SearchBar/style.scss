@@ -4,8 +4,10 @@
   margin-left: 25px;
   width: 35%;
 
+
   form {
-    background: $grey-5;
+    background: $white;
+    box-shadow: $shadow;
     height: 38px;
     line-height: 38px;
     border-radius: $radius;
@@ -31,7 +33,7 @@
       border: solid 1px $grey-4;
 
       &:focus {
-        border: solid 1px $black;
+        box-shadow: $shadow-2;
         background: $white;
       }
     }
@@ -45,14 +47,18 @@
   width: 100%;
   top: 40px;
   left: 0px;
-  border-radius: 6px;
-  box-shadow: $shadow;
+  border-radius: $radius;
+  box-shadow: $shadow-2;
 
   &-item {
     padding: 5px 15px;
     display: block;
     border-bottom: solid 1px $grey-4;
     color: $black;
+
+    &:first-child {
+      border-radius: $radius $radius 0 0;
+    }
 
     &:last-child {
       border-bottom: 0px;
