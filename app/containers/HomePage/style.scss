@@ -258,7 +258,7 @@
 .power-container {
   background: $white;
   border-radius: $radius;
-  border: solid 1px $grey-4;
+  box-shadow: $shadow;
 }
 
 @media screen and (max-width: 1200px) {
