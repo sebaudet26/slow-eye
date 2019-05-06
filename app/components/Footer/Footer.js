@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './style.scss';
-import PatreonLogo from './images/patreon.svg';
 
 const Footer = () => (
   <footer className="footer">
