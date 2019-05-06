@@ -40,6 +40,7 @@
 
     &-item {
       margin-left: 15px;
+      padding: 15px 10px;
       color: $black;
       font-size: $link;
       font-weight: 500;
@@ -47,30 +48,26 @@
       font-size: 16px;
       position: relative;
       cursor: pointer;
+      transition: 0.3s;
 
-      &::after {
-        content: "";
-        transition: 0.3s;
-        position: absolute;
-        bottom: -1px;
-        left: 0;
-        height: 2px;
-        width: 100%;
-        background: $black;
-        opacity: 0;
+      &.dropdownMenu {
+        cursor: default;
+
+        &:hover {
+          color: $grey-3;
+        }
       }
 
       &:hover {
-        &::after {
-          opacity: 1;
+        color: $main;
+
+        .dropdownMenu-arrow {
+          border-color: $grey-3;
         }
       }
-    }
 
-    .active {
-
-      &::after {
-        opacity: 1;
+      &.active {
+        color: $main;
       }
     }
   }

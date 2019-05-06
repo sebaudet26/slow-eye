@@ -7,11 +7,38 @@ import StandingsIcon from './images/standings';
 import StatsIcon from './images/stats';
 import TeamsIcon from './images/team';
 import SearchBar from '../SearchBar/SearchBar';
+import HeaderDropdown from '../HeaderDropdown/HeaderDropdown';
 
 import './style.scss';
 
+
 class Header extends React.Component {
   render() {
+    const statsDropdown = [
+      {
+        name: 'Player Stats',
+        link: '/playerstats',
+      },
+      {
+        name: 'Team Stats',
+        link: '/teamstats',
+      },
+    ];
+
+    const moreDropdown = [
+      {
+        name: 'Power Rankings',
+        link: '/powerrankings',
+      },
+      {
+        name: 'Hot Players',
+        link: '/hotplayers',
+      },
+      {
+        name: 'NHL Entry Draft',
+        link: '/drafts',
+      },
+    ];
     return (
       <div className="header">
         <div className="header-wrapper">
@@ -27,15 +54,8 @@ class Header extends React.Component {
             <NavLink activeClassName="active" className="header-nav-item" exact to="/standings">
               Standings
             </NavLink>
-            <NavLink activeClassName="active" className="header-nav-item" to="/playerstats">
-              Player Stats
-            </NavLink>
-            <NavLink activeClassName="active" className="header-nav-item" to="/teamstats">
-              Team Stats
-            </NavLink>
-            <NavLink activeClassName="active" className="header-nav-item" to="/drafts">
-              Drafts
-            </NavLink>
+            <HeaderDropdown name="Stats" list={statsDropdown} />
+            <HeaderDropdown name="More" list={moreDropdown} />
           </div>
           <div className="header-mobile">
             <ul className="header-mobile-list">
