@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import Logo from '../../images/logo.svg';
+// import Logo from '../../images/logo.svg';
 import HomeIcon from './images/home';
 import ScoreIcon from './images/scoreboard';
 import StandingsIcon from './images/standings';
@@ -8,6 +8,7 @@ import StatsIcon from './images/stats';
 import TeamsIcon from './images/team';
 import SearchBar from '../SearchBar/SearchBar';
 import HeaderDropdown from '../HeaderDropdown/HeaderDropdown';
+import Logo from '../../images/Logo.js';
 
 import './style.scss';
 
@@ -42,9 +43,9 @@ class Header extends React.Component {
     return (
       <div className="header">
         <div className="header-wrapper">
-          <a className="header-logo" href="/">
-            <img src={Logo} alt="" />
-            <span className="header-brand">Sealstats</span>
+          <a className="header-brand" href="/">
+            <Logo />
+            <span className="header-brand-name">Sealstats</span>
           </a>
           <SearchBar />
           <div className="header-nav">

@@ -15,7 +15,7 @@
     padding: 0 7.5px;
   }
 
-  &-logo {
+  &-brand {
     font-size: 20px;
     font-weight: 600;
     color: $black;
@@ -23,13 +23,18 @@
     align-items: center;
     font-family: Futura;
 
-    img {
+    &-logo {
       margin-right: 10px;
-    }
-  }
 
-  &-brand {
-    white-space: pre;
+      &-path {
+        fill: $main;
+      }
+    }
+
+    &-name {
+      white-space: pre;
+      color: $black;
+    }
   }
 
   &-nav {
@@ -140,7 +145,7 @@
   .header {
     height: 64px;
 
-    &-brand {
+    &-brand-name {
       display: none;
     }
   }
