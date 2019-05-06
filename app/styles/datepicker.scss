@@ -1,0 +1,70 @@
+@import './variables.scss';
+
+.react-datepicker {
+  border: none !important;
+  box-shadow: $shadow-2 !important;
+  font-family: "Avenir Next", sans-serif !important;
+
+  &__triangle {
+    display: none !important;
+  }
+
+  &-popper {
+    z-index: 99 !important;
+    left: auto !important;
+    top: 10px !important;
+    right: 0px;
+    transform: translate3d(0px, 30px, 0px) !important;
+  }
+
+  &__header {
+    background: $grey-5 !important;
+    border-bottom: solid 1px $grey-4 !important;
+  }
+
+  &__current-month {
+    font-weight: 500 !important;
+  }
+
+  &__day {
+    font-weight: 500 !important;
+    border-radius: 100% !important;
+
+    &--selected {
+      background: $main !important;
+    }
+
+    &:hover {
+      color: $main !important;
+      background: $grey-5 !important;
+    }
+  }
+
+  &__today-button {
+    padding: 7.5px 0 !important;
+    background: $grey-5 !important;
+    font-weight: 500 !important;
+    font-size: 16px;
+    border-top: solid 1px $grey-4 !important;
+    transition: 0.3s;
+
+    &:hover {
+      color: $main;
+    }
+  }
+
+  &__input-container {
+    input {
+      margin-left: 10px;
+      font-size: 14px;
+      color: $black !important;
+      font-weight: 500;
+      outline: none;
+      position: relative;
+      top: 1px;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 90px;
+    }
+  }
+}
