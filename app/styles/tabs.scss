@@ -1,47 +1,35 @@
 @import './variables.scss';
 
 .react-tabs {
-  &__tab-list {
-    display: flex;
 
+  &__tab-list {
+    background: $white;
+    border-bottom: solid 1px $grey-4;
+
+    .container {
+      flex-direction: row;
+    }
   }
 
   &__tab {
     cursor: pointer;
     padding: 5px 10px;
-    border: solid 2px $black;
     font-weight: 500;
     transition: 0.3s;
     outline: none;
     width: 200px;
     text-align: center;
     white-space: pre;
-
-    &:first-child {
-      border-radius: 6px 0 0 6px;
-      border-right: 0px;
-    }
-
-    &:last-child {
-      border-radius: 0 6px 6px 0;
-      border-left: 0px;
-    }
+    color: $black;
+    border-bottom: solid 3px rgba(255,255,255,0);
 
     &:hover {
-      background: $grey-4;
+      color: $main;
     }
 
     &--selected {
-      border-radius: 0px;
-      color: $white;
-      background: $main;
-      border: solid 2px $main;
-
-      &:hover {
-        background: darken($main, 5%);
-      }
+      color: $main;
+      border-bottom: solid 3px $main;
     }
-
-
   }
 }
