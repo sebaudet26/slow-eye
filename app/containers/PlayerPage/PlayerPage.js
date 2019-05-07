@@ -58,7 +58,7 @@ export default class PlayerPage extends React.Component {
             content={`${info.firstName} ${info.lastName} stats. Seal Stats is the best place to view NHL stats. User-friendly and fast. `}
           />
         </Helmet>
-        <div className="page-header wTabs" onError={ev => ev.target.style = 'backgroundImage: none'} style={{ backgroundImage: `url("https://nhl.bamcontent.com/images/actionshots/${urlParams.get('id')}_low_resolution.jpg")` }}>
+        <div className="page-header wTabs">
           <div className="container">
             <div className="player-wrapper">
               <div className="player-img">
