@@ -246,34 +246,38 @@ export default class PlayerPage extends React.Component {
               onSelect={i => saveToLS(`playerTabIndex${urlParams.get('id')}`, i)}
             >
               <TabList>
-                <Tab>Career Stats</Tab>
-                {internationalStats.length ? <Tab>International</Tab> : null}
-                {logs.length ? <Tab>Game Logs</Tab> : null}
+                <div className="container">
+                  <Tab>Career Stats</Tab>
+                  {internationalStats.length ? <Tab>International</Tab> : null}
+                  {logs.length ? <Tab>Game Logs</Tab> : null}
+                </div>
               </TabList>
-              {careerStats.length && (
-              <TabPanel>
-                <h3>Season Stats</h3>
-                <CareerStatsTable stats={proStats} info={info} showTotalRow={isPro} />
-                {careerPlayoffStats.length ? (
-                  <div>
-                    <h3>Playoff Stats</h3>
-                    <CareerStatsTable stats={careerPlayoffStats} info={info} showTotalRow={isPro} />
-                  </div>
+              <div className="container">
+                {careerStats.length && (
+                <TabPanel>
+                  <h3>Season Stats</h3>
+                  <CareerStatsTable stats={proStats} info={info} showTotalRow={isPro} />
+                  {careerPlayoffStats.length ? (
+                    <div>
+                      <h3>Playoff Stats</h3>
+                      <CareerStatsTable stats={careerPlayoffStats} info={info} showTotalRow={isPro} />
+                    </div>
+                  ) : null}
+                </TabPanel>
+                )}
+                {internationalStats.length ? (
+                  <TabPanel>
+                    <h3>International</h3>
+                    <CareerStatsTable stats={internationalStats} info={info} showTotalRow />
+                  </TabPanel>
                 ) : null}
-              </TabPanel>
-              )}
-              {internationalStats.length ? (
-                <TabPanel>
-                  <h3>International</h3>
-                  <CareerStatsTable stats={internationalStats} info={info} showTotalRow />
-                </TabPanel>
-              ) : null}
-              {logs.length ? (
-                <TabPanel>
-                  <h3>Game Logs</h3>
-                  <GameLogTable logs={logs} info={info} />
-                </TabPanel>
-              ) : null}
+                {logs.length ? (
+                  <TabPanel>
+                    <h3>Game Logs</h3>
+                    <GameLogTable logs={logs} info={info} />
+                  </TabPanel>
+                ) : null}
+              </div>
             </Tabs>
           ) : (
             <div>
