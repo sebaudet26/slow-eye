@@ -9,11 +9,9 @@
     }
   }
 
-  &-header {
-    margin: 15px 0 25px 0;
-    padding: 15px 0;
+  &-wrapper {
+    padding-bottom: 25px;
     position: relative;
-    border-bottom: solid 1px $grey-4;
 
     &-title {
       display: flex;
@@ -95,7 +93,7 @@
 
 @media (max-width: 600px) {
   .team {
-    &-header  {
+    &-wrapper  {
       margin-top: 0px;
 
       &-title {

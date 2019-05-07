@@ -60,7 +60,7 @@ export default class TeamPage extends React.Component {
     const team = teams[urlParams.get('id')] || {};
     const roster = rosters[urlParams.get('id')] || {};
     return (isEmpty(team) ? null : (
-      <div className="team-page container">
+      <div className="team-page">
         <Helmet>
           <title>{`${team.name} - SealStats.com`}</title>
           <meta
@@ -68,53 +68,60 @@ export default class TeamPage extends React.Component {
             content={`${team.name} roster and stats. Seal Stats is the best place to view NHL stats. User-friendly and fast. `}
           />
         </Helmet>
-        <div className="team-header">
-          <div className="team-header-title">
-            <div className="team-img">
-              <svg viewBox="10 0 100 75" width="100" height="75" className="team-img-logo">
-                <use xlinkHref={`/images/teams/season/20182019.svg#team-${team.id}-20182019-light`} />
-              </svg>
-            </div>
-            <div>
-              <Dropdown name={team.name} />
-              <p>
-                <span>
-                  {`${toOrdinal(team.ranking.division)} Division, `}
-                  {`${toOrdinal(team.ranking.conference)} Conference, `}
-                  {`${toOrdinal(team.ranking.league)} League`}
-                </span>
-              </p>
+        <div className="page-header wTabs">
+          <div className="container">
+            <div className="team-wrapper">
+              <div className="team-wrapper-title">
+                <div className="team-img">
+                  <svg viewBox="10 0 100 75" width="100" height="75" className="team-img-logo">
+                    <use xlinkHref={`/images/teams/season/20182019.svg#team-${team.id}-20182019-light`} />
+                  </svg>
+                </div>
+                <div>
+                  <Dropdown name={team.name} />
+                  <p>
+                    <span>
+                      {`${toOrdinal(team.ranking.division)} Division, `}
+                      {`${toOrdinal(team.ranking.conference)} Conference, `}
+                      {`${toOrdinal(team.ranking.league)} League`}
+                    </span>
+                  </p>
+                </div>
+              </div>
+              { !team.stats ? null : (
+                <div className="team-info">
+                  <div className="team-stats">
+                    {renderTeamStat('GP', team.stats.splits[0].gamesPlayed)}
+                    {renderTeamStat('W', team.stats.splits[0].wins)}
+                    {renderTeamStat('L', team.stats.splits[0].losses)}
+                    {renderTeamStat('OTL', team.stats.splits[0].ot)}
+                    {renderTeamStat('Pts', team.stats.splits[0].pts)}
+                  </div>
+                  <div className="team-stats">
+                    {renderTeamStat('GF', Math.round(Number(team.stats.splits[0].gamesPlayed) * Number(team.stats.splits[0].goalsPerGame)))}
+                    {renderTeamStat('GA', Math.round(Number(team.stats.splits[0].gamesPlayed) * Number(team.stats.splits[0].goalsAgainstPerGame)))}
+                    {renderTeamStat('PP%', team.stats.splits[0].powerPlayPercentage)}
+                    {renderTeamStat('PK%', team.stats.splits[0].penaltyKillPercentage)}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-          { !team.stats ? null : (
-            <div className="team-info">
-              <div className="team-stats">
-                {renderTeamStat('GP', team.stats.splits[0].gamesPlayed)}
-                {renderTeamStat('W', team.stats.splits[0].wins)}
-                {renderTeamStat('L', team.stats.splits[0].losses)}
-                {renderTeamStat('OTL', team.stats.splits[0].ot)}
-                {renderTeamStat('Pts', team.stats.splits[0].pts)}
-              </div>
-              <div className="team-stats">
-                {renderTeamStat('GF', Math.round(Number(team.stats.splits[0].gamesPlayed) * Number(team.stats.splits[0].goalsPerGame)))}
-                {renderTeamStat('GA', Math.round(Number(team.stats.splits[0].gamesPlayed) * Number(team.stats.splits[0].goalsAgainstPerGame)))}
-                {renderTeamStat('PP%', team.stats.splits[0].powerPlayPercentage)}
-                {renderTeamStat('PK%', team.stats.splits[0].penaltyKillPercentage)}
-              </div>
-            </div>
-          )}
         </div>
         <Tabs
           defaultIndex={Number(getFromLS('teamTabIndex')) || 0}
           onSelect={i => saveToLS('teamTabIndex', i)}
         >
           <TabList>
-            <Tab>Depth Chart</Tab>
-            <Tab>Roster</Tab>
-            <Tab>Player Stats</Tab>
+            <div className="container">
+              <Tab>Depth Chart</Tab>
+              <Tab>Roster</Tab>
+              <Tab>Player Stats</Tab>
+            </div>
           </TabList>
-          <TabPanel>
-            {
+          <div className="container">
+            <TabPanel>
+              {
           isEmpty(roster) ? null : (
             <div className="depth-chart">
               <h3>Forwards</h3>
@@ -203,9 +210,9 @@ export default class TeamPage extends React.Component {
             </div>
           )
           }
-          </TabPanel>
-          <TabPanel>
-            {
+            </TabPanel>
+            <TabPanel>
+              {
             isEmpty(roster) ? null : (
               <div>
                 <h3>Forwards</h3>
@@ -217,9 +224,9 @@ export default class TeamPage extends React.Component {
               </div>
             )
             }
-          </TabPanel>
-          <TabPanel>
-            {
+            </TabPanel>
+            <TabPanel>
+              {
             isEmpty(roster) ? null : (
               <div>
                 <h3>Forwards</h3>
@@ -231,7 +238,8 @@ export default class TeamPage extends React.Component {
               </div>
             )
             }
-          </TabPanel>
+            </TabPanel>
+          </div>
         </Tabs>
       </div>
     ));
