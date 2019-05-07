@@ -15,7 +15,12 @@ const ScoreCard = ({ game }) => (
         <span>
           {getStatusText(game)}
           {getFinalPeriod(game)}
-          <span className="game-card-series-summary">{game.seriesSummary.seriesStatusShort || ''}</span>
+          {
+            game.seriesSummary ? (
+              <span className="game-card-series-summary">{game.seriesSummary.seriesStatusShort || ''}</span>
+            ) : null
+          }
+
         </span>
       </div>
       <div className="game-card-team">
