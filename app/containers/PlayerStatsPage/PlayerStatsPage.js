@@ -10,24 +10,26 @@ class PlayerStatsPage extends React.PureComponent {
       players, fetchPlayers, fetchTeams, teams, setLoading, loading,
     } = this.props;
     return (
-      <article>
+      <div className="playerStats-page">
         <Helmet>
           <title>Player Stats - SealStats.com</title>
           <meta name="description" content="View NHL Players Stats. Leaderboards. Historical Stats. It's all here. Seal Stats is the best place to view NHL stats. User-friendly and fast." />
         </Helmet>
-        <div className="playerStats-page container">
-          <h2>Player Stats</h2>
-          <PlayersTable
-            players={players}
-            fetchPlayers={fetchPlayers}
-            fetchTeams={fetchTeams}
-            teams={teams}
-            setLoading={setLoading}
-            loading={loading}
-          />
+        <div className="page-header wFilters">
+          <div className="container">
+            <h2>Player Stats</h2>
+          </div>
         </div>
+        <PlayersTable
+          players={players}
+          fetchPlayers={fetchPlayers}
+          fetchTeams={fetchTeams}
+          teams={teams}
+          setLoading={setLoading}
+          loading={loading}
+        />
 
-      </article>
+      </div>
     );
   }
 }

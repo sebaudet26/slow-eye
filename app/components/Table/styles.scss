@@ -245,8 +245,14 @@
 }
 
 .filters {
-  margin: 15px 0 25px 0;
-  display: flex;
+  padding: 15px 0 25px 0;
+  margin-bottom: 25px;
+  border-bottom: solid 1px $grey-4;
+  background: $white;
+
+  &-wrapper {
+    display: flex;
+  }
 
   &-item {
     max-width: 200px;

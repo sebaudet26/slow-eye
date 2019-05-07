@@ -139,358 +139,364 @@ class PlayersTable extends React.PureComponent {
           Show/Hide Filters
         </div>
         <div className="filters">
-          <SeasonFilter selected={seasonSelected} onChange={this.handleSeasonChange} />
-          <PositionFilter selected={posSelected} onChange={this.handlePosChange} />
-          <TeamFilter options={teamOptions} selected={teamSelected} onChange={this.handleTeamChange} />
-          <NationalityFilter selected={natSelected} onChange={this.handleNatChange} />
-          <ExperienceFilter selected={XPSelected} onChange={this.handleXPChange} />
+          <div className="container">
+            <div className="filters-wrapper">
+              <SeasonFilter selected={seasonSelected} onChange={this.handleSeasonChange} />
+              <PositionFilter selected={posSelected} onChange={this.handlePosChange} />
+              <TeamFilter options={teamOptions} selected={teamSelected} onChange={this.handleTeamChange} />
+              <NationalityFilter selected={natSelected} onChange={this.handleNatChange} />
+              <ExperienceFilter selected={XPSelected} onChange={this.handleXPChange} />
+            </div>
+          </div>
         </div>
-        <ReactTableFixedColumns
-          filtered={[
-            {
-              id: 'position',
-              value: posSelected,
-            },
-            {
-              id: 'team',
-              value: teamSelected,
-            },
-            {
-              id: 'nationality',
-              value: natSelected,
-            },
-            {
-              id: 'experience',
-              value: XPSelected,
-            },
-          ]}
-          data={players}
-          loading={loading}
-          resizable={false}
-          noDataText="No players match the criteria"
-          filterable
-          defaultFilterMethod={toLowerCaseAndMatch}
-          getTdProps={(state, rowInfo, column, instance) => ({
-            onClick: (e, handleOriginal) => {
-              if (handleOriginal) {
-                handleOriginal();
-              }
-            },
-          })}
-          columns={[
-            {
-              Header: '#',
-              id: 'rank',
-              Cell: row => <div>{(row.viewIndex + 1) + (row.page * row.pageSize)}</div>,
-              className: 'text-left',
-              maxWidth: 30,
-              minWidth: 30,
-              filterable: false,
-              sortable: false,
-              fixed: 'left',
-            },
-            {
-              Header: 'Name',
-              id: 'fullName',
-              accessor: prop('name'),
-              className: 'text-left border-mobile',
-              maxWidth: 200,
-              minWidth: 110,
-              fixed: 'left',
-              Cell: row => <PlayerName id={row.original.id} name={row.value} />,
-            },
-            {
-              Header: 'Pos',
-              id: 'position',
-              className: 'text-left hidden-mobile',
-              maxWidth: 50,
-              minWidth: 50,
-              fixed: 'left',
-              accessor: (d) => {
-                const pos = prop('positionCode', d);
-                if (['L', 'R'].includes(pos)) {
-                  return `${pos}W`;
-                }
-                return pos;
+        <div className="container">
+          <ReactTableFixedColumns
+            filtered={[
+              {
+                id: 'position',
+                value: posSelected,
               },
-              filterMethod: (filter, row) => {
-                if (filter.value === 'S') {
-                  return row[filter.id] !== 'G';
-                }
-                if (filter.value === 'F') {
-                  return row[filter.id] === 'C' || row[filter.id] === 'LW' || row[filter.id] === 'RW';
-                }
-                return toLowerCaseAndMatch(filter, row);
+              {
+                id: 'team',
+                value: teamSelected,
               },
-            },
-            {
-              Header: 'Team',
-              id: 'team',
-              className: 'text-left team-cell sm-margin hidden-mobile',
-              maxWidth: 85,
-              minWidth: 75,
-              fixed: 'left',
-              Cell: pipe(
-                prop('value'),
-                map(prop('id')),
-                map(id => <TeamLogo key={id} teamId={id} season={seasonSelected} />),
-              ),
-              accessor: prop('teams'),
-              filterMethod: (filter, row) => pipe(
-                prop(filter.id),
-                reject(isNil),
-                last,
-                propOr('', 'abbreviation'),
-                toLower,
-                replace(/\s/g, ''),
-                pipe(match(toLower(filter.value)), length, Boolean),
-              )(row),
-            },
-            {
-              Header: 'Nat.',
-              id: 'nationality',
-              className: 'text-left team-cell hidden',
-              maxWidth: 85,
-              minWidth: 50,
-              accessor: prop('nationality'),
-            },
-            {
-              Header: 'XP',
-              id: 'experience',
-              className: 'text-left team-cell hidden',
-              maxWidth: 85,
-              minWidth: 50,
-              accessor: prop('rookie'),
-              filterMethod: (filter, row) => {
-                if (filter.value === 'all') {
-                  return true;
-                }
-                return String(row[filter.id]).match(filter.value);
+              {
+                id: 'nationality',
+                value: natSelected,
               },
-            },
-            {
-              Header: 'GP',
-              id: 'games',
-              maxWidth: 65,
-              minWidth: 33,
-              filterable: false,
-              accessor: prop('gamesPlayed'),
-            },
-            {
-              Header: 'G',
-              id: 'goals',
-              maxWidth: 65,
-              minWidth: 33,
-              show: not(isPosGoalie(posSelected)),
-              filterable: false,
-              accessor: prop('goals'),
-            },
-            {
-              Header: 'A',
-              id: 'assists',
-              maxWidth: 65,
-              minWidth: 33,
-              show: not(isPosGoalie(posSelected)),
-              filterable: false,
-              accessor: prop('assists'),
-            },
-            {
-              Header: 'Pts',
-              id: 'points',
-              maxWidth: 65,
-              minWidth: 40,
-              show: not(isPosGoalie(posSelected)),
-              filterable: false,
-              accessor: prop('points'),
-            },
-            {
-              Header: '+/-',
-              id: 'plusMinus',
-              maxWidth: 65,
-              minWidth: 40,
-              show: not(isPosGoalie(posSelected)),
-              filterable: false,
-              accessor: prop('plusMinus'),
-              Cell: row => (
-                <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
-              ),
-            },
-            {
-              Header: 'PIM',
-              id: 'pim',
-              maxWidth: 65,
-              minWidth: 35,
-              show: not(isPosGoalie(posSelected)),
-              filterable: false,
-              accessor: prop('penaltyMinutes'),
-            },
-            {
-              Header: 'PPG',
-              id: 'powerPlayGoals',
-              maxWidth: 65,
-              minWidth: 40,
-              show: not(isPosGoalie(posSelected)),
-              filterable: false,
-              accessor: prop('ppGoals'),
-              Cell: row => (
-                <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
-              ),
-            },
-            {
-              Header: 'SHG',
-              id: 'shortHandedGoals',
-              maxWidth: 65,
-              minWidth: 40,
-              show: not(isPosGoalie(posSelected)),
-              filterable: false,
-              accessor: prop('shGoals'),
-              Cell: row => (
-                <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
-              ),
-            },
-            {
-              Header: 'Hits',
-              id: 'hits',
-              maxWidth: 65,
-              minWidth: 35,
-              show: not(isPosGoalie(posSelected)),
-              filterable: false,
-              accessor: prop('hits'),
-              Cell: row => (
-                <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
-              ),
-            },
-            {
-              Header: 'Bks',
-              id: 'blocked',
-              maxWidth: 65,
-              minWidth: 35,
-              show: not(isPosGoalie(posSelected)),
-              filterable: false,
-              accessor: prop('blockedShots'),
-              Cell: row => (
-                <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
-              ),
-            },
-            {
-              Header: 'SOG',
-              id: 'shots',
-              maxWidth: 65,
-              minWidth: 50,
-              show: not(isPosGoalie(posSelected)),
-              filterable: false,
-              accessor: prop('shots'),
-              Cell: row => (
-                <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
-              ),
-            },
-            {
-              Header: 'S%',
-              id: 'shotPct',
-              maxWidth: 65,
-              minWidth: 50,
-              show: not(isPosGoalie(posSelected)),
-              filterable: false,
-              accessor: prop('shootingPctg'),
-            },
-            {
-              Header: 'TOI/GP',
-              id: 'TOIGP',
-              maxWidth: 85,
-              minWidth: 60,
-              show: not(isPosGoalie(posSelected)),
-              filterable: false,
-              accessor: prop('timeOnIcePerGame'),
-              sortMethod: sortTimeOnIce,
-            },
-            {
-              Header: 'W',
-              id: 'wins',
-              maxWidth: 85,
-              minWidth: 50,
-              show: isPosGoalie(posSelected),
-              filterable: false,
-              accessor: propOr('-', 'wins'),
-            },
-            {
-              Header: 'L',
-              id: 'losses',
-              maxWidth: 85,
-              minWidth: 50,
-              show: isPosGoalie(posSelected),
-              filterable: false,
-              accessor: propOr('-', 'losses'),
-            },
-            {
-              Header: 'OT',
-              id: 'ot',
-              maxWidth: 85,
-              minWidth: 50,
-              show: isPosGoalie(posSelected),
-              filterable: false,
-              accessor: propOr('-', 'otLosses'),
-            },
-            {
-              Header: 'Sv%',
-              id: 'savePercentage',
-              maxWidth: 85,
-              minWidth: 50,
-              show: isPosGoalie(posSelected),
-              filterable: false,
-              accessor: d => pathOr(0, ['savePercentage'], d).toFixed(3),
-            },
-            {
-              Header: 'GAA',
-              id: 'goalAgainstAverage',
-              maxWidth: 85,
-              minWidth: 50,
-              show: isPosGoalie(posSelected),
-              filterable: false,
-              accessor: d => pathOr(0, ['goalsAgainstAverage'], d).toFixed(2),
-              sortMethod: (a, b) => (a > b ? -1 : 1),
-            },
-            {
-              Header: 'SO',
-              id: 'shutouts',
-              maxWidth: 85,
-              minWidth: 50,
-              show: isPosGoalie(posSelected),
-              filterable: false,
-              accessor: pathOr('-', ['shutouts']),
-            },
-            {
-              Header: 'SV',
-              id: 'saves',
-              maxWidth: 85,
-              minWidth: 50,
-              show: isPosGoalie(posSelected),
-              filterable: false,
-              accessor: propOr('-', 'saves'),
-            },
-            {
-              Header: 'GA',
-              id: 'goalsAgainst',
-              maxWidth: 85,
-              minWidth: 50,
-              show: isPosGoalie(posSelected),
-              filterable: false,
-              accessor: propOr('-', 'goalsAgainst'),
-            },
-          ]}
-          defaultSorted={[
-            {
-              id: 'wins',
-              desc: true,
-            },
-            {
-              id: 'points',
-              desc: true,
-            },
-          ]}
-          defaultPageSize={20}
-          defaultSortDesc
-          className="player-stats"
-        />
+              {
+                id: 'experience',
+                value: XPSelected,
+              },
+            ]}
+            data={players}
+            loading={loading}
+            resizable={false}
+            noDataText="No players match the criteria"
+            filterable
+            defaultFilterMethod={toLowerCaseAndMatch}
+            getTdProps={(state, rowInfo, column, instance) => ({
+              onClick: (e, handleOriginal) => {
+                if (handleOriginal) {
+                  handleOriginal();
+                }
+              },
+            })}
+            columns={[
+              {
+                Header: '#',
+                id: 'rank',
+                Cell: row => <div>{(row.viewIndex + 1) + (row.page * row.pageSize)}</div>,
+                className: 'text-left',
+                maxWidth: 30,
+                minWidth: 30,
+                filterable: false,
+                sortable: false,
+                fixed: 'left',
+              },
+              {
+                Header: 'Name',
+                id: 'fullName',
+                accessor: prop('name'),
+                className: 'text-left border-mobile',
+                maxWidth: 200,
+                minWidth: 110,
+                fixed: 'left',
+                Cell: row => <PlayerName id={row.original.id} name={row.value} />,
+              },
+              {
+                Header: 'Pos',
+                id: 'position',
+                className: 'text-left hidden-mobile',
+                maxWidth: 50,
+                minWidth: 50,
+                fixed: 'left',
+                accessor: (d) => {
+                  const pos = prop('positionCode', d);
+                  if (['L', 'R'].includes(pos)) {
+                    return `${pos}W`;
+                  }
+                  return pos;
+                },
+                filterMethod: (filter, row) => {
+                  if (filter.value === 'S') {
+                    return row[filter.id] !== 'G';
+                  }
+                  if (filter.value === 'F') {
+                    return row[filter.id] === 'C' || row[filter.id] === 'LW' || row[filter.id] === 'RW';
+                  }
+                  return toLowerCaseAndMatch(filter, row);
+                },
+              },
+              {
+                Header: 'Team',
+                id: 'team',
+                className: 'text-left team-cell sm-margin hidden-mobile',
+                maxWidth: 85,
+                minWidth: 75,
+                fixed: 'left',
+                Cell: pipe(
+                  prop('value'),
+                  map(prop('id')),
+                  map(id => <TeamLogo key={id} teamId={id} season={seasonSelected} />),
+                ),
+                accessor: prop('teams'),
+                filterMethod: (filter, row) => pipe(
+                  prop(filter.id),
+                  reject(isNil),
+                  last,
+                  propOr('', 'abbreviation'),
+                  toLower,
+                  replace(/\s/g, ''),
+                  pipe(match(toLower(filter.value)), length, Boolean),
+                )(row),
+              },
+              {
+                Header: 'Nat.',
+                id: 'nationality',
+                className: 'text-left team-cell hidden',
+                maxWidth: 85,
+                minWidth: 50,
+                accessor: prop('nationality'),
+              },
+              {
+                Header: 'XP',
+                id: 'experience',
+                className: 'text-left team-cell hidden',
+                maxWidth: 85,
+                minWidth: 50,
+                accessor: prop('rookie'),
+                filterMethod: (filter, row) => {
+                  if (filter.value === 'all') {
+                    return true;
+                  }
+                  return String(row[filter.id]).match(filter.value);
+                },
+              },
+              {
+                Header: 'GP',
+                id: 'games',
+                maxWidth: 65,
+                minWidth: 33,
+                filterable: false,
+                accessor: prop('gamesPlayed'),
+              },
+              {
+                Header: 'G',
+                id: 'goals',
+                maxWidth: 65,
+                minWidth: 33,
+                show: not(isPosGoalie(posSelected)),
+                filterable: false,
+                accessor: prop('goals'),
+              },
+              {
+                Header: 'A',
+                id: 'assists',
+                maxWidth: 65,
+                minWidth: 33,
+                show: not(isPosGoalie(posSelected)),
+                filterable: false,
+                accessor: prop('assists'),
+              },
+              {
+                Header: 'Pts',
+                id: 'points',
+                maxWidth: 65,
+                minWidth: 40,
+                show: not(isPosGoalie(posSelected)),
+                filterable: false,
+                accessor: prop('points'),
+              },
+              {
+                Header: '+/-',
+                id: 'plusMinus',
+                maxWidth: 65,
+                minWidth: 40,
+                show: not(isPosGoalie(posSelected)),
+                filterable: false,
+                accessor: prop('plusMinus'),
+                Cell: row => (
+                  <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
+                ),
+              },
+              {
+                Header: 'PIM',
+                id: 'pim',
+                maxWidth: 65,
+                minWidth: 35,
+                show: not(isPosGoalie(posSelected)),
+                filterable: false,
+                accessor: prop('penaltyMinutes'),
+              },
+              {
+                Header: 'PPG',
+                id: 'powerPlayGoals',
+                maxWidth: 65,
+                minWidth: 40,
+                show: not(isPosGoalie(posSelected)),
+                filterable: false,
+                accessor: prop('ppGoals'),
+                Cell: row => (
+                  <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
+                ),
+              },
+              {
+                Header: 'SHG',
+                id: 'shortHandedGoals',
+                maxWidth: 65,
+                minWidth: 40,
+                show: not(isPosGoalie(posSelected)),
+                filterable: false,
+                accessor: prop('shGoals'),
+                Cell: row => (
+                  <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
+                ),
+              },
+              {
+                Header: 'Hits',
+                id: 'hits',
+                maxWidth: 65,
+                minWidth: 35,
+                show: not(isPosGoalie(posSelected)),
+                filterable: false,
+                accessor: prop('hits'),
+                Cell: row => (
+                  <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
+                ),
+              },
+              {
+                Header: 'Bks',
+                id: 'blocked',
+                maxWidth: 65,
+                minWidth: 35,
+                show: not(isPosGoalie(posSelected)),
+                filterable: false,
+                accessor: prop('blockedShots'),
+                Cell: row => (
+                  <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
+                ),
+              },
+              {
+                Header: 'SOG',
+                id: 'shots',
+                maxWidth: 65,
+                minWidth: 50,
+                show: not(isPosGoalie(posSelected)),
+                filterable: false,
+                accessor: prop('shots'),
+                Cell: row => (
+                  <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
+                ),
+              },
+              {
+                Header: 'S%',
+                id: 'shotPct',
+                maxWidth: 65,
+                minWidth: 50,
+                show: not(isPosGoalie(posSelected)),
+                filterable: false,
+                accessor: prop('shootingPctg'),
+              },
+              {
+                Header: 'TOI/GP',
+                id: 'TOIGP',
+                maxWidth: 85,
+                minWidth: 60,
+                show: not(isPosGoalie(posSelected)),
+                filterable: false,
+                accessor: prop('timeOnIcePerGame'),
+                sortMethod: sortTimeOnIce,
+              },
+              {
+                Header: 'W',
+                id: 'wins',
+                maxWidth: 85,
+                minWidth: 50,
+                show: isPosGoalie(posSelected),
+                filterable: false,
+                accessor: propOr('-', 'wins'),
+              },
+              {
+                Header: 'L',
+                id: 'losses',
+                maxWidth: 85,
+                minWidth: 50,
+                show: isPosGoalie(posSelected),
+                filterable: false,
+                accessor: propOr('-', 'losses'),
+              },
+              {
+                Header: 'OT',
+                id: 'ot',
+                maxWidth: 85,
+                minWidth: 50,
+                show: isPosGoalie(posSelected),
+                filterable: false,
+                accessor: propOr('-', 'otLosses'),
+              },
+              {
+                Header: 'Sv%',
+                id: 'savePercentage',
+                maxWidth: 85,
+                minWidth: 50,
+                show: isPosGoalie(posSelected),
+                filterable: false,
+                accessor: d => pathOr(0, ['savePercentage'], d).toFixed(3),
+              },
+              {
+                Header: 'GAA',
+                id: 'goalAgainstAverage',
+                maxWidth: 85,
+                minWidth: 50,
+                show: isPosGoalie(posSelected),
+                filterable: false,
+                accessor: d => pathOr(0, ['goalsAgainstAverage'], d).toFixed(2),
+                sortMethod: (a, b) => (a > b ? -1 : 1),
+              },
+              {
+                Header: 'SO',
+                id: 'shutouts',
+                maxWidth: 85,
+                minWidth: 50,
+                show: isPosGoalie(posSelected),
+                filterable: false,
+                accessor: pathOr('-', ['shutouts']),
+              },
+              {
+                Header: 'SV',
+                id: 'saves',
+                maxWidth: 85,
+                minWidth: 50,
+                show: isPosGoalie(posSelected),
+                filterable: false,
+                accessor: propOr('-', 'saves'),
+              },
+              {
+                Header: 'GA',
+                id: 'goalsAgainst',
+                maxWidth: 85,
+                minWidth: 50,
+                show: isPosGoalie(posSelected),
+                filterable: false,
+                accessor: propOr('-', 'goalsAgainst'),
+              },
+            ]}
+            defaultSorted={[
+              {
+                id: 'wins',
+                desc: true,
+              },
+              {
+                id: 'points',
+                desc: true,
+              },
+            ]}
+            defaultPageSize={20}
+            defaultSortDesc
+            className="player-stats"
+          />
+        </div>
       </div>
     );
   }
