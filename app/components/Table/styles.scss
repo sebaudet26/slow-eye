@@ -358,6 +358,9 @@
 
     &.active {
       display: block;
+      .filters-wrapper {
+        display: block;
+      }
     }
 
     &-item {
