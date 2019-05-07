@@ -43,10 +43,10 @@ class Header extends React.Component {
     return (
       <div className="header">
         <div className="header-wrapper">
-          <a className="header-brand" href="/">
+          <NavLink className="header-brand" to="/">
             <Logo />
             <span className="header-brand-name">Sealstats</span>
-          </a>
+          </NavLink>
           <SearchBar />
           <div className="header-nav">
             <NavLink activeClassName="active" className="header-nav-item" to="/scores">
