@@ -127,7 +127,7 @@ export default class StandingsPage extends React.Component {
     )(draft);
 
     return (
-      <div className="draft-page container">
+      <div className="draft-page">
         <Helmet>
           <title>Draft - SealStats.com</title>
           <meta
@@ -135,19 +135,28 @@ export default class StandingsPage extends React.Component {
             content="View Drafts by Year. Seal Stats is the best place to view NHL stats. User-friendly and fast."
           />
         </Helmet>
-        <h2>{`${yearSelected} NHL Draft`}</h2>
+        <div className="page-header wFilters">
+          <div className="container">
+            <h2>{`${yearSelected} NHL Draft`}</h2>
+          </div>
+        </div>
         <div className="filter-toggle" onClick={this.filterToggle}>
           <img src={FilterIcon} alt="Filter Icon" />
           Show/Hide Filters
         </div>
         <div className="filters">
-          <YearFilter selected={yearSelected} onChange={this.handleYearChange} startYear={1963} />
-          <RoundFilter selected={roundSelected} onChange={this.handleRoundChange} options={rounds} />
-          <TeamFilter selected={teamSelected} onChange={this.handleTeamChange} options={teams} />
-          <PositionFilter selected={posSelected} onChange={this.handlePosChange} enableAllOption />
-          <NationalityFilter selected={natSelected} onChange={this.handleNatChange} />
+          <div className="container">
+            <div className="filters-wrapper">
+              <YearFilter selected={yearSelected} onChange={this.handleYearChange} startYear={1963} />
+              <RoundFilter selected={roundSelected} onChange={this.handleRoundChange} options={rounds} />
+              <TeamFilter selected={teamSelected} onChange={this.handleTeamChange} options={teams} />
+              <PositionFilter selected={posSelected} onChange={this.handlePosChange} enableAllOption />
+              <NationalityFilter selected={natSelected} onChange={this.handleNatChange} />
+            </div>
+          </div>
         </div>
-        {
+        <div className="container">
+          {
           draft
             ? (
               <DraftTable
@@ -161,6 +170,7 @@ export default class StandingsPage extends React.Component {
             )
             : null
         }
+        </div>
       </div>
     );
   }
