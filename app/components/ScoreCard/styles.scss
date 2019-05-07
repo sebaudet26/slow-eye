@@ -32,10 +32,7 @@
     }
 
     &-name {
-      font-weight: 500;
-      &:hover {
-        color: $main;
-      }
+      color: $black;
     }
 
     &-img {
@@ -50,10 +47,6 @@
       right: 15px;
       font-weight: 500;
       font-size: $h4;
-    }
-
-    a {
-      color: $black;
     }
   }
 
