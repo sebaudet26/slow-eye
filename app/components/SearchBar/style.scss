@@ -6,8 +6,6 @@
 
 
   form {
-    background: $white;
-    box-shadow: $shadow;
     height: 38px;
     line-height: 38px;
     border-radius: $radius;
@@ -30,6 +28,7 @@
       width: 100%;
       transition: 0.3s;
       border-radius: $radius;
+      background: $grey-5;
       border: solid 1px $grey-4;
 
       &:focus {
