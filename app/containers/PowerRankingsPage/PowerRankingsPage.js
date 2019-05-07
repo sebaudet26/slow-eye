@@ -13,7 +13,7 @@ class PowerRankingsPage extends Component {
   render() {
     const { teamsStreaks } = this.props;
     return (
-      <div className="powerRankings-page container">
+      <div className="powerRankings-page">
         <Helmet>
           <title>Power Rankings - SealStats.com</title>
           <meta
@@ -21,10 +21,16 @@ class PowerRankingsPage extends Component {
             content="Power Rankings"
           />
         </Helmet>
-        <h2>
+        <div className="page-header">
+          <div className="container">
+            <h2>
             Hot Teams
-        </h2>
-        <PowerRankingsTable teams={teamsStreaks} />
+            </h2>
+          </div>
+        </div>
+        <div className="container">
+          <PowerRankingsTable teams={teamsStreaks} />
+        </div>
       </div>
     );
   }

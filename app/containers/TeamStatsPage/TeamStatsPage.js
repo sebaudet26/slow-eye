@@ -13,13 +13,17 @@ export default class TeamStatsPage extends React.Component {
   render() {
     const { teams } = this.props;
     return (
-      <div>
+      <div className="teamStats-page">
         <Helmet>
           <title>Team Stats - SealStats.com</title>
           <meta name="description" content="View NHL Team Stats. Seal Stats is the best place to view NHL stats. User-friendly and fast." />
         </Helmet>
-        <div className="teamStats-page container">
-          <h2>Team Stats</h2>
+        <div className="page-header">
+          <div className="container">
+            <h2>Team Stats</h2>
+          </div>
+        </div>
+        <div className="container">
           <TeamsTable teams={teams} />
         </div>
       </div>

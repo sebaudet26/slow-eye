@@ -13,7 +13,7 @@ class HotPlayersPage extends Component {
   render() {
     const { hotPlayers } = this.props;
     return (
-      <div className="hotPlayers-page container">
+      <div className="hotPlayers-page">
         <Helmet>
           <title>Who's hot? - SealStats.com</title>
           <meta
@@ -21,10 +21,16 @@ class HotPlayersPage extends Component {
             content="Who's hot in the NHL right now?"
           />
         </Helmet>
-        <h2>
-          {`Who's hot?${this.props.features.someFlag ? ' Seb is Fucking hot' : ''}`}
-        </h2>
-        <HotTable players={hotPlayers} />
+        <div className="page-header">
+          <div className="container">
+            <h2>
+              {`Who's hot?${this.props.features.someFlag ? ' Feature Toggle Test' : ''}`}
+            </h2>
+          </div>
+        </div>
+        <div className="container">
+          <HotTable players={hotPlayers} />
+        </div>
       </div>
     );
   }
