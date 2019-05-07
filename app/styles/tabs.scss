@@ -2,6 +2,11 @@
 
 .react-tabs {
 
+  &-center {
+    margin: auto;
+    display: flex;
+  }
+
   &__tab-list {
     background: $white;
     border-bottom: solid 1px $grey-4;
@@ -30,6 +35,21 @@
     &--selected {
       color: $main;
       border-bottom: solid 3px $main;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .react-tabs {
+
+    &__tab {
+      margin: auto;
+    }
+
+    &-center {
+      width: 100%;
+      margin: 0px;
+      display: inherit;
     }
   }
 }

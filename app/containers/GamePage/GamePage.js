@@ -190,39 +190,40 @@ class GamePage extends React.Component {
     );
 
     return (
-      <div>
+      <div className="game-page">
         <Helmet>
           <title>
             {`${boxscore.away.team.teamName} @ ${boxscore.home.team.teamName} - SealStats.com`}
           </title>
           <meta name="description" content={`${boxscore.away.team.teamName} vs. ${boxscore.home.team.teamName} game page. Seal Stats is the best place to view NHL stats. User-friendly and fast. `} />
         </Helmet>
-        <div className="game-page container">
-          <div className="game-mobile-details">{getStatusText(game)}</div>
-          <div className="game-header">
-            <div className="game-header-team">
-              {awayTeamImage}
-              <div className="game-header-team-name">
-                <div className="city">{boxscore.away.team.location}</div>
-                <div className="team">{boxscore.away.team.teamName}</div>
-                <div className="record">
-                  {join('-', values(pick(['wins', 'losses', 'ot'], boxscore.away.seasonTeamStats.splits[0])))}
-                  {` ${boxscore.away.seasonTeamStats.splits[0].pts}pts`}
+        <div className="page-header wTabs">
+          <div className="container">
+            <div className="game-mobile-details">{getStatusText(game)}</div>
+            <div className="game-header">
+              <div className="game-header-team">
+                {awayTeamImage}
+                <div className="game-header-team-name">
+                  <div className="city">{boxscore.away.team.location}</div>
+                  <div className="team">{boxscore.away.team.teamName}</div>
+                  <div className="record">
+                    {join('-', values(pick(['wins', 'losses', 'ot'], boxscore.away.seasonTeamStats.splits[0])))}
+                    {` ${boxscore.away.seasonTeamStats.splits[0].pts}pts`}
+                  </div>
+                </div>
+                <div className="game-header-team-score">
+                  {boxscore.away.teamStats.goals + (shootoutSummary && shootoutSummary.away.scores > shootoutSummary.home.scores ? 1 : 0)}
                 </div>
               </div>
-              <div className="game-header-team-score">
-                {boxscore.away.teamStats.goals + (shootoutSummary && shootoutSummary.away.scores > shootoutSummary.home.scores ? 1 : 0)}
-              </div>
-            </div>
-            <div className="game-header-result">
-              <div className="hidden-mobile">
-                <div>{ liveFeed.status.detailedState === 'In Progress' | liveFeed.status.detailedState === 'In Progress - Critical' ? null : liveFeed.status.detailedState}</div>
-                <div>
-                  {getStatusText(game)}
-                  {last(lastTenPlays) && last(lastTenPlays).period === 5 ? 'S/O' : null}
+              <div className="game-header-result">
+                <div className="hidden-mobile">
+                  <div>{ liveFeed.status.detailedState === 'In Progress' | liveFeed.status.detailedState === 'In Progress - Critical' ? null : liveFeed.status.detailedState}</div>
+                  <div>
+                    {getStatusText(game)}
+                    {last(lastTenPlays) && last(lastTenPlays).period === 5 ? 'S/O' : null}
+                  </div>
                 </div>
-              </div>
-              {
+                {
                 highlights && highlights.recap ? (
                   <VideoPlayer
                     url={highlights.recap}
@@ -234,31 +235,38 @@ class GamePage extends React.Component {
                   </div>
                 )
               }
-            </div>
-            <div className="game-header-team">
-              <div className="game-header-team-score">
-                {boxscore.home.teamStats.goals + (shootoutSummary && shootoutSummary.home.scores > shootoutSummary.away.scores ? 1 : 0)}
               </div>
-              <div className="game-header-team-name">
-                <div className="city">{boxscore.home.team.location}</div>
-                <div className="team">{boxscore.home.team.teamName}</div>
-                <div className="record">
-                  {join('-', values(pick(['wins', 'losses', 'ot'], boxscore.home.seasonTeamStats.splits[0])))}
-                  {` ${boxscore.home.seasonTeamStats.splits[0].pts}pts`}
+              <div className="game-header-team">
+                <div className="game-header-team-score">
+                  {boxscore.home.teamStats.goals + (shootoutSummary && shootoutSummary.home.scores > shootoutSummary.away.scores ? 1 : 0)}
                 </div>
+                <div className="game-header-team-name">
+                  <div className="city">{boxscore.home.team.location}</div>
+                  <div className="team">{boxscore.home.team.teamName}</div>
+                  <div className="record">
+                    {join('-', values(pick(['wins', 'losses', 'ot'], boxscore.home.seasonTeamStats.splits[0])))}
+                    {` ${boxscore.home.seasonTeamStats.splits[0].pts}pts`}
+                  </div>
+                </div>
+                {homeTeamImage}
               </div>
-              {homeTeamImage}
             </div>
           </div>
-          <Tabs
-            defaultIndex={isNil(getFromLS(`gameTabIndex${gameId}`)) ? 1 : Number(getFromLS(`gameTabIndex${gameId}`))}
-            onSelect={i => saveToLS(`gameTabIndex${gameId}`, i)}
-          >
-            <TabList>
-              <Tab>{boxscore.away.team.teamName}</Tab>
-              <Tab>Summary</Tab>
-              <Tab>{boxscore.home.team.teamName}</Tab>
-            </TabList>
+        </div>
+        <Tabs
+          defaultIndex={isNil(getFromLS(`gameTabIndex${gameId}`)) ? 1 : Number(getFromLS(`gameTabIndex${gameId}`))}
+          onSelect={i => saveToLS(`gameTabIndex${gameId}`, i)}
+        >
+          <TabList>
+            <div className="container">
+              <div className="react-tabs-center">
+                <Tab>{boxscore.away.team.teamName}</Tab>
+                <Tab>Summary</Tab>
+                <Tab>{boxscore.home.team.teamName}</Tab>
+              </div>
+            </div>
+          </TabList>
+          <div className="container">
             <TabPanel>
               <BoxTable
                 players={reject(isScratchedOrGoalie, boxscore.away.players)}
@@ -409,8 +417,8 @@ class GamePage extends React.Component {
                 }
               </div>
             </TabPanel>
-          </Tabs>
-        </div>
+          </div>
+        </Tabs>
       </div>
     );
   }
