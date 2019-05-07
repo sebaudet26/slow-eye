@@ -32,15 +32,15 @@ class HeaderDropdown extends React.Component {
     const subMenu = this.props.list;
 
     return (
-      <div className="header-nav-item dropdownMenu" onMouseOver={this.onMouseEnter} onMouseLeave={this.onMouseLeave} isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+      <div className="header-nav-item headerDropdownMenu" onMouseOver={this.onMouseEnter} onMouseLeave={this.onMouseLeave} isOpen={this.state.dropdownOpen} toggle={this.toggle}>
         <div className="">
           {this.props.name}
-          <i className="dropdownMenu-arrow" />
+          <i className="headerDropdownMenu-arrow" />
         </div>
         {
         this.state.dropdownOpen
           ? (
-            <div className="dropdownMenu-list">
+            <div className="headerDropdownMenu-list">
               {subMenu.map((value, index) => <NavLink to={value.link} key={index}>{value.name}</NavLink>)}
             </div>
           ) : null
