@@ -276,12 +276,13 @@
     min-height: 38px;
     outline: 0 !important;
     transition: 0.3s;
-    background: $white;
+    background: $grey-5;
     border: solid 1px $grey-4;
     border-radius: $radius;
 
     &:hover, &--is-focused {
       box-shadow: $shadow-2;
+      background: $white;
     }
   }
 
