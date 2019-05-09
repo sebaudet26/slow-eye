@@ -2,6 +2,7 @@ import React from 'react';
 import './style.scss';
 import { Helmet } from 'react-helmet';
 import { fetchStandings } from '../../../../server/libs/mlbApi.js';
+import StandingsTable from '../../../components/Table/mlb/StandingsTable';
 
 export default class MLBStandingsPage extends React.Component {
   constructor() {
@@ -23,13 +24,15 @@ export default class MLBStandingsPage extends React.Component {
   }
 
   render() {
+    const standings = this.state.standings;
+
     return (
       <div className="standings-page">
         <Helmet>
-          <title>Test</title>
+          <title>MLB Standings - Sealstats.com</title>
           <meta
             name="description"
-            content="Thank you to all Patreon Contributors"
+            content=""
           />
         </Helmet>
         <div className="page-header">
@@ -38,7 +41,8 @@ export default class MLBStandingsPage extends React.Component {
           </div>
         </div>
         <div className="container">
-          {JSON.stringify(this.state.standings)}
+          {console.log(standings)}
+          <StandingsTable standings={standings} />
         </div>
       </div>
     );
