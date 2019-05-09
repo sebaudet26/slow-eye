@@ -25,6 +25,11 @@ import configureStore from './configureStore';
 
 import { Switch, Route } from 'react-router-dom';
 
+
+import Header from './components/Header';
+import Footer from './components/Footer';
+
+// NHL Containers
 import HomePage from './containers/HomePage/Loadable';
 import PlayerStatsPage from './containers/PlayerStatsPage/Loadable';
 import StandingsPage from './containers/StandingsPage/Loadable';
@@ -40,20 +45,9 @@ import SealPage from './containers/SealPage/Loadable';
 import NotFoundPage from './containers/NotFoundPage/Loadable';
 import DraftPage from './containers/DraftPage/Loadable';
 
-import Header from './components/Header';
-import Footer from './components/Footer';
+// MLB containers
 
-
-// Observe loading of Open Sans (to remove open sans, remove the <link> tag in
-// the index.html file and this observer)
-const openSansObserver = new FontFaceObserver('Open Sans', {});
-
-// When Open Sans is loaded, add a font-family using Open Sans to the body
-openSansObserver.load().then(() => {
-  document.body.classList.add('fontLoaded');
-}, () => {
-  document.body.classList.remove('fontLoaded');
-});
+import MLBStandingsPage from './containers/mlb/StandingsPage/Loadable';
 
 // Create redux store with history
 const initialState = {};
@@ -70,6 +64,7 @@ const render = () => {
           <Header />
           <App />
           <Switch>
+            // NHL Routes
             <Route exact path="/" component={HomePage} />
             <Route path="/standings" component={StandingsPage} />
             <Route path="/playerstats" component={PlayerStatsPage} />
@@ -83,7 +78,13 @@ const render = () => {
             <Route path="/hotplayers" component={HotPlayersPage} />
             <Route path="/seal" component={SealPage} />
             <Route path="/test" component={TestPage} />
+
+            // MLB Routes
+            <Route path="/mlb/standings" component={MLBStandingsPage} />
+
             <Route path="" component={NotFoundPage} />
+
+
           </Switch>
           <Footer />
         </div>
