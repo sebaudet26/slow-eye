@@ -1,0 +1,85 @@
+@import '../../styles/variables.scss';
+
+.leagueSwitch {
+  position: relative;
+  margin-left: 15px;
+  cursor: pointer;
+
+  &:hover {
+    .leagueSwitch-select {
+      color: $grey-3;
+    }
+
+    .leagueSwitch-arrow {
+      border: solid $grey-3;
+      border-width: 0 2px 2px 0;
+    }
+  }
+
+  &-arrow {
+    margin-left: 10px;
+    border: solid $black;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 2px;
+    transform: rotate(45deg);
+    position: relative;
+    top: -2px;
+    transition: 0.3s;
+  }
+
+  &-img-wrapper {
+    width: 40px;
+    margin-right: 10px;
+
+    img {
+      margin: auto;
+      display: block;
+    }
+  }
+
+  &-select {
+    height: 38px;
+    border: solid 1px $grey-4;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-radius: $radius;
+    transition: 0.3s;
+    font-weight: 500;
+
+    img {
+      width: 20px;
+    }
+  }
+
+  &-list {
+    position: absolute;
+    background: $white;
+    box-shadow: $shadow-2;
+    z-index: 99;
+    border-radius: $radius;
+    left: 0px;
+    top: 38px;
+    opacity: 1;
+    width: 150px;
+
+    &-item {
+      color: $black;
+      display: flex;
+      align-items: center;
+      padding: 10px 15px;
+      font-weight: 500;
+
+      &:hover {
+        color: $main;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .leagueSwitch {
+    display: none;
+  }
+}
