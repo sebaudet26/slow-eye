@@ -6,11 +6,11 @@ const fs = require('fs');
 const logger = require('./util/logger');
 const port = require('./util/port');
 const setup = require('./middlewares/frontendMiddleware');
-const graphql = require('./middlewares/graphql');
-require('./libs/redisApi');
-require('./libs/nhlApi');
+// const graphql = require('./middlewares/graphql');
+// require('./libs/redisApi');
+// require('./libs/nhlApi');
 
-require('./libs/automatedJobs');
+// require('./libs/automatedJobs');
 
 const app = express();
 
@@ -18,7 +18,7 @@ app.use('/images', express.static('app/images'));
 
 app.use(bodyParser.json());
 
-app.use('/graphql', graphql);
+// app.use('/graphql', graphql);
 
 setup(app, {
   outputPath: resolve(process.cwd(), 'build'),

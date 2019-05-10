@@ -28,7 +28,7 @@ export default class MLBPlayerStatsPage extends React.Component {
 
 
   render() {
-    const players = this.state.players.stats_sortable_player;
+    const players = this.state.players.leader_hitting_repeater;
     return (
       <div className="playerStats-page">
         <Helmet>
@@ -45,7 +45,7 @@ export default class MLBPlayerStatsPage extends React.Component {
         </div>
         <div className="container">
           {
-            !isNil(players) ? (<PlayersTable players={players.queryResults} />) : null
+            !isNil(players) ? (<PlayersTable players={players.leader_hitting_mux.queryResults} />) : null
           }
         </div>
       </div>
