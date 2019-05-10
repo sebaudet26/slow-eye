@@ -29,21 +29,22 @@ import { Switch, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
-// NHL Containers
-import HomePage from './containers/HomePage/Loadable';
-import PlayerStatsPage from './containers/PlayerStatsPage/Loadable';
-import StandingsPage from './containers/StandingsPage/Loadable';
-import PlayerPage from './containers/PlayerPage/Loadable';
-import TeamPage from './containers/TeamPage/Loadable';
-import TeamStatsPage from './containers/TeamStatsPage/Loadable';
-import ScorePage from './containers/ScorePage/Loadable';
-import GamePage from './containers/GamePage/Loadable';
-import TestPage from './containers/Test/Loadable';
-import HotPlayersPage from './containers/HotPlayersPage/Loadable';
-import PowerRankingsPage from './containers/PowerRankingsPage/Loadable';
-import SealPage from './containers/SealPage/Loadable';
 import NotFoundPage from './containers/NotFoundPage/Loadable';
-import DraftPage from './containers/DraftPage/Loadable';
+import TestPage from './containers/Test/Loadable';
+
+
+// NHL Containers
+import HomePage from './containers/nhl/HomePage/Loadable';
+import PlayerStatsPage from './containers/nhl/PlayerStatsPage/Loadable';
+import StandingsPage from './containers/nhl/StandingsPage/Loadable';
+import PlayerPage from './containers/nhl/PlayerPage/Loadable';
+import TeamPage from './containers/nhl/TeamPage/Loadable';
+import TeamStatsPage from './containers/nhl/TeamStatsPage/Loadable';
+import ScorePage from './containers/nhl/ScorePage/Loadable';
+import GamePage from './containers/nhl/GamePage/Loadable';
+import HotPlayersPage from './containers/nhl/HotPlayersPage/Loadable';
+import PowerRankingsPage from './containers/nhl/PowerRankingsPage/Loadable';
+import DraftPage from './containers/nhl/DraftPage/Loadable';
 
 // MLB containers
 
@@ -78,7 +79,6 @@ const render = () => {
             <Route path="/drafts" component={DraftPage} />
             <Route path="/powerrankings" component={PowerRankingsPage} />
             <Route path="/hotplayers" component={HotPlayersPage} />
-            <Route path="/seal" component={SealPage} />
             <Route path="/test" component={TestPage} />
 
             // MLB Routes
