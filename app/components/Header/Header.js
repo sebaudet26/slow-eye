@@ -63,10 +63,19 @@ class Header extends React.Component {
         link: '/drafts',
       },
     ];
+
+    const NHLHomeLink = '/';
+    const MLBHomeLink = '/mlb/standings';
+
     return (
       <div className="header">
         <div className="header-wrapper">
-          <NavLink className="header-brand" to="/">
+          <NavLink
+            className="header-brand"
+            to={
+              this.state.selectedLeague === 'NHL' ? NHLHomeLink : MLBHomeLink
+            }
+          >
             <Logo />
             <span className="header-brand-name">Sealstats</span>
           </NavLink>
