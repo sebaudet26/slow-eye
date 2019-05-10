@@ -1,5 +1,8 @@
 import React from 'react';
 import './style.scss';
+import {
+  isEmpty,
+} from 'ramda';
 import { Helmet } from 'react-helmet';
 import { fetchStandings } from '../../../../server/libs/mlbApi.js';
 import StandingsTable from '../../../components/Table/mlb/StandingsTable';
@@ -41,8 +44,22 @@ export default class MLBStandingsPage extends React.Component {
           </div>
         </div>
         <div className="container">
-          {console.log(standings)}
-          <StandingsTable standings={standings} />
+          <div>
+            {
+              !isEmpty(standings) ? (
+                <div>
+                  <h3 className="no-margin-top">American League</h3>
+                  <StandingsTable subStandings={standings.records[1]} />
+                  <StandingsTable subStandings={standings.records[2]} />
+                  <StandingsTable subStandings={standings.records[0]} />
+                  <h3>National League</h3>
+                  <StandingsTable subStandings={standings.records[5]} />
+                  <StandingsTable subStandings={standings.records[3]} />
+                  <StandingsTable subStandings={standings.records[4]} />
+                </div>
+              ) : null
+            }
+          </div>
         </div>
       </div>
     );
