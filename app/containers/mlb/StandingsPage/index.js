@@ -4,7 +4,7 @@ import {
   isEmpty,
 } from 'ramda';
 import { Helmet } from 'react-helmet';
-import { fetchStandings } from '../../../../server/libs/mlbApi.js';
+import { fetchDivisionStandings } from '../../../../server/libs/mlbApi.js';
 import StandingsTable from '../../../components/Table/mlb/StandingsTable';
 
 export default class MLBStandingsPage extends React.Component {
@@ -16,7 +16,7 @@ export default class MLBStandingsPage extends React.Component {
   }
 
   async getStandings() {
-    const standings = await fetchStandings();
+    const standings = await fetchDivisionStandings();
     this.setState({
       standings,
     });

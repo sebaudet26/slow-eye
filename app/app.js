@@ -48,6 +48,8 @@ import DraftPage from './containers/DraftPage/Loadable';
 // MLB containers
 
 import MLBStandingsPage from './containers/mlb/StandingsPage/Loadable';
+import MLBPlayerStatsPage from './containers/mlb/PlayerStatsPage/Loadable';
+
 
 // Create redux store with history
 const initialState = {};
@@ -81,6 +83,7 @@ const render = () => {
 
             // MLB Routes
             <Route path="/mlb/standings" component={MLBStandingsPage} />
+            <Route path="/mlb/playerstats" component={MLBPlayerStatsPage} />
 
             <Route path="" component={NotFoundPage} />
 

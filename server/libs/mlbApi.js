@@ -9,8 +9,8 @@ const mlbApi = async (resource) => {
   return data;
 };
 
-const fetchStandings = () => mlbApi('standings?leagueId=103,104&season=2019&standingsTypes=regularSeason&hydrate=division,conference,sport,league)');
+const fetchDivisionStandings = () => mlbApi('standings?leagueId=103,104&season=2019&standingsTypes=regularSeason&hydrate=division,conference,sport,league)');
 
 module.exports = {
-  fetchStandings,
+  fetchDivisionStandings,
 };
