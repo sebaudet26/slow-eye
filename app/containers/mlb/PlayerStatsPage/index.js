@@ -1,9 +1,11 @@
 import React from 'react';
 import './style.scss';
 import {
-  isEmpty,
+  isNil,
 } from 'ramda';
 import { Helmet } from 'react-helmet';
+import { fetchBattingLeaders } from '../../../../server/libs/mlbApi.js';
+import PlayersTable from '../../../components/Table/mlb/PlayersTable';
 
 export default class MLBPlayerStatsPage extends React.Component {
   constructor() {
@@ -13,7 +15,20 @@ export default class MLBPlayerStatsPage extends React.Component {
     };
   }
 
+  async getPlayers() {
+    const players = await fetchBattingLeaders();
+    this.setState({
+      players,
+    });
+  }
+
+  componentDidMount() {
+    this.getPlayers();
+  }
+
+
   render() {
+    const players = this.state.players.stats_sortable_player;
     return (
       <div className="playerStats-page">
         <Helmet>
@@ -29,7 +44,9 @@ export default class MLBPlayerStatsPage extends React.Component {
           </div>
         </div>
         <div className="container">
-          Test
+          {
+            !isNil(players) ? (<PlayersTable players={players.queryResults} />) : null
+          }
         </div>
       </div>
     );

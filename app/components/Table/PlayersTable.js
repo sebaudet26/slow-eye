@@ -175,13 +175,6 @@ class PlayersTable extends React.PureComponent {
             noDataText="No players match the criteria"
             filterable
             defaultFilterMethod={toLowerCaseAndMatch}
-            getTdProps={(state, rowInfo, column, instance) => ({
-              onClick: (e, handleOriginal) => {
-                if (handleOriginal) {
-                  handleOriginal();
-                }
-              },
-            })}
             columns={[
               {
                 Header: '#',
@@ -485,10 +478,6 @@ class PlayersTable extends React.PureComponent {
             defaultSorted={[
               {
                 id: 'wins',
-                desc: true,
-              },
-              {
-                id: 'points',
                 desc: true,
               },
             ]}
