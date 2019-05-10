@@ -477,6 +477,10 @@ class PlayersTable extends React.PureComponent {
             ]}
             defaultSorted={[
               {
+                id: 'points',
+                desc: true,
+              },
+              {
                 id: 'wins',
                 desc: true,
               },
