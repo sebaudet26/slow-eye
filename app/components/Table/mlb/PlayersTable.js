@@ -10,9 +10,12 @@ import '../styles.scss';
 
 const ReactTableFixedColumns = withFixedColumns(ReactTable);
 class PlayersTable extends React.PureComponent {
+  constructor() {
+    super();
+  }
+
   render() {
-    const { players } = this.props;
-    console.log(players);
+    const { players, type } = this.props;
     return (
       <ReactTableFixedColumns
         resizable={false}
@@ -20,6 +23,10 @@ class PlayersTable extends React.PureComponent {
         defaultPageSize={20}
         defaultSortDesc
         defaultSorted={[
+          {
+            id: 'era',
+            desc: false,
+          },
           {
             id: 'avg',
             desc: true,
@@ -53,6 +60,7 @@ class PlayersTable extends React.PureComponent {
             maxWidth: 50,
             minWidth: 40,
             fixed: 'left',
+            show: this.props.type === 'hitting' ? true : null,
           },
           {
             Header: 'Team',
@@ -77,12 +85,76 @@ class PlayersTable extends React.PureComponent {
             accessor: d => d.g,
           },
           {
+            Header: 'GS',
+            id: 'gamesStarted',
+            maxWidth: 65,
+            minWidth: 50,
+            filterable: false,
+            accessor: d => d.gs,
+            show: this.props.type === 'pitching' ? true : null,
+          },
+          {
+            Header: 'W',
+            id: 'wins',
+            maxWidth: 65,
+            minWidth: 50,
+            filterable: false,
+            accessor: d => d.w,
+            show: this.props.type === 'pitching' ? true : null,
+          },
+          {
+            Header: 'L',
+            id: 'losses',
+            maxWidth: 65,
+            minWidth: 50,
+            filterable: false,
+            accessor: d => d.l,
+            show: this.props.type === 'pitching' ? true : null,
+          },
+          {
+            Header: 'ERA',
+            id: 'era',
+            maxWidth: 65,
+            minWidth: 50,
+            filterable: false,
+            accessor: d => d.era,
+            show: this.props.type === 'pitching' ? true : null,
+          },
+          {
+            Header: 'IP',
+            id: 'ip',
+            maxWidth: 65,
+            minWidth: 50,
+            filterable: false,
+            accessor: d => d.ip,
+            show: this.props.type === 'pitching' ? true : null,
+          },
+          {
+            Header: 'SV',
+            id: 'sv',
+            maxWidth: 55,
+            minWidth: 40,
+            filterable: false,
+            accessor: d => d.sv,
+            show: this.props.type === 'pitching' ? true : null,
+          },
+          {
+            Header: 'SVO',
+            id: 'svo',
+            maxWidth: 55,
+            minWidth: 40,
+            filterable: false,
+            accessor: d => d.svo,
+            show: this.props.type === 'pitching' ? true : null,
+          },
+          {
             Header: 'AB',
             id: 'ab',
             maxWidth: 65,
             minWidth: 50,
             filterable: false,
             accessor: d => Number(d.ab),
+            show: this.props.type === 'hitting' ? true : null,
           },
           {
             Header: 'H',
@@ -99,6 +171,17 @@ class PlayersTable extends React.PureComponent {
             minWidth: 55,
             filterable: false,
             accessor: d => d.avg,
+            show: this.props.type === 'hitting' ? true : null,
+          },
+          {
+            Header: 'AVG',
+            id: 'pavg',
+            maxWidth: 65,
+            minWidth: 55,
+            filterable: false,
+            accessor: d => d.avg,
+            sortMethod: (a, b) => (a > b ? -1 : 1),
+            show: this.props.type === 'pitching' ? true : null,
           },
           {
             Header: 'HR',
@@ -115,6 +198,7 @@ class PlayersTable extends React.PureComponent {
             minWidth: 50,
             filterable: false,
             accessor: d => Number(d.rbi),
+            show: this.props.type === 'hitting' ? true : null,
           },
           {
             Header: 'R',
@@ -147,6 +231,7 @@ class PlayersTable extends React.PureComponent {
             minWidth: 30,
             filterable: false,
             accessor: d => Number(d.sb),
+            show: this.props.type === 'hitting' ? true : null,
           },
           {
             Header: 'CS',
@@ -155,6 +240,7 @@ class PlayersTable extends React.PureComponent {
             minWidth: 30,
             filterable: false,
             accessor: d => Number(d.cs),
+            show: this.props.type === 'hitting' ? true : null,
           },
           {
             Header: 'OBP',
@@ -163,6 +249,7 @@ class PlayersTable extends React.PureComponent {
             minWidth: 50,
             filterable: false,
             accessor: d => d.obp,
+            show: this.props.type === 'hitting' ? true : null,
           },
           {
             Header: 'SLG',
@@ -171,6 +258,7 @@ class PlayersTable extends React.PureComponent {
             minWidth: 50,
             filterable: false,
             accessor: d => d.slg,
+            show: this.props.type === 'hitting' ? true : null,
           },
           {
             Header: 'OPS',
@@ -179,6 +267,16 @@ class PlayersTable extends React.PureComponent {
             minWidth: 50,
             filterable: false,
             accessor: d => d.ops,
+            show: this.props.type === 'hitting' ? true : null,
+          },
+          {
+            Header: 'WHIP',
+            id: 'whip',
+            maxWidth: 65,
+            minWidth: 55,
+            filterable: false,
+            accessor: d => d.whip,
+            show: this.props.type === 'pitching' ? true : null,
           },
         ]}
 

@@ -22,8 +22,10 @@ const fetchDivisionStandings = () => mlbApi('standings?leagueId=103,104&season=2
 
 // Player Stats Page
 const fetchBattingLeaders = () => mlbLookup('json/named.leader_hitting_repeater.bam?season=2019&sort_order=%27desc%27&sort_column=%27avg%27&stat_type=hitting&page_type=SortablePlayer&game_type=%27R%27&player_pool=QUALIFIER&season_type=ANY&sport_code=%27mlb%27&totalSize=200');
+const fetchPitchingLeaders = () => mlbLookup('json/named.leader_pitching_repeater.bam?season=2019&sort_order=%27asc%27&sort_column=%27era%27&stat_type=pitching&page_type=SortablePlayer&game_type=%27R%27&player_pool=QUALIFIER&season_type=ANY&sport_code=%27mlb%27&totalSize=200');
 
 module.exports = {
   fetchDivisionStandings,
   fetchBattingLeaders,
+  fetchPitchingLeaders,
 };

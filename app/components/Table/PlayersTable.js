@@ -120,7 +120,6 @@ class PlayersTable extends React.PureComponent {
   // TODO: selectors should live in the container and pass down their state
   render() {
     const { players, teams, loading } = this.props;
-    console.log(this.state);
     const {
       seasonSelected, posSelected, natSelected, teamSelected, XPSelected,
     } = this.state;
