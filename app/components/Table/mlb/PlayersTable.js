@@ -24,8 +24,8 @@ class PlayersTable extends React.PureComponent {
         defaultSortDesc
         defaultSorted={[
           {
-            id: 'era',
-            desc: false,
+            id: 'wins',
+            desc: true,
           },
           {
             id: 'avg',
@@ -85,15 +85,6 @@ class PlayersTable extends React.PureComponent {
             accessor: d => d.g,
           },
           {
-            Header: 'GS',
-            id: 'gamesStarted',
-            maxWidth: 65,
-            minWidth: 50,
-            filterable: false,
-            accessor: d => d.gs,
-            show: this.props.type === 'pitching' ? true : null,
-          },
-          {
             Header: 'W',
             id: 'wins',
             maxWidth: 65,
@@ -118,6 +109,7 @@ class PlayersTable extends React.PureComponent {
             minWidth: 50,
             filterable: false,
             accessor: d => d.era,
+            sortMethod: (a, b) => (a > b ? -1 : 1),
             show: this.props.type === 'pitching' ? true : null,
           },
           {
