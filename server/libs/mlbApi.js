@@ -18,7 +18,7 @@ const mlbLookup = async (resource) => {
 };
 
 // Teams
-const fetchTeams = () => mlbLookup('json/named.team_all_season.bam?sport_code=%27mlb%27&all_star_sw=%27N%27&season=%272019%27');
+const fetchTeams = () => mlbLookup('json/named.team_all_season.bam?sport_code=%27mlb%27&all_star_sw=%27N%27&season=%272019%27&sort_order=name_asc');
 
 // Standings Page
 const fetchDivisionStandings = () => mlbApi('standings?leagueId=103,104&season=2019&standingsTypes=regularSeason&hydrate=division,conference,sport,league)');
