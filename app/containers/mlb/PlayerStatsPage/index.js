@@ -8,7 +8,7 @@ import {
   Tab, Tabs, TabList, TabPanel,
 } from 'react-tabs';
 import { saveToLS, getFromLS } from '../../../utils/localStorage';
-import { fetchBattingLeaders, fetchPitchingLeaders } from '../../../../server/libs/mlbApi.js';
+import { fetchBattingLeaders, fetchPitchingLeaders, fetchTeams } from '../../../../server/libs/mlbApi.js';
 import PlayersTable from '../../../components/Table/mlb/PlayersTable';
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -19,14 +19,17 @@ export default class MLBPlayerStatsPage extends React.Component {
     this.state = {
       hitters: [],
       pitchers: [],
+      teams: [],
     };
   }
 
   async getPlayers() {
     const hitters = await fetchBattingLeaders();
     const pitchers = await fetchPitchingLeaders();
+    const teams = await fetchTeams();
+
     this.setState({
-      hitters, pitchers,
+      hitters, pitchers, teams,
     });
   }
 
@@ -37,6 +40,9 @@ export default class MLBPlayerStatsPage extends React.Component {
   render() {
     const hitters = this.state.hitters.leader_hitting_repeater;
     const pitchers = this.state.pitchers.leader_pitching_repeater;
+    const teams = this.state.teams.team_all_season;
+
+    console.log(teams);
 
     return (
       <div className="playerStats-page">
@@ -62,18 +68,16 @@ export default class MLBPlayerStatsPage extends React.Component {
               <Tab>Pitching</Tab>
             </div>
           </TabList>
-          <div className="container">
-            <TabPanel>
-              {
-                !isNil(hitters) ? (<PlayersTable type="hitting" players={hitters.leader_hitting_mux.queryResults} />) : null
+          <TabPanel>
+            {
+                !isNil(hitters, teams) ? (<PlayersTable type="hitting" teams={teams.queryResults} players={hitters.leader_hitting_mux.queryResults} />) : null
               }
-            </TabPanel>
-            <TabPanel>
-              {
-                !isNil(pitchers) ? (<PlayersTable type="pitching" players={pitchers.leader_pitching_mux.queryResults} />) : null
+          </TabPanel>
+          <TabPanel>
+            {
+                !isNil(pitchers, teams) ? (<PlayersTable type="pitching" teams={teams.queryResults} players={pitchers.leader_pitching_mux.queryResults} />) : null
               }
-            </TabPanel>
-          </div>
+          </TabPanel>
         </Tabs>
       </div>
     );
