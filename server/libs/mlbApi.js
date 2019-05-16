@@ -17,6 +17,9 @@ const mlbLookup = async (resource) => {
   return data;
 };
 
+// Teams
+const fetchTeams = () => mlbLookup('json/named.team_all_season.bam?sport_code=%27mlb%27&all_star_sw=%27N%27&season=%272019%27');
+
 // Standings Page
 const fetchDivisionStandings = () => mlbApi('standings?leagueId=103,104&season=2019&standingsTypes=regularSeason&hydrate=division,conference,sport,league)');
 
@@ -25,6 +28,7 @@ const fetchBattingLeaders = () => mlbLookup('json/named.leader_hitting_repeater.
 const fetchPitchingLeaders = () => mlbLookup('json/named.leader_pitching_repeater.bam?season=2019&sort_order=%27asc%27&sort_column=%27era%27&stat_type=pitching&page_type=SortablePlayer&game_type=%27R%27&player_pool=QUALIFIER&season_type=ANY&sport_code=%27mlb%27&totalSize=200');
 
 module.exports = {
+  fetchTeams,
   fetchDivisionStandings,
   fetchBattingLeaders,
   fetchPitchingLeaders,

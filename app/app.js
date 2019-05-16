@@ -50,6 +50,7 @@ import DraftPage from './containers/nhl/DraftPage/Loadable';
 
 import MLBStandingsPage from './containers/mlb/StandingsPage/Loadable';
 import MLBPlayerStatsPage from './containers/mlb/PlayerStatsPage/Loadable';
+import MLBPlayerPage from './containers/mlb/PlayerPage/Loadable';
 
 
 // Create redux store with history
@@ -67,8 +68,10 @@ const render = () => {
           <Header />
           <App />
           <Switch>
-            // NHL Routes
             <Route exact path="/" component={HomePage} />
+            <Route path="/test" component={TestPage} />
+
+            // NHL Routes
             <Route path="/standings" component={StandingsPage} />
             <Route path="/playerstats" component={PlayerStatsPage} />
             <Route path="/player" component={PlayerPage} />
@@ -79,15 +82,13 @@ const render = () => {
             <Route path="/drafts" component={DraftPage} />
             <Route path="/powerrankings" component={PowerRankingsPage} />
             <Route path="/hotplayers" component={HotPlayersPage} />
-            <Route path="/test" component={TestPage} />
 
             // MLB Routes
             <Route path="/mlb/standings" component={MLBStandingsPage} />
             <Route path="/mlb/playerstats" component={MLBPlayerStatsPage} />
+            <Route path="/mlb/player" component={MLBPlayerPage} />
 
             <Route path="" component={NotFoundPage} />
-
-
           </Switch>
           <Footer />
         </div>

@@ -37,7 +37,7 @@ export default class MLBPlayerStatsPage extends React.Component {
   render() {
     const hitters = this.state.hitters.leader_hitting_repeater;
     const pitchers = this.state.pitchers.leader_pitching_repeater;
-    console.log(pitchers);
+
     return (
       <div className="playerStats-page">
         <Helmet>
