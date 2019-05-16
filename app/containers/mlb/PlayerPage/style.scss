@@ -1,5 +1,152 @@
 @import '../../../styles/variables.scss';
 
-.player-page {
+.player {
+  &-wrapper {
+    display: flex;
+    position: relative;
+    margin-bottom: 15px;
+  }
 
+  &-img {
+    display: flex;
+    position: relative;
+    margin-top: 15px;
+    margin-right: 25px;
+
+    &-face {
+      border-radius: $radius;
+      width: auto;
+      max-height: 210px;
+      margin-right: 25px;
+    }
+
+    &-team {
+      width: 60px;
+      height: 60px;
+      position: absolute;
+      top: 150px;
+      right: 25px;
+
+      img {
+        width: 35px;
+      }
+    }
+
+    &-country {
+      width: 60px;
+      height: 60px;
+      position: absolute;
+      top: 150px;
+      left: 0px;
+
+      img {
+        width: 35px;
+      }
+    }
+  }
+
+  &-info {
+    padding: 15px 0;
+
+    h2, p {
+      margin: 0;
+    }
+  }
+
+  &-desc {
+    display: flex;
+    margin-top: 15px;
+
+    p {
+    }
+
+    &-right {
+      margin-left: 25px;
+      padding-left: 25px;
+      border-left: solid 1px $grey-4;
+    }
+  }
+
+  &-stats {
+    display: flex;
+    margin-top: 20px;
+
+    &-item {
+      text-align: center;
+      font-size: 24px;
+      margin-right: 50px;
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  .player {
+    &-stats {
+      &-item {
+        margin-right: 25px;
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .player {
+    &-wrapper {
+      margin-top: 0px;
+      display: block;
+      text-align: center;
+    }
+
+    &-info {
+    }
+
+    &-desc {
+      display: block;
+
+      &-right {
+        padding-top: 15px;
+        margin-top: 15px;
+        margin-left: 0px;
+        padding-left: 0px;
+        border-left: 0px;
+        border-top: solid 1px $grey-4;
+      }
+    }
+
+    &-stats {
+      margin: 25px 25px 0 25px;
+
+      &-item {
+        margin: auto;
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        &:nth-child(5) {
+          margin-right: 0;
+        }
+      }
+    }
+
+    &-img {
+      margin-right: 0px;
+
+      &-country {
+        left: 15%;
+      }
+
+      &-team {
+        right: 15%;
+      }
+
+      img {
+        margin: auto;
+      }
+    }
+
+    &-badges {
+      display: none;
+    }
+  }
 }
