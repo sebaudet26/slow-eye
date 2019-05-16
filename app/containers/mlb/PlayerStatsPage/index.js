@@ -53,11 +53,6 @@ export default class MLBPlayerStatsPage extends React.Component {
             content="View"
           />
         </Helmet>
-        <div className="page-header">
-          <div className="container">
-            <h2>Player Stats</h2>
-          </div>
-        </div>
         <Tabs
           defaultIndex={Number(getFromLS(`playerTabIndex${urlParams.get('id')}`)) || 0}
           onSelect={i => saveToLS(`playerTabIndex${urlParams.get('id')}`, i)}
