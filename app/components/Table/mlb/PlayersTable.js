@@ -7,6 +7,7 @@ import {
 import withFixedColumns from 'react-table-hoc-fixed-columns';
 import { saveToLS, getFromLS } from '../../../utils/localStorage';
 import { toLowerCaseAndMatch } from '../../../utils/filter';
+import PlayerName from '../../PlayerName';
 import TeamFilter from '../../Filter/team';
 import FilterIcon from '../images/filter.svg';
 import 'react-table/react-table.css';
@@ -104,10 +105,11 @@ class PlayersTable extends React.PureComponent {
                 Header: 'Name',
                 id: 'fullName',
                 className: 'text-left border-mobile',
-                accessor: d => d.name_display_first_last,
+                accessor: d => `${d.name_display_first_last}+${d.player_id}`,
                 maxWidth: 200,
                 minWidth: 110,
                 fixed: 'left',
+                Cell: row => <PlayerName url={`/mlb/player?id=${row.value.split('+')[1]}`} name={row.value.split('+')[0]} />,
               },
               {
                 Header: 'Pos.',
