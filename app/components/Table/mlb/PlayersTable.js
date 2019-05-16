@@ -109,7 +109,11 @@ class PlayersTable extends React.PureComponent {
                 maxWidth: 200,
                 minWidth: 110,
                 fixed: 'left',
-                Cell: row => <PlayerName url={`/mlb/player?id=${row.value.split('+')[1]}`} name={row.value.split('+')[0]} />,
+                Cell: row => (
+                  <a href={`/mlb/player?id=${row.value.split('+')[1]}`} style={{ marginRight: '1%' }}>
+                    {row.value.split('+')[0]}
+                  </a>
+                ),
               },
               {
                 Header: 'Pos.',
