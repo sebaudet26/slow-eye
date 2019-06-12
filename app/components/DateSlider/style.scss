@@ -1,43 +1,54 @@
 @import '../../styles/variables.scss';
 
-.slick-track {
-  height: 64px;
-}
-
-.slick-arrow {
-  position: absolute;
-  z-index: 5;
-  width: 50px;
-  height: 100%;
-  background: $white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px 0 0 6px;
-  cursor: pointer;
-
-  &.next {
-    right: 0px;
-    top: 0px;
-    border-radius: 0 6px 6px 0;
-    border-left: solid 1px $grey-4;
-  }
-}
-
 .slick-slider {
   height: 64px;
-  border-radius: $radius;
-  border: solid 1px $grey-4;
+  border: 0px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+    width: 50px;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    background: linear-gradient(270deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+    width: 50px;
+    height: 100%;
+    right: 0;
+    top: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .slick-list {
+    border-radius: 0px;
+  }
+
+  .slick-track {
+    height: 64px;
+  }
+
+  .slick-arrow {
+    display: none;
+  }
 
   .slick-slide {
     background: $white;
     height: 64px;
     display: flex;
     align-items: center;
-    border-left: solid 1px $grey-4;
     cursor: pointer;
     transition: 0.3s;
-    border-bottom: solid 1px $grey-4;
+    opacity: 1;
+    border-bottom: solid 3px rgba(255,255,255,0);
 
     div {
       margin: auto;
@@ -51,33 +62,36 @@
 
     &-date {
       font-weight: 500;
-      color: $grey-2;
+      color: $grey-3;
       transition: 0.3s;
     }
 
     &-games {
       font-size: 14px;
-      color: $grey-2;
+      color: $grey-3;
     }
 
     &:hover {
-      background: $white;
-
       .slick-slide-date {
-        color: $black;
+        color: $main;
+        font-weight: 500;
       }
     }
   }
 
+  .slick-active {
+    opacity: 1;
+  }
+
   .slick-current {
-    box-shadow: $shadow-2;
     background: $white;
     position: relative;
     border-bottom: solid 3px $main;
 
     .slick-slide-date {
       font-size: 16px;
-      color: $black;
+      color: $main;
+      font-weight: 500;
     }
   }
 }
@@ -107,17 +121,13 @@
 
 @media screen and (max-width: 600px) {
   .slick-slider {
-    border-radius: 0px;
-    width: 100vw;
-    position: relative;
-    left: -7.5px;
-  }
+    height: 50px;
 
-  .slick-arrow {
-    border-radius: 0px;
-
-    &.next {
-      border-radius: 0px;
+    .slick-track, .slick-slide {
+      height: 50px;
     }
+  }
+  .slick-slide-games {
+    display: none;
   }
 }

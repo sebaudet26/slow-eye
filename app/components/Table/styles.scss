@@ -54,10 +54,12 @@
   &.standings-stats {
     margin-bottom: 15px;
 
-    &:nth-child(4), &:nth-child(8) {
-      .rt-tbody {
-        .rt-tr-group:nth-child(2) {
-          border-bottom: solid 5px $grey-4;
+    &.wildCard {
+      &:nth-child(4), &:nth-child(8) {
+        .rt-tbody {
+          .rt-tr-group:nth-child(2) {
+            border-bottom: solid 5px $grey-4;
+          }
         }
       }
     }
@@ -245,8 +247,14 @@
 }
 
 .filters {
-  margin: 15px 0 25px 0;
-  display: flex;
+  padding: 15px 0 25px 0;
+  margin-bottom: 25px;
+  border-bottom: solid 1px $grey-4;
+  background: $white;
+
+  &-wrapper {
+    display: flex;
+  }
 
   &-item {
     max-width: 200px;
@@ -270,12 +278,13 @@
     min-height: 38px;
     outline: 0 !important;
     transition: 0.3s;
-    background: $white;
+    background: $grey-5;
     border: solid 1px $grey-4;
     border-radius: $radius;
 
     &:hover, &--is-focused {
       box-shadow: $shadow-2;
+      background: $white;
     }
   }
 
@@ -352,6 +361,9 @@
 
     &.active {
       display: block;
+      .filters-wrapper {
+        display: block;
+      }
     }
 
     &-item {

@@ -30,7 +30,7 @@ const moment = require('moment-timezone');
 const fetch = require('node-fetch');
 const cache = require('./redisApi');
 
-const nhlApiBase = 'http://www.nhl.com/stats/rest';
+const nhlApiBase = 'https://api.nhle.com/stats/rest';
 const nhlRecordsBase = 'https://records.nhl.com/site/api';
 const nhlStatsApiBase = 'https://statsapi.web.nhl.com/api/v1';
 
@@ -330,10 +330,9 @@ const fetchPlayersReport = async (season = 20182019) => {
   const skatersummaryRookie = `/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&cayenneExp=playerRookieSeasonInd=1%20and%20gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}&sort=[{%22property%22:%22playerId%22}]`;
   const realtimeRookie = `/skaters?isAggregate=false&reportType=basic&reportName=realtime&sort=[{%22property%22:%22playerId%22}]&cayenneExp=playerRookieSeasonInd=1%20and%20gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
   const goaliesRookie = `/goalies?isAggregate=false&reportType=goalie_basic&reportName=goaliesummary&sort=[{%22property%22:%22playerId%22}]&cayenneExp=playerRookieSeasonInd=1%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}%20and%20gameTypeId=2`;
-  const goaliesAll = `/goalies?isAggregate=false&reportType=goalie_basic&reportName=goaliesummary&sort=[{%22property%22:%22playerId%22}]&cayenneExp=seasonId%3E=${season}%20and%20seasonId%3C=${season}%20and%20gameTypeId=2`;
-  // playerRookieSeasonInd=0 does not work ...
-  const skatersummaryAll = `/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}&sort=[{%22property%22:%22playerId%22}]`;
-  const realtimeAll = `/skaters?isAggregate=false&reportType=basic&reportName=realtime&sort=[{%22property%22:%22playerId%22}]&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
+  const goaliesAll = `/goalies?isAggregate=false&reportType=goalie_basic&reportName=goaliesummary&sort=[{%22property%22:%22playerId%22}]&cayenneExp=playerRookieSeasonInd=1%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}%20and%20gameTypeId=2`;
+  const skatersummaryAll = `/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22}]&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
+  const realtimeAll = `/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22}]&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
 
   try {
     const [
@@ -636,16 +635,6 @@ const calculatePlayerStreaks = async (args = {}) => {
   }
 };
 
-const drewDebug = async (playerId) => {
-  console.log('hey');
-  console.log('hello drew');
-  const resource = `/people/${playerId}`;
-  console.log(resource);
-  const playerInfoData = await nhlStatsApi(resource, 1);
-  console.log(playerInfoData);
-  return 'drew';
-};
-
 module.exports = {
   fetchLiveFeed,
   fetchStandings,
@@ -671,5 +660,4 @@ module.exports = {
   fetchGameHighlights,
   calculatePlayerStreaks,
   calculateTeamsStreaks,
-  drewDebug,
 };

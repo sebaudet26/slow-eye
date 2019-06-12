@@ -67,13 +67,12 @@ class DateSlider extends React.Component {
 
     const settings = {
       dots: false,
-      className: 'center',
       swipeToSlide: true,
       afterChange: handleNewDateSelected,
       infinite: false,
       focusOnSelect: true,
       speed: 200,
-      slidesToShow: 5,
+      slidesToShow: 7,
       slidesToScroll: 1,
       initialSlide: Math.round(daysOptions.length / 2),
       centerMode: true,
@@ -81,23 +80,23 @@ class DateSlider extends React.Component {
       nextArrow: <NextArrow />,
       responsive: [
         {
+          breakpoint: 1200,
+          settings: {
+            slidesToShow: 7,
+            slidesToScroll: 1,
+          },
+        },
+        {
           breakpoint: 1024,
           settings: {
-            slidesToShow: 3,
+            slidesToShow: 5,
             slidesToScroll: 1,
           },
         },
         {
           breakpoint: 600,
           settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1,
-          },
-        },
-        {
-          breakpoint: 480,
-          settings: {
-            slidesToShow: 1,
+            slidesToShow: 3,
             slidesToScroll: 1,
           },
         },
@@ -105,7 +104,9 @@ class DateSlider extends React.Component {
     };
     return (
       <Slider ref={slider => this.slider = slider} {...settings}>
-        {daysOptions.map(opt => renderSlide(opt, games))}
+        {
+          daysOptions.map(opt => renderSlide(opt, games))
+        }
       </Slider>
     );
   }

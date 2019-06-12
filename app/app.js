@@ -25,35 +25,33 @@ import configureStore from './configureStore';
 
 import { Switch, Route } from 'react-router-dom';
 
-import HomePage from './containers/HomePage/Loadable';
-import PlayerStatsPage from './containers/PlayerStatsPage/Loadable';
-import StandingsPage from './containers/StandingsPage/Loadable';
-import PlayerPage from './containers/PlayerPage/Loadable';
-import TeamPage from './containers/TeamPage/Loadable';
-import TeamStatsPage from './containers/TeamStatsPage/Loadable';
-import ScorePage from './containers/ScorePage/Loadable';
-import GamePage from './containers/GamePage/Loadable';
-import TestPage from './containers/Test/Loadable';
-import HotPlayersPage from './containers/HotPlayersPage/Loadable';
-import PowerRankingsPage from './containers/PowerRankingsPage/Loadable';
-import SealPage from './containers/SealPage/Loadable';
-import NotFoundPage from './containers/NotFoundPage/Loadable';
-import DraftPage from './containers/DraftPage/Loadable';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
 
+import NotFoundPage from './containers/NotFoundPage/Loadable';
+import TestPage from './containers/Test/Loadable';
 
-// Observe loading of Open Sans (to remove open sans, remove the <link> tag in
-// the index.html file and this observer)
-const openSansObserver = new FontFaceObserver('Open Sans', {});
 
-// When Open Sans is loaded, add a font-family using Open Sans to the body
-openSansObserver.load().then(() => {
-  document.body.classList.add('fontLoaded');
-}, () => {
-  document.body.classList.remove('fontLoaded');
-});
+// NHL Containers
+import HomePage from './containers/nhl/HomePage/Loadable';
+import PlayerStatsPage from './containers/nhl/PlayerStatsPage/Loadable';
+import StandingsPage from './containers/nhl/StandingsPage/Loadable';
+import PlayerPage from './containers/nhl/PlayerPage/Loadable';
+import TeamPage from './containers/nhl/TeamPage/Loadable';
+import TeamStatsPage from './containers/nhl/TeamStatsPage/Loadable';
+import ScorePage from './containers/nhl/ScorePage/Loadable';
+import GamePage from './containers/nhl/GamePage/Loadable';
+import HotPlayersPage from './containers/nhl/HotPlayersPage/Loadable';
+import PowerRankingsPage from './containers/nhl/PowerRankingsPage/Loadable';
+import DraftPage from './containers/nhl/DraftPage/Loadable';
+
+// MLB containers
+
+import MLBStandingsPage from './containers/mlb/StandingsPage/Loadable';
+import MLBPlayerStatsPage from './containers/mlb/PlayerStatsPage/Loadable';
+import MLBPlayerPage from './containers/mlb/PlayerPage/Loadable';
+
 
 // Create redux store with history
 const initialState = {};
@@ -71,6 +69,9 @@ const render = () => {
           <App />
           <Switch>
             <Route exact path="/" component={HomePage} />
+            <Route path="/test" component={TestPage} />
+
+            // NHL Routes
             <Route path="/standings" component={StandingsPage} />
             <Route path="/playerstats" component={PlayerStatsPage} />
             <Route path="/player" component={PlayerPage} />
@@ -81,8 +82,12 @@ const render = () => {
             <Route path="/drafts" component={DraftPage} />
             <Route path="/powerrankings" component={PowerRankingsPage} />
             <Route path="/hotplayers" component={HotPlayersPage} />
-            <Route path="/seal" component={SealPage} />
-            <Route path="/test" component={TestPage} />
+
+            // MLB Routes
+            <Route path="/mlb/standings" component={MLBStandingsPage} />
+            <Route path="/mlb/playerstats" component={MLBPlayerStatsPage} />
+            <Route path="/mlb/player" component={MLBPlayerPage} />
+
             <Route path="" component={NotFoundPage} />
           </Switch>
           <Footer />

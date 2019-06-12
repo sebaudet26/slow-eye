@@ -154,15 +154,16 @@ class SearchBar extends React.Component {
     return (
       <div className="searchBar">
         <form className="searchBar-form">
+          <label>
+            <img src={SearchIcon} alt="" />
+          </label>
           <input
-            placeholder="Search For Player"
+            placeholder="Search For Player or Team"
             onChange={this.handleInputChange}
             onKeyDown={this.handleKeyDown}
             onClick={this.showOptions}
           />
-          <label>
-            <img src={SearchIcon} alt="" />
-          </label>
+
           {
           this.state.showOptions
             ? (

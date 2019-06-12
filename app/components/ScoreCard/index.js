@@ -15,7 +15,12 @@ const ScoreCard = ({ game }) => (
         <span>
           {getStatusText(game)}
           {getFinalPeriod(game)}
-          <span className="game-card-series-summary">{game.seriesSummary.seriesStatusShort || ''}</span>
+          {
+            game.seriesSummary ? (
+              <span className="game-card-series-summary">{game.seriesSummary.seriesStatusShort || ''}</span>
+            ) : null
+          }
+
         </span>
       </div>
       <div className="game-card-team">
@@ -26,7 +31,20 @@ const ScoreCard = ({ game }) => (
           {game.teams.away.team.name}
         </a>
         <div className="game-card-team-score">
-          {game.teams.away.score}
+          {
+            game.status.detailedState === 'Scheduled' ? (
+              <span>
+                {game.teams.away.leagueRecord.wins}
+                {'W - '}
+                {game.teams.away.leagueRecord.losses}
+                {'L'}
+                { game.seriesSummary ? null : ` - ${game.teams.away.leagueRecord.ot}OT`
+                }
+              </span>
+            ) : (
+              game.teams.away.score
+            )
+          }
         </div>
       </div>
       <div className="game-card-team">
@@ -37,7 +55,20 @@ const ScoreCard = ({ game }) => (
           {game.teams.home.team.name}
         </a>
         <div className="game-card-team-score">
-          {game.teams.home.score}
+          {
+            game.status.detailedState === 'Scheduled' ? (
+              <span>
+                {game.teams.home.leagueRecord.wins}
+                {'W - '}
+                {game.teams.home.leagueRecord.losses}
+                {'L'}
+                { game.seriesSummary ? null : ` - ${game.teams.home.leagueRecord.ot}OT`
+                }
+              </span>
+            ) : (
+              game.teams.home.score
+            )
+          }
         </div>
       </div>
       {

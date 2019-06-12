@@ -1,0 +1,43 @@
+@import '../../styles/variables.scss';
+
+.headerDropdownMenu {
+  position: relative;
+
+  &-arrow {
+    margin-left: 10px;
+    border: solid $black;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 2px;
+    transform: rotate(45deg);
+    position: relative;
+    top: -3px;
+    transition: 0.3s;
+  }
+
+  &-list {
+    position: absolute;
+    background: $white;
+    box-shadow: $shadow-2;
+    z-index: 99;
+    border-radius: $radius;
+    right: 0px;
+    top: 50px;
+    opacity: 1;
+
+    a {
+      color: $black;
+      display: block;
+      align-items: center;
+      padding: 10px 25px;
+
+      &:hover {
+        color: $main;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+
+}

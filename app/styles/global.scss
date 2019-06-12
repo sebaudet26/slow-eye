@@ -1,4 +1,5 @@
 @import './variables.scss';
+@import './datepicker.scss';
 @import './tabs.scss';
 @import "~slick-carousel/slick/slick.css";
 
@@ -207,6 +208,47 @@ li {
   min-height: 100%;
   padding: 0 7.5px;
   flex-direction: column;
+}
+
+.page-header {
+  background: $white;
+  padding: 25px 0;
+  border-bottom: solid 1px $grey-4;
+
+  &.wTabs {
+    padding-bottom: 0px;
+  }
+
+  &.wFilters {
+    padding-bottom: 0px;
+    border-bottom: 0px;
+  }
+
+  &.wImage {
+    background-size: 100% auto;
+    background-position: top right;
+    display: block;
+    position: relative;
+
+    &::before {
+      content: '';
+      height: calc(100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(43, 49, 58, 0.75);
+      z-index: 0;
+    }
+  }
+
+  .container {
+    h2 {
+      margin: 0px;
+    }
+  }
 }
 
 @media screen and (max-width: 600px) {

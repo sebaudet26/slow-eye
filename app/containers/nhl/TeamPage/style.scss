@@ -1,0 +1,149 @@
+@import '../../../styles/variables.scss';
+
+.team {
+  &-page {
+    .depth-chart {
+      h3 {
+        margin-bottom: 0px;
+      }
+    }
+  }
+
+  &-wrapper {
+    padding-bottom: 25px;
+    position: relative;
+
+    &-title {
+      display: flex;
+
+      h2 {
+        margin: 0;
+      }
+      p {
+        margin: 0;
+      }
+    }
+  }
+
+  &-info {
+    display: flex;
+  }
+
+  &-stats {
+    display: flex;
+    margin-top: 20px;
+
+    &:first-child {
+      border-right: solid 1px $grey-4;
+    }
+
+    &:last-child {
+      padding-left: 50px;
+    }
+
+    &-item {
+      text-align: center;
+      font-size: 24px;
+      margin-right: 50px;
+    }
+  }
+
+  &-chart {
+    display: flex;
+    flex-basis: auto;
+    flex-grow: 1;
+
+    &-col {
+      margin: 0 auto auto auto;
+      display: block;
+      width: 33%;
+
+      &-title {
+        font-weight: 400;
+        color: $grey-2;
+      }
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+@media (min-width: 601px) and (max-width: 880px) {
+  .team {
+    &-stats {
+      &-item {
+        margin-right: 25px;
+      }
+      &:nth-child(2) {
+        padding-left: 25px;
+
+        &:last-child {
+          margin-right: 0px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .team {
+    &-wrapper  {
+      margin-top: 0px;
+
+      &-title {
+        display: block;
+        text-align: center;
+      }
+
+      .dropdownMenu {
+        &-trigger {
+          justify-content: center;
+        }
+      }
+    }
+
+    &-img {
+      margin-right: 0px;
+    }
+
+    &-info {
+      display: block;
+      margin: 0 25px;
+    }
+
+    &-stats {
+      &:first-child {
+        border: none;
+      }
+
+      &:nth-child(2){
+        padding-left: 0px;
+      }
+
+      &-item{
+        margin: auto;
+
+        &:first-child {
+          margin-left: 0px;
+        }
+
+        &:last-child {
+          margin-right: 0px;
+        }
+      }
+    }
+    &-chart {
+      display: block;
+
+      &-col {
+        width: 100%;
+      }
+    }
+  }
+}
