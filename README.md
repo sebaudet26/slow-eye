@@ -22,8 +22,3 @@ TODO:
 - Corsica Ratings for Players, Advanced Stats
 - Starting Lineups
 - Starting Goalies
-
-----------MLB v0----------
-
-Score Page
-https://statsapi.mlb.com/api/v1/schedule?sportId=1,51&date=2019-04-11&hydrate=team(leaders(showOnPreview(leaderCategories=[homeRuns,runsBattedIn,battingAverage],statGroup=[pitching,hitting]))),linescore(matchup,runners),flags,liveLookin,review,broadcasts(all),decisions,person,probablePitcher,stats,homeRuns,previousPlay,game(content(media(featured,epg),summary),tickets),seriesStatus(useOverride=true)&leagueId=103,104,420
