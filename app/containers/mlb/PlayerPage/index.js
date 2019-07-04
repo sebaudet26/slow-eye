@@ -5,6 +5,7 @@ import {
   isNil, isEmpty,
 } from 'ramda';
 import { fetchPlayer } from '../../../../server/libs/mlbApi.js';
+import CareerStatsTable from '../../../components/Table/mlb/CareerStatsTable';
 
 const urlParams = new URLSearchParams(window.location.search);
 
@@ -30,8 +31,6 @@ export default class MLBPlayerPage extends React.Component {
   render() {
     const player = this.state.player.people;
 
-    console.log(player);
-
     return (isNil(player) ? null : (
       <div className="player-page">
         <Helmet>
@@ -41,7 +40,7 @@ export default class MLBPlayerPage extends React.Component {
             content=""
           />
         </Helmet>
-        <div className="page-header wTabs">
+        <div className="page-header">
           <div className="container">
             <div className="player-wrapper">
               <div className="player-img">
@@ -131,7 +130,7 @@ export default class MLBPlayerPage extends React.Component {
           </div>
         </div>
         <div className="container">
-          test
+          <CareerStatsTable stats={player[0].stats[0].splits} />
         </div>
       </div>
     ));

@@ -1,6 +1,12 @@
 @import '../../../styles/variables.scss';
 
 .player {
+
+  &-page {
+    .ReactTable {
+      margin-top: 25px;
+    }
+  }
   &-wrapper {
     display: flex;
     position: relative;
