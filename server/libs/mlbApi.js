@@ -29,7 +29,6 @@ const fetchPitchingLeaders = () => mlbLookup('json/named.leader_pitching_repeate
 
 // Player Page
 const fetchPlayer = resource => mlbApi(`people/${resource}?hydrate=currentTeam,team,stats(type=[yearByYear,yearByYearAdvanced,careerRegularSeason,careerAdvanced,availableStats](team(league)),leagueListId=mlb_hist)&site=en`);
-const fetchHittingCareer = resource => mlbLookup(`json/named.sport_career_hitting.bam?league_list_id='mlb'&game_type=%27R%27&player_id=${resource}`);
 
 module.exports = {
   fetchTeams,
@@ -37,5 +36,4 @@ module.exports = {
   fetchBattingLeaders,
   fetchPitchingLeaders,
   fetchPlayer,
-  fetchHittingCareer,
 };
