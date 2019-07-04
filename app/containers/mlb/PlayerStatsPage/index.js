@@ -1,7 +1,7 @@
 import React from 'react';
 import './style.scss';
 import {
-  isNil,
+  isNil, pathOr,
 } from 'ramda';
 import { Helmet } from 'react-helmet';
 import {
@@ -38,7 +38,7 @@ export default class MLBPlayerStatsPage extends React.Component {
   }
 
   render() {
-    const hitters = this.state.hitters.leader_hitting_repeater;
+    const hitters = pathOr(null, ['hitters', 'leader_hitting_repeater', 'leader_hitting_mux', 'queryResults'], this.state);
     const pitchers = this.state.pitchers.leader_pitching_repeater;
     const teams = this.state.teams.team_all_season;
 
@@ -65,8 +65,8 @@ export default class MLBPlayerStatsPage extends React.Component {
           </TabList>
           <TabPanel>
             {
-                !isNil(hitters, teams) ? (<PlayersTable type="hitting" teams={teams.queryResults} players={hitters.leader_hitting_mux.queryResults} />) : null
-              }
+              hitters && <PlayersTable type="hitting" teams={teams.queryResults} players={hitters} />
+            }
           </TabPanel>
           <TabPanel>
             {
