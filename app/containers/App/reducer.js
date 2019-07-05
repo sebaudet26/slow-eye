@@ -16,13 +16,9 @@ import { FETCH_FEATURES } from './constants';
 // The initial state of the App
 const initialState = fromJS({
   loading: false,
+  selectedLeague: 'NHL',
   error: false,
-  currentUser: false,
-  userData: {
-    repositories: false,
-  },
   features: {
-
   },
 });
 
