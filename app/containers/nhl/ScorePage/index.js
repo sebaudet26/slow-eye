@@ -7,7 +7,7 @@ import DatePicker from 'react-datepicker';
 import DateSlider from '../../../components/DateSlider';
 import ScoreCard from '../../../components/ScoreCard';
 import 'react-datepicker/dist/react-datepicker.css';
-import CalendarIcon from '../../../public/images/calendar.svg';
+import CalendarIcon from '../../../images/calendar.svg';
 import './style.scss';
 
 const dayLabelFormat = 'ddd MMM D';

@@ -21,7 +21,7 @@ import RoundFilter from '../../../components/Filter/round';
 import TeamFilter from '../../../components/Filter/team';
 import { getFromLS, saveToLS } from '../../../utils/localStorage';
 import NationalityFilter from '../../../components/Filter/nationality';
-import FilterIcon from '../../../public/images/filter.svg';
+import FilterIcon from '../../../images/filter.svg';
 import './style.scss';
 
 export default class StandingsPage extends React.Component {

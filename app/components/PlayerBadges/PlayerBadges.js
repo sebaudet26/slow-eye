@@ -12,11 +12,11 @@ import {
 } from '../../utils/calculations';
 
 // Images
-import RookieIcon from '../../public/images/pacifier.svg';
-import VeteranIcon from '../../public/images/veteran.svg';
-import InjuryIcon from '../../public/images/bandage.svg';
-import HotIcon from '../../public/images/fire.svg';
-import ColdIcon from '../../public/images/snowflake.svg';
+import RookieIcon from '../../images/pacifier.svg';
+import VeteranIcon from '../../images/veteran.svg';
+import InjuryIcon from '../../images/bandage.svg';
+import HotIcon from '../../images/fire.svg';
+import ColdIcon from '../../images/snowflake.svg';
 import './style.scss';
 
 const getIsHotText = logs => (`Hot Streak - ${getPointsInLastGames(logs)} pts in last ${hotColdGames} games`);

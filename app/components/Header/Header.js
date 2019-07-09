@@ -10,7 +10,7 @@ import SearchBar from '../SearchBar/SearchBar';
 import LeagueSwitch from '../LeagueSwitch/LeagueSwitch';
 import HeaderDropdown from '../HeaderDropdown/HeaderDropdown';
 import { saveToLS, getFromLS } from '../../utils/localStorage';
-import Logo from '../../public/images/Logo.js';
+import Logo from '../../images/Logo.js';
 
 import './style.scss';
 

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import ReactPlayer from 'react-player';
-import PlayIcon from '../../public/images/play-button.svg';
+import PlayIcon from '../../images/play-button.svg';
 import './style.scss';
 
 
