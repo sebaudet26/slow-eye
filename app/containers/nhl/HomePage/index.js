@@ -15,6 +15,25 @@ class HomePage extends React.Component {
     document.body.classList.remove('home');
   }
 
+  displayFeaturedPlayer() {
+    const data = this.props.data;
+    if (data.loading) {
+      //
+    } else {
+      return (
+        <div className="home-header" style={{ backgroundImage: `url("https://nhl.bamcontent.com/images/actionshots/${data.playerStreaks[0].id}@2x.jpg")` }}>
+          <div className="container">
+            <h1>The best place to view the NHL's latest scores and stats.</h1>
+            <div className="home-header-featured">
+              <div>This Week's Featured Player</div>
+              <a href="/player?id=8474565" className="home-header-featured-name">{data.playerStreaks[0].name}</a>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  }
+
   displayPlayerStreaks() {
     const data = this.props.data;
     if (data.loading) {
@@ -79,15 +98,7 @@ class HomePage extends React.Component {
   render() {
     return (
       <div className="home-page">
-        <div className="home-header" style={{ backgroundImage: 'url("https://nhl.bamcontent.com/images/actionshots/8474565@2x.jpg")' }}>
-          <div className="container">
-            <h1>The best place to view the NHL's latest scores and stats.</h1>
-            <div className="home-header-featured">
-              <div>This Week's Featured Player</div>
-              <a href="/player?id=8474565" className="home-header-featured-name">Alex Pietrangelo</a>
-            </div>
-          </div>
-        </div>
+        {this.displayFeaturedPlayer()}
         <div className="container">
           <Helmet>
             <title>Home - SealStats.com</title>
