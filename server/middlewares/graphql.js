@@ -1,7 +1,6 @@
 const express = require('express');
 const graphql = require('express-graphql');
 const schema = require('../graphql/schema');
-const features = require('../features');
 
 const app = express();
 

@@ -1,5 +1,4 @@
 /* global fetch */
-import { FETCH_HOT_PLAYERS } from './constants';
 import graphqlApi from '../../../utils/api';
 
 const makePlayersStreaksQuery = () => `
@@ -28,11 +27,10 @@ export const fetchPlayersStreaks = () => async (dispatch) => {
     const data = await graphqlApi(makePlayersStreaksQuery());
     console.log(data);
     return dispatch({
-      type: FETCH_HOT_PLAYERS,
+      type: 'FETCH_HOT_PLAYERS',
       payload: data,
     });
   } catch (e) {
-    // TODO: dispatch error to reducer
     return console.error(e.toString());
   }
 };

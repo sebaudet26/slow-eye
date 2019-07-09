@@ -1,5 +1,4 @@
 /* global fetch */
-import { FETCH_WILDCARD_STANDINGS } from './constants';
 import graphqlApi from '../../../utils/api';
 
 const wildCardStandingsQuery = `
@@ -58,7 +57,7 @@ export const fetchWildCardStandings = () => async (dispatch) => {
   try {
     const data = await graphqlApi(wildCardStandingsQuery);
     return dispatch({
-      type: FETCH_WILDCARD_STANDINGS,
+      type: 'FETCH_WILDCARD_STANDINGS',
       payload: data,
     });
   } catch (e) {

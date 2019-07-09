@@ -1,24 +1,39 @@
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { createStructuredSelector } from 'reselect';
-import injectReducer from '../../../utils/injectReducer';
-import { makeSelectTeamsStreaks } from './selectors';
-import { fetchTeamsStreaks } from './actions';
-import reducer from './reducer';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+import PowerRankingsTable from '../../../components/Table/PowerRankingsTable';
+import './style.scss';
 
-import PowerRankingsPage from './PowerRankingsPage';
+class PowerRankingsPage extends Component {
+  componentWillMount() {
+    const { fetchTeamsStreaks } = this.props;
+    fetchTeamsStreaks();
+  }
 
-const mapDispatchToProps = dispatch => ({
-  fetchTeamsStreaks: () => dispatch(fetchTeamsStreaks()),
-});
+  render() {
+    const { teamsStreaks } = this.props;
+    return (
+      <div className="powerRankings-page">
+        <Helmet>
+          <title>Power Rankings - SealStats.com</title>
+          <meta
+            name="description"
+            content="Power Rankings"
+          />
+        </Helmet>
+        <div className="page-header">
+          <div className="container">
+            <h2>
+            Hot Teams
+            </h2>
+          </div>
+        </div>
+        <div className="container">
+          <PowerRankingsTable teams={teamsStreaks} />
+        </div>
+      </div>
+    );
+  }
+}
 
-const mapStateToProps = createStructuredSelector({
-  teamsStreaks: makeSelectTeamsStreaks(),
-});
-
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
-
-const withReducer = injectReducer({ key: 'home', reducer });
-
-export default compose(withReducer, withConnect)(PowerRankingsPage);
-export { mapDispatchToProps };
+export default PowerRankingsPage;

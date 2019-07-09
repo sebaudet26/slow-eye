@@ -1,24 +1,37 @@
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { createStructuredSelector } from 'reselect';
-import injectReducer from '../../../utils/injectReducer';
-import { makeSelectTeamsStats } from './selectors';
-import { fetchAllTeams } from './actions';
-import reducer from './reducer';
-import TeamStatsPage from './TeamStatsPage';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
+import TeamsTable from '../../../components/Table/TeamsTable';
+import './style.scss';
 
-const mapDispatchToProps = dispatch => ({
-  fetchAllTeams: () => dispatch(fetchAllTeams()),
-});
+export default class TeamStatsPage extends React.Component {
+  componentDidMount() {
+    const { fetchAllTeams } = this.props;
+    fetchAllTeams();
+  }
 
-const mapStateToProps = createStructuredSelector({
-  teams: makeSelectTeamsStats(),
-});
+  render() {
+    const { teams } = this.props;
+    return (
+      <div className="teamStats-page">
+        <Helmet>
+          <title>Team Stats - SealStats.com</title>
+          <meta name="description" content="View NHL Team Stats. Seal Stats is the best place to view NHL stats. User-friendly and fast." />
+        </Helmet>
+        <div className="page-header">
+          <div className="container">
+            <h2>Team Stats</h2>
+          </div>
+        </div>
+        <div className="container">
+          <TeamsTable teams={teams} />
+        </div>
+      </div>
+    );
+  }
+}
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
-
-const withReducer = injectReducer({ key: 'home', reducer });
-
-export default compose(withReducer, withConnect)(TeamStatsPage);
-
-export { mapDispatchToProps };
+TeamStatsPage.propTypes = {
+  teams: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  fetchAllTeams: PropTypes.func.isRequired,
+};

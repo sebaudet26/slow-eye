@@ -127,7 +127,6 @@ class PlayersTable extends React.PureComponent {
       // All option is always first
       ...baseTeamOptions,
       // Teams are sorted alphabetically
-      // in the reducer when added to the store
       ...(teams || []).map(t => ({ value: t.abbreviation, label: t.name })),
     ];
 

@@ -1,5 +1,4 @@
 /* global fetch */
-import { FETCH_PLAYERS, FETCH_TEAMS, SET_LOADING } from './constants';
 import graphqlApi from '../../../utils/api';
 
 const makePlayersQuery = season => `
@@ -50,7 +49,7 @@ const makeTeamsQuery = season => `
 }`;
 
 export const setLoading = () => async dispatch => dispatch({
-  type: SET_LOADING,
+  type: 'SET_LOADING',
   payload: {
     loading: true,
   },
@@ -60,7 +59,7 @@ export const fetchAllPlayers = season => async (dispatch) => {
   try {
     const data = await graphqlApi(makePlayersQuery(season || '20182019'));
     return dispatch({
-      type: FETCH_PLAYERS,
+      type: 'FETCH_PLAYERS',
       payload: data.playersReport,
     });
   } catch (e) {
@@ -73,7 +72,7 @@ export const fetchAllTeams = season => async (dispatch) => {
   try {
     const data = await graphqlApi(makeTeamsQuery(season || '20182019'));
     return dispatch({
-      type: FETCH_TEAMS,
+      type: 'FETCH_TEAMS',
       payload: data.teams,
     });
   } catch (e) {

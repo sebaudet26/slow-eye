@@ -1,5 +1,4 @@
 /* global fetch */
-import { FETCH_PLAYER_BY_ID } from './constants';
 import graphqlApi from '../../../utils/api';
 
 const makePlayerQuery = id => `
@@ -156,7 +155,7 @@ export const fetchPlayer = id => async (dispatch) => {
   try {
     const data = await graphqlApi(makePlayerQuery(id));
     return dispatch({
-      type: FETCH_PLAYER_BY_ID,
+      type: 'FETCH_PLAYER_BY_ID',
       payload: data,
     });
   } catch (e) {

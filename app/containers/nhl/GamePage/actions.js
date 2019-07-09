@@ -1,5 +1,4 @@
 /* global fetch */
-import { FETCH_GAME_BOXSCORE } from './constants';
 import graphqlApi from '../../../utils/api';
 
 const makeGameBoxscoreQuery = id => `

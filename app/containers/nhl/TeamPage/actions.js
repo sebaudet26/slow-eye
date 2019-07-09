@@ -149,7 +149,7 @@ export const fetchTeamRosterDetails = (id, roster) => async (dispatch) => {
   try {
     const filledRoster = await Promise.all(roster.map(p => graphqlApi(makePlayerQuery(p.id), `player-${p.id}`)));
     return dispatch({
-      type: FETCH_TEAM_ROSTER,
+      type: 'FETCH_TEAM_ROSTER',
       payload: {
         id,
         roster: filledRoster,
@@ -165,7 +165,7 @@ export const fetchTeamById = id => async (dispatch) => {
   try {
     const data = await graphqlApi(makeTeamQuery(id));
     return dispatch({
-      type: FETCH_TEAM,
+      type: 'FETCH_TEAM',
       payload: data,
     });
   } catch (e) {

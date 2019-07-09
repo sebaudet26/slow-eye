@@ -4,8 +4,7 @@ import './style.scss';
 import {
   filter, map, pipe, prop, take, mapObjIndexed, values,
 } from 'ramda';
-import { push } from 'react-router-redux';
-import SearchIcon from '../../images/search.svg';
+import SearchIcon from '../../public/images/search.svg';
 import PlayerIcon from '../PlayerIcon';
 import graphqlApi from '../../utils/api';
 import { smallLogoForTeamName } from '../../utils/team';

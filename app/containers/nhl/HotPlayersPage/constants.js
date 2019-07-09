@@ -1,1 +1,0 @@
-export const FETCH_HOT_PLAYERS = 'FETCH_HOT_PLAYERS';

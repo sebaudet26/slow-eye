@@ -1,27 +1,43 @@
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { createStructuredSelector } from 'reselect';
-import injectReducer from '../../../utils/injectReducer';
-import { makeSelectPlayers, makeSelectTeams, makeSelectLoading } from './selectors';
-import { fetchAllPlayers, fetchAllTeams, setLoading } from './actions';
-import reducer from './reducer';
-import PlayerStatsPage from './PlayerStatsPage';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
+import PlayersTable from '../../../components/Table/PlayersTable';
+import './style.scss';
 
-const mapDispatchToProps = dispatch => ({
-  fetchPlayers: season => dispatch(fetchAllPlayers(season)),
-  fetchTeams: season => dispatch(fetchAllTeams(season)),
-  setLoading: () => dispatch(setLoading()),
-});
+class PlayerStatsPage extends React.PureComponent {
+  render() {
+    const {
+      players, fetchPlayers, fetchTeams, teams, setLoading, loading,
+    } = this.props;
+    return (
+      <div className="playerStats-page">
+        <Helmet>
+          <title>Player Stats - SealStats.com</title>
+          <meta name="description" content="View NHL Players Stats. Leaderboards. Historical Stats. It's all here. Seal Stats is the best place to view NHL stats. User-friendly and fast." />
+        </Helmet>
+        <div className="page-header wFilters">
+          <div className="container">
+            <h2>Player Stats</h2>
+          </div>
+        </div>
+        <PlayersTable
+          players={players}
+          fetchPlayers={fetchPlayers}
+          fetchTeams={fetchTeams}
+          teams={teams}
+          setLoading={setLoading}
+          loading={loading}
+        />
 
-const mapStateToProps = createStructuredSelector({
-  players: makeSelectPlayers(),
-  teams: makeSelectTeams(),
-  loading: makeSelectLoading(),
-});
+      </div>
+    );
+  }
+}
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+PlayerStatsPage.propTypes = {
+  players: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  fetchPlayers: PropTypes.func.isRequired,
+  fetchTeams: PropTypes.func.isRequired,
+};
 
-const withReducer = injectReducer({ key: 'home', reducer });
-
-export default compose(withReducer, withConnect)(PlayerStatsPage);
-export { mapDispatchToProps };
+export default PlayerStatsPage;

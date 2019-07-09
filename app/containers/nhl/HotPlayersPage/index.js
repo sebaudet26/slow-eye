@@ -1,26 +1,39 @@
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { createStructuredSelector } from 'reselect';
-import injectReducer from '../../../utils/injectReducer';
-import { makeSelectHotPlayers } from './selectors';
-import { makeSelectFeatures } from '../../App/selectors';
-import { fetchPlayersStreaks } from './actions';
-import reducer from './reducer';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+import HotTable from '../../../components/Table/HotTable';
+import './style.scss';
 
-import HotPlayers from './HotPlayers';
+class HotPlayersPage extends Component {
+  componentWillMount() {
+    const { fetchHotPlayers } = this.props;
+    fetchHotPlayers();
+  }
 
-const mapDispatchToProps = dispatch => ({
-  fetchHotPlayers: () => dispatch(fetchPlayersStreaks()),
-});
+  render() {
+    const { hotPlayers } = this.props;
+    return (
+      <div className="hotPlayers-page">
+        <Helmet>
+          <title>Who's hot? - SealStats.com</title>
+          <meta
+            name="description"
+            content="Who's hot in the NHL right now?"
+          />
+        </Helmet>
+        <div className="page-header">
+          <div className="container">
+            <h2>
+              Test
+            </h2>
+          </div>
+        </div>
+        <div className="container">
+          <HotTable players={hotPlayers} />
+        </div>
+      </div>
+    );
+  }
+}
 
-const mapStateToProps = createStructuredSelector({
-  features: makeSelectFeatures(),
-  hotPlayers: makeSelectHotPlayers(),
-});
-
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
-
-const withReducer = injectReducer({ key: 'home', reducer });
-
-export default compose(withReducer, withConnect)(HotPlayers);
-export { mapDispatchToProps };
+export default HotPlayersPage;

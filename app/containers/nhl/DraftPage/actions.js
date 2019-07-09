@@ -1,5 +1,4 @@
 /* global fetch */
-import { FETCH_DRAFT, SET_LOADING } from './constants';
 import graphqlApi from '../../../utils/api';
 
 const makeDraftQuery = year => `
@@ -48,14 +47,13 @@ export const fetchDraftForYear = year => async (dispatch) => {
   try {
     const data = await graphqlApi(makeDraftQuery(year));
     return dispatch({
-      type: FETCH_DRAFT,
+      type: 'FETCH_DRAFT',
       payload: {
         year,
         data: data.draft,
       },
     });
   } catch (e) {
-    // TODO: dispatch error to reducer
     return console.error(e.toString());
   }
 };

@@ -1,29 +1,22 @@
-// Needed for redux-saga es6 generator support
 import 'babel-polyfill';
 
 // Import all the third party stuff
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
-import FontFaceObserver from 'fontfaceobserver';
-import createHistory from 'history/createBrowserHistory';
+import ApolloClient from 'apollo-boost';
+import { ApolloProvider } from 'react-apollo';
+import { Helmet } from 'react-helmet';
 import 'sanitize.css/sanitize.css';
-
-// Import root app
-import App from './containers/App';
 
 // Load the favicon
 /* eslint-disable import/no-webpack-loader-syntax */
-import '!file-loader?name=[name].[ext]!./images/favicon.ico';
+import '!file-loader?name=[name].[ext]!./public/images/favicon.ico';
 /* eslint-enable import/no-webpack-loader-syntax */
 
 // Import CSS reset and Global Styles
-import 'styles/global.scss';
+import './public/styles/global.scss';
 
-import configureStore from './configureStore';
-
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
 
 
 import Header from './components/Header';
@@ -52,26 +45,30 @@ import MLBStandingsPage from './containers/mlb/StandingsPage/Loadable';
 import MLBPlayerStatsPage from './containers/mlb/PlayerStatsPage/Loadable';
 import MLBPlayerPage from './containers/mlb/PlayerPage/Loadable';
 
+// apollo client setup
+const client = new ApolloClient({
+  uri: 'http://localhost:3000/graphql',
+});
 
-// Create redux store with history
-const initialState = {};
-const history = createHistory();
-const store = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
 
 const render = () => {
   ReactDOM.render(
-    <Provider store={store}>
-      {/* <LanguageProvider messages={messages}> */}
-      <ConnectedRouter history={history}>
+    <ApolloProvider client={client}>
+      <BrowserRouter>
         <div>
+          <Helmet
+            defaultTitle="SealStats.com"
+          >
+            <meta name="description" content="Seal Stats - Hockey Stats" />
+          </Helmet>
           <Header />
-          <App />
+
           <Switch>
             <Route exact path="/" component={HomePage} />
             <Route path="/test" component={TestPage} />
 
-            // NHL Routes
+              // NHL Routes
             <Route path="/standings" component={StandingsPage} />
             <Route path="/playerstats" component={PlayerStatsPage} />
             <Route path="/player" component={PlayerPage} />
@@ -83,7 +80,7 @@ const render = () => {
             <Route path="/powerrankings" component={PowerRankingsPage} />
             <Route path="/hotplayers" component={HotPlayersPage} />
 
-            // MLB Routes
+              // MLB Routes
             <Route path="/mlb/standings" component={MLBStandingsPage} />
             <Route path="/mlb/playerstats" component={MLBPlayerStatsPage} />
             <Route path="/mlb/player" component={MLBPlayerPage} />
@@ -92,21 +89,10 @@ const render = () => {
           </Switch>
           <Footer />
         </div>
-      </ConnectedRouter>
-      {/* </LanguageProvider> */}
-    </Provider>,
+      </BrowserRouter>
+    </ApolloProvider>,
     MOUNT_NODE,
   );
 };
-
-if (module.hot) {
-  // Hot reloadable React components and translation json files
-  // modules.hot.accept does not accept dynamic dependencies,
-  // have to be constants at compile-time
-  module.hot.accept(['containers/App'], () => {
-    ReactDOM.unmountComponentAtNode(MOUNT_NODE);
-    render();
-  });
-}
 
 render();

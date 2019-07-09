@@ -1,6 +1,5 @@
 import moment from 'moment';
 import graphqlApi from '../../../utils/api';
-import { FETCH_GAMES } from './constants';
 
 const makeScoresQuery = date => `
 {
@@ -73,7 +72,7 @@ export const fetchGames = date => async (dispatch) => {
     console.log('properlyFormattedDate', properlyFormattedDate);
     const data = await graphqlApi(makeScoresQuery(properlyFormattedDate));
     return dispatch({
-      type: FETCH_GAMES,
+      type: 'FETCH_GAMES',
       payload: {
         date,
         games: data.games,
