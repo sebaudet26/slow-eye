@@ -57,7 +57,7 @@ class HomePage extends React.Component {
             </div>
             <div className="card-content-team">
               <svg>
-                <use xlinkHref="/public/images/teams/season/20182019.svg#team-24-20182019-light" />
+                <use xlinkHref={`/images/teams/season/20182019.svg#team-${team.id}-20182019-light`} />
               </svg>
               <span>{team.teamName}</span>
             </div>
