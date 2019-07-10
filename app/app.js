@@ -35,9 +35,6 @@ import TeamPage from './containers/nhl/TeamPage/Loadable';
 import TeamStatsPage from './containers/nhl/TeamStatsPage/Loadable';
 import ScorePage from './containers/nhl/ScorePage/Loadable';
 import GamePage from './containers/nhl/GamePage/Loadable';
-import HotPlayersPage from './containers/nhl/HotPlayersPage/Loadable';
-import PowerRankingsPage from './containers/nhl/PowerRankingsPage/Loadable';
-import DraftPage from './containers/nhl/DraftPage/Loadable';
 
 // MLB containers
 
@@ -76,9 +73,6 @@ const render = () => {
             <Route path="/teamstats" component={TeamStatsPage} />
             <Route path="/scores" component={ScorePage} />
             <Route path="/game" component={GamePage} />
-            <Route path="/drafts" component={DraftPage} />
-            <Route path="/powerrankings" component={PowerRankingsPage} />
-            <Route path="/hotplayers" component={HotPlayersPage} />
 
               // MLB Routes
             <Route path="/mlb/standings" component={MLBStandingsPage} />

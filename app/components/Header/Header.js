@@ -49,21 +49,6 @@ class Header extends React.Component {
       },
     ];
 
-    const moreDropdown = [
-      {
-        name: 'Power Rankings',
-        link: '/powerrankings',
-      },
-      {
-        name: 'Hot Players',
-        link: '/hotplayers',
-      },
-      {
-        name: 'NHL Entry Draft',
-        link: '/drafts',
-      },
-    ];
-
     const NHLHomeLink = '/';
     const MLBHomeLink = '/mlb/standings';
 

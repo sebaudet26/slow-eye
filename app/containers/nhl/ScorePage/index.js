@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import { propEq, findIndex, flatten } from 'ramda';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
+import { fetchGames, makeScoresQuery } from './actions.js';
 import DateSlider from '../../../components/DateSlider';
 import ScoreCard from '../../../components/ScoreCard';
 import 'react-datepicker/dist/react-datepicker.css';

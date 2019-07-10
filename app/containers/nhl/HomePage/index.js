@@ -111,14 +111,12 @@ class HomePage extends React.Component {
             <div className="home-page-col">
               <h3>
                 {' Hot Players'}
-                <a href="/hotplayers">View Full List</a>
               </h3>
               { this.displayPlayerStreaks() }
             </div>
             <div className="home-page-col">
               <h3>
                 {' Hot Teams'}
-                <a href="/powerrankings">View Full List</a>
               </h3>
               <div className="power-container">
                 { this.displayTeamStreaks() }
