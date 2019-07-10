@@ -28,8 +28,6 @@ class StandingsPage extends React.Component {
               if (loading) return (<LoadingIndicator />);
               if (error) return (<div>Error</div>);
 
-              console.log(data);
-
               const standings = data.standings;
 
               return (
