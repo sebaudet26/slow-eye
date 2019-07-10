@@ -1,7 +1,6 @@
-/* global fetch */
-import graphqlApi from '../../../utils/api';
+import { gql } from 'apollo-boost';
 
-const allTeams = `
+const getTeamsQuery = gql`
 {
   teams {
     id
@@ -46,19 +45,8 @@ const allTeams = `
       }
     }
   }
-}
-`;
+}`;
 
-export const fetchAllTeams = () => async (dispatch) => {
-  try {
-    const data = await graphqlApi(allTeams);
-    return dispatch({
-      type: 'FETCH_TEAMS_STATS',
-      payload: data,
-    });
-  } catch (e) {
-    return console.error(e.toString());
-  }
+export {
+  getTeamsQuery,
 };
-
-export default null;

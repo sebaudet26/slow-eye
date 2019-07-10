@@ -93,7 +93,6 @@ class Header extends React.Component {
                 Standings
                 </NavLink>
                 <HeaderDropdown name="Stats" list={statsDropdown} />
-                <HeaderDropdown name="More" list={moreDropdown} />
               </div>
             ) : (
               <div className="header-nav">

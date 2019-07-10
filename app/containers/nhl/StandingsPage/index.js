@@ -34,7 +34,6 @@ class StandingsPage extends React.Component {
 
               return (
                 <StandingsTable standings={standings} />
-
               );
             }}
           </Query>

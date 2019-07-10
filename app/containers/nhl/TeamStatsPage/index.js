@@ -1,15 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
+import { Query } from 'react-apollo';
+import { getTeamsQuery } from './query.js';
 import TeamsTable from '../../../components/Table/TeamsTable';
+import LoadingIndicator from '../../../components/LoadingIndicator';
 import './style.scss';
 
-export default class TeamStatsPage extends React.Component {
-  componentDidMount() {
-    const { fetchAllTeams } = this.props;
-    fetchAllTeams();
-  }
-
+class TeamStatsPage extends React.Component {
   render() {
     const { teams } = this.props;
     return (
@@ -24,14 +21,24 @@ export default class TeamStatsPage extends React.Component {
           </div>
         </div>
         <div className="container">
-          <TeamsTable teams={teams} />
+          <Query query={getTeamsQuery}>
+            {({ loading, error, data }) => {
+              if (loading) return (<LoadingIndicator />);
+              if (error) return (<div>Error</div>);
+
+              const teams = data.teams;
+
+              return (
+                <TeamsTable teams={teams} />
+              );
+            }}
+
+          </Query>
+
         </div>
       </div>
     );
   }
 }
 
-TeamStatsPage.propTypes = {
-  teams: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  fetchAllTeams: PropTypes.func.isRequired,
-};
+export default TeamStatsPage;
