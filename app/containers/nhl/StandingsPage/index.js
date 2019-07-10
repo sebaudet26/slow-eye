@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import { getStandingsQuery } from './query.js';
@@ -34,8 +33,6 @@ class StandingsPage extends React.Component {
               const standings = data.standings;
 
               return (
-
-
                 <StandingsTable standings={standings} />
 
               );
