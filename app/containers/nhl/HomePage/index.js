@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { take } from 'ramda';
-import { graphql, compose } from 'react-apollo';
-import { getStreaksQuery } from './queries.js';
+import { graphql } from 'react-apollo';
+import { getStreaksQuery } from './query.js';
 import './style.scss';
 
 class HomePage extends React.Component {

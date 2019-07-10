@@ -1,7 +1,6 @@
-/* global fetch */
-import graphqlApi from '../../../utils/api';
+import { gql } from 'apollo-boost';
 
-const wildCardStandingsQuery = `
+const getStandingsQuery = gql`
 {
   standings {
     type
@@ -53,17 +52,4 @@ const wildCardStandingsQuery = `
 }
 `;
 
-export const fetchWildCardStandings = () => async (dispatch) => {
-  try {
-    const data = await graphqlApi(wildCardStandingsQuery);
-    return dispatch({
-      type: 'FETCH_WILDCARD_STANDINGS',
-      payload: data,
-    });
-  } catch (e) {
-    // TODO: dispatch error to reducer
-    return console.error(e.toString());
-  }
-};
-
-export default null;
+export { getStandingsQuery };

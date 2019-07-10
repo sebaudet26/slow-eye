@@ -1,18 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
+import { Query } from 'react-apollo';
+import { getStandingsQuery } from './query.js';
+import LoadingIndicator from '../../../components/LoadingIndicator';
 import StandingsTable from '../../../components/Table/StandingsTable';
 import './style.scss';
 
-export default class StandingsPage extends React.Component {
-  componentDidMount() {
-    const { fetchStandings } = this.props;
-    fetchStandings();
-  }
-
-
+class StandingsPage extends React.Component {
   render() {
-    const { standings } = this.props;
     return (
       <div className="standings-page">
         <div className="page-header">
@@ -28,15 +24,27 @@ export default class StandingsPage extends React.Component {
               content="View NHL Standings. Seal Stats is the best place to view NHL stats. User-friendly and fast."
             />
           </Helmet>
+          <Query query={getStandingsQuery}>
+            {({ loading, error, data }) => {
+              if (loading) return (<LoadingIndicator />);
+              if (error) return (<div>Error</div>);
 
-          <StandingsTable standings={standings} />
+              console.log(data);
+
+              const standings = data.standings;
+
+              return (
+
+
+                <StandingsTable standings={standings} />
+
+              );
+            }}
+          </Query>
         </div>
       </div>
     );
   }
 }
 
-StandingsPage.propTypes = {
-  standings: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  fetchStandings: PropTypes.func.isRequired,
-};
+export default StandingsPage;
