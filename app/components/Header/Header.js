@@ -81,6 +81,9 @@ class Header extends React.Component {
               </div>
             ) : (
               <div className="header-nav">
+                <NavLink activeClassName="active" className="header-nav-item" exact to="/mlb/scores">
+                  Scores
+                </NavLink>
                 <NavLink activeClassName="active" className="header-nav-item" exact to="/mlb/standings">
                   Standings
                 </NavLink>

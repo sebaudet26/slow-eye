@@ -41,6 +41,7 @@ import GamePage from './containers/nhl/GamePage/Loadable';
 import MLBStandingsPage from './containers/mlb/StandingsPage/Loadable';
 import MLBPlayerStatsPage from './containers/mlb/PlayerStatsPage/Loadable';
 import MLBPlayerPage from './containers/mlb/PlayerPage/Loadable';
+import MLBScorePage from './containers/mlb/ScorePage';
 
 // apollo client setup
 const client = new ApolloClient({
@@ -78,6 +79,7 @@ const render = () => {
             <Route path="/mlb/standings" component={MLBStandingsPage} />
             <Route path="/mlb/playerstats" component={MLBPlayerStatsPage} />
             <Route path="/mlb/player" component={MLBPlayerPage} />
+            <Route path="/mlb/scores" component={MLBScorePage} />
 
             <Route path="" component={NotFoundPage} />
           </Switch>
