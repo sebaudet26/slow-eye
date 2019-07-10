@@ -47,7 +47,7 @@ import MLBPlayerPage from './containers/mlb/PlayerPage/Loadable';
 
 // apollo client setup
 const client = new ApolloClient({
-  uri: 'http://localhost:3000/graphql',
+  uri: '/graphql',
 });
 
 const MOUNT_NODE = document.getElementById('app');
