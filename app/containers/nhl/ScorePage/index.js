@@ -1,18 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { propEq, findIndex, flatten } from 'ramda';
 import moment from 'moment';
+import { Query } from 'react-apollo';
 import DatePicker from 'react-datepicker';
-import { fetchGames, makeScoresQuery } from './actions.js';
+import { getScoresQuery } from './query.js';
 import DateSlider from '../../../components/DateSlider';
 import ScoreCard from '../../../components/ScoreCard';
+import LoadingIndicator from '../../../components/LoadingIndicator';
 import 'react-datepicker/dist/react-datepicker.css';
 import CalendarIcon from '../../../images/calendar.svg';
 import './style.scss';
 
 const dayLabelFormat = 'ddd MMM D';
-const storeKeyFormat = 'YYYYMMDD';
+const storeKeyFormat = 'YYYY-MM-DD';
 const extendDayHours = 12;
 
 const buildPaddedDateRange = (middleMoment) => {
@@ -72,7 +73,8 @@ export default class ScorePage extends React.Component {
     super(props);
     const days = buildPaddedDateRange(moment().subtract(12, 'hours'));
     this.state = {
-      currentDate: days[Math.round(days.length / 2)].format(storeKeyFormat),
+      // currentDate: days[Math.round(days.length / 2)].format(storeKeyFormat),
+      currentDate: '2019-01-05',
       daysOptions: convertToOptions(days),
     };
     this.handleNewDateSelected = this.handleNewDateSelected.bind(this);
@@ -80,7 +82,6 @@ export default class ScorePage extends React.Component {
   }
 
   handleNewCalendarDate(newDate) {
-    const { fetchGames, games } = this.props;
     this.setState({
       daysOptions: convertToOptions(
         buildPaddedDateRange(moment(newDate)),
@@ -90,18 +91,7 @@ export default class ScorePage extends React.Component {
     this.handleNewDateSelected(newDateNumber);
   }
 
-  componentWillMount() {
-    const { fetchGames } = this.props;
-    const middleIndex = 365;
-    fetchGames(this.state.daysOptions[middleIndex].value);
-    for (let i = 1; i < 3; i++) {
-      fetchGames(this.state.daysOptions[middleIndex + i].value);
-      fetchGames(this.state.daysOptions[middleIndex - i].value);
-    }
-  }
-
   handleNewDateSelected(newDate) {
-    const { games, fetchGames } = this.props;
     const gamesAccessor = diff => Number(moment(newDate, storeKeyFormat).add(diff, 'days').format(storeKeyFormat));
     const dayDifferentials = [
       0, -1, 1, -2, 2, -3, 3,
@@ -115,10 +105,9 @@ export default class ScorePage extends React.Component {
   }
 
   render() {
-    const { games } = this.props;
     const { currentDate, daysOptions } = this.state;
     const gamesAccessor = Number(currentDate);
-    console.log('games', games);
+    console.log(currentDate);
     return (
       <div className="score-page">
         <div className="page-header">
@@ -141,12 +130,24 @@ export default class ScorePage extends React.Component {
                 </label>
               </div>
             </div>
-            <DateSlider
-              daysOptions={daysOptions}
-              handleNewDateSelected={index => this.handleNewDateSelected(daysOptions[index].value)}
-              games={games}
-              slickCurrentSlide={findIndex(propEq('value', currentDate))(daysOptions)}
-            />
+            <Query query={getScoresQuery} variables={{ date: currentDate }}>
+              {({ loading, error, data }) => {
+                if (loading) return (<LoadingIndicator />);
+                if (error) return (<div>Error</div>);
+
+                const games = data.games;
+                console.log(games);
+
+                return (
+                  <DateSlider
+                    daysOptions={daysOptions}
+                    handleNewDateSelected={index => this.handleNewDateSelected(daysOptions[index].value)}
+                    games={games}
+                    slickCurrentSlide={findIndex(propEq('value', currentDate))(daysOptions)}
+                  />
+                );
+              }}
+            </Query>
           </div>
         </div>
         <div className="container">
@@ -158,48 +159,54 @@ export default class ScorePage extends React.Component {
             />
           </Helmet>
 
+          <Query query={getScoresQuery} variables={{ date: currentDate }}>
+            {({ loading, error, data }) => {
+              if (loading) return (<LoadingIndicator />);
+              if (error) return (<div>Error</div>);
 
-          <div className="scoreboard-wrapper">
-            {
-            renderGames({
-              validGameStates: [
-                'In Progress - Critical',
-                'In Progress',
-                'Pre-Game',
-              ],
-              labelAs: 'In Progress',
-              games,
-              gamesAccessor,
-            })
-          }
-            {
-            renderGames({
-              validGameStates: [
-                'Final',
-              ],
-              labelAs: 'Final',
-              games,
-              gamesAccessor,
-            })
-          }
-            {
-            renderGames({
-              validGameStates: [
-                'Scheduled',
-              ],
-              labelAs: 'Scheduled',
-              games,
-              gamesAccessor,
-            })
-          }
-          </div>
+              const games = data.games;
+
+              return (
+                <div className="scoreboard-wrapper">
+                  {
+                    renderGames({
+                      validGameStates: [
+                        'In Progress - Critical',
+                        'In Progress',
+                        'Pre-Game',
+                      ],
+                      labelAs: 'In Progress',
+                      games,
+                      gamesAccessor,
+                    })
+                  }
+                  {
+                    renderGames({
+                      validGameStates: [
+                        'Final',
+                      ],
+                      labelAs: 'Final',
+                      games,
+                      gamesAccessor,
+                    })
+                  }
+                  {
+                    renderGames({
+                      validGameStates: [
+                        'Scheduled',
+                      ],
+                      labelAs: 'Scheduled',
+                      games,
+                      gamesAccessor,
+                    })
+                  }
+                </div>
+              );
+            }}
+
+          </Query>
         </div>
       </div>
     );
   }
 }
-
-ScorePage.propTypes = {
-  games: PropTypes.shape({}).isRequired,
-  fetchGames: PropTypes.func.isRequired,
-};

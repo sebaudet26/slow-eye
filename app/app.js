@@ -27,13 +27,13 @@ import TestPage from './containers/Test/Loadable';
 
 
 // NHL Containers
-import HomePage from './containers/nhl/HomePage/Loadable';
-import PlayerStatsPage from './containers/nhl/PlayerStatsPage/Loadable';
-import StandingsPage from './containers/nhl/StandingsPage/Loadable';
+import HomePage from './containers/nhl/HomePage';
+import PlayerStatsPage from './containers/nhl/PlayerStatsPage';
+import StandingsPage from './containers/nhl/StandingsPage';
 import PlayerPage from './containers/nhl/PlayerPage/Loadable';
 import TeamPage from './containers/nhl/TeamPage/Loadable';
-import TeamStatsPage from './containers/nhl/TeamStatsPage/Loadable';
-import ScorePage from './containers/nhl/ScorePage/Loadable';
+import TeamStatsPage from './containers/nhl/TeamStatsPage';
+import ScorePage from './containers/nhl/ScorePage';
 import GamePage from './containers/nhl/GamePage/Loadable';
 
 // MLB containers
