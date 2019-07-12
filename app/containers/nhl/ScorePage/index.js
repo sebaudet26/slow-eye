@@ -40,34 +40,6 @@ const extractGamesByType = (games, type) => {
   return games.filter(g => g.status.detailedState === type);
 };
 
-const renderGamesSection = (games, label) => (
-  <div className="scoreboard-section">
-    {
-      <div>
-        <div className="scoreboard-section-name">{label}</div>
-        <div className="scoreboard-section-results">
-          {
-          games.map(game => (
-            <ScoreCard key={Math.random()} game={game} />
-          ))
-        }
-        </div>
-      </div>
-    }
-  </div>
-);
-
-const renderGames = ({
-  validGameStates, games, gamesAccessor, labelAs,
-}) => {
-  const gamesAccessed = games[gamesAccessor];
-  const gamesToShow = flatten(validGameStates.map(state => extractGamesByType(gamesAccessed, state)));
-  if (!gamesToShow || !gamesToShow.length) {
-    return null;
-  }
-  return renderGamesSection(gamesToShow, labelAs);
-};
-
 export default class ScorePage extends React.Component {
   constructor(props) {
     super(props);
@@ -102,6 +74,17 @@ export default class ScorePage extends React.Component {
       }
     }
     this.setState({ currentDate: newDate });
+  }
+
+  displayGames() {
+    const data = this.props.data;
+    if (data.loading) {
+      // Skeleton Loader
+    } else {
+      return data.games.map(games => (
+        <div className="test">{game.id}</div>
+      ));
+    }
   }
 
   render() {
@@ -158,53 +141,22 @@ export default class ScorePage extends React.Component {
               content="View Live NHL Scores. Seal Stats is the best place to view NHL stats. User-friendly and fast."
             />
           </Helmet>
+          <div className="scoreboard-wrapper">
+            <div className="scoreboard-wrapper-results">
+              <Query query={getScoresQuery} variables={{ date: currentDate }}>
+                {({ loading, error, data }) => {
+                  if (loading) return (<LoadingIndicator />);
+                  if (error) return (<div>Error</div>);
 
-          <Query query={getScoresQuery} variables={{ date: currentDate }}>
-            {({ loading, error, data }) => {
-              if (loading) return (<LoadingIndicator />);
-              if (error) return (<div>Error</div>);
+                  const games = data.games;
 
-              const games = data.games;
-
-              return (
-                <div className="scoreboard-wrapper">
-                  {
-                    renderGames({
-                      validGameStates: [
-                        'In Progress - Critical',
-                        'In Progress',
-                        'Pre-Game',
-                      ],
-                      labelAs: 'In Progress',
-                      games,
-                      gamesAccessor,
-                    })
-                  }
-                  {
-                    renderGames({
-                      validGameStates: [
-                        'Final',
-                      ],
-                      labelAs: 'Final',
-                      games,
-                      gamesAccessor,
-                    })
-                  }
-                  {
-                    renderGames({
-                      validGameStates: [
-                        'Scheduled',
-                      ],
-                      labelAs: 'Scheduled',
-                      games,
-                      gamesAccessor,
-                    })
-                  }
-                </div>
-              );
-            }}
-
-          </Query>
+                  return games.map(game => (
+                    <ScoreCard key={game.id} game={game} />
+                  ));
+                }}
+              </Query>
+            </div>
+          </div>
         </div>
       </div>
     );
