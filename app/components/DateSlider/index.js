@@ -64,7 +64,8 @@ class DateSlider extends React.Component {
 
   render() {
     const { daysOptions, handleNewDateSelected, games } = this.props;
-
+    console.log(daysOptions);
+    console.log(games);
     const settings = {
       dots: false,
       swipeToSlide: true,

@@ -4,6 +4,7 @@ import { propEq, findIndex, flatten } from 'ramda';
 import moment from 'moment';
 import { Query } from 'react-apollo';
 import DatePicker from 'react-datepicker';
+import { graphql } from 'react-apollo';
 import { getScoresQuery } from './query.js';
 import DateSlider from '../../../components/DateSlider';
 import ScoreCard from '../../../components/ScoreCard';
@@ -33,24 +34,17 @@ const convertToOptions = moments => moments.map(moment => ({
   label: moment.format(dayLabelFormat),
 }));
 
-const extractGamesByType = (games, type) => {
-  if (!games || !games.length) {
-    return [];
-  }
-  return games.filter(g => g.status.detailedState === type);
-};
-
-export default class ScorePage extends React.Component {
+class ScorePage extends React.Component {
   constructor(props) {
     super(props);
     const days = buildPaddedDateRange(moment().subtract(12, 'hours'));
     this.state = {
-      // currentDate: days[Math.round(days.length / 2)].format(storeKeyFormat),
-      currentDate: '2019-01-05',
+      currentDate: days[Math.round(days.length / 2)].format(storeKeyFormat),
       daysOptions: convertToOptions(days),
     };
     this.handleNewDateSelected = this.handleNewDateSelected.bind(this);
     this.handleNewCalendarDate = this.handleNewCalendarDate.bind(this);
+    this.displayDateSlider = this.displayDateSlider.bind(this);
   }
 
   handleNewCalendarDate(newDate) {
@@ -64,32 +58,29 @@ export default class ScorePage extends React.Component {
   }
 
   handleNewDateSelected(newDate) {
-    const gamesAccessor = diff => Number(moment(newDate, storeKeyFormat).add(diff, 'days').format(storeKeyFormat));
-    const dayDifferentials = [
-      0, -1, 1, -2, 2, -3, 3,
-    ];
-    for (const diff of dayDifferentials) {
-      if (!games[gamesAccessor(diff)]) {
-        fetchGames(gamesAccessor(diff));
-      }
-    }
+    console.log(newDate);
     this.setState({ currentDate: newDate });
   }
 
-  displayGames() {
+  displayDateSlider() {
     const data = this.props.data;
     if (data.loading) {
       // Skeleton Loader
     } else {
-      return data.games.map(games => (
-        <div className="test">{game.id}</div>
-      ));
+      const games = this.props.data.games;
+      return (
+        <DateSlider
+          daysOptions={this.state.daysOptions}
+          handleNewDateSelected={index => this.handleNewDateSelected(this.state.daysOptions[index].value)}
+          games={games}
+          slickCurrentSlide={findIndex(propEq('value', this.state.currentDate))(this.state.daysOptions)}
+        />
+      );
     }
   }
 
   render() {
     const { currentDate, daysOptions } = this.state;
-    const gamesAccessor = Number(currentDate);
     console.log(currentDate);
     return (
       <div className="score-page">
@@ -110,27 +101,11 @@ export default class ScorePage extends React.Component {
                     todayButton="Today"
                     onChange={this.handleNewCalendarDate}
                   />
+
                 </label>
               </div>
             </div>
-            <Query query={getScoresQuery} variables={{ date: currentDate }}>
-              {({ loading, error, data }) => {
-                if (loading) return (<LoadingIndicator />);
-                if (error) return (<div>Error</div>);
-
-                const games = data.games;
-                console.log(games);
-
-                return (
-                  <DateSlider
-                    daysOptions={daysOptions}
-                    handleNewDateSelected={index => this.handleNewDateSelected(daysOptions[index].value)}
-                    games={games}
-                    slickCurrentSlide={findIndex(propEq('value', currentDate))(daysOptions)}
-                  />
-                );
-              }}
-            </Query>
+            {this.displayDateSlider()}
           </div>
         </div>
         <div className="container">
@@ -145,11 +120,16 @@ export default class ScorePage extends React.Component {
             <div className="scoreboard-wrapper-results">
               <Query query={getScoresQuery} variables={{ date: currentDate }}>
                 {({ loading, error, data }) => {
+                  const games = data.games;
+
                   if (loading) return (<LoadingIndicator />);
                   if (error) return (<div>Error</div>);
 
-                  const games = data.games;
-
+                  if (games.length < 1) {
+                    return (
+                      <div>No games on this date</div>
+                    );
+                  }
                   return games.map(game => (
                     <ScoreCard key={game.id} game={game} />
                   ));
@@ -162,3 +142,5 @@ export default class ScorePage extends React.Component {
     );
   }
 }
+
+export default graphql(getScoresQuery)(ScorePage);
