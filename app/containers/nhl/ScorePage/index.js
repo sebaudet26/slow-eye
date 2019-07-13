@@ -17,6 +17,8 @@ const dayLabelFormat = 'ddd MMM D';
 const storeKeyFormat = 'YYYY-MM-DD';
 const extendDayHours = 12;
 
+// Figure Out how to combine PaddedDateRange and GamesAccessor
+
 const buildPaddedDateRange = (middleMoment) => {
   const options = [];
   for (let i = 365; i > 0; i--) {
@@ -29,6 +31,10 @@ const buildPaddedDateRange = (middleMoment) => {
   return options;
 };
 
+// Combine these two functions and add argument to determine if add or subtract
+const buildPrevAccessor = (date, i) => moment(date).subtract(i, 'days').format(storeKeyFormat);
+const buildNextAccessor = (date, i) => moment(date).add(i, 'days').format(storeKeyFormat);
+
 const convertToOptions = moments => moments.map(moment => ({
   value: moment.format(storeKeyFormat),
   label: moment.format(dayLabelFormat),
@@ -38,13 +44,21 @@ class ScorePage extends React.Component {
   constructor(props) {
     super(props);
     const days = buildPaddedDateRange(moment().subtract(12, 'hours'));
+    const currentDate = days[Math.round(days.length / 2)].format(storeKeyFormat);
     this.state = {
-      currentDate: days[Math.round(days.length / 2)].format(storeKeyFormat),
+      currentDate,
+      // This is clunky as fuck -> Create an array for this
+      y1date: buildPrevAccessor(currentDate, 1),
+      y2date: buildPrevAccessor(currentDate, 2),
+      y3date: buildPrevAccessor(currentDate, 3),
+      n1date: buildNextAccessor(currentDate, 1),
+      n2date: buildNextAccessor(currentDate, 2),
+      n3date: buildNextAccessor(currentDate, 3),
       daysOptions: convertToOptions(days),
+      gamesAccessor: [],
     };
     this.handleNewDateSelected = this.handleNewDateSelected.bind(this);
     this.handleNewCalendarDate = this.handleNewCalendarDate.bind(this);
-    this.displayDateSlider = this.displayDateSlider.bind(this);
   }
 
   handleNewCalendarDate(newDate) {
@@ -59,29 +73,56 @@ class ScorePage extends React.Component {
 
   handleNewDateSelected(newDate) {
     console.log(newDate);
-    this.setState({ currentDate: newDate });
+    this.setState({
+      currentDate: newDate,
+      y1date: buildPrevAccessor(newDate, 1),
+      y2date: buildPrevAccessor(newDate, 2),
+      y3date: buildPrevAccessor(newDate, 3),
+      n1date: buildNextAccessor(newDate, 1),
+      n2date: buildNextAccessor(newDate, 2),
+      n3date: buildNextAccessor(newDate, 3),
+    });
   }
 
-  displayDateSlider() {
-    const data = this.props.data;
-    if (data.loading) {
-      // Skeleton Loader
-    } else {
-      const games = this.props.data.games;
-      return (
-        <DateSlider
-          daysOptions={this.state.daysOptions}
-          handleNewDateSelected={index => this.handleNewDateSelected(this.state.daysOptions[index].value)}
-          games={games}
-          slickCurrentSlide={findIndex(propEq('value', this.state.currentDate))(this.state.daysOptions)}
-        />
-      );
-    }
+  renderGamesAccessor(data) {
+    this.setState({
+      gamesAccessor: [
+        {
+          date: this.state.currentDate,
+          nbGames: data.currentDate.length,
+        },
+        {
+          date: this.state.y1date,
+          nbGames: data.y1date.length,
+        },
+        {
+          date: this.state.y2date,
+          nbGames: data.y2date.length,
+        },
+        {
+          date: this.state.y3date,
+          nbGames: data.y3date.length,
+        },
+        {
+          date: this.state.n1date,
+          nbGames: data.n1date.length,
+        },
+        {
+          date: this.state.n2date,
+          nbGames: data.n2date.length,
+        },
+        {
+          date: this.state.n3date,
+          nbGames: data.n3date.length,
+        },
+      ],
+    });
   }
 
   render() {
-    const { currentDate, daysOptions } = this.state;
-    console.log(currentDate);
+    const {
+      currentDate, daysOptions, y1date, y2date, y3date, n1date, n2date, n3date, gamesAccessor,
+    } = this.state;
     return (
       <div className="score-page">
         <div className="page-header">
@@ -101,11 +142,15 @@ class ScorePage extends React.Component {
                     todayButton="Today"
                     onChange={this.handleNewCalendarDate}
                   />
-
                 </label>
               </div>
             </div>
-            {this.displayDateSlider()}
+            <DateSlider
+              daysOptions={daysOptions}
+              handleNewDateSelected={index => this.handleNewDateSelected(daysOptions[index].value)}
+              slickCurrentSlide={findIndex(propEq('value', currentDate))(daysOptions)}
+              gamesAccessor={gamesAccessor}
+            />
           </div>
         </div>
         <div className="container">
@@ -118,12 +163,20 @@ class ScorePage extends React.Component {
           </Helmet>
           <div className="scoreboard-wrapper">
             <div className="scoreboard-wrapper-results">
-              <Query query={getScoresQuery} variables={{ date: currentDate }}>
-                {({ loading, error, data }) => {
-                  const games = data.games;
-
+              <Query
+                query={getScoresQuery}
+                variables={{
+                  date: currentDate, y1date, y2date, y3date, n1date, n2date, n3date,
+                }}
+                onCompleted={data => this.renderGamesAccessor(data)}
+              >
+                {({
+                  loading, error, data, client,
+                }) => {
                   if (loading) return (<LoadingIndicator />);
                   if (error) return (<div>Error</div>);
+
+                  const games = data.currentDate;
 
                   if (games.length < 1) {
                     return (

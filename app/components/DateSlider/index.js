@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
-import { sortBy, prop, values } from 'ramda';
+import {
+  sortBy, prop, values, findIndex, propEq,
+} from 'ramda';
 import ScoreCard from '../ScoreCard';
 import LeftArrow from './images/left.svg';
 import RightArrow from './images/right.svg';
@@ -33,7 +35,7 @@ function NextArrow(props) {
   );
 }
 
-const renderSlide = (opt, games) => (
+const renderSlide = (opt, gamesAccessor) => (
   <div className="slick-slide-content" key={Math.random()}>
     <div className="slick-slide-date">
       <span>
@@ -41,7 +43,9 @@ const renderSlide = (opt, games) => (
       </span>
     </div>
     <div className="slick-slide-games">
-      {games[opt.value] ? `( ${games[opt.value].length} Games )` : '...'}
+      {
+        // gamesAccessor.findIndex(propEq('date', opt.value)).nbGames
+      }
     </div>
   </div>
 );
@@ -63,9 +67,8 @@ class DateSlider extends React.Component {
   }
 
   render() {
-    const { daysOptions, handleNewDateSelected, games } = this.props;
-    console.log(daysOptions);
-    console.log(games);
+    const { daysOptions, handleNewDateSelected, gamesAccessor } = this.props;
+    console.log(gamesAccessor);
     const settings = {
       dots: false,
       swipeToSlide: true,
@@ -106,7 +109,7 @@ class DateSlider extends React.Component {
     return (
       <Slider ref={slider => this.slider = slider} {...settings}>
         {
-          daysOptions.map(opt => renderSlide(opt, games))
+          daysOptions.map(opt => renderSlide(opt, gamesAccessor))
         }
       </Slider>
     );
