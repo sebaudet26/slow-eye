@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import {
-  sortBy, prop, values, findIndex, propEq,
+  sortBy, prop, values, find, propEq,
 } from 'ramda';
 import ScoreCard from '../ScoreCard';
 import LeftArrow from './images/left.svg';
@@ -44,7 +44,8 @@ const renderSlide = (opt, gamesAccessor) => (
     </div>
     <div className="slick-slide-games">
       {
-        // gamesAccessor.findIndex(propEq('date', opt.value)).nbGames
+        // This loops over entire daysOptions array -> figure out better way
+        find(propEq('date', opt.value))(gamesAccessor) ? `(${find(propEq('date', opt.value))(gamesAccessor).nbGames} Games)` : '...'
       }
     </div>
   </div>
