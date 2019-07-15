@@ -1,5 +1,4 @@
 import { gql } from 'apollo-boost';
-import moment from 'moment';
 
 // This is a bad query, please refactor Seb
 const getScoresQuery = gql`

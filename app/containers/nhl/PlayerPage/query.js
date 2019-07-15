@@ -1,9 +1,8 @@
-/* global fetch */
-import graphqlApi from '../../../utils/api';
+import { gql } from 'apollo-boost';
 
-const makePlayerQuery = id => `
-{
-  player (id: ${id}) {
+const getPlayerQuery = gql`
+query($id: Int) {
+  player (id: $id) {
     info {
       firstName
       lastName
@@ -151,17 +150,4 @@ const makePlayerQuery = id => `
 }
 `;
 
-export const fetchPlayer = id => async (dispatch) => {
-  try {
-    const data = await graphqlApi(makePlayerQuery(id));
-    return dispatch({
-      type: 'FETCH_PLAYER_BY_ID',
-      payload: data,
-    });
-  } catch (e) {
-    // TODO: dispatch error to reducer
-    return console.error(e.toString());
-  }
-};
-
-export default null;
+export { getPlayerQuery };

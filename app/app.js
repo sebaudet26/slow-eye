@@ -30,7 +30,7 @@ import TestPage from './containers/Test/Loadable';
 import HomePage from './containers/nhl/HomePage';
 import PlayerStatsPage from './containers/nhl/PlayerStatsPage';
 import StandingsPage from './containers/nhl/StandingsPage';
-import PlayerPage from './containers/nhl/PlayerPage/Loadable';
+import PlayerPage from './containers/nhl/PlayerPage';
 import TeamPage from './containers/nhl/TeamPage/Loadable';
 import TeamStatsPage from './containers/nhl/TeamStatsPage';
 import ScorePage from './containers/nhl/ScorePage';
