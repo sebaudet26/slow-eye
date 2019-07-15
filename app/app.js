@@ -31,7 +31,7 @@ import HomePage from './containers/nhl/HomePage';
 import PlayerStatsPage from './containers/nhl/PlayerStatsPage';
 import StandingsPage from './containers/nhl/StandingsPage';
 import PlayerPage from './containers/nhl/PlayerPage';
-import TeamPage from './containers/nhl/TeamPage/Loadable';
+import TeamPage from './containers/nhl/TeamPage';
 import TeamStatsPage from './containers/nhl/TeamStatsPage';
 import ScorePage from './containers/nhl/ScorePage';
 import GamePage from './containers/nhl/GamePage/Loadable';

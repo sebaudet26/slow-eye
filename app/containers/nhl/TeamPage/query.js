@@ -1,10 +1,10 @@
 import { gql } from 'apollo-boost';
 
-// Put Player object type nested inside of roster from graphql server, instead of doing parallel query for player
 
+// Nest Player Object Type in Roster Of Team Query
 const getTeamQuery = gql`
-query($teamId: ID, $playerID: ID){
-  team (id: ${teamId}) {
+query($id: Int) {
+  team (id: $id) {
     id
     name
     link
@@ -51,91 +51,6 @@ query($teamId: ID, $playerID: ID){
         faceOffWinPercentage
         shootingPctg
         savePctg
-      }
-    }
-  }
-  {
-    player (id: ${playerId}) {
-      id
-      info {
-        firstName
-        lastName
-        shootsCatches
-        birthDate
-        birthCity
-        birthStateProvince
-        birthCountry
-        nationality
-        height
-        weight
-        captain
-        rookie
-        fullName
-        currentAge
-        rosterStatus
-        primaryNumber
-        currentTeamInfo {
-          name
-          teamName
-          abbreviation
-        }
-        primaryPosition {
-          name
-          abbreviation
-        }
-        draftInfo {
-          year
-          round
-          pickOverall
-          pickInRound
-          team {
-            name
-            abbreviation
-          }
-        }
-      }
-      stats {
-        season
-        team {
-          name
-          abbreviation
-        }
-        league {
-          name
-        }
-        stat {
-          assists
-          goals
-          points
-          games
-          plusMinus
-          shots
-          shotPct
-          hits
-          pim
-          blocked
-          timeOnIcePerGame
-          savePercentage
-          goalsAgainst
-          saves
-          shutouts
-          goalAgainstAverage
-          powerPlayGoals
-          shortHandedGoals
-          gameWinningGoals
-          gamesStarted
-          wins
-          losses
-          ot
-        }
-      }
-      logs (lastTen: true){
-        date
-        stat {
-          points
-          plusMinus
-          timeOnIce
-        }
       }
     }
   }
