@@ -102,6 +102,23 @@ class TeamPage extends React.Component {
                   </div>
                 </div>
               </div>
+              <Tabs
+                defaultIndex={Number(getFromLS('teamTabIndex')) || 0}
+                onSelect={i => saveToLS('teamTabIndex', i)}
+              >
+                <TabList>
+                  <div className="container">
+                    <Tab>Depth Chart</Tab>
+                    <Tab>Roster</Tab>
+                    <Tab>Player Stats</Tab>
+                  </div>
+                </TabList>
+                <div className="container">
+                  <TabPanel />
+                  <TabPanel />
+                  <TabPanel />
+                </div>
+              </Tabs>
             </div>
           );
         }}
