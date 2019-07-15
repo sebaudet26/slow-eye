@@ -1,5 +1,7 @@
 import { gql } from 'apollo-boost';
 
+// Put Player object type nested inside of roster from graphql server, instead of doing parallel query for player
+
 const getTeamQuery = gql`
 query($teamId: ID, $playerID: ID){
   team (id: ${teamId}) {
