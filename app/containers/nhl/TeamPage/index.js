@@ -7,6 +7,7 @@ import {
 import {
   Tab, Tabs, TabList, TabPanel,
 } from 'react-tabs';
+import getTeamQuery from './query.js';
 import Dropdown from '../../../components/Dropdown/Dropdown';
 import PlayerCard from '../../../components/PlayerCard/PlayerCard';
 import RosterTable from '../../../components/Table/RosterTable';
