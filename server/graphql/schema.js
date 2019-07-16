@@ -7,7 +7,7 @@ const {
   GraphQLInt,
   GraphQLFloat,
 } = require('graphql');
-const TEAMS = require('../libs/teams');
+const _ = require('lodash');
 const {
   equals,
   head,
@@ -26,6 +26,7 @@ const {
   takeLast,
   values,
 } = require('ramda');
+const TEAMS = require('../libs/teams');
 const {
   fetchStandings,
   fetchStatsForPlayerId,
@@ -131,13 +132,6 @@ const TeamStats = new GraphQLObjectType({
   },
 });
 
-const TeamRosterPlayer = new GraphQLObjectType({
-  name: 'TeamRosterPlayer',
-  fields: {
-    id: { type: GraphQLInt, resolve: prop('id') },
-  },
-});
-
 const TeamRanking = new GraphQLObjectType({
   name: 'TeamRanking',
   fields: {
@@ -151,7 +145,7 @@ const TeamRanking = new GraphQLObjectType({
 
 const TeamInfo = new GraphQLObjectType({
   name: 'TeamInfo',
-  fields: {
+  fields: () => ({
     id: { type: GraphQLInt, resolve: prop('id') },
     name: { type: GraphQLString, resolve: ifNotThereFetchId('name') },
     link: { type: GraphQLString, resolve: ifNotThereFetchId('link') },
@@ -163,9 +157,12 @@ const TeamInfo = new GraphQLObjectType({
     shortName: { type: GraphQLString, resolve: ifNotThereFetchId('shortName') },
     officialSiteUrl: { type: GraphQLString, resolve: ifNotThereFetchId('officialSiteUrl') },
     stats: { type: TeamStats, resolve: p => fetchStatsForTeamId(p.id) },
-    roster: { type: GraphQLList(TeamRosterPlayer), resolve: p => fetchPlayersForTeamId(p.id) },
+    roster: {
+      type: GraphQLList(Player),
+      resolve: p => fetchPlayersForTeamId(p.id),
+    },
     ranking: { type: TeamRanking, resolve: p => fetchTeamRanking(p.id) },
-  },
+  }),
 });
 
 const Streak = new GraphQLObjectType({
