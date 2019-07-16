@@ -72,7 +72,6 @@ class ScorePage extends React.Component {
   }
 
   handleNewDateSelected(newDate) {
-    console.log(newDate);
     this.setState({
       currentDate: newDate,
       y1date: buildPrevAccessor(newDate, 1),
