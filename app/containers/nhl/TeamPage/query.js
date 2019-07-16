@@ -19,6 +19,79 @@ query($id: Int) {
     }
     roster {
       id
+      stats {
+        season
+        stat {
+          assists
+          goals
+          points
+          games
+          plusMinus
+          shots
+          shotPct
+          hits
+          pim
+          blocked
+          timeOnIcePerGame
+          savePercentage
+          goalsAgainst
+          saves
+          shutouts
+          goalAgainstAverage
+          powerPlayGoals
+          shortHandedGoals
+          gameWinningGoals
+          gamesStarted
+          wins
+          losses
+          ot
+        }
+      }
+      logs (lastTen: true){
+        date
+        stat {
+          points
+          plusMinus
+          timeOnIce
+        }
+      }
+      info {
+        firstName
+        lastName
+        shootsCatches
+        birthDate
+        birthCity
+        birthStateProvince
+        birthCountry
+        nationality
+        height
+        weight
+        captain
+        rookie
+        fullName
+        currentAge
+        rosterStatus
+        primaryNumber
+        currentTeamInfo {
+          name
+          teamName
+          abbreviation
+        }
+        primaryPosition {
+          name
+          abbreviation
+        }
+        draftInfo {
+          year
+          round
+          pickOverall
+          pickInRound
+          team {
+            name
+            abbreviation
+          }
+        }
+      }
     },
     stats {
       type
