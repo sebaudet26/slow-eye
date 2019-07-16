@@ -34,7 +34,7 @@ import PlayerPage from './containers/nhl/PlayerPage';
 import TeamPage from './containers/nhl/TeamPage';
 import TeamStatsPage from './containers/nhl/TeamStatsPage';
 import ScorePage from './containers/nhl/ScorePage';
-import GamePage from './containers/nhl/GamePage/Loadable';
+import GamePage from './containers/nhl/GamePage';
 
 // MLB containers
 
