@@ -1,9 +1,8 @@
-/* global fetch */
-import graphqlApi from '../../../utils/api';
+import { gql } from 'apollo-boost';
 
-const makeGameBoxscoreQuery = id => `
-{
-  game (id: "${id}") {
+const getGameQuery = gql`
+query (id: Int) {
+  game (id: $id) {
     id
     highlights {
       recap
@@ -199,17 +198,4 @@ const makeGameBoxscoreQuery = id => `
 }
 `;
 
-export const fetchGameBoxscore = id => async (dispatch) => {
-  try {
-    const data = await graphqlApi(makeGameBoxscoreQuery(id));
-    return dispatch({
-      type: FETCH_GAME_BOXSCORE,
-      payload: data,
-    });
-  } catch (e) {
-    // TODO: dispatch error to reducer
-    return console.error(e.toString());
-  }
-};
-
-export default null;
+export { getGameQuery };
