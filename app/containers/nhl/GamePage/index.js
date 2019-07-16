@@ -109,10 +109,8 @@ const renderPenaltyInfo = penalty => (
     </div>
     <div className="card-cell-item penalty-info">
       <span className="hidden-mobile">
-        {penalty.type}
-        {' - '}
+        {`${penalty.type} - ${penalty.minutes} mins`}
       </span>
-      {`${penalty.minutes} mins`}
     </div>
   </div>
 );
@@ -379,7 +377,7 @@ class GamePage extends React.Component {
                               </tr>
                               <tr>
                                 <td>
-                          GV
+                          Bks
                                 </td>
                                 <td>{boxscore.away.teamStats.blocked}</td>
                                 <td>{boxscore.home.teamStats.blocked}</td>
