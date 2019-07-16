@@ -1,7 +1,7 @@
 import { gql } from 'apollo-boost';
 
 const getGameQuery = gql`
-query (id: Int) {
+query($id: String) {
   game (id: $id) {
     id
     highlights {

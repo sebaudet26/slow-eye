@@ -71,21 +71,21 @@ export default class PlayerPage extends React.Component {
                         <img src={`/images/country/${nationality}.svg`} />
                       </div>
                       {
-                 currentTeamInfo ? (
-                   <div className="icon-wrapper player-img-team">
-                     <img src={`/images/teams/${currentTeamInfo.teamName.replace(' ', '-').toLowerCase()}.png`} className="" />
-                   </div>
-                 ) : null
-                }
+                       currentTeamInfo ? (
+                         <div className="icon-wrapper player-img-team">
+                           <img src={`/images/teams/${currentTeamInfo.teamName.replace(' ', '-').toLowerCase()}.png`} className="" />
+                         </div>
+                       ) : null
+                      }
                     </div>
                     <div className="player-info">
                       <h2>{`${info.firstName} ${info.lastName}`}</h2>
                       <p>
                         {
-                    currentTeamInfo ? (
-                      <a href={`/team?id=${currentTeamInfo.id}`}>{`${currentTeamInfo.name}, `}</a>
-                    ) : null
-                  }
+                          currentTeamInfo ? (
+                            <a href={`/team?id=${currentTeamInfo.id}`}>{`${currentTeamInfo.name}, `}</a>
+                          ) : null
+                        }
                         {`${primaryPosition.abbreviation}, Shoots ${shootsCatches}`}
                       </p>
                       <div className="player-desc">

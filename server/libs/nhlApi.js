@@ -35,7 +35,7 @@ const nhlRecordsBase = 'https://records.nhl.com/site/api';
 const nhlStatsApiBase = 'https://statsapi.web.nhl.com/api/v1';
 
 // TODO: hardcoded feature flag lol
-const IS_PLAYOFFS_TIME = true;
+const IS_PLAYOFFS_TIME = false;
 
 // technically 2AM to leave some time for Western coast to be at end of day
 const getSecondsUntilMidnight = () => Math.round((moment.tz('America/New_York').endOf('day').add(2, 'hours').valueOf() - moment.tz('America/New_York').valueOf()) / 1000);
