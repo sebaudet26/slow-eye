@@ -14,7 +14,6 @@ import PlayerCard from '../../../components/PlayerCard/PlayerCard';
 import RosterTable from '../../../components/Table/RosterTable';
 import RosterStatsTable from '../../../components/Table/RosterStatsTable';
 import LoadingIndicator from '../../../components/LoadingIndicator';
-import { logoForTeamName } from '../../../utils/team';
 import {
   pointsInLatestSeason,
   gamesPlayedLatestSeason,
@@ -50,6 +49,9 @@ class TeamPage extends React.Component {
           if (error) return (<div>Error</div>);
 
           const team = data.team;
+          const roster = team.roster;
+
+          console.log(roster[0]);
 
           console.log(team);
 
@@ -115,8 +117,35 @@ class TeamPage extends React.Component {
                 </TabList>
                 <div className="container">
                   <TabPanel />
-                  <TabPanel />
-                  <TabPanel />
+                  <TabPanel>
+                    {
+                      isEmpty(roster) ? null : (
+                        <div>
+                          <h3>Forwards</h3>
+                          <RosterTable players={roster.filter(p => forwardsAbbreviations.includes(p.info.primaryPosition.abbreviation))} />
+                          <h3>Defensemen</h3>
+                          <RosterTable players={roster.filter(p => p.info.primaryPosition.abbreviation === 'D')} />
+                          <h3>Goalies</h3>
+                          <RosterTable players={roster.filter(p => p.info.primaryPosition.abbreviation === 'G')} />
+                        </div>
+                      )
+                    }
+                  </TabPanel>
+                  <TabPanel>
+                    {
+
+                      isEmpty(roster) ? null : (
+                        <div>
+                          <h3>Forwards</h3>
+                          <RosterStatsTable players={roster.filter(p => forwardsAbbreviations.includes(p.info.primaryPosition.abbreviation))} position="F" />
+                          <h3>Defensemen</h3>
+                          <RosterStatsTable players={roster.filter(p => p.info.primaryPosition.abbreviation === 'D')} position="D" />
+                          <h3>Goalies</h3>
+                          <RosterStatsTable players={roster.filter(p => p.info.primaryPosition.abbreviation === 'G')} position="G" />
+                        </div>
+                      )
+                    }
+                  </TabPanel>
                 </div>
               </Tabs>
             </div>

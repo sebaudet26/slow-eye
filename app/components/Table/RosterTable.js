@@ -22,7 +22,7 @@ class RosterTable extends React.PureComponent {
             {
               Header: '#',
               id: 'primaryNumber',
-              accessor: d => Number(d.player.info.primaryNumber),
+              accessor: d => Number(d.info.primaryNumber),
               className: 'text-left',
               maxWidth: 40,
               minWidth: 40,
@@ -30,7 +30,7 @@ class RosterTable extends React.PureComponent {
             {
               Header: 'Name',
               id: 'fullName',
-              accessor: d => `${d.player.info.fullName}+${d.player.id}`,
+              accessor: d => `${d.info.fullName}+${d.id}`,
               className: 'text-left',
               maxWidth: 200,
               minWidth: 150,
@@ -46,7 +46,7 @@ class RosterTable extends React.PureComponent {
               className: 'text-left',
               maxWidth: 75,
               minWidth: 50,
-              accessor: d => d.player.info.shootsCatches,
+              accessor: d => d.info.shootsCatches,
             },
             {
               Header: 'Age',
@@ -54,7 +54,7 @@ class RosterTable extends React.PureComponent {
               className: 'text-left',
               maxWidth: 65,
               minWidth: 50,
-              accessor: d => d.player.info.currentAge,
+              accessor: d => d.info.currentAge,
             },
             {
               Header: 'Birthday',
@@ -62,7 +62,7 @@ class RosterTable extends React.PureComponent {
               className: 'text-left',
               maxWidth: 130,
               minWidth: 100,
-              accessor: d => d.player.info.birthDate,
+              accessor: d => d.info.birthDate,
             },
             {
               Header: 'Height',
@@ -70,7 +70,7 @@ class RosterTable extends React.PureComponent {
               className: 'text-left',
               maxWidth: 85,
               minWidth: 50,
-              accessor: d => d.player.info.height,
+              accessor: d => d.info.height,
             },
             {
               Header: 'Weight',
@@ -78,7 +78,7 @@ class RosterTable extends React.PureComponent {
               className: 'text-left',
               maxWidth: 85,
               minWidth: 50,
-              accessor: d => d.player.info.weight,
+              accessor: d => d.info.weight,
             },
             {
               Header: 'Birthplace',
@@ -86,7 +86,7 @@ class RosterTable extends React.PureComponent {
               className: 'text-left team-cell',
               maxWidth: 175,
               minWidth: 75,
-              accessor: d => `${[d.player.info.birthCity, d.player.info.birthStateProvince || ''].filter(Boolean).join(', ')} `,
+              accessor: d => `${[d.info.birthCity, d.info.birthStateProvince || ''].filter(Boolean).join(', ')} `,
             },
             {
               Header: 'Country',
@@ -94,7 +94,7 @@ class RosterTable extends React.PureComponent {
               className: 'text-left team-cell',
               maxWidth: 85,
               minWidth: 50,
-              accessor: d => d.player.info.nationality,
+              accessor: d => d.info.nationality,
               Cell: row => (
                 <img src={`/images/country/${row.value}.svg`} alt="" />
               ),
