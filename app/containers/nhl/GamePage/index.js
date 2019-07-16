@@ -167,6 +167,8 @@ class GamePage extends React.Component {
 
           const game = data.game;
 
+          console.log(game);
+
           const { boxscore, liveFeed, highlights } = game;
 
           const groupedHighlights = groupBy(prop('period'), highlights.goals || []);

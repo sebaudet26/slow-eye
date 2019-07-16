@@ -110,6 +110,12 @@
     border: solid 1px $grey-4;
     margin: 0 25px 15px 0;
     position: relative;
+    padding: 0px;
+
+    &:hover {
+      box-shadow: none;
+      transform: none;
+    }
 
     &-header {
       border-bottom: solid 1px $grey-4;

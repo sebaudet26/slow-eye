@@ -613,14 +613,14 @@ const LiveFeed = new GraphQLObjectType({
       type: GraphQLList(GoalGameEvent),
       resolve: pipe(
         pathOr([], ['liveData', 'plays', 'allPlays']),
-        filter(d => d.result.eventTypeId === 'GOAL'),
+        filter(d => d.result.event === 'Goal'),
       ),
     },
     penaltySummary: {
       type: GraphQLList(PenaltyGameEvent),
       resolve: pipe(
         pathOr([], ['liveData', 'plays', 'allPlays']),
-        filter(d => d.result.eventTypeId === 'PENALTY'),
+        filter(d => d.result.event === 'Penalty'),
       ),
     },
     shootoutSummary: {
