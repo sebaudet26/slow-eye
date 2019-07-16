@@ -51,8 +51,6 @@ class TeamPage extends React.Component {
           const team = data.team;
           const roster = team.roster;
 
-          console.log(roster[0]);
-
           console.log(team);
 
           return (

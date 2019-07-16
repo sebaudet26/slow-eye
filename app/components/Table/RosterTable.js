@@ -61,7 +61,7 @@ class RosterTable extends React.PureComponent {
               id: 'birthDate',
               className: 'text-left',
               maxWidth: 130,
-              minWidth: 100,
+              minWidth: 110,
               accessor: d => d.info.birthDate,
             },
             {
@@ -69,7 +69,7 @@ class RosterTable extends React.PureComponent {
               id: 'height',
               className: 'text-left',
               maxWidth: 85,
-              minWidth: 50,
+              minWidth: 55,
               accessor: d => d.info.height,
             },
             {
@@ -85,7 +85,7 @@ class RosterTable extends React.PureComponent {
               id: 'birthCity',
               className: 'text-left team-cell',
               maxWidth: 175,
-              minWidth: 75,
+              minWidth: 90,
               accessor: d => `${[d.info.birthCity, d.info.birthStateProvince || ''].filter(Boolean).join(', ')} `,
             },
             {
@@ -105,18 +105,10 @@ class RosterTable extends React.PureComponent {
               className: 'text-left team-cell',
               maxWidth: 185,
               minWidth: 150,
-              accessor: pathOr(null, ['player', 'info', 'draftInfo']),
+              accessor: d => d.info.draftInfo,
               Cell: row => (!row.value ? 'Undrafted' : (
-                <div>
-                  <div className="draft">
-                    {row.value.year}
-                  </div>
-                  <div className="draft">
-                    {row.value.team.abbreviation}
-                  </div>
-                  <div className="draft">
-                    {`R${row.value.round}`}
-                  </div>
+                <div className="draft">
+                  {`${row.value.year} - ${row.value.team.abbreviation} - #${row.value.pickOverall} Overall`}
                 </div>
               )),
             },

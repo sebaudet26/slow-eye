@@ -7,7 +7,7 @@ import './styles.scss';
 
 const ReactTableFixedColumns = withFixedColumns(ReactTable);
 
-const RosterStatsTable = ({ players, position, stats }) => (
+const RosterStatsTable = ({ players, position }) => (
   <div>
     <ReactTableFixedColumns
       data={players}
