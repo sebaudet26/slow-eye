@@ -4,6 +4,7 @@ import { Query } from 'react-apollo';
 import { getTeamsQuery } from './query.js';
 import TeamsTable from '../../../components/Table/TeamsTable';
 import LoadingIndicator from '../../../components/LoadingIndicator';
+import EmptyState from '../../../components/EmptyState';
 import './style.scss';
 
 class TeamStatsPage extends React.Component {
@@ -24,7 +25,7 @@ class TeamStatsPage extends React.Component {
           <Query query={getTeamsQuery}>
             {({ loading, error, data }) => {
               if (loading) return (<LoadingIndicator />);
-              if (error) return (<div>Error</div>);
+              if (error) return (<EmptyState isError />);
 
               const teams = data.teams;
 

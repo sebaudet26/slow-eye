@@ -14,6 +14,7 @@ import PlayerCard from '../../../components/PlayerCard/PlayerCard';
 import RosterTable from '../../../components/Table/RosterTable';
 import RosterStatsTable from '../../../components/Table/RosterStatsTable';
 import LoadingIndicator from '../../../components/LoadingIndicator';
+import EmptyState from '../../../components/EmptyState';
 import {
   pointsInLatestSeason,
   gamesPlayedLatestSeason,
@@ -46,7 +47,7 @@ class TeamPage extends React.Component {
       <Query query={getTeamQuery} variables={{ id }}>
         {({ loading, error, data }) => {
           if (loading) return (<LoadingIndicator />);
-          if (error) return (<div>Error</div>);
+          if (error) return (<EmptyState isError />);
 
           const team = data.team;
           const roster = team.roster;

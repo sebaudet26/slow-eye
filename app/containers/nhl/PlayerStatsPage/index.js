@@ -4,6 +4,7 @@ import { Query } from 'react-apollo';
 import { getPlayersQuery } from './query.js';
 import PlayersTable from '../../../components/Table/PlayersTable';
 import LoadingIndicator from '../../../components/LoadingIndicator';
+import EmptyState from '../../../components/EmptyState';
 import './style.scss';
 
 class PlayerStatsPage extends React.PureComponent {
@@ -22,7 +23,7 @@ class PlayerStatsPage extends React.PureComponent {
         <Query query={getPlayersQuery}>
           {({ loading, error, data }) => {
             if (loading) return (<LoadingIndicator />);
-            if (error) return (<div>Error</div>);
+            if (error) return (<EmptyState isError />);
 
 
             const players = data.playersReport;

@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import { getStandingsQuery } from './query.js';
 import LoadingIndicator from '../../../components/LoadingIndicator';
+import EmptyState from '../../../components/EmptyState';
 import StandingsTable from '../../../components/Table/StandingsTable';
 import './style.scss';
 
@@ -26,7 +27,7 @@ class StandingsPage extends React.Component {
           <Query query={getStandingsQuery}>
             {({ loading, error, data }) => {
               if (loading) return (<LoadingIndicator />);
-              if (error) return (<div>Error</div>);
+              if (error) return (<EmptyState isError />);
 
               const standings = data.standings;
 

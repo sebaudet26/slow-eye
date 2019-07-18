@@ -8,6 +8,7 @@ import { graphql } from 'react-apollo';
 import { getScoresQuery } from './query.js';
 import DateSlider from '../../../components/DateSlider';
 import ScoreCard from '../../../components/ScoreCard';
+import EmptyState from '../../../components/EmptyState';
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import 'react-datepicker/dist/react-datepicker.css';
 import CalendarIcon from '../../../public/images/calendar.svg';
@@ -173,13 +174,13 @@ class ScorePage extends React.Component {
                   loading, error, data, client,
                 }) => {
                   if (loading) return (<LoadingIndicator />);
-                  if (error) return (<div>Error</div>);
+                  if (error) return (<EmptyState isError />);
 
                   const games = data.currentDate;
 
                   if (games.length < 1) {
                     return (
-                      <div>No games on this date</div>
+                      <EmptyState />
                     );
                   }
                   return games.map(game => (

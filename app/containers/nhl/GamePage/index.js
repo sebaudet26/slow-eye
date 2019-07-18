@@ -39,7 +39,6 @@ import VideoPlayer from '../../../components/VideoPlayer';
 
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get('id');
-console.log(id);
 
 const renderGoalInfo = isShootout => goal => (
   <div key={Math.random()} className="card-cell">
@@ -161,7 +160,7 @@ class GamePage extends React.Component {
       <Query query={getGameQuery} variables={{ id }}>
         {({ loading, error, data }) => {
           if (loading) return (<LoadingIndicator />);
-          if (error) return (<div>Error</div>);
+          if (error) return (<EmptyState isError />);
 
           const game = data.game;
 

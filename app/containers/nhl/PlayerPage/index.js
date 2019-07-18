@@ -11,6 +11,7 @@ import {
 import { Query } from 'react-apollo';
 import { getPlayerQuery } from './query.js';
 import LoadingIndicator from '../../../components/LoadingIndicator';
+import EmptyState from '../../../components/EmptyState';
 import CareerStatsTable from '../../../components/Table/CareerStatsTable';
 import GameLogTable from '../../../components/Table/GameLogTable';
 import PlayerBadges from '../../../components/PlayerBadges/PlayerBadges';
@@ -31,7 +32,7 @@ export default class PlayerPage extends React.Component {
       <Query query={getPlayerQuery} variables={{ id }}>
         {({ loading, error, data }) => {
           if (loading) return (<LoadingIndicator />);
-          if (error) return (<div>Error</div>);
+          if (error) return (<EmptyState isError />);
 
           const player = data.player;
 
