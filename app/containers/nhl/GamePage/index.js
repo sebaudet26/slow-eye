@@ -30,6 +30,7 @@ import {
 import { getGameQuery } from './query.js';
 import { getStatusText } from '../../../utils/game';
 import LoadingIndicator from '../../../components/LoadingIndicator';
+import EmptyState from '../../../components/EmptyState';
 import { saveToLS, getFromLS } from '../../../utils/localStorage';
 import { toOrdinal } from '../../../utils/misc';
 import BoxTable from '../../../components/Table/BoxTable';
