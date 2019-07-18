@@ -15,11 +15,7 @@ class PlayerStatsPage extends React.PureComponent {
           <title>Player Stats - SealStats.com</title>
           <meta name="description" content="View NHL Players Stats. Leaderboards. It's all here. Seal Stats is the best place to view NHL stats. User-friendly and fast." />
         </Helmet>
-        <div className="page-header wFilters">
-          <div className="container">
-            <h2>Player Stats</h2>
-          </div>
-        </div>
+
         <Query query={getPlayersQuery}>
           {({ loading, error, data }) => {
             if (loading) return (<LoadingIndicator />);
