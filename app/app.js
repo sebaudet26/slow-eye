@@ -5,8 +5,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import { Helmet } from 'react-helmet';
 import 'sanitize.css/sanitize.css';
+import { saveToLS, getFromLS } from './utils/localStorage';
 
 // Load the favicon
 /* eslint-disable import/no-webpack-loader-syntax */
@@ -44,24 +46,19 @@ import MLBPlayerPage from './containers/mlb/PlayerPage/Loadable';
 import MLBScorePage from './containers/mlb/ScorePage';
 
 // apollo client setup
+const cache = new InMemoryCache();
+
 const client = new ApolloClient({
+  cache,
   uri: '/graphql',
-  clientState: {
-    defaults: {
-      selectedLeague: 'NHL',
-    },
-    resolvers: {
-      Mutation: {
-        updateLeague: (_, { selectedLeague }, { cache }) => {
-          cache.writeData({ data: { selectedLeague } });
-          return null;
-        },
-      },
-    },
-  },
 });
 
 const MOUNT_NODE = document.getElementById('app');
+
+// Get Selected League from Local Storage
+const headerState = JSON.parse(getFromLS('headerState') || '{}');
+
+console.log(headerState.selectedLeague);
 
 const render = () => {
   ReactDOM.render(

@@ -38,6 +38,7 @@ class Header extends React.Component {
   }
 
   render() {
+    console.log(this.props.selectedLeague);
     const statsDropdown = [
       {
         name: 'Player Stats',

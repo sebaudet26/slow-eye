@@ -97,29 +97,31 @@ class HomePage extends React.Component {
 
   render() {
     return (
-      <div className="home-page">
-        {this.displayFeaturedPlayer()}
-        <div className="container">
-          <Helmet>
-            <title>Home - SealStats.com</title>
-            <meta
-              name="description"
-              content="Seal Stats is the best place to view NHL stats. User-friendly and fast."
-            />
-          </Helmet>
-          <div className="home-page-wrapper">
-            <div className="home-page-col">
-              <h3>
-                {' Hot Players'}
-              </h3>
-              { this.displayPlayerStreaks() }
-            </div>
-            <div className="home-page-col">
-              <h3>
-                {' Hot Teams'}
-              </h3>
-              <div className="power-container">
-                { this.displayTeamStreaks() }
+      <div>
+        <div className="home-page">
+          {this.displayFeaturedPlayer()}
+          <div className="container">
+            <Helmet>
+              <title>Home - SealStats.com</title>
+              <meta
+                name="description"
+                content="Seal Stats is the best place to view NHL stats. User-friendly and fast."
+              />
+            </Helmet>
+            <div className="home-page-wrapper">
+              <div className="home-page-col">
+                <h3>
+                  {' Hot Players'}
+                </h3>
+                { this.displayPlayerStreaks() }
+              </div>
+              <div className="home-page-col">
+                <h3>
+                  {' Hot Teams'}
+                </h3>
+                <div className="power-container">
+                  { this.displayTeamStreaks() }
+                </div>
               </div>
             </div>
           </div>
