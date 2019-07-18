@@ -16,6 +16,7 @@ TODO:
 - Component Refactoring
 - Selected option state on react select
 - Dropdown on click not hover
+- Link vs A Tag
 
 ----------V3----------
 - Game Page When game isn't started (show matchup)
