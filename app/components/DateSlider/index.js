@@ -36,7 +36,7 @@ function NextArrow(props) {
 }
 
 const renderSlide = (opt, gamesAccessor) => (
-  <div className="slick-slide-content" key={Math.random()}>
+  <div className="slick-slide-content" key={opt.value}>
     <div className="slick-slide-date">
       <span>
         {opt.label}
