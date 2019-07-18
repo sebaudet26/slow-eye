@@ -7,7 +7,6 @@ https://github.com/dword4/nhlapi
 TODO:
 
 ----------V2----------
-- Change Loading Indicator
 - League State Fix
 - Home Page Redesign (UI Architecture Review as well)
 - Change Branding - ScoreJam
