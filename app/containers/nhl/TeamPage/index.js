@@ -69,7 +69,7 @@ class TeamPage extends React.Component {
                     <div className="team-wrapper-title">
                       <div className="team-img">
                         <svg viewBox="10 0 100 75" width="100" height="75" className="team-img-logo">
-                          <use xlinkHref={`/images/teams/season/20182019.svg#team-${team.id}-20182019-light`} />
+                          <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${team.id}-20182019-light`} />
                         </svg>
                       </div>
                       <div>

@@ -25,7 +25,7 @@ const ScoreCard = ({ game }) => (
       </div>
       <div className="game-card-team">
         <svg key={Math.random()} className="game-card-team-img">
-          <use xlinkHref={`/images/teams/season/20182019.svg#team-${game.teams.away.team.id}-20182019-light`} />
+          <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${game.teams.away.team.id}-20182019-light`} />
         </svg>
         <a className="game-card-team-name" href={`/team?id=${game.teams.away.team.id}`}>
           {game.teams.away.team.name}
@@ -49,7 +49,7 @@ const ScoreCard = ({ game }) => (
       </div>
       <div className="game-card-team">
         <svg key={Math.random()} className="game-card-team-img">
-          <use xlinkHref={`/images/teams/season/20182019.svg#team-${game.teams.home.team.id}-20182019-light`} />
+          <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${game.teams.home.team.id}-20182019-light`} />
         </svg>
         <a className="game-card-team-name" href={`/team?id=${game.teams.home.team.id}`}>
           {game.teams.home.team.name}

@@ -96,7 +96,7 @@ class RosterTable extends React.PureComponent {
               minWidth: 50,
               accessor: d => d.info.nationality,
               Cell: row => (
-                <img src={`/images/country/${row.value}.svg`} alt="" />
+                <img src={`/public/images/country/${row.value}.svg`} alt="" />
               ),
             },
             {

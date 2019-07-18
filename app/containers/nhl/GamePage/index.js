@@ -50,7 +50,7 @@ const renderGoalInfo = isShootout => goal => (
       />
       <div className="icon-wrapper">
         <svg className="goal-image-team" key={Math.random()}>
-          <use xlinkHref={`/images/teams/season/20182019.svg#team-${goal.team.id}-20182019-light`} />
+          <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${goal.team.id}-20182019-light`} />
         </svg>
       </div>
     </div>
@@ -96,7 +96,7 @@ const renderPenaltyInfo = penalty => (
   <div key={Math.random()} className="card-cell penalty">
     <div className="card-cell-item penalty-team">
       <svg className="penalty-img" key={Math.random()}>
-        <use xlinkHref={`/images/teams/season/20182019.svg#team-${penalty.team.id}-20182019-light`} />
+        <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${penalty.team.id}-20182019-light`} />
       </svg>
       {penalty.periodTime}
     </div>
@@ -175,13 +175,13 @@ class GamePage extends React.Component {
           } = liveFeed;
           const awayTeamImage = (
             <svg key={Math.random()} className="game-card-team-img">
-              <use xlinkHref={`/images/teams/season/20182019.svg#team-${boxscore.away.team.id}-20182019-light`} />
+              <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${boxscore.away.team.id}-20182019-light`} />
             </svg>
           );
 
           const homeTeamImage = (
             <svg key={Math.random()} className="game-card-team-img">
-              <use xlinkHref={`/images/teams/season/20182019.svg#team-${boxscore.home.team.id}-20182019-light`} />
+              <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${boxscore.home.team.id}-20182019-light`} />
             </svg>
           );
 

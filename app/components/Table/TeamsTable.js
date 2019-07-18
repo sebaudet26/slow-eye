@@ -43,7 +43,7 @@ class TeamsTable extends React.PureComponent {
               Cell: row => (
                 <a href={`./team?id=${row.value.split('+')[2]}`}>
                   <svg key={Math.random()} className="team-cell-logo">
-                    <use xlinkHref={`/images/teams/season/20182019.svg#team-${row.value.split('+')[2]}-20182019-light`} />
+                    <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${row.value.split('+')[2]}-20182019-light`} />
                   </svg>
                   <span className="hidden-mobile">{row.value.split('+')[0]}</span>
                   <span className="hidden-desktop">{row.value.split('+')[1]}</span>

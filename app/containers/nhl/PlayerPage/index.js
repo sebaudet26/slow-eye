@@ -69,12 +69,12 @@ export default class PlayerPage extends React.Component {
                     <div className="player-img">
                       <PlayerImage id={urlParams.get('id')} />
                       <div className="icon-wrapper player-img-country">
-                        <img src={`/images/country/${nationality}.svg`} />
+                        <img src={`/public/images/country/${nationality}.svg`} />
                       </div>
                       {
                        currentTeamInfo ? (
                          <div className="icon-wrapper player-img-team">
-                           <img src={`/images/teams/${currentTeamInfo.teamName.replace(' ', '-').toLowerCase()}.png`} className="" />
+                           <img src={`/public/images/teams/${currentTeamInfo.teamName.replace(' ', '-').toLowerCase()}.png`} className="" />
                          </div>
                        ) : null
                       }
