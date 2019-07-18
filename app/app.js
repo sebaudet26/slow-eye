@@ -50,12 +50,14 @@ const client = new ApolloClient({
     defaults: {
       selectedLeague: 'NHL',
     },
-    resolvers: {},
-    typeDefs: `
-      type Query {
-        selectedLeague: String
-      }
-    `,
+    resolvers: {
+      Mutation: {
+        updateLeague: (_, { selectedLeague }, { cache }) => {
+          cache.writeData({ data: { selectedLeague } });
+          return null;
+        },
+      },
+    },
   },
 });
 
