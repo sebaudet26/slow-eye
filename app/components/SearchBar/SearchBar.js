@@ -80,7 +80,7 @@ class SearchBar extends React.Component {
     this.closeOptions = this.closeOptions.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.getPlayersShortList();
   }
 
