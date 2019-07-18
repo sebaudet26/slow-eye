@@ -46,6 +46,17 @@ import MLBScorePage from './containers/mlb/ScorePage';
 // apollo client setup
 const client = new ApolloClient({
   uri: '/graphql',
+  clientState: {
+    defaults: {
+      selectedLeague: 'NHL',
+    },
+    resolvers: {},
+    typeDefs: `
+      type Query {
+        selectedLeague: String
+      }
+    `,
+  },
 });
 
 const MOUNT_NODE = document.getElementById('app');
