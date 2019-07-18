@@ -32,7 +32,7 @@ class HeaderDropdown extends React.Component {
     const subMenu = this.props.list;
 
     return (
-      <div className="header-nav-item headerDropdownMenu" onMouseOver={this.onMouseEnter} onMouseLeave={this.onMouseLeave} toggle={this.toggle}>
+      <div className="header-nav-item headerDropdownMenu" onMouseOver={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onToggle={this.toggle}>
         <div className="">
           {this.props.name}
           <i className="headerDropdownMenu-arrow" />
