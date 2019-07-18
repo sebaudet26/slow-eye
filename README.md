@@ -10,10 +10,13 @@ TODO:
 - ErrorState
 - Change Loading Indicator
 - League State Fix
-- Home Page Redesign
+- Home Page Redesign (UI Architecture Review as well)
 - Change Branding - ScoreJam
 - Pass ID as props instead of URL?
 - Component Refactoring
+- Selected option state on react select
+
+----------V3----------
 - Game Page When game isn't started (show matchup)
 - Add Tabs to Standings Page (Playoff Picture, Wild Card Tab, League Tab, Conference Tab)
 - Schedule Page & Schedule Tab for Team page
