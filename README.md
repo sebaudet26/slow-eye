@@ -15,6 +15,7 @@ TODO:
 - Pass ID as props instead of URL?
 - Component Refactoring
 - Selected option state on react select
+- Dropdown on click not hover
 
 ----------V3----------
 - Game Page When game isn't started (show matchup)
