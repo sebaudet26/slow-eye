@@ -8,6 +8,7 @@ TODO:
 ----------V2----------
 - EmptyState
 - ErrorState
+- Change Loading Indicator
 - League State Fix
 - Home Page Redesign
 - Change Branding - ScoreJam
