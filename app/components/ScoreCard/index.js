@@ -3,7 +3,7 @@ import { pathOr } from 'ramda';
 import { isScheduled, getStatusText, getFinalPeriod } from '../../utils/game';
 import { smallLogoForTeamName, calculatePoints } from '../../utils/team';
 import VideoPlayer from '../VideoPlayer';
-import PlayIcon from '../../images/play-button.svg';
+import PlayIcon from '../../public/images/play-button.svg';
 import './styles.scss';
 
 const ScoreCard = ({ game }) => (
