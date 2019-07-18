@@ -10,7 +10,6 @@ TODO:
 - League State Fix
 - Home Page Redesign (UI Architecture Review as well)
 - Change Branding - ScoreJam
-- Illustrations for Empty State
 - Pass ID as props instead of URL?
 - Component Refactoring
 - Selected option state on react select
