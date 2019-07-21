@@ -3,7 +3,7 @@ import {
 } from 'ramda';
 
 export const logoForTeamName = teamName =>
-  `../../images/teams/${teamName.replace(' ', '-').toLowerCase()}.png`;
+  `../../public/images/teams/${teamName.replace(' ', '-').toLowerCase()}.png`;
 
 export const smallLogoForTeamName = teamAbr =>
   `../../images/teams/small/${teamAbr}.png`;

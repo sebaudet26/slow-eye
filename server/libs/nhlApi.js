@@ -323,7 +323,10 @@ const fetchAllHistoryPlayers = async () => {
     nhlApi(resourceSkaters, 60 * 60 * 24 * 7),
     nhlApi(resourceGoalies, 60 * 60 * 24 * 7),
   ]);
-  return [...goalies.data, ...skaters.data];
+
+  const test = [...skaters.data, ...goalies.data];
+
+  return test;
 };
 
 const fetchPlayersReport = async (season = 20182019) => {

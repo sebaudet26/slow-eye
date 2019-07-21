@@ -4,7 +4,7 @@ const PlayerIcon = ({ id }) => (
   <img
     src={`https://nhl.bamcontent.com/images/headshots/current/60x60/${id}@2x.png`}
     className="options-img"
-    onError={ev => ev.target.src = '../../images/avatar.svg'}
+    onError={ev => ev.target.src = '../../public/images/avatar.svg'}
   />
 );
 

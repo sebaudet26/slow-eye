@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import { take } from 'ramda';
 import { graphql } from 'react-apollo';
 import { getStreaksQuery } from './query.js';
+import Header from '../../../components/Header';
 import './style.scss';
 
 class HomePage extends React.Component {

@@ -860,8 +860,9 @@ const schema = new GraphQLSchema({
         type: GraphQLList(PlayerReport),
         resolve: (root, args) => fetchPlayersReport(args.season),
       },
-      allHistoryPlayers: {
+      searchPlayers: {
         type: GraphQLList(PlayerBio),
+        args: { filter: { type: GraphQLString } },
         resolve: fetchAllHistoryPlayers,
       },
       players: {

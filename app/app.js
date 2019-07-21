@@ -54,11 +54,6 @@ const client = new ApolloClient({
 
 const MOUNT_NODE = document.getElementById('app');
 
-// Get Selected League from Local Storage
-const headerState = JSON.parse(getFromLS('headerState') || '{}');
-
-console.log(headerState.selectedLeague);
-
 const render = () => {
   ReactDOM.render(
     <ApolloProvider client={client}>
