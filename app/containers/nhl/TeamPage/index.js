@@ -20,7 +20,6 @@ import EmptyState from '../../../components/EmptyState';
 import {
   pointsInLatestSeason,
   gamesPlayedLatestSeason,
-  shootingSideIs,
   forwardsAbbreviations,
 } from '../../../utils/player';
 import { toOrdinal } from '../../../utils/misc';
