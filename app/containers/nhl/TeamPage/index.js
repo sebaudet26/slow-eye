@@ -20,7 +20,6 @@ import EmptyState from '../../../components/EmptyState';
 import {
   pointsInLatestSeason,
   gamesPlayedLatestSeason,
-  positionIs,
   shootingSideIs,
   forwardsAbbreviations,
 } from '../../../utils/player';
@@ -44,6 +43,16 @@ const renderTeamStat = (label, stat) => (
 );
 
 class TeamPage extends React.Component {
+  renderChartCol(roster) {
+    const sortedRoster = pipe(
+      sortBy(pointsInLatestSeason),
+      reverse,
+    )(roster);
+    return sortedRoster.map(player => (
+      <PlayerCard key={player.id} player={player} />
+    ));
+  }
+
   render() {
     return (
       <div>
@@ -117,7 +126,57 @@ class TeamPage extends React.Component {
                     </div>
                   </TabList>
                   <div className="container">
-                    <TabPanel />
+                    <TabPanel>
+                      <div className="depth-chart">
+                        <h3>Forwards</h3>
+                        <div className="team-chart">
+                          <div className="team-chart-col">
+                            <div className="team-chart-col-title">Left Wing</div>
+                            {
+                                this.renderChartCol(roster.filter(p => p.info.primaryPosition.abbreviation === 'LW'))
+                            }
+                          </div>
+                          <div className="team-chart-col">
+                            <div className="team-chart-col-title">Center</div>
+                            {
+                                this.renderChartCol(roster.filter(p => p.info.primaryPosition.abbreviation === 'C'))
+                            }
+                          </div>
+                          <div className="team-chart-col">
+                            <div className="team-chart-col-title">Right Wing</div>
+                            {
+                                this.renderChartCol(roster.filter(p => p.info.primaryPosition.abbreviation === 'RW'))
+                            }
+                          </div>
+                        </div>
+                      </div>
+                      <h3>Defensemen</h3>
+                      <div className="team-chart">
+                        <div className="team-chart-col">
+                          <div className="team-chart-col-title">LD</div>
+                          {
+                                this.renderChartCol(roster.filter(p => (p.info.primaryPosition.abbreviation === 'D' && p.info.shootsCatches === 'L')))
+                            }
+                        </div>
+                        <div className="team-chart-col">
+                          <div className="team-chart-col-title">RD</div>
+                          {
+                                this.renderChartCol(roster.filter(p => (p.info.primaryPosition.abbreviation === 'D' && p.info.shootsCatches === 'R')))
+                            }
+                        </div>
+                        <div className="team-chart-col" />
+                      </div>
+                      <h3>Goalies</h3>
+                      <div className="team-chart">
+                        <div className="team-chart-col">
+                          {
+                                this.renderChartCol(roster.filter(p => p.info.primaryPosition.abbreviation === 'G'))
+                            }
+                        </div>
+                        <div className="team-chart-col" />
+                        <div className="team-chart-col" />
+                      </div>
+                    </TabPanel>
                     <TabPanel>
                       <div>
                         <h3>Forwards</h3>

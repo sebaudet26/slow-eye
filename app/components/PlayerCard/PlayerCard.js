@@ -15,7 +15,7 @@ const PlayerCard = ({ player }) => (
           {player.info.fullName}
         </a>
         <div className="country">
-          <img src={`/images/country/${player.info.nationality}.svg`} />
+          <img src={`/public/images/country/${player.info.nationality}.svg`} />
           {` ${player.info.birthCountry}`}
         </div>
         <div>{`${player.info.currentAge} y.o.`}</div>
