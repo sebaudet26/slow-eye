@@ -74,7 +74,6 @@ class Dropdown extends React.Component {
                           if (error) return ('Error');
 
                           const teams = data.teams;
-                          console.log(teams);
 
                           return teams.map(team => (
                             <a key={team.id} href={`/team?id=${team.id}`}>
