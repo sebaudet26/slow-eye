@@ -6,6 +6,8 @@ import { Query } from 'react-apollo';
 import DatePicker from 'react-datepicker';
 import { graphql } from 'react-apollo';
 import { getScoresQuery } from './query.js';
+import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
 import DateSlider from '../../../components/DateSlider';
 import ScoreCard from '../../../components/ScoreCard';
 import EmptyState from '../../../components/EmptyState';
@@ -124,73 +126,77 @@ class ScorePage extends React.Component {
       currentDate, daysOptions, y1date, y2date, y3date, n1date, n2date, n3date, gamesAccessor,
     } = this.state;
     return (
-      <div className="score-page">
-        <div className="page-header">
+      <div>
+        <Header selectedLeague="NHL" />
+        <div className="score-page">
+          <div className="page-header">
+            <div className="container">
+              <div className="scoreboard-header">
+                <h2>Scores</h2>
+                <div className="scoreboard-datePicker">
+                  <label>
+                    <img
+                      src={CalendarIcon}
+                      className="scoreboard-datePicker-calendar"
+                      alt=""
+                    />
+                    <DatePicker
+                      selected={moment(currentDate, storeKeyFormat).toDate()}
+                      dateFormat="eee MMM dd"
+                      todayButton="Today"
+                      onChange={this.handleNewCalendarDate}
+                    />
+                  </label>
+                </div>
+              </div>
+              <DateSlider
+                daysOptions={daysOptions}
+                handleNewDateSelected={index => this.handleNewDateSelected(daysOptions[index].value)}
+                slickCurrentSlide={findIndex(propEq('value', currentDate))(daysOptions)}
+                gamesAccessor={gamesAccessor}
+              />
+            </div>
+          </div>
           <div className="container">
-            <div className="scoreboard-header">
-              <h2>Scores</h2>
-              <div className="scoreboard-datePicker">
-                <label>
-                  <img
-                    src={CalendarIcon}
-                    className="scoreboard-datePicker-calendar"
-                    alt=""
-                  />
-                  <DatePicker
-                    selected={moment(currentDate, storeKeyFormat).toDate()}
-                    dateFormat="eee MMM dd"
-                    todayButton="Today"
-                    onChange={this.handleNewCalendarDate}
-                  />
-                </label>
+            <Helmet>
+              <title>NHL Scores - SealStats.com</title>
+              <meta
+                name="description"
+                content="View Live NHL Scores. Seal Stats is the best place to view NHL stats. User-friendly and fast."
+              />
+            </Helmet>
+            <div className="scoreboard-wrapper">
+              <div className="scoreboard-wrapper-results">
+                <Query
+                  query={getScoresQuery}
+                  variables={{
+                    date: currentDate, y1date, y2date, y3date, n1date, n2date, n3date,
+                  }}
+                  onCompleted={data => this.renderGamesAccessor(data)}
+                >
+                  {({
+                    loading, error, data, client,
+                  }) => {
+                    if (loading) return (<LoadingIndicator />);
+                    if (error) return (<EmptyState isError />);
+
+                    const games = data.currentDate;
+
+                    if (games.length < 1) {
+                      return (
+                        <EmptyState />
+                      );
+                    }
+                    return games.map(game => (
+                      <ScoreCard key={game.id} game={game} />
+                    ));
+                  }}
+                </Query>
               </div>
             </div>
-            <DateSlider
-              daysOptions={daysOptions}
-              handleNewDateSelected={index => this.handleNewDateSelected(daysOptions[index].value)}
-              slickCurrentSlide={findIndex(propEq('value', currentDate))(daysOptions)}
-              gamesAccessor={gamesAccessor}
-            />
           </div>
         </div>
-        <div className="container">
-          <Helmet>
-            <title>NHL Scores - SealStats.com</title>
-            <meta
-              name="description"
-              content="View Live NHL Scores. Seal Stats is the best place to view NHL stats. User-friendly and fast."
-            />
-          </Helmet>
-          <div className="scoreboard-wrapper">
-            <div className="scoreboard-wrapper-results">
-              <Query
-                query={getScoresQuery}
-                variables={{
-                  date: currentDate, y1date, y2date, y3date, n1date, n2date, n3date,
-                }}
-                onCompleted={data => this.renderGamesAccessor(data)}
-              >
-                {({
-                  loading, error, data, client,
-                }) => {
-                  if (loading) return (<LoadingIndicator />);
-                  if (error) return (<EmptyState isError />);
-
-                  const games = data.currentDate;
-
-                  if (games.length < 1) {
-                    return (
-                      <EmptyState />
-                    );
-                  }
-                  return games.map(game => (
-                    <ScoreCard key={game.id} game={game} />
-                  ));
-                }}
-              </Query>
-            </div>
-          </div>
-        </div>
+        <Footer />
       </div>
     );
   }

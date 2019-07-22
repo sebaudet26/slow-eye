@@ -15,19 +15,17 @@ import './style.scss';
 
 
 class Header extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
-      selectedLeague: 'NHL',
-      ...JSON.parse(getFromLS('headerState') || '{}'),
+      selectedLeague: this.props.selectedLeague,
     };
 
     this.switchLeague = this.switchLeague.bind(this);
   }
 
   componentDidUpdate() {
-    saveToLS('headerState', JSON.stringify(this.state));
   }
 
   switchLeague(event) {

@@ -5,6 +5,7 @@ import { take } from 'ramda';
 import { graphql } from 'react-apollo';
 import { getStreaksQuery } from './query.js';
 import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
 import './style.scss';
 
 class HomePage extends React.Component {
@@ -99,6 +100,7 @@ class HomePage extends React.Component {
   render() {
     return (
       <div>
+        <Header selectedLeague="NHL" />
         <div className="home-page">
           {this.displayFeaturedPlayer()}
           <div className="container">
@@ -112,13 +114,13 @@ class HomePage extends React.Component {
             <div className="home-page-wrapper">
               <div className="home-page-col">
                 <h3>
-                  {' Hot Players'}
+                  {' Trending Players'}
                 </h3>
                 { this.displayPlayerStreaks() }
               </div>
               <div className="home-page-col">
                 <h3>
-                  {' Hot Teams'}
+                  {' Trending Teams'}
                 </h3>
                 <div className="power-container">
                   { this.displayTeamStreaks() }
@@ -127,6 +129,7 @@ class HomePage extends React.Component {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     );
   }

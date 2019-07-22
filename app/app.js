@@ -20,9 +20,6 @@ import './public/styles/global.scss';
 
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
 
-import Header from './components/Header';
-import Footer from './components/Footer';
-
 import NotFoundPage from './containers/NotFoundPage/Loadable';
 import TestPage from './containers/Test/Loadable';
 
@@ -64,7 +61,6 @@ const render = () => {
           >
             <meta name="description" content="Seal Stats - Hockey Stats" />
           </Helmet>
-          <Header />
           <Switch>
             <Route exact path="/" component={HomePage} />
             <Route path="/test" component={TestPage} />
@@ -86,7 +82,6 @@ const render = () => {
 
             <Route path="" component={NotFoundPage} />
           </Switch>
-          <Footer />
         </div>
       </BrowserRouter>
     </ApolloProvider>,

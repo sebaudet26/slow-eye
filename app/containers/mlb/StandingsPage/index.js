@@ -4,6 +4,8 @@ import {
   isEmpty,
 } from 'ramda';
 import { Helmet } from 'react-helmet';
+import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
 import { fetchDivisionStandings } from '../../../../server/libs/mlbApi.js';
 import StandingsTable from '../../../components/Table/mlb/StandingsTable';
 
@@ -12,6 +14,7 @@ export default class MLBStandingsPage extends React.Component {
     super();
     this.state = {
       standings: [],
+      selectedLeague: 'MLB',
     };
   }
 
@@ -30,22 +33,24 @@ export default class MLBStandingsPage extends React.Component {
     const standings = this.state.standings;
 
     return (
-      <div className="standings-page">
-        <Helmet>
-          <title>MLB Standings - Sealstats.com</title>
-          <meta
-            name="description"
-            content=""
-          />
-        </Helmet>
-        <div className="page-header">
-          <div className="container">
-            <h2>Standings</h2>
+      <div>
+        <Header selectedLeague={this.state.selectedLeague} />
+        <div className="standings-page">
+          <Helmet>
+            <title>MLB Standings - Sealstats.com</title>
+            <meta
+              name="description"
+              content=""
+            />
+          </Helmet>
+          <div className="page-header">
+            <div className="container">
+              <h2>Standings</h2>
+            </div>
           </div>
-        </div>
-        <div className="container">
-          <div>
-            {
+          <div className="container">
+            <div>
+              {
               !isEmpty(standings) ? (
                 <div>
                   <h3 className="no-margin-top">American League</h3>
@@ -59,8 +64,10 @@ export default class MLBStandingsPage extends React.Component {
                 </div>
               ) : null
             }
+            </div>
           </div>
         </div>
+        <Footer />
       </div>
     );
   }

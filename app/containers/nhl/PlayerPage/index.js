@@ -10,6 +10,8 @@ import {
 } from 'react-tabs';
 import { Query } from 'react-apollo';
 import { getPlayerQuery } from './query.js';
+import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import EmptyState from '../../../components/EmptyState';
 import CareerStatsTable from '../../../components/Table/CareerStatsTable';
@@ -29,222 +31,224 @@ const id = Number(urlParams.get('id'));
 export default class PlayerPage extends React.Component {
   render() {
     return (
-      <Query query={getPlayerQuery} variables={{ id }}>
-        {({ loading, error, data }) => {
-          if (loading) return (<LoadingIndicator />);
-          if (error) return (<EmptyState isError />);
+      <div>
+        <Header selectedLeague="NHL" />
+        <Query query={getPlayerQuery} variables={{ id }}>
+          {({ loading, error, data }) => {
+            if (loading) return (<LoadingIndicator />);
+            if (error) return (<EmptyState isError />);
 
-          const player = data.player;
+            const player = data.player;
 
-          const {
-            careerStats = [], careerPlayoffStats = [], info = {}, logs = [],
-          } = player;
-          const {
-            primaryPosition = {},
-            currentTeamInfo = {},
-            active = {},
-            draftInfo = {},
-            shootsCatches,
-            nationality,
-          } = info;
+            const {
+              careerStats = [], careerPlayoffStats = [], info = {}, logs = [],
+            } = player;
+            const {
+              primaryPosition = {},
+              currentTeamInfo = {},
+              active = {},
+              draftInfo = {},
+              shootsCatches,
+              nationality,
+            } = info;
 
-          const isPro = hasNHLExperience(careerStats);
-          const internationalLeagueNames = ['WJC-A', 'WC-A', 'Olympics'];
-          const proStats = reject(stat => contains(stat.league.name, internationalLeagueNames))(careerStats);
-          const internationalStats = filter(stat => contains(stat.league.name, internationalLeagueNames))(careerStats);
+            const isPro = hasNHLExperience(careerStats);
+            const internationalLeagueNames = ['WJC-A', 'WC-A', 'Olympics'];
+            const proStats = reject(stat => contains(stat.league.name, internationalLeagueNames))(careerStats);
+            const internationalStats = filter(stat => contains(stat.league.name, internationalLeagueNames))(careerStats);
 
 
-          return (
-            <div className="player-page">
-              <Helmet>
-                <title>{`${info.firstName} ${info.lastName} - SealStats.com`}</title>
-                <meta
-                  name="description"
-                  content={`${info.firstName} ${info.lastName} stats. Seal Stats is the best place to view NHL stats. User-friendly and fast. `}
-                />
-              </Helmet>
-              <div className="page-header wTabs">
-                <div className="container">
-                  <div className="player-wrapper">
-                    <div className="player-img">
-                      <PlayerImage id={urlParams.get('id')} />
-                      <div className="icon-wrapper player-img-country">
-                        <img src={`/public/images/country/${nationality}.svg`} />
-                      </div>
-                      {
+            return (
+              <div className="player-page">
+                <Helmet>
+                  <title>{`${info.firstName} ${info.lastName} - SealStats.com`}</title>
+                  <meta
+                    name="description"
+                    content={`${info.firstName} ${info.lastName} stats. Seal Stats is the best place to view NHL stats. User-friendly and fast. `}
+                  />
+                </Helmet>
+                <div className="page-header wTabs">
+                  <div className="container">
+                    <div className="player-wrapper">
+                      <div className="player-img">
+                        <PlayerImage id={urlParams.get('id')} />
+                        <div className="icon-wrapper player-img-country">
+                          <img src={`/public/images/country/${nationality}.svg`} />
+                        </div>
+                        {
                        currentTeamInfo ? (
                          <div className="icon-wrapper player-img-team">
                            <img src={`/public/images/teams/${currentTeamInfo.teamName.replace(' ', '-').toLowerCase()}.png`} className="" />
                          </div>
                        ) : null
                       }
-                    </div>
-                    <div className="player-info">
-                      <h2>{`${info.firstName} ${info.lastName}`}</h2>
-                      <p>
-                        {
+                      </div>
+                      <div className="player-info">
+                        <h2>{`${info.firstName} ${info.lastName}`}</h2>
+                        <p>
+                          {
                           currentTeamInfo ? (
                             <a href={`/team?id=${currentTeamInfo.id}`}>{`${currentTeamInfo.name}, `}</a>
                           ) : null
                         }
-                        {`${primaryPosition.abbreviation}, Shoots ${shootsCatches}`}
-                      </p>
-                      <div className="player-desc">
-                        <div>
-                          <p>
-                            <span className="bold">Born</span>
-                            {` ${moment(info.birthDate).format('LL')} (${moment().diff(info.birthDate, 'years')} yrs. ago) `}
-                          </p>
-                          <p>
-                            <span className="bold"> Birthplace</span>
-                            {` ${[info.birthCity, info.birthStateProvince || '', info.birthCountry].filter(Boolean).join(', ')} `}
-                          </p>
-                          <p>
-                            <span className="bold">Height</span>
-                            {` ${info.height} ft. `}
-                            <span className="bold">Weight</span>
-                            {` ${info.weight} lbs. `}
-                          </p>
-                        </div>
-                        <div className="player-desc-right">
-                          {!draftInfo ? <span>Undrafted</span> : (
-                            <div>
-                              <p>
-                                <span className="bold">Drafted by</span>
-                                {` ${draftInfo.team.name}`}
-                              </p>
-                              <p>
-                                <span>{`${toOrdinal(draftInfo.round)}  Round,`}</span>
-                                <span>{`#${draftInfo.pickOverall} Overall, ${draftInfo.year} NHL Draft`}</span>
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      { isPro && (
-                      <div className="player-stats">
-                        <div className="player-stats-item">
-                          <div className="light small-text">GP</div>
-                          <div className="bold">
-                            {sumStatsByPath({
-                              active,
-                              careerStats,
-                              pathToNumber: ['stat', 'games'],
-                            })}
+                          {`${primaryPosition.abbreviation}, Shoots ${shootsCatches}`}
+                        </p>
+                        <div className="player-desc">
+                          <div>
+                            <p>
+                              <span className="bold">Born</span>
+                              {` ${moment(info.birthDate).format('LL')} (${moment().diff(info.birthDate, 'years')} yrs. ago) `}
+                            </p>
+                            <p>
+                              <span className="bold"> Birthplace</span>
+                              {` ${[info.birthCity, info.birthStateProvince || '', info.birthCountry].filter(Boolean).join(', ')} `}
+                            </p>
+                            <p>
+                              <span className="bold">Height</span>
+                              {` ${info.height} ft. `}
+                              <span className="bold">Weight</span>
+                              {` ${info.weight} lbs. `}
+                            </p>
+                          </div>
+                          <div className="player-desc-right">
+                            {!draftInfo ? <span>Undrafted</span> : (
+                              <div>
+                                <p>
+                                  <span className="bold">Drafted by</span>
+                                  {` ${draftInfo.team.name}`}
+                                </p>
+                                <p>
+                                  <span>{`${toOrdinal(draftInfo.round)}  Round,`}</span>
+                                  <span>{`#${draftInfo.pickOverall} Overall, ${draftInfo.year} NHL Draft`}</span>
+                                </p>
+                              </div>
+                            )}
                           </div>
                         </div>
-                        {primaryPosition.abbreviation === 'G'
-                          ? (
-                            <div className="player-stats-item">
-                              <div className="light small-text">W</div>
-                              <div className="bold">
-                                {sumStatsByPath({
-                                  active,
-                                  careerStats,
-                                  pathToNumber: ['stat', 'wins'],
-                                })}
-                              </div>
+                        { isPro && (
+                        <div className="player-stats">
+                          <div className="player-stats-item">
+                            <div className="light small-text">GP</div>
+                            <div className="bold">
+                              {sumStatsByPath({
+                                active,
+                                careerStats,
+                                pathToNumber: ['stat', 'games'],
+                              })}
                             </div>
-                          ) : (
-                            <div className="player-stats-item">
-                              <div className="light small-text">G</div>
-                              <div className="bold">
-                                {sumStatsByPath({
-                                  active,
-                                  careerStats,
-                                  pathToNumber: ['stat', 'goals'],
-                                })}
+                          </div>
+                          {primaryPosition.abbreviation === 'G'
+                            ? (
+                              <div className="player-stats-item">
+                                <div className="light small-text">W</div>
+                                <div className="bold">
+                                  {sumStatsByPath({
+                                    active,
+                                    careerStats,
+                                    pathToNumber: ['stat', 'wins'],
+                                  })}
+                                </div>
                               </div>
-                            </div>
-                          )
+                            ) : (
+                              <div className="player-stats-item">
+                                <div className="light small-text">G</div>
+                                <div className="bold">
+                                  {sumStatsByPath({
+                                    active,
+                                    careerStats,
+                                    pathToNumber: ['stat', 'goals'],
+                                  })}
+                                </div>
+                              </div>
+                            )
                     }
-                        {primaryPosition.abbreviation === 'G'
-                          ? (
-                            <div className="player-stats-item">
-                              <div className="light small-text">L</div>
-                              <div className="bold">
-                                {sumStatsByPath({
-                                  active,
-                                  careerStats,
-                                  pathToNumber: ['stat', 'losses'],
-                                })}
+                          {primaryPosition.abbreviation === 'G'
+                            ? (
+                              <div className="player-stats-item">
+                                <div className="light small-text">L</div>
+                                <div className="bold">
+                                  {sumStatsByPath({
+                                    active,
+                                    careerStats,
+                                    pathToNumber: ['stat', 'losses'],
+                                  })}
+                                </div>
                               </div>
-                            </div>
-                          ) : (
-                            <div className="player-stats-item">
-                              <div className="light small-text">A</div>
-                              <div className="bold">
-                                {sumStatsByPath({
-                                  active,
-                                  careerStats,
-                                  pathToNumber: ['stat', 'assists'],
-                                })}
+                            ) : (
+                              <div className="player-stats-item">
+                                <div className="light small-text">A</div>
+                                <div className="bold">
+                                  {sumStatsByPath({
+                                    active,
+                                    careerStats,
+                                    pathToNumber: ['stat', 'assists'],
+                                  })}
+                                </div>
                               </div>
-                            </div>
-                          )
+                            )
                     }
-                        {primaryPosition.abbreviation === 'G'
-                          ? (
-                            <div className="player-stats-item">
-                              <div className="light small-text">OT</div>
-                              <div className="bold">
-                                {sumStatsByPath({
-                                  active,
-                                  careerStats,
-                                  pathToNumber: ['stat', 'ot'],
-                                })}
+                          {primaryPosition.abbreviation === 'G'
+                            ? (
+                              <div className="player-stats-item">
+                                <div className="light small-text">OT</div>
+                                <div className="bold">
+                                  {sumStatsByPath({
+                                    active,
+                                    careerStats,
+                                    pathToNumber: ['stat', 'ot'],
+                                  })}
+                                </div>
                               </div>
-                            </div>
-                          ) : (
-                            <div className="player-stats-item">
-                              <div className="light small-text">Pts</div>
-                              <div className="bold">
-                                {sumStatsByPath({
-                                  active,
-                                  careerStats,
-                                  pathToNumber: ['stat', 'points'],
-                                })}
+                            ) : (
+                              <div className="player-stats-item">
+                                <div className="light small-text">Pts</div>
+                                <div className="bold">
+                                  {sumStatsByPath({
+                                    active,
+                                    careerStats,
+                                    pathToNumber: ['stat', 'points'],
+                                  })}
+                                </div>
                               </div>
-                            </div>
-                          )
+                            )
                     }
-                        {primaryPosition.abbreviation === 'G'
-                          ? (
-                            <div className="player-stats-item">
-                              <div className="light small-text">SO</div>
-                              <div className="bold">
-                                {sumStatsByPath({
-                                  active,
-                                  careerStats,
-                                  pathToNumber: ['stat', 'shutouts'],
-                                })}
+                          {primaryPosition.abbreviation === 'G'
+                            ? (
+                              <div className="player-stats-item">
+                                <div className="light small-text">SO</div>
+                                <div className="bold">
+                                  {sumStatsByPath({
+                                    active,
+                                    careerStats,
+                                    pathToNumber: ['stat', 'shutouts'],
+                                  })}
+                                </div>
                               </div>
-                            </div>
-                          ) : (
-                            <div className="player-stats-item">
-                              <div className="light small-text">+/-</div>
-                              <div className="bold">
-                                {sumStatsByPath({
-                                  active,
-                                  careerStats,
-                                  pathToNumber: ['stat', 'plusMinus'],
-                                })}
+                            ) : (
+                              <div className="player-stats-item">
+                                <div className="light small-text">+/-</div>
+                                <div className="bold">
+                                  {sumStatsByPath({
+                                    active,
+                                    careerStats,
+                                    pathToNumber: ['stat', 'plusMinus'],
+                                  })}
+                                </div>
                               </div>
-                            </div>
-                          )
+                            )
                     }
-                        {
+                          {
                       active === true ? (
                         <PlayerBadges info={info} stats={careerStats} logs={logs} />
                       ) : null
                     }
+                        </div>
+                        )}
                       </div>
-                      )}
                     </div>
                   </div>
                 </div>
-              </div>
-              {
+                {
               internationalStats.length || logs.length ? (
                 <Tabs
                   defaultIndex={Number(getFromLS(`playerTabIndex${urlParams.get('id')}`)) || 0}
@@ -294,11 +298,13 @@ export default class PlayerPage extends React.Component {
               )
             }
 
-            </div>
-          );
-        }}
+              </div>
+            );
+          }}
 
-      </Query>
+        </Query>
+        <Footer />
+      </div>
     );
   }
 }

@@ -9,6 +9,8 @@ import {
 } from 'react-tabs';
 import { Query } from 'react-apollo';
 import { getTeamQuery } from './query.js';
+import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
 import Dropdown from '../../../components/Dropdown/Dropdown';
 import PlayerCard from '../../../components/PlayerCard/PlayerCard';
 import RosterTable from '../../../components/Table/RosterTable';
@@ -44,104 +46,108 @@ const renderTeamStat = (label, stat) => (
 class TeamPage extends React.Component {
   render() {
     return (
-      <Query query={getTeamQuery} variables={{ id }}>
-        {({ loading, error, data }) => {
-          if (loading) return (<LoadingIndicator />);
-          if (error) return (<EmptyState isError />);
+      <div>
+        <Header selectedLeague="NHL" />
+        <Query query={getTeamQuery} variables={{ id }}>
+          {({ loading, error, data }) => {
+            if (loading) return (<LoadingIndicator />);
+            if (error) return (<EmptyState isError />);
 
-          const team = data.team;
-          const roster = team.roster;
+            const team = data.team;
+            const roster = team.roster;
 
-          console.log(team);
+            console.log(team);
 
-          return (
-            <div className="team-page">
-              <Helmet>
-                <title>{`${team.name} - SealStats.com`}</title>
-                <meta
-                  name="description"
-                  content={`${team.name} roster and stats. Seal Stats is the best place to view NHL stats. User-friendly and fast. `}
-                />
-              </Helmet>
-              <div className="page-header wTabs">
-                <div className="container">
-                  <div className="team-wrapper">
-                    <div className="team-wrapper-title">
-                      <div className="team-img">
-                        <svg viewBox="10 0 100 75" width="100" height="75" className="team-img-logo">
+            return (
+              <div className="team-page">
+                <Helmet>
+                  <title>{`${team.name} - SealStats.com`}</title>
+                  <meta
+                    name="description"
+                    content={`${team.name} roster and stats. Seal Stats is the best place to view NHL stats. User-friendly and fast. `}
+                  />
+                </Helmet>
+                <div className="page-header wTabs">
+                  <div className="container">
+                    <div className="team-wrapper">
+                      <div className="team-wrapper-title">
+                        <div className="team-img">
+                          <svg viewBox="10 0 100 75" width="100" height="75" className="team-img-logo">
                           <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${team.id}-20182019-light`} />
                         </svg>
-                      </div>
-                      <div>
-                        <Dropdown name={team.name} />
-                        <p>
+                        </div>
+                        <div>
+                          <Dropdown name={team.name} />
+                          <p>
                           <span>
                             {`${toOrdinal(team.ranking.division)} Division, `}
                             {`${toOrdinal(team.ranking.conference)} Conference, `}
                             {`${toOrdinal(team.ranking.league)} League`}
                           </span>
                         </p>
+                        </div>
                       </div>
-                    </div>
-                    { !team.stats ? null : (
-                      <div className="team-info">
-                        <div className="team-stats">
+                      { !team.stats ? null : (
+                        <div className="team-info">
+                          <div className="team-stats">
                           {renderTeamStat('GP', team.stats.splits[0].gamesPlayed)}
                           {renderTeamStat('W', team.stats.splits[0].wins)}
                           {renderTeamStat('L', team.stats.splits[0].losses)}
                           {renderTeamStat('OTL', team.stats.splits[0].ot)}
                           {renderTeamStat('Pts', team.stats.splits[0].pts)}
                         </div>
-                        <div className="team-stats">
+                          <div className="team-stats">
                           {renderTeamStat('GF', Math.round(Number(team.stats.splits[0].gamesPlayed) * Number(team.stats.splits[0].goalsPerGame)))}
                           {renderTeamStat('GA', Math.round(Number(team.stats.splits[0].gamesPlayed) * Number(team.stats.splits[0].goalsAgainstPerGame)))}
                           {renderTeamStat('PP%', team.stats.splits[0].powerPlayPercentage)}
                           {renderTeamStat('PK%', team.stats.splits[0].penaltyKillPercentage)}
                         </div>
-                      </div>
-                    )}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-              <Tabs
-                defaultIndex={Number(getFromLS('teamTabIndex')) || 0}
-                onSelect={i => saveToLS('teamTabIndex', i)}
-              >
-                <TabList>
+                <Tabs
+                  defaultIndex={Number(getFromLS('teamTabIndex')) || 0}
+                  onSelect={i => saveToLS('teamTabIndex', i)}
+                >
+                  <TabList>
+                    <div className="container">
+                      <Tab>Depth Chart</Tab>
+                      <Tab>Roster</Tab>
+                      <Tab>Player Stats</Tab>
+                    </div>
+                  </TabList>
                   <div className="container">
-                    <Tab>Depth Chart</Tab>
-                    <Tab>Roster</Tab>
-                    <Tab>Player Stats</Tab>
+                    <TabPanel />
+                    <TabPanel>
+                      <div>
+                        <h3>Forwards</h3>
+                        <RosterTable players={roster.filter(p => forwardsAbbreviations.includes(p.info.primaryPosition.abbreviation))} />
+                        <h3>Defensemen</h3>
+                        <RosterTable players={roster.filter(p => p.info.primaryPosition.abbreviation === 'D')} />
+                        <h3>Goalies</h3>
+                        <RosterTable players={roster.filter(p => p.info.primaryPosition.abbreviation === 'G')} />
+                      </div>
+                    </TabPanel>
+                    <TabPanel>
+                      <div>
+                        <h3>Forwards</h3>
+                        <RosterStatsTable players={roster.filter(p => forwardsAbbreviations.includes(p.info.primaryPosition.abbreviation))} position="F" />
+                        <h3>Defensemen</h3>
+                        <RosterStatsTable players={roster.filter(p => p.info.primaryPosition.abbreviation === 'D')} position="D" />
+                        <h3>Goalies</h3>
+                        <RosterStatsTable players={roster.filter(p => p.info.primaryPosition.abbreviation === 'G')} position="G" />
+                      </div>
+                    </TabPanel>
                   </div>
-                </TabList>
-                <div className="container">
-                  <TabPanel />
-                  <TabPanel>
-                    <div>
-                      <h3>Forwards</h3>
-                      <RosterTable players={roster.filter(p => forwardsAbbreviations.includes(p.info.primaryPosition.abbreviation))} />
-                      <h3>Defensemen</h3>
-                      <RosterTable players={roster.filter(p => p.info.primaryPosition.abbreviation === 'D')} />
-                      <h3>Goalies</h3>
-                      <RosterTable players={roster.filter(p => p.info.primaryPosition.abbreviation === 'G')} />
-                    </div>
-                  </TabPanel>
-                  <TabPanel>
-                    <div>
-                      <h3>Forwards</h3>
-                      <RosterStatsTable players={roster.filter(p => forwardsAbbreviations.includes(p.info.primaryPosition.abbreviation))} position="F" />
-                      <h3>Defensemen</h3>
-                      <RosterStatsTable players={roster.filter(p => p.info.primaryPosition.abbreviation === 'D')} position="D" />
-                      <h3>Goalies</h3>
-                      <RosterStatsTable players={roster.filter(p => p.info.primaryPosition.abbreviation === 'G')} position="G" />
-                    </div>
-                  </TabPanel>
-                </div>
-              </Tabs>
-            </div>
-          );
-        }}
-      </Query>
+                </Tabs>
+              </div>
+            );
+          }}
+        </Query>
+        <Footer />
+      </div>
     );
   }
 }
