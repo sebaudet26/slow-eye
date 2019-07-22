@@ -56,8 +56,6 @@ class TeamPage extends React.Component {
             const team = data.team;
             const roster = team.roster;
 
-            console.log(team);
-
             return (
               <div className="team-page">
                 <Helmet>
@@ -73,35 +71,35 @@ class TeamPage extends React.Component {
                       <div className="team-wrapper-title">
                         <div className="team-img">
                           <svg viewBox="10 0 100 75" width="100" height="75" className="team-img-logo">
-                          <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${team.id}-20182019-light`} />
-                        </svg>
+                            <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${team.id}-20182019-light`} />
+                          </svg>
                         </div>
                         <div>
                           <Dropdown name={team.name} />
                           <p>
-                          <span>
-                            {`${toOrdinal(team.ranking.division)} Division, `}
-                            {`${toOrdinal(team.ranking.conference)} Conference, `}
-                            {`${toOrdinal(team.ranking.league)} League`}
-                          </span>
-                        </p>
+                            <span>
+                              {`${toOrdinal(team.ranking.division)} Division, `}
+                              {`${toOrdinal(team.ranking.conference)} Conference, `}
+                              {`${toOrdinal(team.ranking.league)} League`}
+                            </span>
+                          </p>
                         </div>
                       </div>
                       { !team.stats ? null : (
                         <div className="team-info">
                           <div className="team-stats">
-                          {renderTeamStat('GP', team.stats.splits[0].gamesPlayed)}
-                          {renderTeamStat('W', team.stats.splits[0].wins)}
-                          {renderTeamStat('L', team.stats.splits[0].losses)}
-                          {renderTeamStat('OTL', team.stats.splits[0].ot)}
-                          {renderTeamStat('Pts', team.stats.splits[0].pts)}
-                        </div>
+                            {renderTeamStat('GP', team.stats.splits[0].gamesPlayed)}
+                            {renderTeamStat('W', team.stats.splits[0].wins)}
+                            {renderTeamStat('L', team.stats.splits[0].losses)}
+                            {renderTeamStat('OTL', team.stats.splits[0].ot)}
+                            {renderTeamStat('Pts', team.stats.splits[0].pts)}
+                          </div>
                           <div className="team-stats">
-                          {renderTeamStat('GF', Math.round(Number(team.stats.splits[0].gamesPlayed) * Number(team.stats.splits[0].goalsPerGame)))}
-                          {renderTeamStat('GA', Math.round(Number(team.stats.splits[0].gamesPlayed) * Number(team.stats.splits[0].goalsAgainstPerGame)))}
-                          {renderTeamStat('PP%', team.stats.splits[0].powerPlayPercentage)}
-                          {renderTeamStat('PK%', team.stats.splits[0].penaltyKillPercentage)}
-                        </div>
+                            {renderTeamStat('GF', Math.round(Number(team.stats.splits[0].gamesPlayed) * Number(team.stats.splits[0].goalsPerGame)))}
+                            {renderTeamStat('GA', Math.round(Number(team.stats.splits[0].gamesPlayed) * Number(team.stats.splits[0].goalsAgainstPerGame)))}
+                            {renderTeamStat('PP%', team.stats.splits[0].powerPlayPercentage)}
+                            {renderTeamStat('PK%', team.stats.splits[0].penaltyKillPercentage)}
+                          </div>
                         </div>
                       )}
                     </div>
