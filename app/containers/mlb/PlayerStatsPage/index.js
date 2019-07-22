@@ -45,8 +45,6 @@ export default class MLBPlayerStatsPage extends React.Component {
     const pitchers = this.state.pitchers.leader_pitching_repeater;
     const teams = this.state.teams.team_all_season;
 
-    console.log(teams);
-
     return (
       <div>
         <Header selectedLeague={this.state.selectedLeague} />
