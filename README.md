@@ -7,7 +7,6 @@ https://github.com/dword4/nhlapi
 TODO:
 
 ----------V2----------
-- League State Fix
 - Home Page Redesign (UI Architecture Review as well)
 - Change Branding - ScoreJam
 - Pass ID as props instead of URL?
