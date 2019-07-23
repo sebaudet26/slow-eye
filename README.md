@@ -1,6 +1,6 @@
 Made with ❤️
 
-NHL API
+Thank you to dword4 for documenting the NHL api
 https://github.com/dword4/nhlapi
 
 TODO:
