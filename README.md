@@ -1,6 +1,5 @@
 Made with ❤️
 
-
 NHL API
 https://github.com/dword4/nhlapi
 
@@ -14,6 +13,8 @@ TODO:
 - Selected option state on react select
 - Dropdown on click not hover
 - Link vs A Tag
+- Clean up constants, utils
+- Add MLB to Schema && Clean up schema file it's reaaaaally bad
 
 ----------V3----------
 - Game Page When game isn't started (show matchup)
