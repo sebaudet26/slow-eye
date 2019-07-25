@@ -13,6 +13,7 @@ const {
   head,
   filter,
   find,
+  lte,
   map,
   path,
   pathOr,
@@ -22,6 +23,7 @@ const {
   propOr,
   replace,
   split,
+  sum,
   take,
   takeLast,
   values,
@@ -52,6 +54,11 @@ const {
   calculatePlayerStreaks,
   calculateTeamsStreaks,
 } = require('../libs/nhlApi');
+
+const {
+  isHot,
+  isCold,
+} = require('./streaks');
 
 const ifNotThereFetchId = propName => async (d) => {
   if (d.id) {
@@ -417,6 +424,40 @@ const Player = new GraphQLObjectType({
     position: {
       type: Position,
       resolve: prop('position'),
+    },
+    // Decorators
+    isInjured: {
+      type: GraphQLBoolean,
+      resolve: p => fetchInfoForPlayerId(p.id)
+      .then(pipe(
+        path(['info', 'rosterStatus']),
+        equals('I'),
+      ))
+    },
+    isVeteran: {
+      type: GraphQLBoolean,
+      resolve: p => fetchAllYearsStatsForPlayerId(p.id)
+      .then(pipe(
+        map(pathOr(0, ['stat', 'games'])),
+        sum,
+        lte(500),
+      ))
+    },
+    isHot: {
+      type: GraphQLBoolean,
+      resolve: p => Promise.all([
+        fetchGameLogsForPlayerId(p.id),
+        fetchInfoForPlayerId(p.id),
+      ])
+      .then(([gameLogs, info]) => isHot(take(10, gameLogs), info.primaryPosition.abbreviation))
+    },
+    isCold: {
+      type: GraphQLBoolean,
+      resolve: p => Promise.all([
+        fetchGameLogsForPlayerId(p.id),
+        fetchInfoForPlayerId(p.id),
+      ])
+      .then(([gameLogs, info]) => isCold(take(10, gameLogs), info.primaryPosition.abbreviation))
     },
     // Lazy load team info
     team: {
