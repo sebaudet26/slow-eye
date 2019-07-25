@@ -14,7 +14,7 @@ TODO:
 - Dropdown on click not hover
 - Link vs A Tag
 - Clean up constants, utils
-- Add MLB to Schema && Clean up schema file it's reaaaaally bad
+- Add MLB to Schema && Clean up schema file
 
 ----------V3----------
 - Game Page When game isn't started (show matchup)
