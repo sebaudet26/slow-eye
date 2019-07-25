@@ -20,9 +20,11 @@ const debounce = (func, delay) => {
 
 const optionsQuery = gql`
 query {
-  searchPlayers {
-    id
-    name
+  players {
+    info {
+      id
+      fullName
+    }
   }
   teams {
     id
@@ -147,8 +149,8 @@ class SearchBar extends React.Component {
               if (error) return ('Error');
 
               const options = [
-                ...data.searchPlayers.map(p => ({
-                  id: p.id, string: p.name, linkType: 'player',
+                ...data.players.map(p => ({
+                  id: p.info.id, string: p.info.fullName, linkType: 'player',
                 })),
                 ...data.teams.map(t => ({
                   id: t.id, string: t.name, linkType: 'team', abbreviation: t.abbreviation,
