@@ -1,16 +1,11 @@
 /* global window */
 import React from 'react';
-import PropTypes from 'prop-types';
-import {
-  last, pipe, pathOr, invoker,
-} from 'ramda';
 import ReactTable from 'react-table';
 import withFixedColumns from 'react-table-hoc-fixed-columns';
 import 'react-table/react-table.css';
 import './styles.scss';
 
 const ReactTableFixedColumns = withFixedColumns(ReactTable);
-const takeLatestSeason = pipe(pathOr([], ['player', 'stats']), last);
 
 const RosterStatsTable = ({ players, position }) => (
   <div>
@@ -32,7 +27,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'Name',
           id: 'fullName',
-          accessor: d => `${d.player.info.fullName}+${d.player.id}`,
+          accessor: d => `${d.info.fullName}+${d.id}`,
           className: 'text-left',
           fixed: 'left',
           maxWidth: 200,
@@ -46,14 +41,14 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'GP',
           id: 'games',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'games'])),
+          accessor: d => d.stats[0].stat.games,
           maxWidth: 75,
           minWidth: 35,
         },
         {
           Header: 'G',
           id: 'goals',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'goals'])),
+          accessor: d => d.stats[0].stat.goals,
           show: position !== 'G',
           maxWidth: 75,
           minWidth: 35,
@@ -61,7 +56,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'A',
           id: 'assists',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'assists'])),
+          accessor: d => d.stats[0].stat.assists,
           show: position !== 'G',
           maxWidth: 75,
           minWidth: 35,
@@ -69,7 +64,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'Pts',
           id: 'points',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'points'])),
+          accessor: d => d.stats[0].stat.points,
           show: position !== 'G',
           maxWidth: 75,
           minWidth: 50,
@@ -77,7 +72,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: '+/-',
           id: 'plusMinus',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'plusMinus'])),
+          accessor: d => d.stats[0].stat.plusMinus,
           show: position !== 'G',
           maxWidth: 75,
           minWidth: 50,
@@ -85,7 +80,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'W',
           id: 'wins',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'wins'])),
+          accessor: d => d.stats[0].stat.wins,
           show: position === 'G',
           maxWidth: 75,
           minWidth: 50,
@@ -93,7 +88,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'L',
           id: 'losses',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'losses'])),
+          accessor: d => d.stats[0].stat.losses,
           show: position === 'G',
           maxWidth: 75,
           minWidth: 50,
@@ -101,7 +96,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'OT',
           id: 'ot',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'ot'])),
+          accessor: d => d.stats[0].stat.ot,
           show: position === 'G',
           maxWidth: 75,
           minWidth: 50,
@@ -109,7 +104,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'SV%',
           id: 'savePercentage',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'savePercentage']), invoker(1, 'toFixed')(3)),
+          accessor: d => d.stats[0].stat.savePercentage,
           show: position === 'G',
           maxWidth: 75,
           minWidth: 60,
@@ -117,7 +112,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'GAA',
           id: 'goalAgainstAverage',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'goalAgainstAverage'])),
+          accessor: d => d.stats[0].stat.goalAgainstAverage,
           show: position === 'G',
           maxWidth: 75,
           minWidth: 60,
@@ -126,7 +121,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'SO',
           id: 'shutouts',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'shutouts'])),
+          accessor: d => d.stats[0].stat.shutouts,
           show: position === 'G',
           maxWidth: 75,
           minWidth: 50,
@@ -134,7 +129,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'SV',
           id: 'saves',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'saves'])),
+          accessor: d => d.stats[0].stat.saves,
           show: position === 'G',
           maxWidth: 75,
           minWidth: 50,
@@ -142,7 +137,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'GA',
           id: 'goalsAgainst',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'goalsAgainst'])),
+          accessor: d => d.stats[0].stat.goalsAgainst,
           show: position === 'G',
           maxWidth: 75,
           minWidth: 50,
@@ -150,7 +145,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'PIM',
           id: 'pim',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'pim'])),
+          accessor: d => d.stats[0].stat.pim,
           show: position !== 'G',
           maxWidth: 55,
           minWidth: 50,
@@ -158,7 +153,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'PPG',
           id: 'powerPlayGoals',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'powerPlayGoals'])),
+          accessor: d => d.stats[0].stat.powerPlayGoals,
           show: position !== 'G',
           maxWidth: 75,
           minWidth: 50,
@@ -166,7 +161,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'SHG',
           id: 'shortHandedGoals',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'shortHandedGoals'])),
+          accessor: d => d.stats[0].stat.shortHandedGoals,
           show: position !== 'G',
           maxWidth: 75,
           minWidth: 50,
@@ -174,7 +169,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'GWG',
           id: 'gameWinningGoals',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'gameWinningGoals'])),
+          accessor: d => d.stats[0].stat.gameWinningGoals,
           show: position !== 'G',
           maxWidth: 75,
           minWidth: 50,
@@ -182,7 +177,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'Hits',
           id: 'hits',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'hits'])),
+          accessor: d => d.stats[0].stat.hits,
           show: position !== 'G',
           maxWidth: 75,
           minWidth: 50,
@@ -190,7 +185,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'Bks',
           id: 'blocked',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'blocked'])),
+          accessor: d => d.stats[0].stat.blocked,
           show: position !== 'G',
           maxWidth: 75,
           minWidth: 50,
@@ -198,7 +193,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'SOG',
           id: 'shots',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'shots'])),
+          accessor: d => d.stats[0].stat.shots,
           show: position !== 'G',
           maxWidth: 75,
           minWidth: 50,
@@ -206,7 +201,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'S%',
           id: 'shotPct',
-          accessor: d => pipe(takeLatestSeason, pathOr('0', ['stat', 'shotPct']))(d),
+          accessor: d => d.stats[0].stat.shotPct,
           show: position !== 'G',
           maxWidth: 75,
           minWidth: 55,
@@ -217,7 +212,7 @@ const RosterStatsTable = ({ players, position }) => (
         {
           Header: 'TOI/GP',
           id: 'timeOnIcePerGame',
-          accessor: pipe(takeLatestSeason, pathOr(0, ['stat', 'timeOnIcePerGame'])),
+          accessor: d => d.stats[0].stat.timeOnIcePerGame,
           show: position !== 'G',
           maxWidth: 75,
           minWidth: 65,
@@ -240,9 +235,5 @@ const RosterStatsTable = ({ players, position }) => (
     />
   </div>
 );
-
-RosterStatsTable.propTypes = {
-  players: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-};
 
 export default RosterStatsTable;

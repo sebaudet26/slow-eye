@@ -34,7 +34,7 @@ class LeagueSwitch extends React.Component {
 
   render() {
     return (
-      <div className="leagueSwitch" onMouseOver={this.onMouseEnter} onMouseLeave={this.onMouseLeave} toggle={this.toggle}>
+      <div className="leagueSwitch" onMouseOver={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onToggle={this.toggle}>
         <div className="leagueSwitch-select">
           {this.props.league}
           <i className="leagueSwitch-arrow" />

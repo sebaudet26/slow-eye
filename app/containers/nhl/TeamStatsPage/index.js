@@ -1,24 +1,51 @@
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { createStructuredSelector } from 'reselect';
-import injectReducer from '../../../utils/injectReducer';
-import { makeSelectTeamsStats } from './selectors';
-import { fetchAllTeams } from './actions';
-import reducer from './reducer';
-import TeamStatsPage from './TeamStatsPage';
+import React from 'react';
+import { Helmet } from 'react-helmet';
+import { Query } from 'react-apollo';
+import { getTeamsQuery } from './query.js';
+import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
+import TeamsTable from '../../../components/Table/TeamsTable';
+import LoadingIndicator from '../../../components/LoadingIndicator';
+import EmptyState from '../../../components/EmptyState';
+import './style.scss';
 
-const mapDispatchToProps = dispatch => ({
-  fetchAllTeams: () => dispatch(fetchAllTeams()),
-});
+class TeamStatsPage extends React.Component {
+  render() {
+    const { teams } = this.props;
+    return (
+      <div>
+        <Header selectedLeague="NHL" />
+        <div className="teamStats-page">
+          <Helmet>
+            <title>Team Stats - SealStats.com</title>
+            <meta name="description" content="View NHL Team Stats. Seal Stats is the best place to view NHL stats. User-friendly and fast." />
+          </Helmet>
+          <div className="page-header">
+            <div className="container">
+              <h2>Team Stats</h2>
+            </div>
+          </div>
+          <div className="container">
+            <Query query={getTeamsQuery}>
+              {({ loading, error, data }) => {
+                if (loading) return (<LoadingIndicator />);
+                if (error) return (<EmptyState isError />);
 
-const mapStateToProps = createStructuredSelector({
-  teams: makeSelectTeamsStats(),
-});
+                const teams = data.teams;
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+                return (
+                  <TeamsTable teams={teams} />
+                );
+              }}
 
-const withReducer = injectReducer({ key: 'home', reducer });
+            </Query>
 
-export default compose(withReducer, withConnect)(TeamStatsPage);
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+}
 
-export { mapDispatchToProps };
+export default TeamStatsPage;

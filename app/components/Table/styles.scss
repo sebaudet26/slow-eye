@@ -1,4 +1,4 @@
-@import '../../styles/variables.scss';
+@import '../../public/styles/variables.scss';
 
 
 .ReactTable {
@@ -9,7 +9,7 @@
   input, select {
     height: 30px;
   }
-  &.player-stats {
+  &.playerTable-stats {
 
     .team-cell-logo {
       margin-right: 0px;
@@ -247,7 +247,7 @@
 }
 
 .filters {
-  padding: 15px 0 25px 0;
+  padding: 25px 0;
   margin-bottom: 25px;
   border-bottom: solid 1px $grey-4;
   background: $white;

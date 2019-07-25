@@ -12,17 +12,16 @@ import {
 } from '../../utils/calculations';
 
 // Images
-import RookieIcon from '../../images/pacifier.svg';
-import VeteranIcon from '../../images/veteran.svg';
-import InjuryIcon from '../../images/bandage.svg';
-import HotIcon from '../../images/fire.svg';
-import ColdIcon from '../../images/snowflake.svg';
+import RookieIcon from '../../public/images/pacifier.svg';
+import VeteranIcon from '../../public/images/veteran.svg';
+import InjuryIcon from '../../public/images/bandage.svg';
+import HotIcon from '../../public/images/fire.svg';
+import ColdIcon from '../../public/images/snowflake.svg';
 import './style.scss';
 
 const getIsHotText = logs => (`Hot Streak - ${getPointsInLastGames(logs)} pts in last ${hotColdGames} games`);
 const getPlusMinusText = (logs, pos) => (pos === 'D' ? ` and ${cumulativePlusMinusInLastGames(logs)} ` : '');
 const getIsColdText = (logs, pos) => (`Cold Streak - ${getPointsInLastGames(logs)} pts${getPlusMinusText(logs, pos)} in last ${hotColdGames} games`);
-const isActiveThisYear = latestSeason => latestSeason.season === '20182019';
 
 const PlayerBadges = ({ info, stats, logs }) => (
   <div className="player-badges">
@@ -44,17 +43,16 @@ const PlayerBadges = ({ info, stats, logs }) => (
         <ReactTooltip />
       </div>
     ) : null }
-    { isActiveThisYear(stats[stats.length - 1])
-      && isHot(logs, info.primaryPosition.abbreviation)
-      ? (
-        <div className="icon-wrapper" data-tip={getIsHotText(logs)}>
-          <img src={HotIcon} />
-          <ReactTooltip />
-        </div>
-      ) : null
+    {
+      isHot(logs, info.primaryPosition.abbreviation)
+        ? (
+          <div className="icon-wrapper" data-tip={getIsHotText(logs)}>
+            <img src={HotIcon} />
+            <ReactTooltip />
+          </div>
+        ) : null
     }
-    { isActiveThisYear(stats[stats.length - 1])
-      && isCold(logs, info.primaryPosition.abbreviation)
+    { isCold(logs, info.primaryPosition.abbreviation)
       ? (
         <div className="icon-wrapper" data-tip={getIsColdText(logs, info.primaryPosition.abbreviation)}>
           <img src={ColdIcon} />

@@ -1,23 +1,51 @@
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { createStructuredSelector } from 'reselect';
-import injectReducer from '../../../utils/injectReducer';
-import { fetchWildCardStandings } from './actions';
-import { makeSelectStandings } from './selectors';
-import reducer from './reducer';
-import StandingsPage from './StandingsPage';
+import React from 'react';
+import { Helmet } from 'react-helmet';
+import { Query } from 'react-apollo';
+import { getStandingsQuery } from './query.js';
+import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
+import LoadingIndicator from '../../../components/LoadingIndicator';
+import EmptyState from '../../../components/EmptyState';
+import StandingsTable from '../../../components/Table/StandingsTable';
+import './style.scss';
 
-const mapDispatchToProps = dispatch => ({
-  fetchStandings: () => dispatch(fetchWildCardStandings()),
-});
+class StandingsPage extends React.Component {
+  render() {
+    return (
+      <div>
+        <Header selectedLeague="NHL" />
+        <div className="standings-page">
+          <div className="page-header">
+            <div className="container">
+              <h2>Standings</h2>
+            </div>
+          </div>
+          <div className="container">
+            <Helmet>
+              <title>NHL Standings - SealStats.com</title>
+              <meta
+                name="description"
+                content="View NHL Standings. Seal Stats is the best place to view NHL stats. User-friendly and fast."
+              />
+            </Helmet>
+            <Query query={getStandingsQuery}>
+              {({ loading, error, data }) => {
+                if (loading) return (<LoadingIndicator />);
+                if (error) return (<EmptyState isError />);
 
-const mapStateToProps = createStructuredSelector({
-  standings: makeSelectStandings(),
-});
+                const standings = data.standings;
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+                return (
+                  <StandingsTable standings={standings} />
+                );
+              }}
+            </Query>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+}
 
-const withReducer = injectReducer({ key: 'home', reducer });
-
-export default compose(withReducer, withConnect)(StandingsPage);
-export { mapDispatchToProps };
+export default StandingsPage;

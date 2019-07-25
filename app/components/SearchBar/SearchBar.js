@@ -4,10 +4,10 @@ import './style.scss';
 import {
   filter, map, pipe, prop, take, mapObjIndexed, values,
 } from 'ramda';
-import { push } from 'react-router-redux';
-import SearchIcon from '../../images/search.svg';
+import { gql } from 'apollo-boost';
+import { Query } from 'react-apollo';
+import SearchIcon from '../../public/images/search.svg';
 import PlayerIcon from '../PlayerIcon';
-import graphqlApi from '../../utils/api';
 import { smallLogoForTeamName } from '../../utils/team';
 
 let action;
@@ -18,14 +18,12 @@ const debounce = (func, delay) => {
   action = setTimeout(func, delay);
 };
 
-const graphqlQueryPlayers = `{
-  allHistoryPlayers {
+const optionsQuery = gql`
+query {
+  searchPlayers {
     id
     name
   }
-}`;
-
-const graphqlQueryTeams = `{
   teams {
     id
     name
@@ -61,7 +59,6 @@ const stringMatches = query => opt => new RegExp(query, 'i').test(opt.string);
 
 const initialState = {
   cursor: 0,
-  options: [],
   query: '',
 };
 
@@ -70,37 +67,17 @@ class SearchBar extends React.Component {
     super(props);
     this.state = {
       cursor: 0,
-      options: [],
       query: '',
       showOptions: false,
     };
-    this.getPlayersShortList = this.getPlayersShortList.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.showOptions = this.showOptions.bind(this);
     this.closeOptions = this.closeOptions.bind(this);
   }
 
-  componentWillMount() {
-    this.getPlayersShortList();
-  }
-
   componentWillUnmount() {
     clearTimeout(action);
-  }
-
-  async getPlayersShortList() {
-    const { allHistoryPlayers: players } = await graphqlApi(graphqlQueryPlayers);
-    const { teams } = await graphqlApi(graphqlQueryTeams);
-    const newOptions = [
-      ...players.map(p => ({
-        id: p.id, string: p.name, linkType: 'player',
-      })),
-      ...teams.map(t => ({
-        id: t.id, string: t.name, linkType: 'team', abbreviation: t.abbreviation,
-      })),
-    ];
-    this.setState({ options: newOptions });
   }
 
   handleInputChange(e) {
@@ -150,7 +127,7 @@ class SearchBar extends React.Component {
 
 
   render() {
-    const { options, query, cursor } = this.state;
+    const { query, cursor } = this.state;
     return (
       <div className="searchBar">
         <form className="searchBar-form">
@@ -164,28 +141,51 @@ class SearchBar extends React.Component {
             onClick={this.showOptions}
           />
 
-          {
-          this.state.showOptions
-            ? (
-              <div
-                className="options"
-                ref={(element) => {
-                  this.optionsList = element;
-                }}
-              >
-                {
-                query
-                  ? pipe(
-                    filter(stringMatches(query)),
-                    take(5),
-                    mapObjIndexed(renderOption(cursor)),
-                    values,
-                  )(options)
-                  : null
-              }
-              </div>
-            ) : null
-          }
+          <Query query={optionsQuery}>
+            {({ loading, error, data }) => {
+              if (loading) return (null);
+              if (error) return ('Error');
+
+              const options = [
+                ...data.searchPlayers.map(p => ({
+                  id: p.id, string: p.name, linkType: 'player',
+                })),
+                ...data.teams.map(t => ({
+                  id: t.id, string: t.name, linkType: 'team', abbreviation: t.abbreviation,
+                })),
+              ];
+
+              return (
+                <div>
+                  {
+                      this.state.showOptions
+                        ? (
+                          <div
+                            className="options"
+                            ref={(element) => {
+                              this.optionsList = element;
+                            }}
+                          >
+                            {
+                          query
+                            ? pipe(
+                              filter(stringMatches(query)),
+                              take(5),
+                              mapObjIndexed(renderOption(cursor)),
+                              values,
+                            )(options)
+                            : null
+                        }
+                          </div>
+                        )
+                        : null
+                    }
+                </div>
+
+
+              );
+            }}
+          </Query>
         </form>
 
       </div>

@@ -1,3 +1,4 @@
+
 const graphqlApiUrl = `${window.location.origin}/graphql`;
 
 const graphqlApi = async (query, cacheId) => {

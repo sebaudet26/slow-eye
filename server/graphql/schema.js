@@ -7,12 +7,13 @@ const {
   GraphQLInt,
   GraphQLFloat,
 } = require('graphql');
-const TEAMS = require('../libs/teams');
+const _ = require('lodash');
 const {
   equals,
   head,
   filter,
   find,
+  lte,
   map,
   path,
   pathOr,
@@ -22,10 +23,12 @@ const {
   propOr,
   replace,
   split,
+  sum,
   take,
   takeLast,
   values,
 } = require('ramda');
+const TEAMS = require('../libs/teams');
 const {
   fetchStandings,
   fetchStatsForPlayerId,
@@ -51,6 +54,11 @@ const {
   calculatePlayerStreaks,
   calculateTeamsStreaks,
 } = require('../libs/nhlApi');
+
+const {
+  isHot,
+  isCold,
+} = require('./streaks');
 
 const ifNotThereFetchId = propName => async (d) => {
   if (d.id) {
@@ -131,13 +139,6 @@ const TeamStats = new GraphQLObjectType({
   },
 });
 
-const TeamRosterPlayer = new GraphQLObjectType({
-  name: 'TeamRosterPlayer',
-  fields: {
-    id: { type: GraphQLInt, resolve: prop('id') },
-  },
-});
-
 const TeamRanking = new GraphQLObjectType({
   name: 'TeamRanking',
   fields: {
@@ -151,7 +152,7 @@ const TeamRanking = new GraphQLObjectType({
 
 const TeamInfo = new GraphQLObjectType({
   name: 'TeamInfo',
-  fields: {
+  fields: () => ({
     id: { type: GraphQLInt, resolve: prop('id') },
     name: { type: GraphQLString, resolve: ifNotThereFetchId('name') },
     link: { type: GraphQLString, resolve: ifNotThereFetchId('link') },
@@ -163,9 +164,12 @@ const TeamInfo = new GraphQLObjectType({
     shortName: { type: GraphQLString, resolve: ifNotThereFetchId('shortName') },
     officialSiteUrl: { type: GraphQLString, resolve: ifNotThereFetchId('officialSiteUrl') },
     stats: { type: TeamStats, resolve: p => fetchStatsForTeamId(p.id) },
-    roster: { type: GraphQLList(TeamRosterPlayer), resolve: p => fetchPlayersForTeamId(p.id) },
+    roster: {
+      type: GraphQLList(Player),
+      resolve: p => fetchPlayersForTeamId(p.id),
+    },
     ranking: { type: TeamRanking, resolve: p => fetchTeamRanking(p.id) },
-  },
+  }),
 });
 
 const Streak = new GraphQLObjectType({
@@ -421,6 +425,40 @@ const Player = new GraphQLObjectType({
       type: Position,
       resolve: prop('position'),
     },
+    // Decorators
+    isInjured: {
+      type: GraphQLBoolean,
+      resolve: p => fetchInfoForPlayerId(p.id)
+      .then(pipe(
+        path(['info', 'rosterStatus']),
+        equals('I'),
+      ))
+    },
+    isVeteran: {
+      type: GraphQLBoolean,
+      resolve: p => fetchAllYearsStatsForPlayerId(p.id)
+      .then(pipe(
+        map(pathOr(0, ['stat', 'games'])),
+        sum,
+        lte(500),
+      ))
+    },
+    isHot: {
+      type: GraphQLBoolean,
+      resolve: p => Promise.all([
+        fetchGameLogsForPlayerId(p.id),
+        fetchInfoForPlayerId(p.id),
+      ])
+      .then(([gameLogs, info]) => isHot(take(10, gameLogs), info.primaryPosition.abbreviation))
+    },
+    isCold: {
+      type: GraphQLBoolean,
+      resolve: p => Promise.all([
+        fetchGameLogsForPlayerId(p.id),
+        fetchInfoForPlayerId(p.id),
+      ])
+      .then(([gameLogs, info]) => isCold(take(10, gameLogs), info.primaryPosition.abbreviation))
+    },
     // Lazy load team info
     team: {
       type: TeamInfo,
@@ -616,14 +654,14 @@ const LiveFeed = new GraphQLObjectType({
       type: GraphQLList(GoalGameEvent),
       resolve: pipe(
         pathOr([], ['liveData', 'plays', 'allPlays']),
-        filter(d => d.result.eventTypeId === 'GOAL'),
+        filter(d => d.result.event === 'Goal'),
       ),
     },
     penaltySummary: {
       type: GraphQLList(PenaltyGameEvent),
       resolve: pipe(
         pathOr([], ['liveData', 'plays', 'allPlays']),
-        filter(d => d.result.eventTypeId === 'PENALTY'),
+        filter(d => d.result.event === 'Penalty'),
       ),
     },
     shootoutSummary: {
@@ -863,8 +901,9 @@ const schema = new GraphQLSchema({
         type: GraphQLList(PlayerReport),
         resolve: (root, args) => fetchPlayersReport(args.season),
       },
-      allHistoryPlayers: {
+      searchPlayers: {
         type: GraphQLList(PlayerBio),
+        args: { filter: { type: GraphQLString } },
         resolve: fetchAllHistoryPlayers,
       },
       players: {

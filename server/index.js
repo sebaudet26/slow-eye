@@ -14,7 +14,7 @@ require('./libs/automatedJobs');
 
 const app = express();
 
-app.use('/images', express.static('app/images'));
+app.use('/public/images', express.static('app/public/images'));
 
 app.use(bodyParser.json());
 

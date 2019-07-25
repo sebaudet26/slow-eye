@@ -7,6 +7,8 @@ import { Helmet } from 'react-helmet';
 import {
   Tab, Tabs, TabList, TabPanel,
 } from 'react-tabs';
+import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
 import { saveToLS, getFromLS } from '../../../utils/localStorage';
 import { fetchBattingLeaders, fetchPitchingLeaders, fetchTeams } from '../../../../server/libs/mlbApi.js';
 import PlayersTable from '../../../components/Table/mlb/PlayersTable';
@@ -20,6 +22,7 @@ export default class MLBPlayerStatsPage extends React.Component {
       hitters: [],
       pitchers: [],
       teams: [],
+      selectedLeague: 'MLB',
     };
   }
 
@@ -42,38 +45,40 @@ export default class MLBPlayerStatsPage extends React.Component {
     const pitchers = this.state.pitchers.leader_pitching_repeater;
     const teams = this.state.teams.team_all_season;
 
-    console.log(teams);
-
     return (
-      <div className="playerStats-page">
-        <Helmet>
-          <title>MLB Player Stats - Sealstats.com</title>
-          <meta
-            name="description"
-            content="View"
-          />
-        </Helmet>
-        <Tabs
-          defaultIndex={Number(getFromLS(`playerTabIndex${urlParams.get('id')}`)) || 0}
-          onSelect={i => saveToLS(`playerTabIndex${urlParams.get('id')}`, i)}
-        >
-          <TabList>
-            <div className="container">
-              <Tab>Hitting</Tab>
-              <Tab>Pitching</Tab>
-            </div>
-          </TabList>
-          <TabPanel>
-            {
+      <div>
+        <Header selectedLeague={this.state.selectedLeague} />
+        <div className="playerStats-page">
+          <Helmet>
+            <title>MLB Player Stats - Sealstats.com</title>
+            <meta
+              name="description"
+              content="View"
+            />
+          </Helmet>
+          <Tabs
+            defaultIndex={Number(getFromLS(`playerTabIndex${urlParams.get('id')}`)) || 0}
+            onSelect={i => saveToLS(`playerTabIndex${urlParams.get('id')}`, i)}
+          >
+            <TabList>
+              <div className="container">
+                <Tab>Hitting</Tab>
+                <Tab>Pitching</Tab>
+              </div>
+            </TabList>
+            <TabPanel>
+              {
               hitters && <PlayersTable type="hitting" teams={teams.queryResults} players={hitters} />
             }
-          </TabPanel>
-          <TabPanel>
-            {
+            </TabPanel>
+            <TabPanel>
+              {
                 !isNil(pitchers, teams) ? (<PlayersTable type="pitching" teams={teams.queryResults} players={pitchers.leader_pitching_mux.queryResults} />) : null
               }
-          </TabPanel>
-        </Tabs>
+            </TabPanel>
+          </Tabs>
+        </div>
+        <Footer />
       </div>
     );
   }

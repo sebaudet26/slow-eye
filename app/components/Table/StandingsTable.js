@@ -37,7 +37,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         Cell: row => (
           <a href={`./team?id=${row.value.id}`}>
             <svg key={Math.random()} className="team-cell-logo">
-              <use xlinkHref={`/images/teams/season/20182019.svg#team-${row.value.id}-20182019-light`} />
+              <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${row.value.id}-20182019-light`} />
             </svg>
             <span className="hidden-mobile">{row.value.name}</span>
             <span className="hidden-desktop">{row.value.abbreviation}</span>

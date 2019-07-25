@@ -41,7 +41,7 @@ const GameLogTable = ({ logs, info }) => {
             sortable: false,
             Cell: row => (
               <a href={`./team?id=${row.value.id}`}>
-                <img src={`/images/teams/small/${row.value.abbreviation}.png`} />
+                <img src={`/public/images/teams/small/${row.value.abbreviation}.png`} />
                 {row.value.shortName}
                 {' '}
                 {row.value.teamName}

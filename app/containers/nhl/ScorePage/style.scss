@@ -1,4 +1,4 @@
-@import '../../../styles/variables.scss';
+@import '../../../public/styles/variables.scss';
 
 .score {
   &-page {
@@ -58,13 +58,7 @@ button {
     margin-top: 25px;
   }
 
-  &-section {
-    &-name {
-      padding: 10px 0;
-      color: $grey-2;
-      border-top: dashed 1px $grey-4;
-    }
-
+  &-wrapper {
     &-results {
       align-items: center;
       flex-flow: wrap;

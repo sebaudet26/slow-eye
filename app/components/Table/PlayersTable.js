@@ -1,6 +1,5 @@
 /* global window */
 import React from 'react';
-import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import Select from 'react-select';
 import {
@@ -30,14 +29,12 @@ import PlayerName from '../PlayerName';
 import TeamLogo from '../TeamLogo';
 import NationalityFilter from '../Filter/nationality';
 import ExperienceFilter from '../Filter/experience';
-import SeasonFilter from '../Filter/season';
 import PositionFilter from '../Filter/position';
 import TeamFilter from '../Filter/team';
 import { sortTimeOnIce } from '../../utils/sort';
 import { toLowerCaseAndMatch } from '../../utils/filter';
 import { isPosGoalie } from '../../utils/player';
 import { saveToLS, getFromLS } from '../../utils/localStorage';
-import seasons from '../../constants/seasons';
 import FilterIcon from './images/filter.svg';
 import './styles.scss';
 
@@ -52,14 +49,12 @@ class PlayersTable extends React.PureComponent {
   constructor() {
     super();
     this.state = {
-      seasonSelected: '20182019',
       posSelected: 'S',
       natSelected: '',
       teamSelected: '',
       XPSelected: '',
       ...JSON.parse(getFromLS('playersFilters') || '{}'),
     };
-    this.handleSeasonChange = this.handleSeasonChange.bind(this);
     this.handlePosChange = this.handlePosChange.bind(this);
     this.handleTeamChange = this.handleTeamChange.bind(this);
     this.handleNatChange = this.handleNatChange.bind(this);
@@ -67,25 +62,11 @@ class PlayersTable extends React.PureComponent {
   }
 
   componentDidMount() {
-    const { seasonSelected } = this.state;
-    const { fetchPlayers, fetchTeams, setLoading } = this.props;
-    setLoading();
-    fetchPlayers(seasonSelected || seasons[0].value);
-    fetchTeams(seasonSelected || seasons[0].value);
+    const { fetchPlayers, fetchTeams } = this.props;
   }
 
   componentDidUpdate() {
     saveToLS('playersFilters', JSON.stringify(this.state));
-  }
-
-  handleSeasonChange(target) {
-    const { fetchPlayers, fetchTeams, setLoading } = this.props;
-    this.setState({
-      seasonSelected: target.value,
-    });
-    setLoading();
-    fetchPlayers(target.value);
-    fetchTeams(target.value);
   }
 
   componentWillUpdate(newProps) {
@@ -119,15 +100,14 @@ class PlayersTable extends React.PureComponent {
 
   // TODO: selectors should live in the container and pass down their state
   render() {
-    const { players, teams, loading } = this.props;
+    const { players, teams } = this.props;
     const {
-      seasonSelected, posSelected, natSelected, teamSelected, XPSelected,
+      posSelected, natSelected, teamSelected, XPSelected,
     } = this.state;
     const teamOptions = [
       // All option is always first
       ...baseTeamOptions,
       // Teams are sorted alphabetically
-      // in the reducer when added to the store
       ...(teams || []).map(t => ({ value: t.abbreviation, label: t.name })),
     ];
 
@@ -140,7 +120,6 @@ class PlayersTable extends React.PureComponent {
         <div className="filters">
           <div className="container">
             <div className="filters-wrapper">
-              <SeasonFilter selected={seasonSelected} onChange={this.handleSeasonChange} />
               <PositionFilter selected={posSelected} onChange={this.handlePosChange} />
               <TeamFilter options={teamOptions} selected={teamSelected} onChange={this.handleTeamChange} />
               <NationalityFilter selected={natSelected} onChange={this.handleNatChange} />
@@ -169,7 +148,6 @@ class PlayersTable extends React.PureComponent {
               },
             ]}
             data={players}
-            loading={loading}
             resizable={false}
             noDataText="No players match the criteria"
             filterable
@@ -230,7 +208,7 @@ class PlayersTable extends React.PureComponent {
                 Cell: pipe(
                   prop('value'),
                   map(prop('id')),
-                  map(id => <TeamLogo key={id} teamId={id} season={seasonSelected} />),
+                  map(id => <TeamLogo key={id} teamId={id} season="20182019" />),
                 ),
                 accessor: prop('teams'),
                 filterMethod: (filter, row) => pipe(
@@ -486,18 +464,12 @@ class PlayersTable extends React.PureComponent {
             ]}
             defaultPageSize={20}
             defaultSortDesc
-            className="player-stats"
+            className="playerTable-stats"
           />
         </div>
       </div>
     );
   }
 }
-
-PlayersTable.propTypes = {
-  players: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  fetchPlayers: PropTypes.func.isRequired,
-  fetchTeams: PropTypes.func.isRequired,
-};
 
 export default PlayersTable;
