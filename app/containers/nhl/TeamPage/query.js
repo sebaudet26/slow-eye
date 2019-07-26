@@ -19,6 +19,14 @@ query($id: Int) {
     }
     roster {
       id
+      isActive
+      isInjured
+      isVeteran
+      isHot
+      isCold
+      hotColdPoints
+      hotColdGames
+      hotColdPlusMinus
       stats {
         season
         stat {

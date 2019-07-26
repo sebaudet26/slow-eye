@@ -3,6 +3,14 @@ import { gql } from 'apollo-boost';
 const getPlayerQuery = gql`
 query($id: Int) {
   player (id: $id) {
+    isActive
+    isInjured
+    isVeteran
+    isHot
+    isCold
+    hotColdPoints
+    hotColdGames
+    hotColdPlusMinus
     info {
       firstName
       lastName
@@ -13,10 +21,8 @@ query($id: Int) {
       birthCountry
       nationality
       height
-      active
       weight
       captain
-      rookie
       fullName
       currentAge
       rosterStatus

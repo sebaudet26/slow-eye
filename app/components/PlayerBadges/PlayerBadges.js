@@ -1,16 +1,6 @@
 import React from 'react';
 import ReactTooltip from 'react-tooltip';
 
-import {
-  isHot,
-  isCold,
-  isInjured,
-  isVeteran,
-  getPointsInLastGames,
-  cumulativePlusMinusInLastGames,
-  hotColdGames,
-} from '../../utils/calculations';
-
 // Images
 import RookieIcon from '../../public/images/pacifier.svg';
 import VeteranIcon from '../../public/images/veteran.svg';
@@ -19,49 +9,72 @@ import HotIcon from '../../public/images/fire.svg';
 import ColdIcon from '../../public/images/snowflake.svg';
 import './style.scss';
 
-const getIsHotText = logs => (`Hot Streak - ${getPointsInLastGames(logs)} pts in last ${hotColdGames} games`);
-const getPlusMinusText = (logs, pos) => (pos === 'D' ? ` and ${cumulativePlusMinusInLastGames(logs)} ` : '');
-const getIsColdText = (logs, pos) => (`Cold Streak - ${getPointsInLastGames(logs)} pts${getPlusMinusText(logs, pos)} in last ${hotColdGames} games`);
+const getPlusMinusText = ({ hotColdPlusMinus, position }) => (position === 'D' ? ` and ${hotColdPlusMinus} ` : '');
+const getIsHotText = ({ hotColdPoints, hotColdGames }) => (
+  `Hot Streak - ${hotColdPoints} pts in last ${hotColdGames} games`
+);
+const getIsColdText = ({ hotColdPoints, hotColdGames, hotColdPlusMinus, position }) => (
+  `Cold Streak - ${hotColdPoints} pts${getPlusMinusText(hotColdPlusMinus, position)} in last ${hotColdGames} games`
+);
 
-const PlayerBadges = ({ info, stats, logs }) => (
-  <div className="player-badges">
-    { isInjured(info) ? (
-      <div className="icon-wrapper" data-tip="Injured">
-        <img src={InjuryIcon} />
-        <ReactTooltip />
-      </div>
-    ) : null }
-    { info.rookie ? (
-      <div className="icon-wrapper" data-tip="Rookie">
-        <img src={RookieIcon} />
-        <ReactTooltip />
-      </div>
-    ) : null }
-    { isVeteran(stats) ? (
-      <div className="icon-wrapper" data-tip="Veteran">
-        <img src={VeteranIcon} />
-        <ReactTooltip />
-      </div>
-    ) : null }
-    {
-      isHot(logs, info.primaryPosition.abbreviation)
-        ? (
-          <div className="icon-wrapper" data-tip={getIsHotText(logs)}>
-            <img src={HotIcon} />
-            <ReactTooltip />
-          </div>
-        ) : null
-    }
-    { isCold(logs, info.primaryPosition.abbreviation)
-      ? (
-        <div className="icon-wrapper" data-tip={getIsColdText(logs, info.primaryPosition.abbreviation)}>
+const InjuredBadge = (
+  <div className="icon-wrapper" data-tip="Injured">
+    <img src={InjuryIcon} />
+    <ReactTooltip />
+  </div>
+);
+
+const RookieBadge = (
+  <div className="icon-wrapper" data-tip="Rookie">
+    <img src={RookieIcon} />
+    <ReactTooltip />
+  </div>
+);
+
+const VeteranBadge = (
+  <div className="icon-wrapper" data-tip="Veteran">
+    <img src={VeteranIcon} />
+    <ReactTooltip />
+  </div>
+);
+
+const PlayerBadges = ({ player }) => {
+  const {
+    isHot,
+    isCold,
+    hotColdGames,
+    hotColdPoints,
+    hotColdPlusMinus,
+    isVeteran,
+    isRookie,
+    isInjured,
+    position,
+  } = player;
+  return (
+    <div className="player-badges">
+      { isInjured && InjuredBadge }
+      { isRookie && RookieBadge }
+      { isVeteran && VeteranBadge }
+      { isHot && (
+        <div
+          className="icon-wrapper"
+          data-tip={getIsHotText({ hotColdPoints, hotColdGames })}
+        >
+          <img src={HotIcon} />
+          <ReactTooltip />
+        </div>
+      )}
+      { isCold && (
+        <div
+          className="icon-wrapper"
+          data-tip={getIsColdText({ hotColdPoints, hotColdGames, hotColdPlusMinus, position })}
+        >
           <img src={ColdIcon} />
           <ReactTooltip />
         </div>
-      )
-      : null
-    }
-  </div>
-);
+      )}
+    </div>
+  );
+};
 
 export default PlayerBadges;
