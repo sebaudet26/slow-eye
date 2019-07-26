@@ -40,8 +40,8 @@ http {
       index index.html;
       try_files $uri $uri/ /index.html;
     }
-    location /images/ {
-      root /app/app/public;
+    location /public/ {
+      root /app/app;
     }
     location /graphql {
       index index.html;
