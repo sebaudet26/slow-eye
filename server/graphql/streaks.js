@@ -42,6 +42,10 @@ const cumulativePlusMinusInLastGames = pipe(
   sum,
 );
 
+const hotColdPlusMinus = gameLogs => cumulativePlusMinusInLastGames(gameLogs);
+
+const hotColdPoints = gameLogs => getPointsInLastGames(gameLogs);
+
 const isHot = (gameLogs, pos) => {
   const secondInLastGames = getSecondsPlayedInLastGames(gameLogs);
   return (getPointsInLastGames(gameLogs) / secondInLastGames * 1000) >= pointsPerThousandSecondsToBeHot[pos];
@@ -58,4 +62,7 @@ const isCold = (gameLogs, pos) => {
 module.exports = {
   isHot,
   isCold,
+  hotColdPoints,
+  hotColdGames,
+  hotColdPlusMinus,
 }

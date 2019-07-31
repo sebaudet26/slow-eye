@@ -32,8 +32,6 @@ import './style.scss';
 const urlParams = new URLSearchParams(window.location.search);
 const id = Number(urlParams.get('id'));
 
-const renderPlayerCard = player => <PlayerCard key={player.id} player={player} />;
-
 const renderTeamStat = (label, stat) => (
   <div className="team-stats-item">
     <div className="light small-text">{label}</div>

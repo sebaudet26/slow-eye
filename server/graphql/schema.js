@@ -58,6 +58,9 @@ const {
 const {
   isHot,
   isCold,
+  hotColdPoints,
+  hotColdGames,
+  hotColdPlusMinus,
 } = require('./streaks');
 
 const ifNotThereFetchId = propName => async (d) => {
@@ -316,10 +319,8 @@ const PlayerInfo = new GraphQLObjectType({
     nationality: { type: GraphQLString, resolve: prop('nationality') },
     height: { type: GraphQLString, resolve: prop('height') },
     weight: { type: GraphQLInt, resolve: prop('weight') },
-    active: { type: GraphQLBoolean, resolve: prop('active') },
     alternateCaptain: { type: GraphQLBoolean, resolve: prop('alternateCaptain') },
     captain: { type: GraphQLBoolean, resolve: prop('captain') },
-    rookie: { type: GraphQLBoolean, resolve: prop('rookie') },
     shootsCatches: { type: GraphQLString, resolve: prop('shootsCatches') },
     rosterStatus: { type: GraphQLString, resolve: prop('rosterStatus') },
     primaryPosition: { type: Position, resolve: prop('primaryPosition') },
@@ -426,11 +427,21 @@ const Player = new GraphQLObjectType({
       resolve: prop('position'),
     },
     // Decorators
+    isRookie: {
+      type: GraphQLBoolean,
+      resolve: p => fetchInfoForPlayerId(p.id)
+        .then(path(['rookie']))
+    },
+    isActive: {
+      type: GraphQLBoolean,
+      resolve: p => fetchInfoForPlayerId(p.id)
+        .then(path(['active']))
+    },
     isInjured: {
       type: GraphQLBoolean,
       resolve: p => fetchInfoForPlayerId(p.id)
       .then(pipe(
-        path(['info', 'rosterStatus']),
+        path(['rosterStatus']),
         equals('I'),
       ))
     },
@@ -458,6 +469,18 @@ const Player = new GraphQLObjectType({
         fetchInfoForPlayerId(p.id),
       ])
       .then(([gameLogs, info]) => isCold(take(10, gameLogs), info.primaryPosition.abbreviation))
+    },
+    hotColdPoints: {
+      type: GraphQLInt,
+      resolve: p => fetchGameLogsForPlayerId(p.id).then(hotColdPoints)
+    },
+    hotColdGames: {
+      type: GraphQLInt,
+      resolve: () => hotColdGames,
+    },
+    hotColdPlusMinus: {
+      type: GraphQLInt,
+      resolve: p => fetchGameLogsForPlayerId(p.id).then(hotColdPlusMinus)
     },
     // Lazy load team info
     team: {

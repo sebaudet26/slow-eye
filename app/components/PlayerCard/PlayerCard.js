@@ -21,7 +21,7 @@ const PlayerCard = ({ player }) => (
         <div>{`${player.info.currentAge} y.o.`}</div>
       </div>
       <div className="player-card-header-item status">
-        <PlayerBadges stats={player.stats} info={player.info} logs={player.logs} />
+        <PlayerBadges player={player} />
       </div>
     </div>
   </div>

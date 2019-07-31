@@ -41,12 +41,11 @@ export default class PlayerPage extends React.Component {
             const player = data.player;
 
             const {
-              careerStats = [], careerPlayoffStats = [], info = {}, logs = [],
+              careerStats = [], careerPlayoffStats = [], info = {}, logs = [], isActive,
             } = player;
             const {
               primaryPosition = {},
               currentTeamInfo = {},
-              active = {},
               draftInfo = {},
               shootsCatches,
               nationality,
@@ -56,7 +55,6 @@ export default class PlayerPage extends React.Component {
             const internationalLeagueNames = ['WJC-A', 'WC-A', 'Olympics'];
             const proStats = reject(stat => contains(stat.league.name, internationalLeagueNames))(careerStats);
             const internationalStats = filter(stat => contains(stat.league.name, internationalLeagueNames))(careerStats);
-
 
             return (
               <div className="player-page">
@@ -131,7 +129,7 @@ export default class PlayerPage extends React.Component {
                             <div className="light small-text">GP</div>
                             <div className="bold">
                               {sumStatsByPath({
-                                active,
+                                isActive,
                                 careerStats,
                                 pathToNumber: ['stat', 'games'],
                               })}
@@ -143,7 +141,7 @@ export default class PlayerPage extends React.Component {
                                 <div className="light small-text">W</div>
                                 <div className="bold">
                                   {sumStatsByPath({
-                                    active,
+                                    isActive,
                                     careerStats,
                                     pathToNumber: ['stat', 'wins'],
                                   })}
@@ -154,7 +152,7 @@ export default class PlayerPage extends React.Component {
                                 <div className="light small-text">G</div>
                                 <div className="bold">
                                   {sumStatsByPath({
-                                    active,
+                                    isActive,
                                     careerStats,
                                     pathToNumber: ['stat', 'goals'],
                                   })}
@@ -168,7 +166,7 @@ export default class PlayerPage extends React.Component {
                                 <div className="light small-text">L</div>
                                 <div className="bold">
                                   {sumStatsByPath({
-                                    active,
+                                    isActive,
                                     careerStats,
                                     pathToNumber: ['stat', 'losses'],
                                   })}
@@ -179,7 +177,7 @@ export default class PlayerPage extends React.Component {
                                 <div className="light small-text">A</div>
                                 <div className="bold">
                                   {sumStatsByPath({
-                                    active,
+                                    isActive,
                                     careerStats,
                                     pathToNumber: ['stat', 'assists'],
                                   })}
@@ -193,7 +191,7 @@ export default class PlayerPage extends React.Component {
                                 <div className="light small-text">OT</div>
                                 <div className="bold">
                                   {sumStatsByPath({
-                                    active,
+                                    isActive,
                                     careerStats,
                                     pathToNumber: ['stat', 'ot'],
                                   })}
@@ -204,7 +202,7 @@ export default class PlayerPage extends React.Component {
                                 <div className="light small-text">Pts</div>
                                 <div className="bold">
                                   {sumStatsByPath({
-                                    active,
+                                    isActive,
                                     careerStats,
                                     pathToNumber: ['stat', 'points'],
                                   })}
@@ -218,7 +216,7 @@ export default class PlayerPage extends React.Component {
                                 <div className="light small-text">SO</div>
                                 <div className="bold">
                                   {sumStatsByPath({
-                                    active,
+                                    isActive,
                                     careerStats,
                                     pathToNumber: ['stat', 'shutouts'],
                                   })}
@@ -229,7 +227,7 @@ export default class PlayerPage extends React.Component {
                                 <div className="light small-text">+/-</div>
                                 <div className="bold">
                                   {sumStatsByPath({
-                                    active,
+                                    isActive,
                                     careerStats,
                                     pathToNumber: ['stat', 'plusMinus'],
                                   })}
@@ -237,11 +235,7 @@ export default class PlayerPage extends React.Component {
                               </div>
                             )
                     }
-                          {
-                      active === true ? (
-                        <PlayerBadges info={info} stats={careerStats} logs={logs} />
-                      ) : null
-                    }
+                          {isActive && <PlayerBadges player={player}/>}
                         </div>
                         )}
                       </div>
