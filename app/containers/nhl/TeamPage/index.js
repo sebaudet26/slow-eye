@@ -118,7 +118,6 @@ class TeamPage extends React.Component {
                     <div className="container">
                       <Tab>Depth Chart</Tab>
                       <Tab>Roster</Tab>
-                      <Tab>Player Stats</Tab>
                     </div>
                   </TabList>
                   <div className="container">
