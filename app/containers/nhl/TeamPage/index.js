@@ -14,7 +14,6 @@ import Footer from '../../../components/Footer';
 import Dropdown from '../../../components/Dropdown/Dropdown';
 import PlayerCard from '../../../components/PlayerCard/PlayerCard';
 import RosterTable from '../../../components/Table/RosterTable';
-import RosterStatsTable from '../../../components/Table/RosterStatsTable';
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import EmptyState from '../../../components/EmptyState';
 import {
@@ -182,16 +181,6 @@ class TeamPage extends React.Component {
                         <RosterTable players={roster.filter(p => p.info.primaryPosition.abbreviation === 'D')} />
                         <h3>Goalies</h3>
                         <RosterTable players={roster.filter(p => p.info.primaryPosition.abbreviation === 'G')} />
-                      </div>
-                    </TabPanel>
-                    <TabPanel>
-                      <div>
-                        <h3>Forwards</h3>
-                        <RosterStatsTable players={roster.filter(p => forwardsAbbreviations.includes(p.info.primaryPosition.abbreviation))} position="F" />
-                        <h3>Defensemen</h3>
-                        <RosterStatsTable players={roster.filter(p => p.info.primaryPosition.abbreviation === 'D')} position="D" />
-                        <h3>Goalies</h3>
-                        <RosterStatsTable players={roster.filter(p => p.info.primaryPosition.abbreviation === 'G')} position="G" />
                       </div>
                     </TabPanel>
                   </div>
