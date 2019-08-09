@@ -1,6 +1,6 @@
 import React from 'react';
 import { pathOr } from 'ramda';
-import { smallLogoForTeamName, calculatePoints } from '../../utils/team';
+import { smallLogoForTeamName } from '../../utils/team';
 import VideoPlayer from '../VideoPlayer';
 import PlayIcon from '../../public/images/play-button.svg';
 import './styles.scss';
