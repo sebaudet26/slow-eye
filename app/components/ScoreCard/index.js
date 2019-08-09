@@ -1,6 +1,5 @@
 import React from 'react';
 import { pathOr } from 'ramda';
-import { isScheduled, getStatusText, getFinalPeriod } from '../../utils/game';
 import { smallLogoForTeamName, calculatePoints } from '../../utils/team';
 import VideoPlayer from '../VideoPlayer';
 import PlayIcon from '../../public/images/play-button.svg';
@@ -10,15 +9,15 @@ const ScoreCard = ({ game }) => (
   <div className="game-card-wrapper">
     <div className="game-card">
       <div className="game-card-header">
-        { game.status.detailedState === 'In Progress' | game.status.detailedState === 'Scheduled' | game.status.detailedState === 'In Progress - Critical' ? null : (<span>{game.status.detailedState}</span>) }
+        {game.status.friendlyStatus}
         {' '}
         <span>
-          {getStatusText(game)}
-          {getFinalPeriod(game)}
+          {game.statusText}
+          {game.liveFeed.finalPeriod}
           {
-            game.seriesSummary ? (
+            game.seriesSummary && (
               <span className="game-card-series-summary">{game.seriesSummary.seriesStatusShort || ''}</span>
-            ) : null
+            )
           }
 
         </span>
@@ -32,7 +31,7 @@ const ScoreCard = ({ game }) => (
         </a>
         <div className="game-card-team-score">
           {
-            game.status.detailedState === 'Scheduled' ? (
+            game.status.isScheduled ? (
               <span>
                 {game.teams.away.leagueRecord.wins}
                 {'W - '}
@@ -56,7 +55,7 @@ const ScoreCard = ({ game }) => (
         </a>
         <div className="game-card-team-score">
           {
-            game.status.detailedState === 'Scheduled' ? (
+            game.status.isScheduled ? (
               <span>
                 {game.teams.home.leagueRecord.wins}
                 {'W - '}
@@ -72,19 +71,17 @@ const ScoreCard = ({ game }) => (
         </div>
       </div>
       {
-        game.status.detailedState === 'Scheduled' ? null : (
+        !game.status.isScheduled && (
           <div className="game-card-footer">
             <a href={`/game?id=${game.id}`}>
                 Summary
             </a>
             {
-              pathOr(false, ['highlights', 'recap'], game)
-                ? (
-                  <span>
-                    <VideoPlayer url={game.highlights.recap} callToAction="Game Recap" />
-                  </span>
-                )
-                : null
+              pathOr(false, ['highlights', 'recap'], game) && (
+                <span>
+                  <VideoPlayer url={game.highlights.recap} callToAction="Game Recap" />
+                </span>
+              )
             }
           </div>
         )

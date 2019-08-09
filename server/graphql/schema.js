@@ -13,11 +13,13 @@ const {
   head,
   filter,
   find,
+  join,
   lte,
   map,
   path,
   pathOr,
   pipe,
+  pick,
   prop,
   propEq,
   propOr,
@@ -62,6 +64,11 @@ const {
   hotColdGames,
   hotColdPlusMinus,
 } = require('./streaks');
+
+const {
+  getFinalPeriod,
+  getStatusText,
+} = require('./nhlGames');
 
 const ifNotThereFetchId = propName => async (d) => {
   if (d.id) {
@@ -138,7 +145,23 @@ const TeamStats = new GraphQLObjectType({
   name: 'TeamStats',
   fields: {
     type: { type: GraphQLString, resolve: path(['type', 'displayName']) },
-    splits: { type: GraphQLList(TeamStat), resolve: pipe(prop('splits'), map(prop('stat'))) },
+    splits: {
+      type: GraphQLList(TeamStat), resolve: pipe(
+        prop('splits'),
+        map(prop('stat')),
+      )
+    },
+    record: {
+      type: GraphQLString,
+      resolve: pipe(
+        prop('splits'),
+        map(prop('stat')),
+        head,
+        pick(['wins', 'losses', 'ot']),
+        values,
+        join('-'),
+      )
+    },
   },
 });
 
@@ -557,6 +580,19 @@ const GameStatus = new GraphQLObjectType({
       type: GraphQLString,
       resolve: prop('statusCode'),
     },
+    isScheduled: {
+      type: GraphQLBoolean,
+      resolve: status => status.detailedState === 'Scheduled'
+    },
+    friendlyStatus: {
+      type: GraphQLString,
+      resolve: status => (
+        status.detailedState === 'In Progress' ||
+        status.detailedState === 'Scheduled' ||
+        status.detailedState === 'In Progress - Critical'
+      ) ? ''
+        : status.detailedState
+    }
   },
 });
 
@@ -691,6 +727,14 @@ const LiveFeed = new GraphQLObjectType({
       type: Shootout,
       resolve: pathOr({}, ['liveData', 'linescore', 'shootoutInfo']),
     },
+    finalPeriod: {
+      type: GraphQLString,
+      resolve: pipe(
+        pathOr([], ['liveData', 'plays', 'allPlays']),
+        takeLast(10),
+        getFinalPeriod,
+      )
+    }
   },
 });
 
@@ -769,6 +813,11 @@ const Game = new GraphQLObjectType({
     highlights: { type: GameHighlights, resolve: p => fetchGameHighlights(p.gamePk) },
     // Playoffs series
     seriesSummary: { type: SeriesSummary, resolve: prop('seriesSummary') },
+    statusText: {
+      type: GraphQLString,
+      resolve: (game) => fetchLiveFeed(game.gamePk)
+        .then((liveFeed) => getStatusText(game.status, liveFeed.gameData, game.gameDate))
+    },
   },
 });
 

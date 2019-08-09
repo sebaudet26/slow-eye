@@ -28,7 +28,6 @@ import {
   isScratchedOrGoalie,
 } from '../../../utils/player';
 import { getGameQuery } from './query.js';
-import { getStatusText } from '../../../utils/game';
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import LoadingIndicator from '../../../components/LoadingIndicator';
@@ -169,8 +168,6 @@ class GamePage extends React.Component {
 
             const game = data.game;
 
-            console.log(game);
-
             const { boxscore, liveFeed, highlights } = game;
 
             const groupedHighlights = groupBy(prop('period'), highlights.goals || []);
@@ -199,7 +196,7 @@ class GamePage extends React.Component {
                 </Helmet>
                 <div className="page-header wTabs">
                   <div className="container">
-                    <div className="game-mobile-details">{getStatusText(game)}</div>
+                    <div className="game-mobile-details">{game.statusText}</div>
                     <div className="game-header">
                       <div className="game-header-team">
                         {awayTeamImage}
@@ -207,7 +204,7 @@ class GamePage extends React.Component {
                           <div className="city">{boxscore.away.team.location}</div>
                           <div className="team">{boxscore.away.team.teamName}</div>
                           <div className="record">
-                            {join('-', values(pick(['wins', 'losses', 'ot'], boxscore.away.seasonTeamStats.splits[0])))}
+                            {boxscore.away.seasonTeamStats.record}
                             {` ${boxscore.away.seasonTeamStats.splits[0].pts}pts`}
                           </div>
                         </div>
@@ -217,10 +214,10 @@ class GamePage extends React.Component {
                       </div>
                       <div className="game-header-result">
                         <div className="hidden-mobile">
-                          <div>{ liveFeed.status.detailedState === 'In Progress' | liveFeed.status.detailedState === 'In Progress - Critical' ? null : liveFeed.status.detailedState}</div>
+                          <div>{game.liveFeed.status.friendlyStatus}</div>
                           <div>
-                            {getStatusText(game)}
-                            {last(lastTenPlays) && last(lastTenPlays).period === 5 ? 'S/O' : null}
+                            {game.statusText}
+                            {game.liveFeed.finalPeriod}
                           </div>
                         </div>
                         {
@@ -244,7 +241,7 @@ class GamePage extends React.Component {
                           <div className="city">{boxscore.home.team.location}</div>
                           <div className="team">{boxscore.home.team.teamName}</div>
                           <div className="record">
-                            {join('-', values(pick(['wins', 'losses', 'ot'], boxscore.home.seasonTeamStats.splits[0])))}
+                            {boxscore.home.seasonTeamStats.record}
                             {` ${boxscore.home.seasonTeamStats.splits[0].pts}pts`}
                           </div>
                         </div>
