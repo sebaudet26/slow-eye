@@ -31,6 +31,7 @@ const {
   values,
 } = require('ramda');
 const TEAMS = require('../libs/teams');
+const forwardsAbbreviations = ['LW', 'C', 'RW'];
 const {
   fetchStandings,
   fetchStatsForPlayerId,
@@ -347,6 +348,30 @@ const PlayerInfo = new GraphQLObjectType({
     shootsCatches: { type: GraphQLString, resolve: prop('shootsCatches') },
     rosterStatus: { type: GraphQLString, resolve: prop('rosterStatus') },
     primaryPosition: { type: Position, resolve: prop('primaryPosition') },
+    isGoalie: {
+      type: GraphQLBoolean,
+      resolve: pipe(
+        prop('primaryPosition'),
+        prop('abbreviation'),
+        equals('G')
+      )
+    },
+    isDefenseman: {
+      type: GraphQLBoolean,
+      resolve: pipe(
+        prop('primaryPosition'),
+        prop('abbreviation'),
+        equals('D')
+      )
+    },
+    isForward: {
+      type: GraphQLBoolean,
+      resolve: pipe(
+        prop('primaryPosition'),
+        prop('abbreviation'),
+        forwardsAbbreviations.includes,
+      )
+    },
     // Lazy load current team info
     currentTeamInfo: { type: TeamInfo, resolve: p => fetchInfoForTeamId(p.currentTeam.id) },
     // Lazy load draft info
@@ -558,6 +583,14 @@ const Player = new GraphQLObjectType({
       type: GraphQLList(SeasonStat),
       resolve: p => fetchPlayoffGameLogsForPlayerId(p.id),
     },
+    pointsInLatestSeason: {
+      type: GraphQLInt,
+      resolve: (p, args) => fetchStatsForPlayerId(p.id, args)
+        .then((stats) => stats.length
+          ? stats[stats.length - 1].stat.points
+          : 0
+        )
+    }
   },
 });
 
