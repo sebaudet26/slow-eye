@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Helmet } from 'react-helmet';
 import { take } from 'ramda';
 import { graphql } from 'react-apollo';
 import { getStreaksQuery } from './query.js';
 import Header from '../../../components/Header';
+import Helmet from '../../../components/Helmet';
 import Footer from '../../../components/Footer';
 import './style.scss';
 
@@ -104,13 +104,7 @@ class HomePage extends React.Component {
         <div className="home-page">
           {this.displayFeaturedPlayer()}
           <div className="container">
-            <Helmet>
-              <title>Home - SealStats.com</title>
-              <meta
-                name="description"
-                content="Seal Stats is the best place to view NHL stats. User-friendly and fast."
-              />
-            </Helmet>
+            <Helmet />
             <div className="home-page-wrapper">
               <div className="home-page-col">
                 <h3>

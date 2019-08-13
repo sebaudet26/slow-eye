@@ -1,5 +1,4 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import {
   isEmpty, sortBy, pipe, filter, map, prop, reverse,
@@ -10,6 +9,7 @@ import {
 import { Query } from 'react-apollo';
 import { getTeamQuery } from './query.js';
 import Header from '../../../components/Header';
+import Helmet from '../../../components/Helmet';
 import Footer from '../../../components/Footer';
 import Dropdown from '../../../components/Dropdown/Dropdown';
 import PlayerCard from '../../../components/PlayerCard/PlayerCard';
@@ -59,13 +59,7 @@ class TeamPage extends React.Component {
 
             return (
               <div className="team-page">
-                <Helmet>
-                  <title>{`${team.name} - SealStats.com`}</title>
-                  <meta
-                    name="description"
-                    content={`${team.name} roster and stats. Seal Stats is the best place to view NHL stats. User-friendly and fast. `}
-                  />
-                </Helmet>
+                <Helmet titlePrefix={team.name} contentPrefix={`${team.name} roster and stats.`}/>
                 <div className="page-header wTabs">
                   <div className="container">
                     <div className="team-wrapper">

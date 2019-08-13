@@ -1,5 +1,4 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import {
   filter,
   groupBy,
@@ -29,6 +28,7 @@ import {
 } from '../../../utils/player';
 import { getGameQuery } from './query.js';
 import Header from '../../../components/Header';
+import Helmet from '../../../components/Helmet';
 import Footer from '../../../components/Footer';
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import EmptyState from '../../../components/EmptyState';
@@ -188,12 +188,10 @@ class GamePage extends React.Component {
 
             return (
               <div className="game-page">
-                <Helmet>
-                  <title>
-                    {`${boxscore.away.team.teamName} @ ${boxscore.home.team.teamName} - SealStats.com`}
-                  </title>
-                  <meta name="description" content={`${boxscore.away.team.teamName} vs. ${boxscore.home.team.teamName} game page. Seal Stats is the best place to view NHL stats. User-friendly and fast. `} />
-                </Helmet>
+                <Helmet
+                  titlePrefix={`${boxscore.away.team.teamName} @ ${boxscore.home.team.teamName}`}
+                  contentPrefix={`${boxscore.away.team.teamName} vs. ${boxscore.home.team.teamName} game page.`}
+                />
                 <div className="page-header wTabs">
                   <div className="container">
                     <div className="game-mobile-details">{game.statusText}</div>

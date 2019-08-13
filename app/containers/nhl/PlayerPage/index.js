@@ -1,10 +1,10 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { reject, filter, contains } from 'ramda';
 import { Query } from 'react-apollo';
 import { getPlayerQuery } from './query.js';
 import Header from '../../../components/Header';
+import Helmet from '../../../components/Helmet';
 import Footer from '../../../components/Footer';
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import EmptyState from '../../../components/EmptyState';
@@ -48,13 +48,10 @@ export default class PlayerPage extends React.Component {
 
             return (
               <div className="player-page">
-                <Helmet>
-                  <title>{`${info.firstName} ${info.lastName} - SealStats.com`}</title>
-                  <meta
-                    name="description"
-                    content={`${info.firstName} ${info.lastName} stats. Seal Stats is the best place to view NHL stats. User-friendly and fast. `}
-                  />
-                </Helmet>
+                <Helmet
+                  titlePrefix={`${info.firstName} ${info.lastName}`}
+                  contentPrefix={`${info.firstName} ${info.lastName} stats.`}
+                />
                 <div className="page-header wTabs">
                   <div className="container">
                     <div className="player-wrapper">
