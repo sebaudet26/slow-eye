@@ -50,6 +50,7 @@ const nhlStatsApi = async (resource, expiration, force) => {
       }
     }
     const url = `${nhlStatsApiBase}${resource}`;
+    console.log(`fetching ${url}`)
     const response = await fetch(url);
     const data = await response.json();
     cache

@@ -123,21 +123,15 @@ class TeamPage extends React.Component {
                         <div className="team-chart">
                           <div className="team-chart-col">
                             <div className="team-chart-col-title">Left Wing</div>
-                            {
-                              this.renderChartCol(roster.filter(p => p.info.primaryPosition.abbreviation === 'LW'))
-                            }
+                            {this.renderChartCol(roster.filter(p => p.info.primaryPosition.abbreviation === 'LW'))}
                           </div>
                           <div className="team-chart-col">
                             <div className="team-chart-col-title">Center</div>
-                            {
-                              this.renderChartCol(roster.filter(p => p.info.primaryPosition.abbreviation === 'C'))
-                            }
+                            {this.renderChartCol(roster.filter(p => p.info.primaryPosition.abbreviation === 'C'))}
                           </div>
                           <div className="team-chart-col">
                             <div className="team-chart-col-title">Right Wing</div>
-                            {
-                              this.renderChartCol(roster.filter(p => p.info.primaryPosition.abbreviation === 'RW'))
-                            }
+                            {this.renderChartCol(roster.filter(p => p.info.primaryPosition.abbreviation === 'RW'))}
                           </div>
                         </div>
                       </div>
@@ -156,7 +150,7 @@ class TeamPage extends React.Component {
                           <div className="team-chart-col-title">RD</div>
                           {
                             this.renderChartCol(roster.filter(p => (
-                              p.info.primaryPosition.abbreviation === 'D' &&
+                              p.info.isDefenseman &&
                               p.info.shootsCatches === 'R'
                             )))
                           }

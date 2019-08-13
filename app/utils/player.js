@@ -36,6 +36,3 @@ export const sumStatsByPath = ({
   }
   return sumNumbers(careerStats, pathToNumber);
 };
-
-export const hasNHLExperience = careerStats => !!careerStats
-  .filter(seasonStat => seasonStat.league.name === 'National Hockey League').length;

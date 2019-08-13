@@ -553,6 +553,11 @@ const Player = new GraphQLObjectType({
       type: GraphQLList(SeasonStat),
       resolve: p => fetchAllYearsStatsForPlayerId(p.id),
     },
+    hasNHLExperience: {
+      type: GraphQLBoolean,
+      resolve: p => fetchAllYearsStatsForPlayerId(p.id)
+        .then(careerStats => !!careerStats.filter(seasonStat => seasonStat.league.name === 'National Hockey League').length),
+    },
     // Lazy load player stats
     careerPlayoffStats: {
       type: GraphQLList(SeasonStat),
