@@ -11,6 +11,7 @@ query($id: Int) {
     hotColdPoints
     hotColdGames
     hotColdPlusMinus
+    hasNHLExperience
     info {
       firstName
       lastName
@@ -26,6 +27,7 @@ query($id: Int) {
       fullName
       currentAge
       rosterStatus
+      isGoalie
       currentTeamInfo {
         id
         name

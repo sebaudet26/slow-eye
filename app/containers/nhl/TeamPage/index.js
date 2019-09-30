@@ -1,5 +1,4 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import {
   isEmpty, sortBy, pipe, filter, map, prop, reverse,
@@ -10,18 +9,15 @@ import {
 import { Query } from 'react-apollo';
 import { getTeamQuery } from './query.js';
 import Header from '../../../components/Header';
+import Helmet from '../../../components/Helmet';
 import Footer from '../../../components/Footer';
 import Dropdown from '../../../components/Dropdown/Dropdown';
 import PlayerCard from '../../../components/PlayerCard/PlayerCard';
 import RosterTable from '../../../components/Table/RosterTable';
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import EmptyState from '../../../components/EmptyState';
-import {
-  pointsInLatestSeason,
-  gamesPlayedLatestSeason,
-  forwardsAbbreviations,
-} from '../../../utils/player';
 import { toOrdinal } from '../../../utils/misc';
+
 import {
   saveToLS,
   getFromLS,
@@ -41,7 +37,7 @@ const renderTeamStat = (label, stat) => (
 class TeamPage extends React.Component {
   renderChartCol(roster) {
     const sortedRoster = pipe(
-      sortBy(pointsInLatestSeason),
+      sortBy(prop('pointsInLatestSeason')),
       reverse,
     )(roster);
     return sortedRoster.map(player => (
@@ -63,13 +59,7 @@ class TeamPage extends React.Component {
 
             return (
               <div className="team-page">
-                <Helmet>
-                  <title>{`${team.name} - SealStats.com`}</title>
-                  <meta
-                    name="description"
-                    content={`${team.name} roster and stats. Seal Stats is the best place to view NHL stats. User-friendly and fast. `}
-                  />
-                </Helmet>
+                <Helmet titlePrefix={team.name} contentPrefix={`${team.name} roster and stats.`}/>
                 <div className="page-header wTabs">
                   <div className="container">
                     <div className="team-wrapper">
@@ -127,21 +117,15 @@ class TeamPage extends React.Component {
                         <div className="team-chart">
                           <div className="team-chart-col">
                             <div className="team-chart-col-title">Left Wing</div>
-                            {
-                                this.renderChartCol(roster.filter(p => p.info.primaryPosition.abbreviation === 'LW'))
-                            }
+                            {this.renderChartCol(roster.filter(p => p.info.primaryPosition.abbreviation === 'LW'))}
                           </div>
                           <div className="team-chart-col">
                             <div className="team-chart-col-title">Center</div>
-                            {
-                                this.renderChartCol(roster.filter(p => p.info.primaryPosition.abbreviation === 'C'))
-                            }
+                            {this.renderChartCol(roster.filter(p => p.info.primaryPosition.abbreviation === 'C'))}
                           </div>
                           <div className="team-chart-col">
                             <div className="team-chart-col-title">Right Wing</div>
-                            {
-                                this.renderChartCol(roster.filter(p => p.info.primaryPosition.abbreviation === 'RW'))
-                            }
+                            {this.renderChartCol(roster.filter(p => p.info.primaryPosition.abbreviation === 'RW'))}
                           </div>
                         </div>
                       </div>
@@ -150,23 +134,27 @@ class TeamPage extends React.Component {
                         <div className="team-chart-col">
                           <div className="team-chart-col-title">LD</div>
                           {
-                                this.renderChartCol(roster.filter(p => (p.info.primaryPosition.abbreviation === 'D' && p.info.shootsCatches === 'L')))
-                            }
+                            this.renderChartCol(roster.filter(p => (
+                              p.info.isDefenseman &&
+                              p.info.shootsCatches === 'L'
+                            )))
+                          }
                         </div>
                         <div className="team-chart-col">
                           <div className="team-chart-col-title">RD</div>
                           {
-                                this.renderChartCol(roster.filter(p => (p.info.primaryPosition.abbreviation === 'D' && p.info.shootsCatches === 'R')))
-                            }
+                            this.renderChartCol(roster.filter(p => (
+                              p.info.isDefenseman &&
+                              p.info.shootsCatches === 'R'
+                            )))
+                          }
                         </div>
                         <div className="team-chart-col" />
                       </div>
                       <h3>Goalies</h3>
                       <div className="team-chart">
                         <div className="team-chart-col">
-                          {
-                                this.renderChartCol(roster.filter(p => p.info.primaryPosition.abbreviation === 'G'))
-                            }
+                          {this.renderChartCol(roster.filter(p => p.info.isGoalie))}
                         </div>
                         <div className="team-chart-col" />
                         <div className="team-chart-col" />
@@ -175,11 +163,11 @@ class TeamPage extends React.Component {
                     <TabPanel>
                       <div>
                         <h3>Forwards</h3>
-                        <RosterTable players={roster.filter(p => forwardsAbbreviations.includes(p.info.primaryPosition.abbreviation))} />
+                        <RosterTable players={roster.filter(p => p.info.isForward)} />
                         <h3>Defensemen</h3>
-                        <RosterTable players={roster.filter(p => p.info.primaryPosition.abbreviation === 'D')} />
+                        <RosterTable players={roster.filter(p => p.info.isDefenseman)} />
                         <h3>Goalies</h3>
-                        <RosterTable players={roster.filter(p => p.info.primaryPosition.abbreviation === 'G')} />
+                        <RosterTable players={roster.filter(p => p.info.isGoalie)} />
                       </div>
                     </TabPanel>
                   </div>

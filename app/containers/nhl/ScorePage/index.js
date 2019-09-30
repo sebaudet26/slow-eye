@@ -1,5 +1,4 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import { propEq, findIndex, flatten } from 'ramda';
 import moment from 'moment';
 import { Query } from 'react-apollo';
@@ -7,6 +6,7 @@ import DatePicker from 'react-datepicker';
 import { graphql } from 'react-apollo';
 import { getScoresQuery } from './query.js';
 import Header from '../../../components/Header';
+import Helmet from '../../../components/Helmet';
 import Footer from '../../../components/Footer';
 import DateSlider from '../../../components/DateSlider';
 import ScoreCard from '../../../components/ScoreCard';
@@ -158,13 +158,7 @@ class ScorePage extends React.Component {
             </div>
           </div>
           <div className="container">
-            <Helmet>
-              <title>NHL Scores - SealStats.com</title>
-              <meta
-                name="description"
-                content="View Live NHL Scores. Seal Stats is the best place to view NHL stats. User-friendly and fast."
-              />
-            </Helmet>
+            <Helmet titlePrefix="NHL Scores" contentPrefix="View Live NHL Scores."/>
             <div className="scoreboard-wrapper">
               <div className="scoreboard-wrapper-results">
                 <Query

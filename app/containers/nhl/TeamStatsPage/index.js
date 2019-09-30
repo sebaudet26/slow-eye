@@ -1,8 +1,8 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import { getTeamsQuery } from './query.js';
 import Header from '../../../components/Header';
+import Helmet from '../../../components/Helmet';
 import Footer from '../../../components/Footer';
 import TeamsTable from '../../../components/Table/TeamsTable';
 import LoadingIndicator from '../../../components/LoadingIndicator';
@@ -16,10 +16,7 @@ class TeamStatsPage extends React.Component {
       <div>
         <Header selectedLeague="NHL" />
         <div className="teamStats-page">
-          <Helmet>
-            <title>Team Stats - SealStats.com</title>
-            <meta name="description" content="View NHL Team Stats. Seal Stats is the best place to view NHL stats. User-friendly and fast." />
-          </Helmet>
+          <Helmet titlePrefix="Team Stats" contentPrefix="View NHL Team Stats." />
           <div className="page-header">
             <div className="container">
               <h2>Team Stats</h2>
@@ -33,13 +30,9 @@ class TeamStatsPage extends React.Component {
 
                 const teams = data.teams;
 
-                return (
-                  <TeamsTable teams={teams} />
-                );
+                return <TeamsTable teams={teams} />;
               }}
-
             </Query>
-
           </div>
         </div>
         <Footer />

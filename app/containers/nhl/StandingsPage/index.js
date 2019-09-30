@@ -1,8 +1,8 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import { getStandingsQuery } from './query.js';
 import Header from '../../../components/Header';
+import Helmet from '../../../components/Helmet';
 import Footer from '../../../components/Footer';
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import EmptyState from '../../../components/EmptyState';
@@ -21,13 +21,7 @@ class StandingsPage extends React.Component {
             </div>
           </div>
           <div className="container">
-            <Helmet>
-              <title>NHL Standings - SealStats.com</title>
-              <meta
-                name="description"
-                content="View NHL Standings. Seal Stats is the best place to view NHL stats. User-friendly and fast."
-              />
-            </Helmet>
+            <Helmet titlePrefix="NHL Standings" contentPrefix="View NHL Standings."/>
             <Query query={getStandingsQuery}>
               {({ loading, error, data }) => {
                 if (loading) return (<LoadingIndicator />);

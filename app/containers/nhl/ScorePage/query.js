@@ -4,12 +4,14 @@ import { gql } from 'apollo-boost';
 const getScoresQuery = gql`
   query($date: String, $y1date: String, $y2date: String, $y3date: String, $n1date: String, $n2date: String, $n3date: String) {
     currentDate: games (date: $date){
-      id,
+      id
+      statusText
       gameDate
       highlights {
         recap
       }
       liveFeed {
+        finalPeriod
         lastTenPlays {
           period
           periodTimeRemaining
@@ -23,6 +25,8 @@ const getScoresQuery = gql`
         codedGameState
         detailedState
         statusCode
+        isScheduled
+        friendlyStatus
       }
       seriesSummary {
         gameLabel

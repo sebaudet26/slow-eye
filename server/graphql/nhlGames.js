@@ -1,6 +1,11 @@
-import { last } from 'ramda';
-import moment from 'moment';
-import { toOrdinal } from './misc';
+const { last } = require('ramda');
+const moment = require('moment');
+
+const toOrdinal = (n) => {
+  const s = ['th', 'st', 'nd', 'rd'];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+};
 
 // export const gameStatusLabels = {
 //   1: 'Scheduled',
@@ -11,9 +16,9 @@ import { toOrdinal } from './misc';
 //   7: 'Final',
 // };
 
-export const isScheduled = game => game.status.detailedState === 'Scheduled';
+const isScheduled = game => game.status.detailedState === 'Scheduled';
 
-export const calculateGameTime = (lastEvent) => {
+const calculateGameTime = (lastEvent) => {
   if (!lastEvent) {
     return 'Starting Soon';
   }
@@ -35,34 +40,33 @@ export const calculateGameTime = (lastEvent) => {
   return `${lastEvent.period} - ${lastEvent.periodTimeRemaining}`;
 };
 
-export const getStatusText = (game) => {
-  const statusCode = game.status
-    ? game.status.codedGameState
-    : game.liveFeed.status.codedGameState;
+const getStatusText = (status, liveFeed, gameDate) => {
+  const statusCode = status
+    ? status.codedGameState
+    : liveFeed.status.codedGameState;
 
   switch (statusCode) {
     case '1':
-      return `${moment(game.gameDate).format('h:mm A')}`;
+      return `${moment(gameDate).format('h:mm A')}`;
     case '3':
-      return `${calculateGameTime(last(game.liveFeed.lastTenPlays))}`;
+      return `${calculateGameTime(last(liveFeed.lastTenPlays))}`;
     case '4':
-      return `${calculateGameTime(last(game.liveFeed.lastTenPlays))}`;
+      return `${calculateGameTime(last(liveFeed.lastTenPlays))}`;
     default:
       return '';
   }
 };
 
-export const getFinalPeriod = (game) => {
+const getFinalPeriod = (lastTenPlays) => {
   if (
-    !game.liveFeed
-    || !game.liveFeed.lastTenPlays
-    || !game.liveFeed.lastTenPlays.length
-    || !last(game.liveFeed.lastTenPlays).period
+    !lastTenPlays
+    || !lastTenPlays.length
+    || !last(lastTenPlays).about
   ) {
     return '';
   }
 
-  switch (last(game.liveFeed.lastTenPlays).period) {
+  switch (last(lastTenPlays).about.period) {
     case 3:
       return '';
     case 4:
@@ -74,4 +78,4 @@ export const getFinalPeriod = (game) => {
   }
 };
 
-export default null;
+module.exports = { getStatusText, getFinalPeriod };

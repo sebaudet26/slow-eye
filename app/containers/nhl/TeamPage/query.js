@@ -27,6 +27,7 @@ query($id: Int) {
       hotColdPoints
       hotColdGames
       hotColdPlusMinus
+      pointsInLatestSeason
       stats {
         season
         stat {
@@ -75,11 +76,13 @@ query($id: Int) {
         height
         weight
         captain
-        rookie
         fullName
         currentAge
         rosterStatus
         primaryNumber
+        isForward
+        isDefenseman
+        isGoalie
         currentTeamInfo {
           name
           teamName
