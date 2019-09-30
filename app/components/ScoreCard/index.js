@@ -35,10 +35,10 @@ const ScoreCard = ({ game }) => (
             game.status.detailedState === 'Scheduled' ? (
               <span>
                 {game.teams.away.leagueRecord.wins}
-                {'W - '}
+                {'-'}
                 {game.teams.away.leagueRecord.losses}
-                {'L'}
-                { game.seriesSummary ? null : ` - ${game.teams.away.leagueRecord.ot}OT`
+                {''}
+                { game.teams.away.leagueRecord.ot ? `-${game.teams.away.leagueRecord.ot}` : game.seriesSummary
                 }
               </span>
             ) : (
@@ -59,10 +59,10 @@ const ScoreCard = ({ game }) => (
             game.status.detailedState === 'Scheduled' ? (
               <span>
                 {game.teams.home.leagueRecord.wins}
-                {'W - '}
+                {'-'}
                 {game.teams.home.leagueRecord.losses}
-                {'L'}
-                { game.seriesSummary ? null : ` - ${game.teams.home.leagueRecord.ot}OT`
+                {''}
+                { game.teams.away.leagueRecord.ot ? `-${game.teams.away.leagueRecord.ot}` : game.seriesSummary
                 }
               </span>
             ) : (
