@@ -4,6 +4,7 @@ const getGameQuery = gql`
 query($id: String) {
   game (id: $id) {
     id
+    statusText
     highlights {
       recap
       goals {
@@ -72,6 +73,7 @@ query($id: String) {
       status {
         codedGameState
         detailedState
+        friendlyStatus
       }
     }
     boxscore {
@@ -84,6 +86,7 @@ query($id: String) {
           locationName
         }
         seasonTeamStats {
+          record
           splits {
             wins
             losses
@@ -155,6 +158,7 @@ query($id: String) {
           hits
         }
         seasonTeamStats {
+          record
           splits {
             wins
             losses

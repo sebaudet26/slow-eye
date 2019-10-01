@@ -1,8 +1,8 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import { Query } from 'react-apollo';
 import { getPlayersQuery } from './query.js';
 import Header from '../../../components/Header';
+import Helmet from '../../../components/Helmet';
 import Footer from '../../../components/Footer';
 import PlayersTable from '../../../components/Table/PlayersTable';
 import LoadingIndicator from '../../../components/LoadingIndicator';
@@ -15,11 +15,7 @@ class PlayerStatsPage extends React.PureComponent {
       <div>
         <Header selectedLeague="NHL" />
         <div className="playerStats-page">
-          <Helmet>
-            <title>Player Stats - SealStats.com</title>
-            <meta name="description" content="View NHL Players Stats. Leaderboards. It's all here. Seal Stats is the best place to view NHL stats. User-friendly and fast." />
-          </Helmet>
-
+          <Helmet titlePrefix="Player Stats" contentPrefix="View NHL Players Stats." />
           <Query query={getPlayersQuery}>
             {({ loading, error, data }) => {
               if (loading) return (<LoadingIndicator />);

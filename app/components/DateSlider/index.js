@@ -54,7 +54,8 @@ const renderSlide = (opt, gamesAccessor) => (
 class DateSlider extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+    };
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -68,7 +69,9 @@ class DateSlider extends React.Component {
   }
 
   render() {
-    const { daysOptions, handleNewDateSelected, gamesAccessor } = this.props;
+    const {
+      daysOptions, handleNewDateSelected, gamesAccessor, slickCurrentSlide,
+    } = this.props;
     const settings = {
       dots: false,
       swipeToSlide: true,
@@ -78,7 +81,7 @@ class DateSlider extends React.Component {
       speed: 200,
       slidesToShow: 7,
       slidesToScroll: 1,
-      initialSlide: Math.round(daysOptions.length / 2),
+      initialSlide: slickCurrentSlide,
       centerMode: true,
       prevArrow: <PrevArrow />,
       nextArrow: <NextArrow />,

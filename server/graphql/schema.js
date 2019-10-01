@@ -13,11 +13,13 @@ const {
   head,
   filter,
   find,
+  join,
   lte,
   map,
   path,
   pathOr,
   pipe,
+  pick,
   prop,
   propEq,
   propOr,
@@ -29,6 +31,7 @@ const {
   values,
 } = require('ramda');
 const TEAMS = require('../libs/teams');
+const forwardsAbbreviations = ['LW', 'C', 'RW'];
 const {
   fetchStandings,
   fetchStatsForPlayerId,
@@ -62,6 +65,11 @@ const {
   hotColdGames,
   hotColdPlusMinus,
 } = require('./streaks');
+
+const {
+  getFinalPeriod,
+  getStatusText,
+} = require('./nhlGames');
 
 const ifNotThereFetchId = propName => async (d) => {
   if (d.id) {
@@ -138,7 +146,23 @@ const TeamStats = new GraphQLObjectType({
   name: 'TeamStats',
   fields: {
     type: { type: GraphQLString, resolve: path(['type', 'displayName']) },
-    splits: { type: GraphQLList(TeamStat), resolve: pipe(prop('splits'), map(prop('stat'))) },
+    splits: {
+      type: GraphQLList(TeamStat), resolve: pipe(
+        prop('splits'),
+        map(prop('stat')),
+      )
+    },
+    record: {
+      type: GraphQLString,
+      resolve: pipe(
+        prop('splits'),
+        map(prop('stat')),
+        head,
+        pick(['wins', 'losses', 'ot']),
+        values,
+        join('-'),
+      )
+    },
   },
 });
 
@@ -324,6 +348,30 @@ const PlayerInfo = new GraphQLObjectType({
     shootsCatches: { type: GraphQLString, resolve: prop('shootsCatches') },
     rosterStatus: { type: GraphQLString, resolve: prop('rosterStatus') },
     primaryPosition: { type: Position, resolve: prop('primaryPosition') },
+    isGoalie: {
+      type: GraphQLBoolean,
+      resolve: pipe(
+        prop('primaryPosition'),
+        prop('abbreviation'),
+        equals('G')
+      )
+    },
+    isDefenseman: {
+      type: GraphQLBoolean,
+      resolve: pipe(
+        prop('primaryPosition'),
+        prop('abbreviation'),
+        equals('D')
+      )
+    },
+    isForward: {
+      type: GraphQLBoolean,
+      resolve: pipe(
+        prop('primaryPosition'),
+        prop('abbreviation'),
+        forwardsAbbreviations.includes,
+      )
+    },
     // Lazy load current team info
     currentTeamInfo: { type: TeamInfo, resolve: p => fetchInfoForTeamId(p.currentTeam.id) },
     // Lazy load draft info
@@ -505,6 +553,11 @@ const Player = new GraphQLObjectType({
       type: GraphQLList(SeasonStat),
       resolve: p => fetchAllYearsStatsForPlayerId(p.id),
     },
+    hasNHLExperience: {
+      type: GraphQLBoolean,
+      resolve: p => fetchAllYearsStatsForPlayerId(p.id)
+        .then(careerStats => !!careerStats.filter(seasonStat => seasonStat.league.name === 'National Hockey League').length),
+    },
     // Lazy load player stats
     careerPlayoffStats: {
       type: GraphQLList(SeasonStat),
@@ -535,6 +588,14 @@ const Player = new GraphQLObjectType({
       type: GraphQLList(SeasonStat),
       resolve: p => fetchPlayoffGameLogsForPlayerId(p.id),
     },
+    pointsInLatestSeason: {
+      type: GraphQLInt,
+      resolve: (p, args) => fetchStatsForPlayerId(p.id, args)
+        .then((stats) => stats.length
+          ? stats[stats.length - 1].stat.points
+          : 0
+        )
+    }
   },
 });
 
@@ -557,6 +618,19 @@ const GameStatus = new GraphQLObjectType({
       type: GraphQLString,
       resolve: prop('statusCode'),
     },
+    isScheduled: {
+      type: GraphQLBoolean,
+      resolve: status => status.detailedState === 'Scheduled'
+    },
+    friendlyStatus: {
+      type: GraphQLString,
+      resolve: status => (
+        status.detailedState === 'In Progress' ||
+        status.detailedState === 'Scheduled' ||
+        status.detailedState === 'In Progress - Critical'
+      ) ? ''
+        : status.detailedState
+    }
   },
 });
 
@@ -691,6 +765,14 @@ const LiveFeed = new GraphQLObjectType({
       type: Shootout,
       resolve: pathOr({}, ['liveData', 'linescore', 'shootoutInfo']),
     },
+    finalPeriod: {
+      type: GraphQLString,
+      resolve: pipe(
+        pathOr([], ['liveData', 'plays', 'allPlays']),
+        takeLast(10),
+        getFinalPeriod,
+      )
+    }
   },
 });
 
@@ -769,6 +851,11 @@ const Game = new GraphQLObjectType({
     highlights: { type: GameHighlights, resolve: p => fetchGameHighlights(p.gamePk) },
     // Playoffs series
     seriesSummary: { type: SeriesSummary, resolve: prop('seriesSummary') },
+    statusText: {
+      type: GraphQLString,
+      resolve: (game) => fetchLiveFeed(game.gamePk)
+        .then((liveFeed) => getStatusText(game.status, liveFeed.gameData, game.gameDate))
+    },
   },
 });
 
