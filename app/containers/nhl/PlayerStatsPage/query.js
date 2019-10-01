@@ -2,7 +2,7 @@ import { gql } from 'apollo-boost';
 
 const getPlayersQuery = gql`
 {
-  playersReport (season: "20182019") {
+  playersReport (season: "20192020") {
     id
     name
     nationality
@@ -37,7 +37,7 @@ const getPlayersQuery = gql`
     shutouts
   }
 
-  teams (season: "20182019") {
+  teams (season: "20192020") {
     id
     abbreviation
     name

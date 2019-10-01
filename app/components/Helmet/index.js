@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 
-const title = 'SealStats.com';
+const title = 'Seal-Stats.com';
 const content = "Seal Stats is the best place to view NHL stats. User-friendly and fast.";
 
 class Header extends React.Component {
@@ -12,10 +12,10 @@ class Header extends React.Component {
   render() {
     return (
       <Helmet>
-        <title>{`${this.props.titlePrefix} ${title}`}</title>
+        <title>{`${this.props.titlePrefix || ''} ${title}`}</title>
         <meta
           name="description"
-          content={`${this.props.contentPrefix} ${content}`}
+          content={`${this.props.contentPrefix || ''} ${content}`}
         />
       </Helmet>
     );
