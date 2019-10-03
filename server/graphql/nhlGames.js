@@ -1,4 +1,4 @@
-const { last } = require('ramda');
+const { last, pathOr, pipe, takeLast } = require('ramda');
 const moment = require('moment');
 
 const toOrdinal = (n) => {
@@ -43,15 +43,20 @@ const calculateGameTime = (lastEvent) => {
 const getStatusText = (status, liveFeed, gameDate) => {
   const statusCode = status
     ? status.codedGameState
-    : liveFeed.status.codedGameState;
+    : liveFeed.gameData.status.codedGameState;
+
+  const lastTenPlays = pipe(
+    pathOr([], ['liveData', 'plays', 'allPlays']),
+    takeLast(10),
+  )(liveFeed.liveData)
 
   switch (statusCode) {
     case '1':
       return `${moment(gameDate).format('h:mm A')}`;
     case '3':
-      return `${calculateGameTime(last(liveFeed.lastTenPlays))}`;
+      return `${calculateGameTime(last(lastTenPlays))}`;
     case '4':
-      return `${calculateGameTime(last(liveFeed.lastTenPlays))}`;
+      return `${calculateGameTime(last(lastTenPlays))}`;
     default:
       return '';
   }
