@@ -854,7 +854,7 @@ const Game = new GraphQLObjectType({
     statusText: {
       type: GraphQLString,
       resolve: (game) => fetchLiveFeed(game.gamePk)
-        .then((liveFeed) => getStatusText(game.status, liveFeed.gameData, game.gameDate))
+        .then((liveFeed) => getStatusText(game.status, liveFeed, game.gameDate))
     },
   },
 });

@@ -318,8 +318,8 @@ const fetchTeamRanking = async (teamId) => {
 };
 
 const fetchAllHistoryPlayers = async () => {
-  const resourceSkaters = '/skaters?isAggregate=true&reportType=basic&reportName=bios&sort=[{%22property%22:%22playerBirthDate%22,%22direction%22:%22DESC%22}]&cayenneExp=seasonId%3E=19171918%20and%20seasonId%3C=20182019';
-  const resourceGoalies = '/goalies?isAggregate=true&reportType=goalie_basic&reportName=goaliebios&sort=[{%22property%22:%22playerBirthDate%22,%22direction%22:%22DESC%22}]&cayenneExp=seasonId%3E=19171918%20and%20seasonId%3C=20182019';
+  const resourceSkaters = '/skaters?isAggregate=true&reportType=basic&reportName=bios&sort=[{%22property%22:%22playerBirthDate%22,%22direction%22:%22DESC%22}]&cayenneExp=seasonId%3E=19171918%20and%20seasonId%3C=20192020';
+  const resourceGoalies = '/goalies?isAggregate=true&reportType=goalie_basic&reportName=goaliebios&sort=[{%22property%22:%22playerBirthDate%22,%22direction%22:%22DESC%22}]&cayenneExp=seasonId%3E=19171918%20and%20seasonId%3C=20192020';
   const [skaters, goalies] = await Promise.all([
     nhlApi(resourceSkaters, 60 * 60 * 24 * 7),
     nhlApi(resourceGoalies, 60 * 60 * 24 * 7),
@@ -330,7 +330,7 @@ const fetchAllHistoryPlayers = async () => {
   return test;
 };
 
-const fetchPlayersReport = async (season = 20182019) => {
+const fetchPlayersReport = async (season = 20192020) => {
   const skatersummaryRookie = `/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&cayenneExp=playerRookieSeasonInd=1%20and%20gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}&sort=[{%22property%22:%22playerId%22}]`;
   const realtimeRookie = `/skaters?isAggregate=false&reportType=basic&reportName=realtime&sort=[{%22property%22:%22playerId%22}]&cayenneExp=playerRookieSeasonInd=1%20and%20gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
   const goaliesRookie = `/goalies?isAggregate=false&reportType=goalie_basic&reportName=goaliesummary&sort=[{%22property%22:%22playerId%22}]&cayenneExp=playerRookieSeasonInd=1%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}%20and%20gameTypeId=2`;
@@ -540,7 +540,7 @@ const calculatePlayerPointsStreak = player => ({
 });
 
 const fetchTeamSchedule = async (teamId) => {
-  const resource = `/schedule?teamId=${teamId}&startDate=2018-10-01&endDate=${moment.tz('America/New_York').subtract(1, 'day').endOf('day').format('YYYY-MM-DD')}`;
+  const resource = `/schedule?teamId=${teamId}&startDate=2019-09-01&endDate=${moment.tz('America/New_York').subtract(1, 'day').endOf('day').format('YYYY-MM-DD')}`;
   const teamSchedule = await nhlStatsApi(resource);
   return teamSchedule.dates.map(date => ({ date: date.date, game: date.games[0] }));
 };
@@ -609,7 +609,7 @@ const calculatePlayerStreaks = async (args = {}) => {
     if (cached && !args.forced) {
       return take(args.limit || defaultPlayersLimit, JSON.parse(cached));
     }
-    const skatersummaryAll = '/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&cayenneExp=gameTypeId=2%20and%20seasonId%3E=20182019%20and%20seasonId%3C=20182019&sort=[{%22property%22:%22playerId%22}]';
+    const skatersummaryAll = '/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&cayenneExp=gameTypeId=2%20and%20seasonId%3E=20192020%20and%20seasonId%3C=20192020&sort=[{%22property%22:%22playerId%22}]';
 
     const players = await nhlApi(skatersummaryAll, 60 * 60 * 24, true);
 
