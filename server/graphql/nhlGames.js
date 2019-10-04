@@ -18,10 +18,11 @@ const toOrdinal = (n) => {
 
 const isScheduled = game => game.status.detailedState === 'Scheduled';
 
-const calculateGameTime = (lastEvent) => {
-  if (!lastEvent) {
+const calculateGameTime = (lastEventObject) => {
+  if (!lastEventObject) {
     return 'Starting Soon';
   }
+  const lastEvent = lastEventObject.about;
   if (lastEvent.periodTimeRemaining === '00:00') {
     return `${toOrdinal(lastEvent.period)} Intermission`;
   }
@@ -48,7 +49,7 @@ const getStatusText = (status, liveFeed, gameDate) => {
   const lastTenPlays = pipe(
     pathOr([], ['liveData', 'plays', 'allPlays']),
     takeLast(10),
-  )(liveFeed.liveData)
+  )(liveFeed)
 
   switch (statusCode) {
     case '1':
