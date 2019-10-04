@@ -439,6 +439,7 @@ const calculateTeamPointsStreak = (team) => {
     reverse,
     take(teamStreakDefaultNumberOfGames + 1),
     map(prop('game')),
+    filter(game => game.gameType === 'R')
   )(team);
 
   const goalsFor = pipe(
@@ -458,12 +459,18 @@ const calculateTeamPointsStreak = (team) => {
   const firstGame = last(gamesToConsider);
   const lastGame = head(gamesToConsider);
 
-  const initialRecord = firstGame.teams.home.team.id === team.id
-    ? firstGame.teams.home.leagueRecord
-    : firstGame.teams.away.leagueRecord;
-  const latestRecord = lastGame.teams.home.team.id === team.id
-    ? lastGame.teams.home.leagueRecord
-    : lastGame.teams.away.leagueRecord;
+  let initialRecord = { wins: 0, losses: 0, ot: 0, type: 'league' }
+  let latestRecord  = { wins: 0, losses: 0, ot: 0, type: 'league' }
+
+  if (gamesToConsider.length == 1) {
+    latestRecord = lastGame.teams.home.team.id === team.id
+      ? lastGame.teams.home.leagueRecord
+      : lastGame.teams.away.leagueRecord;
+  } else if (gamesToConsider.length > 1) {
+    initialRecord = firstGame.teams.home.team.id === team.id
+      ? firstGame.teams.home.leagueRecord
+      : firstGame.teams.away.leagueRecord;
+  }
 
   const streak = {
     wins: latestRecord.wins - initialRecord.wins,
@@ -548,6 +555,7 @@ const fetchTeamSchedule = async (teamId) => {
 const calculateTeamsStreaks = async (args = {}) => {
   try {
     const cached = await cache.get('team_streaks');
+    
     if (cached && !args.forced) {
       return take(args.limit || defaultTeamsLimit, JSON.parse(cached));
     }
@@ -571,11 +579,14 @@ const calculateTeamsStreaks = async (args = {}) => {
       ]),
       map(omit(['schedule'])),
     )(teamsWithSchedules);
+
     console.log(`Saving streaks for the next ${(getSecondsUntilMidnight() / 60 / 60).toFixed(1)} hours`);
     cache
       .set(
         'team_streaks',
         JSON.stringify(teamsStreaks),
+        'EX',
+        getSecondsUntilMidnight(),
       );
 
     return take(args.limit || defaultTeamsLimit, teamsStreaks);
@@ -596,7 +607,6 @@ const fetchByTen = async (cumulative, players) => {
   }));
   const newCumulative = [...cumulative, ...responses];
   if (players.length <= 10) {
-    console.log('done!');
     return newCumulative;
   }
   const final = await fetchByTen(newCumulative, takeLast(players.length - 10, players));
