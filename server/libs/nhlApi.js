@@ -462,14 +462,10 @@ const calculateTeamPointsStreak = (team) => {
   let initialRecord = { wins: 0, losses: 0, ot: 0, type: 'league' }
   let latestRecord  = { wins: 0, losses: 0, ot: 0, type: 'league' }
 
-  if (gamesToConsider.length == 1) {
+  if (gamesToConsider.length > 1) {
     latestRecord = lastGame.teams.home.team.id === team.id
       ? lastGame.teams.home.leagueRecord
       : lastGame.teams.away.leagueRecord;
-  } else if (gamesToConsider.length > 1) {
-    initialRecord = firstGame.teams.home.team.id === team.id
-      ? firstGame.teams.home.leagueRecord
-      : firstGame.teams.away.leagueRecord;
   }
 
   const streak = {
