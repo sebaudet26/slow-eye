@@ -436,10 +436,10 @@ const takeAwayTeam = path(['teams', 'away']);
 const calculateTeamPointsStreak = (team) => {
   const gamesToConsider = pipe(
     prop('schedule'),
-    reverse,
-    take(teamStreakDefaultNumberOfGames + 1),
     map(prop('game')),
     filter(game => game.gameType === 'R')
+    reverse,
+    take(teamStreakDefaultNumberOfGames + 1),
   )(team);
 
   const goalsFor = pipe(
@@ -466,6 +466,12 @@ const calculateTeamPointsStreak = (team) => {
     latestRecord = lastGame.teams.home.team.id === team.id
       ? lastGame.teams.home.leagueRecord
       : lastGame.teams.away.leagueRecord;
+  }
+
+  if (gamesToConsider.length > teamStreakDefaultNumberOfGames) {
+    initialRecord = firstGame.teams.home.team.id === team.id
+      ? firstGame.teams.home.leagueRecord
+      : firstGame.teams.away.leagueRecord;
   }
 
   const streak = {
