@@ -1,31 +1,34 @@
-// const {
-//   contains,
-//   descend,
-//   filter,
-//   find,
-//   flatten,
-//   head,
-//   last,
-//   map,
-//   mergeAll,
-//   mergeLeft,
-//   omit,
-//   path,
-//   pathEq,
-//   pathOr,
-//   pick,
-//   pipe,
-//   prop,
-//   propEq,
-//   propOr,
-//   reverse,
-//   sum,
-//   sortBy,
-//   sortWith,
-//   tail,
-//   take,
-//   takeLast,
-// } = require('ramda');
+const {
+  contains,
+  descend,
+  filter,
+  find,
+  flatten,
+  head,
+  last,
+  map,
+  mergeAll,
+  mergeLeft,
+  omit,
+  path,
+  pathEq,
+  pathOr,
+  pick,
+  pipe,
+  prop,
+  propEq,
+  propOr,
+  reverse,
+  sum,
+  sortBy,
+  sortWith,
+  tail,
+  take,
+  takeLast,
+} = require('ramda');
+
+const ApiRequest = require('../../libs/api/api')
+const DataLoader = require('dataloader')
 
 
 // TODO: hardcoded feature flag lol
@@ -51,11 +54,19 @@
 //   return json.data[0];
 // };
 
-// const fetchInfoForPlayerId = async (playerId) => {
-//   const resource = `/people/${playerId}`;
-//   const playerInfoData = await nhlStatsApi(resource);
-//   return path(['people', 0], playerInfoData);
-// };
+const batchPlayerInfoLoader = async (playerIds) => {
+  const data = await Promise.all(playerIds.map((id) => {
+  	return new ApiRequest({ 
+  		league: 'NHL', 
+  		apiType: 'STATS_API', 
+  		resource: `/people/${id}` 
+  	}).fetch()
+  }))
+
+  return map(path(['people', 0]))(data)
+};
+
+const playerLoader = new DataLoader(ids => batchPlayerInfoLoader(ids));
 
 // const fetchStatsForPlayerId = async (playerId, args) => {
 //   let resource = `/people/${playerId}/stats?stats=statsSingleSeason`;
@@ -591,3 +602,7 @@
 //   calculatePlayerStreaks,
 //   calculateTeamsStreaks,
 // };
+
+module.exports = {
+	playerLoader
+}

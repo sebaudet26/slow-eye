@@ -10,12 +10,16 @@ const fakeCache = {
 	set: sinon.stub().resolves(true),
 }
 
+const expectedUrl = 'https://statsapi.web.nhl.com/api/v1/people/8479339'
+
+const fakeFetch = sinon
+  .stub()
+  .resolves({ json: () => Promise.resolve(testData[expectedUrl]) })
+
 const ApiRequest = proxyquire('./api', {
   './../redis': fakeCache,
-  'node-fetch': (url) => Promise.resolve({ json: () => Promise.resolve(testData[url]) }),
+  'node-fetch': fakeFetch,
 })
-
-const expectedUrl = 'https://statsapi.web.nhl.com/api/v1/people/8479339'
 
 describe('api', function() {
   afterEach(() => {

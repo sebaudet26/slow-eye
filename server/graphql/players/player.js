@@ -1,6 +1,3 @@
-const DataLoader = require('dataloader')
-
-
 const PlayerBio = new GraphQLObjectType({
   name: 'TeamRanking',
   fields: {
@@ -35,6 +32,3 @@ const PlayerStats = new GraphQLObjectType({
 
 	},
 });
-
-
-const playerLoader = new DataLoader(keys => myBatchGetUsers(keys));

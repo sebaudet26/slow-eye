@@ -1,22 +1,3 @@
-const fetch = require('node-fetch');
-
-const mlbApiBase = 'https://statsapi.mlb.com/api/v1/';
-const mlbLookupBase = 'https://lookup-service-prod.mlb.com/';
-
-const mlbApi = async (resource) => {
-  const url = `${mlbApiBase}${resource}`;
-  const response = await fetch(url);
-  const data = await response.json();
-  return data;
-};
-
-const mlbLookup = async (resource) => {
-  const url = `${mlbLookupBase}${resource}`;
-  const response = await fetch(url);
-  const data = await response.json();
-  return data;
-};
-
 // Teams
 const fetchTeams = () => mlbLookup('json/named.team_all_season.bam?sport_code=%27mlb%27&all_star_sw=%27N%27&season=%272019%27&sort_order=name_asc');
 
