@@ -1,0 +1,37 @@
+{
+	"https://statsapi.web.nhl.com/api/v1/people/8479339": {
+	  "copyright" : "NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2019. All Rights Reserved.",
+	  "people" : [ {
+	    "id" : 8479339,
+	    "fullName" : "Patrik Laine",
+	    "link" : "/api/v1/people/8479339",
+	    "firstName" : "Patrik",
+	    "lastName" : "Laine",
+	    "primaryNumber" : "29",
+	    "birthDate" : "1998-04-19",
+	    "currentAge" : 21,
+	    "birthCity" : "Tampere",
+	    "birthCountry" : "FIN",
+	    "nationality" : "FIN",
+	    "height" : "6' 5\"",
+	    "weight" : 206,
+	    "active" : true,
+	    "alternateCaptain" : false,
+	    "captain" : false,
+	    "rookie" : false,
+	    "shootsCatches" : "R",
+	    "rosterStatus" : "Y",
+	    "currentTeam" : {
+	      "id" : 52,
+	      "name" : "Winnipeg Jets",
+	      "link" : "/api/v1/teams/52"
+	    },
+	    "primaryPosition" : {
+	      "code" : "R",
+	      "name" : "Right Wing",
+	      "type" : "Forward",
+	      "abbreviation" : "RW"
+	    }
+	  } ]
+	}
+}
