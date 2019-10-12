@@ -33,5 +33,847 @@
 	      "abbreviation" : "RW"
 	    }
 	  } ]
+	},
+	"https://records.nhl.com/site/api/draft?cayenneExp=playerId=8479339": {
+	  "data": [
+	    {
+	      "id": 15869,
+	      "amateurClubName": "Tappara",
+	      "amateurLeague": "FINLAND",
+	      "birthDate": "1998-04-19",
+	      "birthPlace": "Tampere, Finland",
+	      "countryCode": "FIN",
+	      "csPlayerId": 60063,
+	      "draftYear": 2016,
+	      "draftedByTeamId": 52,
+	      "firstName": "Patrik",
+	      "height": 75,
+	      "lastName": "Laine",
+	      "overallPickNumber": 2,
+	      "pickInRound": 2,
+	      "playerId": 8479339,
+	      "playerName": "Patrik Laine",
+	      "position": "RW",
+	      "removedOutright": "N",
+	      "removedOutrightWhy": null,
+	      "roundNumber": 1,
+	      "shootsCatches": "R",
+	      "supplementalDraft": "N",
+	      "teamPickHistory": "WPG",
+	      "triCode": "WPG",
+	      "weight": 201
+	    }
+	  ],
+	  "total": 1
+	},
+	"https://statsapi.web.nhl.com/api/v1/people/8479339/stats?stats=yearByYear": {
+	  "copyright": "NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2019. All Rights Reserved.",
+	  "stats": [
+	    {
+	      "type": {
+	        "displayName": "yearByYear"
+	      },
+	      "splits": [
+	        {
+	          "season": "20122013",
+	          "stat": {
+	            "assists": 9,
+	            "goals": 14,
+	            "pim": 2,
+	            "games": 7,
+	            "penaltyMinutes": "2",
+	            "plusMinus": 0,
+	            "points": 23
+	          },
+	          "team": {
+	            "name": "Tappara U16",
+	            "link": "/api/v1/teams/null"
+	          },
+	          "league": {
+	            "name": "Jr. C SM-sarja Q",
+	            "link": "/api/v1/league/null"
+	          },
+	          "sequenceNumber": 10153638
+	        },
+	        {
+	          "season": "20132014",
+	          "stat": {
+	            "assists": 6,
+	            "goals": 5,
+	            "pim": 2,
+	            "games": 5,
+	            "penaltyMinutes": "2",
+	            "points": 11
+	          },
+	          "team": {
+	            "name": "Tappara U18",
+	            "link": "/api/v1/teams/null"
+	          },
+	          "league": {
+	            "name": "Fin-U18",
+	            "link": "/api/v1/league/null"
+	          },
+	          "sequenceNumber": 1
+	        },
+	        {
+	          "season": "20132014",
+	          "stat": {
+	            "assists": 11,
+	            "goals": 26,
+	            "pim": 43,
+	            "games": 42,
+	            "penaltyMinutes": "43",
+	            "points": 37
+	          },
+	          "team": {
+	            "id": 4886,
+	            "name": "Tappara Jr.",
+	            "link": "/api/v1/teams/4886"
+	          },
+	          "league": {
+	            "id": 267,
+	            "name": "Fin-Jr.",
+	            "link": "/api/v1/league/267"
+	          },
+	          "sequenceNumber": 2
+	        },
+	        {
+	          "season": "20142015",
+	          "stat": {
+	            "assists": 1,
+	            "goals": 4,
+	            "pim": 4,
+	            "games": 6,
+	            "penaltyMinutes": "4",
+	            "points": 5
+	          },
+	          "team": {
+	            "id": 4886,
+	            "name": "Tappara Jr.",
+	            "link": "/api/v1/teams/4886"
+	          },
+	          "league": {
+	            "id": 267,
+	            "name": "Fin-Jr.",
+	            "link": "/api/v1/league/267"
+	          },
+	          "sequenceNumber": 1
+	        },
+	        {
+	          "season": "20142015",
+	          "stat": {
+	            "assists": 1,
+	            "goals": 0,
+	            "pim": 2,
+	            "games": 6,
+	            "penaltyMinutes": "2",
+	            "points": 1
+	          },
+	          "team": {
+	            "id": 2490,
+	            "name": "Tappara",
+	            "link": "/api/v1/teams/2490"
+	          },
+	          "league": {
+	            "id": 267,
+	            "name": "Finland",
+	            "link": "/api/v1/league/267"
+	          },
+	          "sequenceNumber": 2
+	        },
+	        {
+	          "season": "20142015",
+	          "stat": {
+	            "assists": 7,
+	            "goals": 5,
+	            "pim": 14,
+	            "games": 36,
+	            "penaltyMinutes": "14",
+	            "points": 12
+	          },
+	          "team": {
+	            "name": "LeKi",
+	            "link": "/api/v1/teams/null"
+	          },
+	          "league": {
+	            "name": "Finland-2",
+	            "link": "/api/v1/league/null"
+	          },
+	          "sequenceNumber": 3
+	        },
+	        {
+	          "season": "20152016",
+	          "stat": {
+	            "assists": 16,
+	            "goals": 17,
+	            "pim": 6,
+	            "games": 46,
+	            "penaltyMinutes": "6",
+	            "points": 33
+	          },
+	          "team": {
+	            "id": 2490,
+	            "name": "Tappara",
+	            "link": "/api/v1/teams/2490"
+	          },
+	          "league": {
+	            "name": "Finland",
+	            "link": "/api/v1/league/null"
+	          },
+	          "sequenceNumber": 1
+	        },
+	        {
+	          "season": "20152016",
+	          "stat": {
+	            "assists": 6,
+	            "goals": 7,
+	            "pim": 6,
+	            "shots": 27,
+	            "games": 7,
+	            "powerPlayGoals": 1,
+	            "penaltyMinutes": "6",
+	            "gameWinningGoals": 2,
+	            "shortHandedGoals": 0,
+	            "plusMinus": 8,
+	            "points": 13
+	          },
+	          "team": {
+	            "id": 62,
+	            "name": "Finland",
+	            "link": "/api/v1/teams/62"
+	          },
+	          "league": {
+	            "id": 147,
+	            "name": "WJC-A",
+	            "link": "/api/v1/league/147"
+	          },
+	          "sequenceNumber": 2
+	        },
+	        {
+	          "season": "20152016",
+	          "stat": {
+	            "assists": 5,
+	            "goals": 7,
+	            "pim": 4,
+	            "shots": 36,
+	            "games": 10,
+	            "powerPlayGoals": 3,
+	            "penaltyMinutes": "4",
+	            "gameWinningGoals": 1,
+	            "shortHandedGoals": 9,
+	            "plusMinus": 4,
+	            "points": 12
+	          },
+	          "team": {
+	            "id": 62,
+	            "name": "Finland",
+	            "link": "/api/v1/teams/62"
+	          },
+	          "league": {
+	            "id": 147,
+	            "name": "WC-A",
+	            "link": "/api/v1/league/147"
+	          },
+	          "sequenceNumber": 3
+	        },
+	        {
+	          "season": "20162017",
+	          "stat": {
+	            "timeOnIce": "1307:37",
+	            "assists": 28,
+	            "goals": 36,
+	            "pim": 26,
+	            "shots": 204,
+	            "games": 73,
+	            "hits": 80,
+	            "powerPlayGoals": 9,
+	            "powerPlayPoints": 14,
+	            "powerPlayTimeOnIce": "199:18",
+	            "evenTimeOnIce": "1106:54",
+	            "penaltyMinutes": "26",
+	            "faceOffPct": 0,
+	            "shotPct": 17.6,
+	            "gameWinningGoals": 5,
+	            "overTimeGoals": 1,
+	            "shortHandedGoals": 0,
+	            "shortHandedPoints": 0,
+	            "shortHandedTimeOnIce": "01:25",
+	            "blocked": 33,
+	            "plusMinus": 7,
+	            "points": 64,
+	            "shifts": 1633
+	          },
+	          "team": {
+	            "id": 52,
+	            "name": "Winnipeg Jets",
+	            "link": "/api/v1/teams/52"
+	          },
+	          "league": {
+	            "id": 133,
+	            "name": "National Hockey League",
+	            "link": "/api/v1/league/133"
+	          },
+	          "sequenceNumber": 1
+	        },
+	        {
+	          "season": "20162017",
+	          "stat": {
+	            "assists": 0,
+	            "goals": 0,
+	            "pim": 0,
+	            "games": 3,
+	            "penaltyMinutes": "0",
+	            "plusMinus": -1,
+	            "points": 0
+	          },
+	          "team": {
+	            "name": "Finland",
+	            "link": "/api/v1/teams/null"
+	          },
+	          "league": {
+	            "name": "WCup",
+	            "link": "/api/v1/league/null"
+	          },
+	          "sequenceNumber": 16165
+	        },
+	        {
+	          "season": "20172018",
+	          "stat": {
+	            "timeOnIce": "1351:25",
+	            "assists": 26,
+	            "goals": 44,
+	            "pim": 24,
+	            "shots": 241,
+	            "games": 82,
+	            "hits": 74,
+	            "powerPlayGoals": 20,
+	            "powerPlayPoints": 31,
+	            "powerPlayTimeOnIce": "246:33",
+	            "evenTimeOnIce": "1104:46",
+	            "penaltyMinutes": "24",
+	            "faceOffPct": 25.58,
+	            "shotPct": 18.3,
+	            "gameWinningGoals": 8,
+	            "overTimeGoals": 0,
+	            "shortHandedGoals": 0,
+	            "shortHandedPoints": 0,
+	            "shortHandedTimeOnIce": "00:06",
+	            "blocked": 43,
+	            "plusMinus": 8,
+	            "points": 70,
+	            "shifts": 1662
+	          },
+	          "team": {
+	            "id": 52,
+	            "name": "Winnipeg Jets",
+	            "link": "/api/v1/teams/52"
+	          },
+	          "league": {
+	            "id": 133,
+	            "name": "National Hockey League",
+	            "link": "/api/v1/league/133"
+	          },
+	          "sequenceNumber": 1
+	        },
+	        {
+	          "season": "20182019",
+	          "stat": {
+	            "timeOnIce": "1413:07",
+	            "assists": 20,
+	            "goals": 30,
+	            "pim": 42,
+	            "shots": 245,
+	            "games": 82,
+	            "hits": 70,
+	            "powerPlayGoals": 15,
+	            "powerPlayPoints": 23,
+	            "powerPlayTimeOnIce": "287:36",
+	            "evenTimeOnIce": "1124:20",
+	            "penaltyMinutes": "42",
+	            "faceOffPct": 36.67,
+	            "shotPct": 12.2,
+	            "gameWinningGoals": 3,
+	            "overTimeGoals": 0,
+	            "shortHandedGoals": 0,
+	            "shortHandedPoints": 0,
+	            "shortHandedTimeOnIce": "01:11",
+	            "blocked": 44,
+	            "plusMinus": -24,
+	            "points": 50,
+	            "shifts": 1620
+	          },
+	          "team": {
+	            "id": 52,
+	            "name": "Winnipeg Jets",
+	            "link": "/api/v1/teams/52"
+	          },
+	          "league": {
+	            "id": 133,
+	            "name": "National Hockey League",
+	            "link": "/api/v1/league/133"
+	          },
+	          "sequenceNumber": 1
+	        },
+	        {
+	          "season": "20192020",
+	          "stat": {
+	            "timeOnIce": "90:25",
+	            "assists": 7,
+	            "goals": 3,
+	            "pim": 0,
+	            "shots": 16,
+	            "games": 5,
+	            "hits": 13,
+	            "powerPlayGoals": 0,
+	            "powerPlayPoints": 1,
+	            "powerPlayTimeOnIce": "13:54",
+	            "evenTimeOnIce": "76:28",
+	            "penaltyMinutes": "0",
+	            "faceOffPct": 0,
+	            "shotPct": 18.8,
+	            "gameWinningGoals": 0,
+	            "overTimeGoals": 0,
+	            "shortHandedGoals": 0,
+	            "shortHandedPoints": 0,
+	            "shortHandedTimeOnIce": "00:03",
+	            "blocked": 4,
+	            "plusMinus": 6,
+	            "points": 10,
+	            "shifts": 107
+	          },
+	          "team": {
+	            "id": 52,
+	            "name": "Winnipeg Jets",
+	            "link": "/api/v1/teams/52"
+	          },
+	          "league": {
+	            "id": 133,
+	            "name": "National Hockey League",
+	            "link": "/api/v1/league/133"
+	          },
+	          "sequenceNumber": 1
+	        }
+	      ]
+	    }
+	  ]
+	},
+	"https://statsapi.web.nhl.com/api/v1/people/8479339/stats?stats=yearByYearPlayoffs": {
+	  "copyright" : "NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2019. All Rights Reserved.",
+	  "stats" : [ {
+	    "type" : {
+	      "displayName" : "yearByYearPlayoffs"
+	    },
+	    "splits" : [ {
+	      "season" : "20132014",
+	      "stat" : {
+	        "assists" : 1,
+	        "goals" : 0,
+	        "pim" : 0,
+	        "games" : 1,
+	        "penaltyMinutes" : "0",
+	        "points" : 1
+	      },
+	      "team" : {
+	        "name" : "Tappara U18",
+	        "link" : "/api/v1/teams/null"
+	      },
+	      "league" : {
+	        "name" : "Fin-U18",
+	        "link" : "/api/v1/league/null"
+	      },
+	      "sequenceNumber" : 1
+	    }, {
+	      "season" : "20132014",
+	      "stat" : {
+	        "assists" : 0,
+	        "goals" : 0,
+	        "pim" : 0,
+	        "games" : 1,
+	        "penaltyMinutes" : "0",
+	        "points" : 0
+	      },
+	      "team" : {
+	        "id" : 4886,
+	        "name" : "Tappara Jr.",
+	        "link" : "/api/v1/teams/4886"
+	      },
+	      "league" : {
+	        "id" : 267,
+	        "name" : "Fin-Jr.",
+	        "link" : "/api/v1/league/267"
+	      },
+	      "sequenceNumber" : 2
+	    }, {
+	      "season" : "20142015",
+	      "stat" : {
+	        "assists" : 0,
+	        "goals" : 0,
+	        "pim" : 2,
+	        "games" : 2,
+	        "penaltyMinutes" : "2",
+	        "points" : 0
+	      },
+	      "team" : {
+	        "name" : "LeKi",
+	        "link" : "/api/v1/teams/null"
+	      },
+	      "league" : {
+	        "name" : "Finland-2",
+	        "link" : "/api/v1/league/null"
+	      },
+	      "sequenceNumber" : 3
+	    }, {
+	      "season" : "20152016",
+	      "stat" : {
+	        "assists" : 5,
+	        "goals" : 10,
+	        "pim" : 6,
+	        "games" : 18,
+	        "penaltyMinutes" : "6",
+	        "points" : 15
+	      },
+	      "team" : {
+	        "id" : 2490,
+	        "name" : "Tappara",
+	        "link" : "/api/v1/teams/2490"
+	      },
+	      "league" : {
+	        "name" : "Finland",
+	        "link" : "/api/v1/league/null"
+	      },
+	      "sequenceNumber" : 1
+	    }, {
+	      "season" : "20172018",
+	      "stat" : {
+	        "timeOnIce" : "302:22",
+	        "assists" : 7,
+	        "goals" : 5,
+	        "pim" : 4,
+	        "shots" : 56,
+	        "games" : 17,
+	        "hits" : 27,
+	        "powerPlayGoals" : 3,
+	        "powerPlayPoints" : 6,
+	        "powerPlayTimeOnIce" : "53:49",
+	        "evenTimeOnIce" : "248:18",
+	        "penaltyMinutes" : "4",
+	        "faceOffPct" : 33.33,
+	        "shotPct" : 8.9,
+	        "gameWinningGoals" : 0,
+	        "overTimeGoals" : 0,
+	        "shortHandedGoals" : 0,
+	        "shortHandedPoints" : 0,
+	        "shortHandedTimeOnIce" : "00:15",
+	        "blocked" : 11,
+	        "plusMinus" : 2,
+	        "points" : 12,
+	        "shifts" : 350
+	      },
+	      "team" : {
+	        "id" : 52,
+	        "name" : "Winnipeg Jets",
+	        "link" : "/api/v1/teams/52"
+	      },
+	      "league" : {
+	        "id" : 133,
+	        "name" : "National Hockey League",
+	        "link" : "/api/v1/league/133"
+	      },
+	      "sequenceNumber" : 1
+	    }, {
+	      "season" : "20182019",
+	      "stat" : {
+	        "timeOnIce" : "107:49",
+	        "assists" : 1,
+	        "goals" : 3,
+	        "pim" : 0,
+	        "shots" : 18,
+	        "games" : 6,
+	        "hits" : 14,
+	        "powerPlayGoals" : 1,
+	        "powerPlayPoints" : 2,
+	        "powerPlayTimeOnIce" : "16:46",
+	        "evenTimeOnIce" : "89:17",
+	        "penaltyMinutes" : "0",
+	        "faceOffPct" : 0.0,
+	        "shotPct" : 16.7,
+	        "gameWinningGoals" : 0,
+	        "overTimeGoals" : 0,
+	        "shortHandedGoals" : 0,
+	        "shortHandedPoints" : 0,
+	        "shortHandedTimeOnIce" : "01:46",
+	        "blocked" : 1,
+	        "plusMinus" : 2,
+	        "points" : 4,
+	        "shifts" : 127
+	      },
+	      "team" : {
+	        "id" : 52,
+	        "name" : "Winnipeg Jets",
+	        "link" : "/api/v1/teams/52"
+	      },
+	      "league" : {
+	        "id" : 133,
+	        "name" : "National Hockey League",
+	        "link" : "/api/v1/league/133"
+	      },
+	      "sequenceNumber" : 1
+	    } ]
+	  } ]
+	},
+	"https://statsapi.web.nhl.com/api/v1/people/8479339/stats?stats=gameLog": {
+	  "copyright" : "NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2019. All Rights Reserved.",
+	  "stats" : [ {
+	    "type" : {
+	      "displayName" : "gameLog"
+	    },
+	    "splits" : [ {
+	      "season" : "20192020",
+	      "stat" : {
+	        "timeOnIce" : "16:41",
+	        "assists" : 2,
+	        "goals" : 2,
+	        "pim" : 0,
+	        "shots" : 4,
+	        "games" : 1,
+	        "hits" : 8,
+	        "powerPlayGoals" : 0,
+	        "powerPlayPoints" : 0,
+	        "powerPlayTimeOnIce" : "03:11",
+	        "evenTimeOnIce" : "13:30",
+	        "penaltyMinutes" : "0",
+	        "shotPct" : 50.0,
+	        "gameWinningGoals" : 0,
+	        "overTimeGoals" : 0,
+	        "shortHandedGoals" : 0,
+	        "shortHandedPoints" : 0,
+	        "shortHandedTimeOnIce" : "00:00",
+	        "blocked" : 1,
+	        "plusMinus" : 4,
+	        "points" : 4,
+	        "shifts" : 20
+	      },
+	      "team" : {
+	        "id" : 52,
+	        "name" : "Winnipeg Jets",
+	        "link" : "/api/v1/teams/52"
+	      },
+	      "opponent" : {
+	        "id" : 30,
+	        "name" : "Minnesota Wild",
+	        "link" : "/api/v1/teams/30"
+	      },
+	      "date" : "2019-10-10",
+	      "isHome" : true,
+	      "isWin" : true,
+	      "isOT" : false,
+	      "game" : {
+	        "gamePk" : 2019020053,
+	        "link" : "/api/v1/game/2019020053/feed/live",
+	        "content" : {
+	          "link" : "/api/v1/game/2019020053/content"
+	        }
+	      }
+	    }, {
+	      "season" : "20192020",
+	      "stat" : {
+	        "timeOnIce" : "16:42",
+	        "assists" : 3,
+	        "goals" : 0,
+	        "pim" : 0,
+	        "shots" : 1,
+	        "games" : 1,
+	        "hits" : 0,
+	        "powerPlayGoals" : 0,
+	        "powerPlayPoints" : 0,
+	        "powerPlayTimeOnIce" : "00:00",
+	        "evenTimeOnIce" : "16:39",
+	        "penaltyMinutes" : "0",
+	        "shotPct" : 0.0,
+	        "gameWinningGoals" : 0,
+	        "overTimeGoals" : 0,
+	        "shortHandedGoals" : 0,
+	        "shortHandedPoints" : 0,
+	        "shortHandedTimeOnIce" : "00:03",
+	        "blocked" : 1,
+	        "plusMinus" : 2,
+	        "points" : 3,
+	        "shifts" : 23
+	      },
+	      "team" : {
+	        "id" : 52,
+	        "name" : "Winnipeg Jets",
+	        "link" : "/api/v1/teams/52"
+	      },
+	      "opponent" : {
+	        "id" : 5,
+	        "name" : "Pittsburgh Penguins",
+	        "link" : "/api/v1/teams/5"
+	      },
+	      "date" : "2019-10-08",
+	      "isHome" : false,
+	      "isWin" : true,
+	      "isOT" : false,
+	      "game" : {
+	        "gamePk" : 2019020038,
+	        "link" : "/api/v1/game/2019020038/feed/live",
+	        "content" : {
+	          "link" : "/api/v1/game/2019020038/content"
+	        }
+	      }
+	    }, {
+	      "season" : "20192020",
+	      "stat" : {
+	        "timeOnIce" : "17:23",
+	        "assists" : 0,
+	        "goals" : 1,
+	        "pim" : 0,
+	        "shots" : 4,
+	        "games" : 1,
+	        "hits" : 2,
+	        "powerPlayGoals" : 0,
+	        "powerPlayPoints" : 0,
+	        "powerPlayTimeOnIce" : "02:12",
+	        "evenTimeOnIce" : "15:11",
+	        "penaltyMinutes" : "0",
+	        "shotPct" : 25.0,
+	        "gameWinningGoals" : 0,
+	        "overTimeGoals" : 0,
+	        "shortHandedGoals" : 0,
+	        "shortHandedPoints" : 0,
+	        "shortHandedTimeOnIce" : "00:00",
+	        "blocked" : 2,
+	        "plusMinus" : 1,
+	        "points" : 1,
+	        "shifts" : 20
+	      },
+	      "team" : {
+	        "id" : 52,
+	        "name" : "Winnipeg Jets",
+	        "link" : "/api/v1/teams/52"
+	      },
+	      "opponent" : {
+	        "id" : 2,
+	        "name" : "New York Islanders",
+	        "link" : "/api/v1/teams/2"
+	      },
+	      "date" : "2019-10-06",
+	      "isHome" : false,
+	      "isWin" : false,
+	      "isOT" : false,
+	      "game" : {
+	        "gamePk" : 2019020033,
+	        "link" : "/api/v1/game/2019020033/feed/live",
+	        "content" : {
+	          "link" : "/api/v1/game/2019020033/content"
+	        }
+	      }
+	    }, {
+	      "season" : "20192020",
+	      "stat" : {
+	        "timeOnIce" : "19:38",
+	        "assists" : 1,
+	        "goals" : 0,
+	        "pim" : 0,
+	        "shots" : 3,
+	        "games" : 1,
+	        "hits" : 1,
+	        "powerPlayGoals" : 0,
+	        "powerPlayPoints" : 0,
+	        "powerPlayTimeOnIce" : "02:38",
+	        "evenTimeOnIce" : "17:00",
+	        "penaltyMinutes" : "0",
+	        "shotPct" : 0.0,
+	        "gameWinningGoals" : 0,
+	        "overTimeGoals" : 0,
+	        "shortHandedGoals" : 0,
+	        "shortHandedPoints" : 0,
+	        "shortHandedTimeOnIce" : "00:00",
+	        "blocked" : 0,
+	        "plusMinus" : 2,
+	        "points" : 1,
+	        "shifts" : 21
+	      },
+	      "team" : {
+	        "id" : 52,
+	        "name" : "Winnipeg Jets",
+	        "link" : "/api/v1/teams/52"
+	      },
+	      "opponent" : {
+	        "id" : 1,
+	        "name" : "New Jersey Devils",
+	        "link" : "/api/v1/teams/1"
+	      },
+	      "date" : "2019-10-04",
+	      "isHome" : false,
+	      "isWin" : true,
+	      "isOT" : false,
+	      "game" : {
+	        "gamePk" : 2019020013,
+	        "link" : "/api/v1/game/2019020013/feed/live",
+	        "content" : {
+	          "link" : "/api/v1/game/2019020013/content"
+	        }
+	      }
+	    }, {
+	      "season" : "20192020",
+	      "stat" : {
+	        "timeOnIce" : "20:01",
+	        "assists" : 1,
+	        "goals" : 0,
+	        "pim" : 0,
+	        "shots" : 4,
+	        "games" : 1,
+	        "hits" : 2,
+	        "powerPlayGoals" : 0,
+	        "powerPlayPoints" : 1,
+	        "powerPlayTimeOnIce" : "05:53",
+	        "evenTimeOnIce" : "14:08",
+	        "penaltyMinutes" : "0",
+	        "shotPct" : 0.0,
+	        "gameWinningGoals" : 0,
+	        "overTimeGoals" : 0,
+	        "shortHandedGoals" : 0,
+	        "shortHandedPoints" : 0,
+	        "shortHandedTimeOnIce" : "00:00",
+	        "blocked" : 0,
+	        "plusMinus" : -3,
+	        "points" : 1,
+	        "shifts" : 23
+	      },
+	      "team" : {
+	        "id" : 52,
+	        "name" : "Winnipeg Jets",
+	        "link" : "/api/v1/teams/52"
+	      },
+	      "opponent" : {
+	        "id" : 3,
+	        "name" : "New York Rangers",
+	        "link" : "/api/v1/teams/3"
+	      },
+	      "date" : "2019-10-03",
+	      "isHome" : false,
+	      "isWin" : false,
+	      "isOT" : false,
+	      "game" : {
+	        "gamePk" : 2019020006,
+	        "link" : "/api/v1/game/2019020006/feed/live",
+	        "content" : {
+	          "link" : "/api/v1/game/2019020006/content"
+	        }
+	      }
+	    } ]
+	  }]
+	},
+	"https://statsapi.web.nhl.com/api/v1/people/8479339/stats?stats=playoffGameLog": {
+	  "copyright": "NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2019. All Rights Reserved.",
+	  "stats": [
+	    {
+	      "type": {
+	        "displayName": "playoffGameLog"
+	      },
+	      "splits": []
+	    }
+	  ]
 	}
 }

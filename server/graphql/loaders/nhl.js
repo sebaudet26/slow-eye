@@ -1,3 +1,26 @@
+/*
+
+year
+=> league 
+	=> draft/season/playoffs/standings/schedule
+	=> game
+		=> boxscore/liveFeed
+			=> teams/team/record 
+			=> venue/players/player 
+				=> bio/seasionStats/playoffStats/seasonGameLogs/playoffGameLogs/draft
+				=> country/position/stat
+
+now
+=> teamStreaks/playerStreaks
+
+
+
+
+
+
+*/
+
+
 const {
   contains,
   descend,
@@ -30,31 +53,29 @@ const {
 const ApiRequest = require('../../libs/api/api')
 const DataLoader = require('dataloader')
 
+// Definitions
+const professionalLeagueIds = [133];
+const isSeasonProfessional = pipe(
+	pathOr(null, ['league', 'id']),
+	leagueId => contains(leagueId, professionalLeagueIds)
+)
 
-// TODO: hardcoded feature flag lol
-// const IS_PLAYOFFS_TIME = false;
+// NHL = 133
+// AHL = 153
+// International leagues have no id, so we have to use the names
+// WJC-A
+// WC-A
+// Olympics
+const internationalLeagueNames = ['WJC-A', 'WC-A', 'Olympics'];
+const isInternational = pipe(
+	pathOr(null, ['league', 'name']),
+	leagueName => contains(leagueName, internationalLeagueNames)
+)
 
-// const fetchGameLogsForPlayerId = async (playerId) => {
-//   const apiResponse = await nhlStatsApi(`/people/${playerId}/stats?stats=gameLog`);
-//   const gameLogs = path(['stats', 0, 'splits'], apiResponse);
-//   return gameLogs;
-// };
 
-// const fetchPlayoffGameLogsForPlayerId = async (playerId) => {
-//   const apiResponse = await nhlStatsApi(`/people/${playerId}/stats?stats=playoffGameLog`);
-//   const gameLogs = path(['stats', 0, 'splits'], apiResponse);
-//   return gameLogs;
-// };
+// Player schema
 
-// const fetchDraftInfoForPlayer = async (playerId) => {
-//   const response = await fetch(
-//     `https://records.nhl.com/site/api/draft?cayenneExp=playerId=${playerId}`,
-//   );
-//   const json = await response.json();
-//   return json.data[0];
-// };
-
-const batchPlayerInfoLoader = async (playerIds) => {
+const batchPlayerBioFetcher = async (playerIds) => {
   const data = await Promise.all(playerIds.map((id) => {
   	return new ApiRequest({ 
   		league: 'NHL', 
@@ -62,65 +83,171 @@ const batchPlayerInfoLoader = async (playerIds) => {
   		resource: `/people/${id}` 
   	}).fetch()
   }))
-
+  
   return map(path(['people', 0]))(data)
+}
+
+const playerBioLoader = new DataLoader(ids => batchPlayerBioFetcher(ids))
+
+const batchPlayerDraftFetcher = async (playerIds) => {
+	const data = await Promise.all(playerIds.map((id) => {
+		return new ApiRequest({
+			league: 'NHL',
+			apiType: 'RECORDS_API',
+			resource: `/draft?cayenneExp=playerId=${id}`,
+		}).fetch()
+	}))
+
+  return map(path(['data', 0]))(data)
 };
 
-const playerLoader = new DataLoader(ids => batchPlayerInfoLoader(ids));
+const playerDraftLoader = new DataLoader(ids => batchPlayerDraftFetcher(ids))
 
-// const fetchStatsForPlayerId = async (playerId, args) => {
-//   let resource = `/people/${playerId}/stats?stats=statsSingleSeason`;
-//   if (args && args.season) {
-//     resource += `&season=${args.season}`;
-//   }
-//   const playerStatsData = await nhlStatsApi(resource);
-//   return path(['stats', 0, 'splits'], playerStatsData);
+const batchCareerStatsFetcher = async (playerIds) => {
+	const data = await Promise.all(playerIds.map((id) => {
+		return new ApiRequest({
+			league: 'NHL',
+			apiType: 'RECORDS_API',
+			resource: `/people/${id}/stats?stats=yearByYear`,
+		}).fetch()
+	}))
+
+	return data.map((player) => {
+		const professionalSeasons = pipe(
+			path(['stats', 0, 'splits']), 
+			filter(isSeasonProfessional)
+		)(player);
+	  const internationalCompetitions = pipe(
+	  	path(['stats', 0, 'splits']), 
+	  	filter(isInternational)
+	  )(player);
+	  // if pro, return nhl seasons and international competitions only
+	  if (professionalSeasons.length) {
+	    return [
+	    	...internationalCompetitions, 
+	    	...professionalSeasons
+	    ];
+	  }
+	  // if not, return everything we have
+	  return pathOr([], ['stats', 0, 'splits'], data);
+	})
+}
+
+const playerCareerSeasonStatsLoader = new DataLoader(ids => batchCareerStatsFetcher(ids))
+
+const batchCareerPlayoffsStatsFetcher = async (playerIds) => {
+  const data = await Promise.all(playerIds.map((id) => {
+		return new ApiRequest({
+			league: 'NHL',
+			apiType: 'RECORDS_API',
+			resource: `/people/${id}/stats?stats=yearByYearPlayoffs`,
+		}).fetch()
+	}))
+
+  return pipe(
+  	pathOr([], ['stats', 0, 'splits']), 
+  	filter(isSeasonProfessional), 
+  )(data)
+}
+
+const playerCareerPlayoffsStatsLoader = new DataLoader(ids => batchCareerStatsFetcher(ids))
+
+const batchPlayerSeasonGameLogsFetcher = async (playerIds) => {
+	const data = await Promise.all(playerIds.map((id) => {
+		return new ApiRequest({
+			league: 'NHL',
+			apiType: 'STATS_API',
+			resource: `/people/${id}/stats?stats=gameLog`,
+		}).fetch()
+	}))
+
+	return map(path(['stats', 0, 'splits']))(data)
+}
+
+const playerSeasonGameLogsLoader = new DataLoader(ids => batchPlayerSeasonGameLogsFetcher(ids))
+
+const batchPlayerPlayoffsGameLogsFetcher = async (playerIds) => {
+	const data = await Promise.all(playerIds.map((id) => {
+		return new ApiRequest({
+			league: 'NHL',
+			apiType: 'STATS_API',
+			resource: `/people/${id}/stats?stats=playoffGameLog`,
+		}).fetch()
+	}))
+
+	return map(path(['stats', 0, 'splits']))(data)
+}
+
+const playerPlayoffsGameLogsLoader = new DataLoader(ids => batchPlayerPlayoffsGameLogsFetcher(ids))
+
+// Players
+// const fetchAllHistoryPlayers = async () => {
+//   const resourceSkaters = '/skaters?isAggregate=true&reportType=basic&reportName=bios&sort=[{%22property%22:%22playerBirthDate%22,%22direction%22:%22DESC%22}]&cayenneExp=seasonId%3E=19171918%20and%20seasonId%3C=20192020';
+//   const resourceGoalies = '/goalies?isAggregate=true&reportType=goalie_basic&reportName=goaliebios&sort=[{%22property%22:%22playerBirthDate%22,%22direction%22:%22DESC%22}]&cayenneExp=seasonId%3E=19171918%20and%20seasonId%3C=20192020';
+//   const [skaters, goalies] = await Promise.all([
+//     nhlApi(resourceSkaters, 60 * 60 * 24 * 7),
+//     nhlApi(resourceGoalies, 60 * 60 * 24 * 7),
+//   ]);
+
+//   const test = [...skaters.data, ...goalies.data];
+
+//   return test;
 // };
 
-// const fetchPlayoffStatsForPlayerId = async (playerId, args) => {
-//   let resource = `/people/${playerId}/stats?stats=statsSingleSeasonPlayoffs`;
-//   if (args && args.season) {
-//     resource += `&season=${args.season}`;
-//   }
-//   const playerStatsData = await nhlStatsApi(resource);
-//   return path(['stats', 0, 'splits'], playerStatsData);
-// };
+// const fetchPlayersReport = async (season = 20192020) => {
+//   const skatersummaryRookie = `/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&cayenneExp=playerRookieSeasonInd=1%20and%20gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}&sort=[{%22property%22:%22playerId%22}]`;
+//   const realtimeRookie = `/skaters?isAggregate=false&reportType=basic&reportName=realtime&sort=[{%22property%22:%22playerId%22}]&cayenneExp=playerRookieSeasonInd=1%20and%20gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
+//   const goaliesRookie = `/goalies?isAggregate=false&reportType=goalie_basic&reportName=goaliesummary&sort=[{%22property%22:%22playerId%22}]&cayenneExp=playerRookieSeasonInd=1%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}%20and%20gameTypeId=2`;
+//   const goaliesAll = `/goalies?isAggregate=false&reportType=goalie_basic&reportName=goaliesummary&sort=[{%22property%22:%22playerId%22}]&cayenneExp=playerRookieSeasonInd=1%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}%20and%20gameTypeId=2`;
+//   const skatersummaryAll = `/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22}]&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
+//   const realtimeAll = `/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22}]&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
 
-// // NHL = 133
-// // AHL = 153
-// // International leagues have no id, so we have to use the names
-// // WJC-A
-// // WC-A
-// // Olympics
-// const internationalLeagueNames = ['WJC-A', 'WC-A', 'Olympics'];
-
-// const fetchAllYearsStatsForPlayerId = async (playerId) => {
 //   try {
-//     const resource = `/people/${playerId}/stats?stats=yearByYear`;
-//     const playerStatsData = await nhlStatsApi(resource);
-//     const usefulLeagueIds = [133];
-//     const isStatUseful = seasonStat => contains(path(['league', 'id'], seasonStat), usefulLeagueIds);
-//     const isStatInternational = stat => contains(path(['league', 'name', stat], internationalLeagueNames));
-//     const nhlSeasons = filter(isStatUseful, path(['stats', 0, 'splits'], playerStatsData));
-//     const internationalCompetitions = playerStatsData.stats[0].splits.filter(stat => contains(stat.league.name, internationalLeagueNames));
-//     // if nhler, return nhl seasons and international competitions only
-//     if (nhlSeasons.length) {
-//       return [...internationalCompetitions, ...nhlSeasons];
-//     }
-//     // if not, return everything we have
-//     return path(['stats', 0, 'splits'], playerStatsData);
+//     const [
+//       skatersummaryRookieJSON,
+//       skatersummaryAllJSON,
+//       realtimeRookieJSON,
+//       realtimeAllJSON,
+//       goaliesRookieJSON,
+//       goaliesAllJSON,
+//     ] = await Promise.all([
+//       nhlApi(skatersummaryRookie, 60 * 60 * 24),
+//       nhlApi(skatersummaryAll, 60 * 60 * 24),
+//       nhlApi(realtimeRookie, 60 * 60 * 24),
+//       nhlApi(realtimeAll, 60 * 60 * 24),
+//       nhlApi(goaliesRookie, 60 * 60 * 24),
+//       nhlApi(goaliesAll, 60 * 60 * 24),
+//     ]);
+//     return pipe(
+//       map(prop('data')),
+//       ([arr1, arr2, arr3, arr4, arr5, arr6]) => {
+//         const rookiePlayerIds = map(prop('playerId'), arr1);
+//         const goalieRookieIds = map(prop('playerId'), arr5);
+//         return [
+//           ...arr1.map((item, k) => mergeLeft(arr1[k], { ...arr3[k], rookie: true })),
+//           ...arr2.map((item, k) => ({ ...item, ...arr4[k], rookie: false }))
+//             .filter(item => !rookiePlayerIds.includes(item.playerId)),
+//           ...arr5.map((item, k) => ({ ...arr5[k], rookie: true })),
+//           ...arr6.map((item, k) => ({ ...item, rookie: false }))
+//             .filter(item => !goalieRookieIds.includes(item.playerId)),
+//         ];
+//       },
+//     )([
+//       skatersummaryRookieJSON,
+//       skatersummaryAllJSON,
+//       realtimeRookieJSON,
+//       realtimeAllJSON,
+//       goaliesRookieJSON,
+//       goaliesAllJSON,
+//     ]);
 //   } catch (e) {
 //     console.error(e);
+//     return [];
 //   }
 // };
 
-// const fetchAllYearsPlayoffStatsForPlayerId = async (playerId) => {
-//   const resource = `/people/${playerId}/stats?stats=yearByYearPlayoffs`;
-//   const playerStatsData = await nhlStatsApi(resource);
-//   const usefulLeagueIds = [133];
-//   const isStatUseful = seasonStat => contains(path(['league', 'id'], seasonStat), usefulLeagueIds);
-//   return filter(isStatUseful, path(['stats', 0, 'splits'], playerStatsData)) || [];
-// };
+// TODO: hardcoded feature flag lol
+// const IS_PLAYOFFS_TIME = false;
 
 // const fetchStatsForTeamId = async (teamId) => {
 //   const resource = `/teams/${teamId}/stats?stats=statsSingleSeason`;
@@ -160,15 +287,6 @@ const playerLoader = new DataLoader(ids => batchPlayerInfoLoader(ids));
 //   }
 //   const allTeamsData = await nhlStatsApi(resource, 60 * 60 * 24 * 300);
 //   return prop('teams', allTeamsData);
-// };
-
-// const fetchPlayer = async (playerId) => {
-//   const stats = await fetchAllYearsStatsForPlayerId(playerId);
-//   const info = await fetchInfoForPlayerId(playerId);
-//   return {
-//     stats,
-//     info,
-//   };
 // };
 
 // const fetchAllPlayers = async (args) => {
@@ -239,71 +357,6 @@ const playerLoader = new DataLoader(ids => batchPlayerInfoLoader(ids));
 //     divisionName: teamStanding.division.name,
 //     league: teamStanding.leagueRank,
 //   };
-// };
-
-// const fetchAllHistoryPlayers = async () => {
-//   const resourceSkaters = '/skaters?isAggregate=true&reportType=basic&reportName=bios&sort=[{%22property%22:%22playerBirthDate%22,%22direction%22:%22DESC%22}]&cayenneExp=seasonId%3E=19171918%20and%20seasonId%3C=20192020';
-//   const resourceGoalies = '/goalies?isAggregate=true&reportType=goalie_basic&reportName=goaliebios&sort=[{%22property%22:%22playerBirthDate%22,%22direction%22:%22DESC%22}]&cayenneExp=seasonId%3E=19171918%20and%20seasonId%3C=20192020';
-//   const [skaters, goalies] = await Promise.all([
-//     nhlApi(resourceSkaters, 60 * 60 * 24 * 7),
-//     nhlApi(resourceGoalies, 60 * 60 * 24 * 7),
-//   ]);
-
-//   const test = [...skaters.data, ...goalies.data];
-
-//   return test;
-// };
-
-// const fetchPlayersReport = async (season = 20192020) => {
-//   const skatersummaryRookie = `/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&cayenneExp=playerRookieSeasonInd=1%20and%20gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}&sort=[{%22property%22:%22playerId%22}]`;
-//   const realtimeRookie = `/skaters?isAggregate=false&reportType=basic&reportName=realtime&sort=[{%22property%22:%22playerId%22}]&cayenneExp=playerRookieSeasonInd=1%20and%20gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
-//   const goaliesRookie = `/goalies?isAggregate=false&reportType=goalie_basic&reportName=goaliesummary&sort=[{%22property%22:%22playerId%22}]&cayenneExp=playerRookieSeasonInd=1%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}%20and%20gameTypeId=2`;
-//   const goaliesAll = `/goalies?isAggregate=false&reportType=goalie_basic&reportName=goaliesummary&sort=[{%22property%22:%22playerId%22}]&cayenneExp=playerRookieSeasonInd=1%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}%20and%20gameTypeId=2`;
-//   const skatersummaryAll = `/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22}]&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
-//   const realtimeAll = `/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22}]&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`;
-
-//   try {
-//     const [
-//       skatersummaryRookieJSON,
-//       skatersummaryAllJSON,
-//       realtimeRookieJSON,
-//       realtimeAllJSON,
-//       goaliesRookieJSON,
-//       goaliesAllJSON,
-//     ] = await Promise.all([
-//       nhlApi(skatersummaryRookie, 60 * 60 * 24),
-//       nhlApi(skatersummaryAll, 60 * 60 * 24),
-//       nhlApi(realtimeRookie, 60 * 60 * 24),
-//       nhlApi(realtimeAll, 60 * 60 * 24),
-//       nhlApi(goaliesRookie, 60 * 60 * 24),
-//       nhlApi(goaliesAll, 60 * 60 * 24),
-//     ]);
-//     return pipe(
-//       map(prop('data')),
-//       ([arr1, arr2, arr3, arr4, arr5, arr6]) => {
-//         const rookiePlayerIds = map(prop('playerId'), arr1);
-//         const goalieRookieIds = map(prop('playerId'), arr5);
-//         return [
-//           ...arr1.map((item, k) => mergeLeft(arr1[k], { ...arr3[k], rookie: true })),
-//           ...arr2.map((item, k) => ({ ...item, ...arr4[k], rookie: false }))
-//             .filter(item => !rookiePlayerIds.includes(item.playerId)),
-//           ...arr5.map((item, k) => ({ ...arr5[k], rookie: true })),
-//           ...arr6.map((item, k) => ({ ...item, rookie: false }))
-//             .filter(item => !goalieRookieIds.includes(item.playerId)),
-//         ];
-//       },
-//     )([
-//       skatersummaryRookieJSON,
-//       skatersummaryAllJSON,
-//       realtimeRookieJSON,
-//       realtimeAllJSON,
-//       goaliesRookieJSON,
-//       goaliesAllJSON,
-//     ]);
-//   } catch (e) {
-//     console.error(e);
-//     return [];
-//   }
 // };
 
 // const fetchDraft = async (args) => {
@@ -576,33 +629,11 @@ const playerLoader = new DataLoader(ids => batchPlayerInfoLoader(ids));
 //   }
 // };
 
-// module.exports = {
-//   fetchLiveFeed,
-//   fetchStandings,
-//   fetchStatsForPlayerId,
-//   fetchGameLogsForPlayerId,
-//   fetchAllYearsStatsForPlayerId,
-//   fetchDraftInfoForPlayer,
-//   fetchDraft,
-//   fetchInfoForPlayerId,
-//   fetchAllHistoryPlayers,
-//   fetchPlayer,
-//   fetchInfoForTeamId,
-//   fetchStatsForTeamId,
-//   fetchPlayersForTeamId,
-//   fetchAllTeams,
-//   fetchAllPlayers,
-//   fetchGames,
-//   fetchBoxscore,
-//   fetchTeamRanking,
-//   fetchAllYearsPlayoffStatsForPlayerId,
-//   fetchPlayoffGameLogsForPlayerId,
-//   fetchPlayersReport,
-//   fetchGameHighlights,
-//   calculatePlayerStreaks,
-//   calculateTeamsStreaks,
-// };
-
 module.exports = {
-	playerLoader
+	playerBioLoader,
+	playerDraftLoader,
+	playerCareerSeasonStatsLoader,
+	playerCareerPlayoffsStatsLoader,
+	playerSeasonGameLogsLoader,
+	playerPlayoffsGameLogsLoader
 }
