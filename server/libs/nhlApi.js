@@ -437,9 +437,9 @@ const calculateTeamPointsStreak = (team) => {
   const gamesToConsider = pipe(
     prop('schedule'),
     map(prop('game')),
-    filter(game => game.gameType === 'R')
+    filter(game => game.gameType === 'R'),
     reverse,
-    take(teamStreakDefaultNumberOfGames + 1),
+    take(teamStreakDefaultNumberOfGames + 1)
   )(team);
 
   const goalsFor = pipe(
@@ -458,6 +458,7 @@ const calculateTeamPointsStreak = (team) => {
 
   const firstGame = last(gamesToConsider);
   const lastGame = head(gamesToConsider);
+
 
   let initialRecord = { wins: 0, losses: 0, ot: 0, type: 'league' }
   let latestRecord  = { wins: 0, losses: 0, ot: 0, type: 'league' }
@@ -558,9 +559,9 @@ const calculateTeamsStreaks = async (args = {}) => {
   try {
     const cached = await cache.get('team_streaks');
     
-    if (cached && !args.forced) {
-      return take(args.limit || defaultTeamsLimit, JSON.parse(cached));
-    }
+    // if (cached && !args.forced) {
+    //   return take(args.limit || defaultTeamsLimit, JSON.parse(cached));
+    // }
 
     const teams = await fetchAllTeams();
     const teamsRelevantInformation = map(pick(['id', 'name', 'teamName', 'abbreviation']), teams);
