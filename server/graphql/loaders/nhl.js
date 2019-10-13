@@ -47,8 +47,14 @@ const {
 const ApiRequest = require('../../libs/api/api')
 const DataLoader = require('dataloader')
 
+const {
+	calculateTeamPointsStreak
+} = require('./nhlHelpers')
+
+
 // Definitions
 const CURRENT_SEASON = '20192020'
+const CURRENT_YEAR = '2019'
 
 const professionalLeagueIds = [133];
 const isSeasonProfessional = pipe(
@@ -99,7 +105,7 @@ const batchCareerStatsFetcher = async (playerIds) => {
 	const data = await Promise.all(playerIds.map((id) => {
 		return new ApiRequest({
 			league: 'NHL',
-			apiType: 'RECORDS_API',
+			apiType: 'STATS_API',
 			resource: `/people/${id}/stats?stats=yearByYear`,
 		}).fetch()
 	}))
@@ -129,15 +135,15 @@ const batchCareerPlayoffsStatsFetcher = async (playerIds) => {
   const data = await Promise.all(playerIds.map((id) => {
 		return new ApiRequest({
 			league: 'NHL',
-			apiType: 'RECORDS_API',
+			apiType: 'STATS_API',
 			resource: `/people/${id}/stats?stats=yearByYearPlayoffs`,
 		}).fetch()
 	}))
 
-  return pipe(
+  return map(pipe(
   	pathOr([], ['stats', 0, 'splits']), 
   	filter(isSeasonProfessional), 
-  )(data)
+  ))(data)
 }
 
 const batchPlayerSeasonGameLogsFetcher = async (playerIds) => {
@@ -352,7 +358,7 @@ const batchTeamStandingsFetcher = async (seasons) => {
 		return new ApiRequest({
 			league: 'NHL',
 			apiType: 'STATS_API',
-			resource: `/standings/wildCardWithLeaders?expand=standings.record${season}`,
+			resource: `/standings/wildCardWithLeaders?expand=standings.record&season=${season}`,
 		}).fetch()
 	}))
 
@@ -443,147 +449,74 @@ const batchGamesScheduleFetcher = async (dates) => {
 
 	return map(pathOr([], ['dates', 0, 'games']))(data)
 }
-// const fetchGames = async (args) => {
-//   let resource = '/schedule';
-//   let cacheExp = 60 * 60;
-//   if (args.date) {
-//     resource += `?date=${args.date}`;
-//     if (moment(args.date).subtract(1, 'day').isBefore(moment())) {
-//       cacheExp = 60 * 60 * 24 * 300;
-//     }
-//   } else {
-//     resource += `?date=${moment().format('YYYY-MM-DD')}`;
-//   }
-
-//   if (IS_PLAYOFFS_TIME) {
-//     resource += '&hydrate=game(seriesSummary),seriesSummary(series)';
-//   }
-//   const gamesResponse = await nhlStatsApi(resource, cacheExp || 60);
-//   const games = flatten(map(propOr({}, 'games'), gamesResponse.dates || []));
-//   return games;
-// };
-
 
 // Streaks -----
 
-// const emptyRecord = { wins: 0, losses: 0, ot: 0 }
-// const teamStreakDefaultNumberOfGames = 15;
-// const playerStreakDefaultNumberOfGames = 5;
-// const defaultTeamsLimit = 10;
-// const defaultPlayersLimit = 5;
-
-// const takeHomeTeam = path(['teams', 'home']);
-// const takeAwayTeam = path(['teams', 'away']);
+const emptyRecord = { wins: 0, losses: 0, ot: 0 }
+const teamStreakDefaultNumberOfGames = 15;
+const playerStreakDefaultNumberOfGames = 5;
+const defaultTeamsLimit = 10;
+const defaultPlayersLimit = 5;
+const takeHomeTeam = path(['teams', 'home']);
+const takeAwayTeam = path(['teams', 'away']);
 	
-// const fetchTeamSchedule = async (teamId) => {
-//   const resource = `/schedule?teamId=${teamId}&startDate=2019-09-01&endDate=${moment.tz('America/New_York').subtract(1, 'day').endOf('day').format('YYYY-MM-DD')}`;
-//   const teamSchedule = await nhlStatsApi(resource);
-//   return teamSchedule.dates.map(date => ({ date: date.date, game: date.games[0] }));
-// };
+const batchTeamScheduleFetcher = async (teamIds) => {
+	const endDate = `${moment.tz('America/New_York').subtract(1, 'day').endOf('day').format('YYYY-MM-DD')}`
+	const data = await Promise.all(teamIds.map((id) => {
+		new ApiRequest({
+			league: 'NHL',
+			apiType: 'STATS_API',
+			resource: `/schedule?teamId=${teamId}&startDate=${CURRENT_YEAR}-09-01&endDate=${endDate}`,
+		}).fetch()
+	}))
+  
+  return teamSchedule.dates.map(date => ({ date: date.date, game: date.games[0] }));
+}
 
-// const calculateTeamsStreaks = async (args = {}) => {
-//   try {
-//     const cached = await cache.get('team_streaks');
+const teamScheduleLoader = new DataLoader(batchTeamScheduleFetcher)
+
+const calculateTeamsStreaks = async () => {
+	const cached = await cache.get('team_streaks')
     
-//     // if (cached && !args.forced) {
-//     //   return take(args.limit || defaultTeamsLimit, JSON.parse(cached));
-//     // }
+  if (cached) {
+    return take(args.limit || defaultTeamsLimit, JSON.parse(cached));
+  }
 
-//     const teams = await fetchAllTeams();
-//     const teamsRelevantInformation = map(pick(['id', 'name', 'teamName', 'abbreviation']), teams);
+  const teams = await new ApiRequest({
+		league: 'NHL',
+		apiType: 'STATS_API',
+		resource: `/teams?season=${CURRENT_SEASON}`,
+	})
+	.fetch()
+	.then((data) => Promise.resolve(propOr([], 'teams')))
+	.then((teams) => map(pick(['id', 'name', 'teamName', 'abbreviation'])))
 
-//     const teamsWithSchedules = await Promise.all(
-//       teamsRelevantInformation.map(async team => ({
-//         ...team,
-//         schedule: await fetchTeamSchedule(team.id),
-//       })),
-//     );
+  const teamsWithSchedules = await Promise.all(teams.map(async team => ({
+    ...team,
+    schedule: await teamScheduleLoader.load(team.id),
+  })))
 
-//     // get game logs for all players
-//     const teamsStreaks = pipe(
-//       map(calculateTeamPointsStreak),
-//       filter(team => team.streak.isValid),
-//       sortWith([
-//         descend(path(['streak', 'points'])),
-//       ]),
-//       map(omit(['schedule'])),
-//     )(teamsWithSchedules);
+  const teamsStreaks = pipe(
+    map(calculateTeamPointsStreak),
+    filter(team => team.streak.isValid),
+    sortWith([descend(path(['streak', 'points']))]),
+    map(omit(['schedule'])),
+  )(teamsWithSchedules)
 
-//     console.log(`Saving streaks for the next ${(getSecondsUntilMidnight() / 60 / 60).toFixed(1)} hours`);
-//     cache
-//       .set(
-//         'team_streaks',
-//         JSON.stringify(teamsStreaks),
-//         'EX',
-//         getSecondsUntilMidnight(),
-//       );
+  console.log('Caching streaks')
 
-//     return take(args.limit || defaultTeamsLimit, teamsStreaks);
-//   } catch (e) {
-//     console.error(e);
-//   }
-// };
+  cache
+    .set(
+      'team_streaks',
+      JSON.stringify(teamsStreaks),
+      'EX',
+      getSecondsUntilMidnight(),
+    )
 
-// const calculateTeamPointsStreak = (team) => {
-//   const gamesToConsider = pipe(
-//     prop('schedule'),
-//     map(prop('game')),
-//     filter(game => game.gameType === 'R'),
-//     reverse,
-//     take(teamStreakDefaultNumberOfGames + 1)
-//   )(team);
-
-//   const goalsFor = pipe(
-//     tail,
-//     map(game => (game.teams.home.team.id === team.id ? takeHomeTeam(game) : takeAwayTeam(game))),
-//     map(prop('score')),
-//     sum,
-//   )(gamesToConsider);
-
-//   const goalsAgainst = pipe(
-//     tail,
-//     map(game => (game.teams.home.team.id !== team.id ? takeHomeTeam(game) : takeAwayTeam(game))),
-//     map(prop('score')),
-//     sum,
-//   )(gamesToConsider);
-
-//   const firstGame = last(gamesToConsider);
-//   const lastGame = head(gamesToConsider);
+  return take(args.limit || defaultTeamsLimit, teamsStreaks);
+}
 
 
-//   let initialRecord = emptyRecord
-//   let latestRecord  = emptyRecord
-
-//   if (gamesToConsider.length > 1) {
-//     latestRecord = lastGame.teams.home.team.id === team.id
-//       ? lastGame.teams.home.leagueRecord
-//       : lastGame.teams.away.leagueRecord;
-//   }
-
-//   if (gamesToConsider.length > teamStreakDefaultNumberOfGames) {
-//     initialRecord = firstGame.teams.home.team.id === team.id
-//       ? firstGame.teams.home.leagueRecord
-//       : firstGame.teams.away.leagueRecord;
-//   }
-
-//   const streak = {
-//     wins: latestRecord.wins - initialRecord.wins,
-//     losses: latestRecord.losses - initialRecord.losses,
-//     ot: latestRecord.ot - initialRecord.ot,
-//     games: teamStreakDefaultNumberOfGames,
-//     isValid: latestRecord.wins >= initialRecord.wins,
-//     goalsAgainst,
-//     goalsFor,
-//   };
-
-//   return {
-//     ...team,
-//     streak: {
-//       ...streak,
-//       points: Math.round(streak.wins * 2 + streak.ot),
-//     },
-//   };
-// };
 
 // const calculatePlayerPointsStreak = player => ({
 //   ...player,
@@ -705,7 +638,7 @@ module.exports = {
 	playerBioLoader: new DataLoader(batchPlayerBioFetcher),
 	playerDraftLoader: new DataLoader(batchPlayerDraftFetcher),
 	playerCareerSeasonStatsLoader: new DataLoader(batchCareerStatsFetcher),
-	playerCareerPlayoffsStatsLoader: new DataLoader(batchCareerStatsFetcher),
+	playerCareerPlayoffsStatsLoader: new DataLoader(batchCareerPlayoffsStatsFetcher),
 	playerSeasonGameLogsLoader: new DataLoader(batchPlayerSeasonGameLogsFetcher),
 	playerPlayoffsGameLogsLoader: new DataLoader(batchPlayerPlayoffsGameLogsFetcher),
 
@@ -725,4 +658,5 @@ module.exports = {
 
 	gamesScheduleLoader: new DataLoader(batchGamesScheduleFetcher),
 
+	calculateTeamsStreaks: new DataLoader(calculateTeamsStreaks, { batch: false })
 }

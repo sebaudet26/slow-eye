@@ -18,32 +18,9 @@ const makeCacheClient = () => {
 
   const cache = {
     client: redisClient,
-    connected: false,
     get: promisify(redisClient.get).bind(redisClient),
     set: promisify(redisClient.set).bind(redisClient),
   }
-
-  cache.client.on('connect', async () => {
-    try {
-      cache.connected = true
-      console.log('Redis: Connected!')
-      const rep = await cache.set('test_key', 'Test succeeded', 'EX', 10)
-      console.log(`Redis: Inserted a value to redis ${rep}`)
-      const val = await cache.get('test_key')
-      console.log(`Redis: ${val}`)
-
-      // FOR DELETING ALL CACHE
-      console.log(`Cache will be cleared in ${(getMsUntilFourAM() / 1000 / 60 / 60).toFixed(1)} hours`)
-      setTimeout(
-        () => cache.client.flushdb((err, succeeded) => {
-          console.log('Flushed command was succeessful: ', succeeded)
-        }),
-        getMsUntilFourAM(),
-      )
-    } catch (e) {
-      throw new Error(`Failed to insert value in redis client ${e.toString()}`)
-    }
-  })
 
   return cache
 }
@@ -51,7 +28,34 @@ const makeCacheClient = () => {
 class Cache {
   constructor() {
     if (this.instance) return this.instance
+    this.connected = false
+  }
+
+  connect() {
+    if (this.connected) return this.instance
     this.instance = makeCacheClient()
+
+    this.instance.client.on('connect', async () => {
+      try {
+        this.connected = true
+        console.log('Redis: Connected!')
+        const rep = await this.instance.set('test_key', 'Test succeeded', 'EX', 10)
+        console.log(`Redis: Inserted a value to redis ${rep}`)
+        const val = await this.instance.get('test_key')
+        console.log(`Redis: ${val}`)
+
+        // FOR DELETING ALL CACHE
+        console.log(`Cache will be cleared in ${(getMsUntilFourAM() / 1000 / 60 / 60).toFixed(1)} hours`)
+        setTimeout(
+          () => cache.client.flushdb((err, succeeded) => {
+            console.log('Flushed command was succeessful: ', succeeded)
+          }),
+          getMsUntilFourAM(),
+        )
+      } catch (e) {
+        throw new Error(`Failed to insert value in redis client ${e.toString()}`)
+      }
+    })
     return this.instance
   }
 }
