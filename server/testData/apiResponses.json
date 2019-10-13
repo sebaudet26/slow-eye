@@ -674,195 +674,7 @@
 	          "link" : "/api/v1/game/2019020053/content"
 	        }
 	      }
-	    }, {
-	      "season" : "20192020",
-	      "stat" : {
-	        "timeOnIce" : "16:42",
-	        "assists" : 3,
-	        "goals" : 0,
-	        "pim" : 0,
-	        "shots" : 1,
-	        "games" : 1,
-	        "hits" : 0,
-	        "powerPlayGoals" : 0,
-	        "powerPlayPoints" : 0,
-	        "powerPlayTimeOnIce" : "00:00",
-	        "evenTimeOnIce" : "16:39",
-	        "penaltyMinutes" : "0",
-	        "shotPct" : 0.0,
-	        "gameWinningGoals" : 0,
-	        "overTimeGoals" : 0,
-	        "shortHandedGoals" : 0,
-	        "shortHandedPoints" : 0,
-	        "shortHandedTimeOnIce" : "00:03",
-	        "blocked" : 1,
-	        "plusMinus" : 2,
-	        "points" : 3,
-	        "shifts" : 23
-	      },
-	      "team" : {
-	        "id" : 52,
-	        "name" : "Winnipeg Jets",
-	        "link" : "/api/v1/teams/52"
-	      },
-	      "opponent" : {
-	        "id" : 5,
-	        "name" : "Pittsburgh Penguins",
-	        "link" : "/api/v1/teams/5"
-	      },
-	      "date" : "2019-10-08",
-	      "isHome" : false,
-	      "isWin" : true,
-	      "isOT" : false,
-	      "game" : {
-	        "gamePk" : 2019020038,
-	        "link" : "/api/v1/game/2019020038/feed/live",
-	        "content" : {
-	          "link" : "/api/v1/game/2019020038/content"
-	        }
-	      }
-	    }, {
-	      "season" : "20192020",
-	      "stat" : {
-	        "timeOnIce" : "17:23",
-	        "assists" : 0,
-	        "goals" : 1,
-	        "pim" : 0,
-	        "shots" : 4,
-	        "games" : 1,
-	        "hits" : 2,
-	        "powerPlayGoals" : 0,
-	        "powerPlayPoints" : 0,
-	        "powerPlayTimeOnIce" : "02:12",
-	        "evenTimeOnIce" : "15:11",
-	        "penaltyMinutes" : "0",
-	        "shotPct" : 25.0,
-	        "gameWinningGoals" : 0,
-	        "overTimeGoals" : 0,
-	        "shortHandedGoals" : 0,
-	        "shortHandedPoints" : 0,
-	        "shortHandedTimeOnIce" : "00:00",
-	        "blocked" : 2,
-	        "plusMinus" : 1,
-	        "points" : 1,
-	        "shifts" : 20
-	      },
-	      "team" : {
-	        "id" : 52,
-	        "name" : "Winnipeg Jets",
-	        "link" : "/api/v1/teams/52"
-	      },
-	      "opponent" : {
-	        "id" : 2,
-	        "name" : "New York Islanders",
-	        "link" : "/api/v1/teams/2"
-	      },
-	      "date" : "2019-10-06",
-	      "isHome" : false,
-	      "isWin" : false,
-	      "isOT" : false,
-	      "game" : {
-	        "gamePk" : 2019020033,
-	        "link" : "/api/v1/game/2019020033/feed/live",
-	        "content" : {
-	          "link" : "/api/v1/game/2019020033/content"
-	        }
-	      }
-	    }, {
-	      "season" : "20192020",
-	      "stat" : {
-	        "timeOnIce" : "19:38",
-	        "assists" : 1,
-	        "goals" : 0,
-	        "pim" : 0,
-	        "shots" : 3,
-	        "games" : 1,
-	        "hits" : 1,
-	        "powerPlayGoals" : 0,
-	        "powerPlayPoints" : 0,
-	        "powerPlayTimeOnIce" : "02:38",
-	        "evenTimeOnIce" : "17:00",
-	        "penaltyMinutes" : "0",
-	        "shotPct" : 0.0,
-	        "gameWinningGoals" : 0,
-	        "overTimeGoals" : 0,
-	        "shortHandedGoals" : 0,
-	        "shortHandedPoints" : 0,
-	        "shortHandedTimeOnIce" : "00:00",
-	        "blocked" : 0,
-	        "plusMinus" : 2,
-	        "points" : 1,
-	        "shifts" : 21
-	      },
-	      "team" : {
-	        "id" : 52,
-	        "name" : "Winnipeg Jets",
-	        "link" : "/api/v1/teams/52"
-	      },
-	      "opponent" : {
-	        "id" : 1,
-	        "name" : "New Jersey Devils",
-	        "link" : "/api/v1/teams/1"
-	      },
-	      "date" : "2019-10-04",
-	      "isHome" : false,
-	      "isWin" : true,
-	      "isOT" : false,
-	      "game" : {
-	        "gamePk" : 2019020013,
-	        "link" : "/api/v1/game/2019020013/feed/live",
-	        "content" : {
-	          "link" : "/api/v1/game/2019020013/content"
-	        }
-	      }
-	    }, {
-	      "season" : "20192020",
-	      "stat" : {
-	        "timeOnIce" : "20:01",
-	        "assists" : 1,
-	        "goals" : 0,
-	        "pim" : 0,
-	        "shots" : 4,
-	        "games" : 1,
-	        "hits" : 2,
-	        "powerPlayGoals" : 0,
-	        "powerPlayPoints" : 1,
-	        "powerPlayTimeOnIce" : "05:53",
-	        "evenTimeOnIce" : "14:08",
-	        "penaltyMinutes" : "0",
-	        "shotPct" : 0.0,
-	        "gameWinningGoals" : 0,
-	        "overTimeGoals" : 0,
-	        "shortHandedGoals" : 0,
-	        "shortHandedPoints" : 0,
-	        "shortHandedTimeOnIce" : "00:00",
-	        "blocked" : 0,
-	        "plusMinus" : -3,
-	        "points" : 1,
-	        "shifts" : 23
-	      },
-	      "team" : {
-	        "id" : 52,
-	        "name" : "Winnipeg Jets",
-	        "link" : "/api/v1/teams/52"
-	      },
-	      "opponent" : {
-	        "id" : 3,
-	        "name" : "New York Rangers",
-	        "link" : "/api/v1/teams/3"
-	      },
-	      "date" : "2019-10-03",
-	      "isHome" : false,
-	      "isWin" : false,
-	      "isOT" : false,
-	      "game" : {
-	        "gamePk" : 2019020006,
-	        "link" : "/api/v1/game/2019020006/feed/live",
-	        "content" : {
-	          "link" : "/api/v1/game/2019020006/content"
-	        }
-	      }
-	    } ]
+	    }]
 	  }]
 	},
 	"https://statsapi.web.nhl.com/api/v1/people/8479339/stats?stats=playoffGameLog": {
@@ -875,5 +687,279 @@
 	      "splits": []
 	    }
 	  ]
+	},
+	"https://statsapi.web.nhl.com/api/v1/teams?season=20192020": {
+	  "copyright" : "NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2019. All Rights Reserved.",
+	  "teams" : [ {
+	    "id" : 1,
+	    "name" : "New Jersey Devils",
+	    "link" : "/api/v1/teams/1",
+	    "venue" : {
+	      "name" : "Prudential Center",
+	      "link" : "/api/v1/venues/null",
+	      "city" : "Newark",
+	      "timeZone" : {
+	        "id" : "America/New_York",
+	        "offset" : -4,
+	        "tz" : "EDT"
+	      }
+	    }
+	  } ]
+	},
+	"https://statsapi.web.nhl.com/api/v1/teams/26": {
+	  "copyright" : "NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2019. All Rights Reserved.",
+	  "teams" : [ {
+	    "id" : 26,
+	    "name" : "Los Angeles Kings",
+	    "link" : "/api/v1/teams/26",
+	    "venue" : {
+	      "id" : 5081,
+	      "name" : "STAPLES Center",
+	      "link" : "/api/v1/venues/5081",
+	      "city" : "Los Angeles",
+	      "timeZone" : {
+	        "id" : "America/Los_Angeles",
+	        "offset" : -7,
+	        "tz" : "PDT"
+	      }
+	    },
+	    "abbreviation" : "LAK",
+	    "teamName" : "Kings",
+	    "locationName" : "Los Angeles",
+	    "firstYearOfPlay" : "1967",
+	    "division" : {
+	      "id" : 15,
+	      "name" : "Pacific",
+	      "nameShort" : "PAC",
+	      "link" : "/api/v1/divisions/15",
+	      "abbreviation" : "P"
+	    },
+	    "conference" : {
+	      "id" : 5,
+	      "name" : "Western",
+	      "link" : "/api/v1/conferences/5"
+	    },
+	    "franchise" : {
+	      "franchiseId" : 14,
+	      "teamName" : "Kings",
+	      "link" : "/api/v1/franchises/14"
+	    },
+	    "shortName" : "Los Angeles",
+	    "officialSiteUrl" : "http://www.lakings.com/",
+	    "franchiseId" : 14,
+	    "active" : true
+	  } ]
+	},
+	"https://statsapi.web.nhl.com/api/v1/teams/26/stats?stats=statsSingleSeason&season=20182019": {
+	  "copyright" : "NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2019. All Rights Reserved.",
+	  "stats" : [ {
+	    "type" : {
+	      "displayName" : "statsSingleSeason"
+	    },
+	    "splits" : [ {
+	      "stat" : {
+	        "gamesPlayed" : 82,
+	        "wins" : 31,
+	        "losses" : 42,
+	        "ot" : 9,
+	        "pts" : 71,
+	        "ptPctg" : "43.3",
+	        "goalsPerGame" : 2.427,
+	        "goalsAgainstPerGame" : 3.159,
+	        "evGGARatio" : 0.8246,
+	        "powerPlayPercentage" : "15.8",
+	        "powerPlayGoals" : 35.0,
+	        "powerPlayGoalsAgainst" : 54.0,
+	        "powerPlayOpportunities" : 221.0,
+	        "penaltyKillPercentage" : "76.5",
+	        "shotsPerGame" : 28.7561,
+	        "shotsAllowed" : 31.439,
+	        "winScoreFirst" : 0.7,
+	        "winOppScoreFirst" : 0.192,
+	        "winLeadFirstPer" : 0.867,
+	        "winLeadSecondPer" : 0.833,
+	        "winOutshootOpp" : 0.375,
+	        "winOutshotByOpp" : 0.375,
+	        "faceOffsTaken" : 4776.0,
+	        "faceOffsWon" : 2410.0,
+	        "faceOffsLost" : 2366.0,
+	        "faceOffWinPercentage" : "50.5",
+	        "shootingPctg" : 8.4,
+	        "savePctg" : 0.9
+	      },
+	      "team" : {
+	        "id" : 26,
+	        "name" : "Los Angeles Kings",
+	        "link" : "/api/v1/teams/26"
+	      }
+	    } ]
+	  }, {
+	    "type" : {
+	      "displayName" : "regularSeasonStatRankings"
+	    },
+	    "splits" : [ {
+	      "stat" : {
+	        "wins" : "30th",
+	        "losses" : "30th",
+	        "ot" : "16th",
+	        "pts" : "30th",
+	        "ptPctg" : "30th",
+	        "goalsPerGame" : "30th",
+	        "goalsAgainstPerGame" : "22nd",
+	        "evGGARatio" : "28th",
+	        "powerPlayPercentage" : "27th",
+	        "powerPlayGoals" : "27th",
+	        "powerPlayGoalsAgainst" : "24th",
+	        "powerPlayOpportunities" : "27th",
+	        "penaltyKillOpportunities" : "10th",
+	        "penaltyKillPercentage" : "29th",
+	        "shotsPerGame" : "30th",
+	        "shotsAllowed" : "14th",
+	        "winScoreFirst" : "29th",
+	        "winOppScoreFirst" : "27th",
+	        "winLeadFirstPer" : "5th",
+	        "winLeadSecondPer" : "19th",
+	        "winOutshootOpp" : "29th",
+	        "winOutshotByOpp" : "29th",
+	        "faceOffsTaken" : "23rd",
+	        "faceOffsWon" : "18th",
+	        "faceOffsLost" : "9th",
+	        "faceOffWinPercentage" : "13th",
+	        "savePctRank" : "24th",
+	        "shootingPctRank" : "27th"
+	      },
+	      "team" : {
+	        "id" : 26,
+	        "name" : "Los Angeles Kings",
+	        "link" : "/api/v1/teams/26"
+	      }
+	    } ]
+	  } ]
+	},
+	"https://statsapi.web.nhl.com/api/v1/teams/26/roster?season=20182019": {
+	  "copyright" : "NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2019. All Rights Reserved.",
+	  "roster" : [ {
+	    "person" : {
+	      "id" : 8469454,
+	      "fullName" : "Ilya Kovalchuk",
+	      "link" : "/api/v1/people/8469454"
+	    },
+	    "jerseyNumber" : "17",
+	    "position" : {
+	      "code" : "L",
+	      "name" : "Left Wing",
+	      "type" : "Forward",
+	      "abbreviation" : "LW"
+	    }
+	  } ]
+	},
+	"https://statsapi.web.nhl.com/api/v1/standings/wildCardWithLeaders?expand=standings.record&season=20182019" : {
+	  "copyright" : "NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2019. All Rights Reserved.",
+	  "records" : [ {
+	    "standingsType" : "wildCard",
+	    "league" : {
+	      "id" : 133,
+	      "name" : "National Hockey League",
+	      "link" : "/api/v1/league/133"
+	    },
+	    "conference" : {
+	      "id" : 6,
+	      "name" : "Eastern",
+	      "link" : "/api/v1/conferences/6"
+	    },
+	    "season" : "20182019",
+	    "teamRecords" : [ {
+	      "team" : {
+	        "id" : 12,
+	        "name" : "Carolina Hurricanes",
+	        "link" : "/api/v1/teams/12"
+	      },
+	      "leagueRecord" : {
+	        "wins" : 46,
+	        "losses" : 29,
+	        "ot" : 7,
+	        "type" : "league"
+	      },
+	      "goalsAgainst" : 223,
+	      "goalsScored" : 245,
+	      "points" : 99,
+	      "divisionRank" : "4",
+	      "divisionL10Rank" : "4",
+	      "divisionRoadRank" : "5",
+	      "divisionHomeRank" : "2",
+	      "conferenceRank" : "7",
+	      "conferenceL10Rank" : "8",
+	      "conferenceRoadRank" : "7",
+	      "conferenceHomeRank" : "5",
+	      "leagueRank" : "11",
+	      "leagueL10Rank" : "15",
+	      "leagueRoadRank" : "10",
+	      "leagueHomeRank" : "9",
+	      "wildCardRank" : "1",
+	      "row" : 44,
+	      "gamesPlayed" : 82,
+	      "streak" : {
+	        "streakType" : "wins",
+	        "streakNumber" : 3,
+	        "streakCode" : "W3"
+	      },
+	      "clinchIndicator" : "x",
+	      "records" : {
+	        "divisionRecords" : [ {
+	          "wins" : 10,
+	          "losses" : 4,
+	          "ot" : 0,
+	          "type" : "Central"
+	        }, {
+	          "wins" : 14,
+	          "losses" : 8,
+	          "ot" : 2,
+	          "type" : "Atlantic"
+	        }, {
+	          "wins" : 9,
+	          "losses" : 4,
+	          "ot" : 3,
+	          "type" : "Pacific"
+	        }, {
+	          "wins" : 13,
+	          "losses" : 13,
+	          "ot" : 2,
+	          "type" : "Metropolitan"
+	        } ],
+	        "overallRecords" : [ {
+	          "wins" : 24,
+	          "losses" : 13,
+	          "ot" : 4,
+	          "type" : "home"
+	        }, {
+	          "wins" : 22,
+	          "losses" : 16,
+	          "ot" : 3,
+	          "type" : "away"
+	        }, {
+	          "wins" : 2,
+	          "losses" : 2,
+	          "type" : "shootOuts"
+	        }, {
+	          "wins" : 6,
+	          "losses" : 4,
+	          "ot" : 0,
+	          "type" : "lastTen"
+	        } ],
+	        "conferenceRecords" : [ {
+	          "wins" : 27,
+	          "losses" : 21,
+	          "ot" : 4,
+	          "type" : "Eastern"
+	        }, {
+	          "wins" : 19,
+	          "losses" : 8,
+	          "ot" : 3,
+	          "type" : "Western"
+	        } ]
+	      },
+	      "lastUpdated" : "2019-10-13T01:36:36Z"
+	    }]
+	  }]
 	}
 }

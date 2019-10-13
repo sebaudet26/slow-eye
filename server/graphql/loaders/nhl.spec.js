@@ -14,6 +14,12 @@ const playerPlayoffsStatsUrl = 'https://statsapi.web.nhl.com/api/v1/people/84793
 const playerSeasonGameLogsUrl = 'https://statsapi.web.nhl.com/api/v1/people/8479339/stats?stats=gameLog'
 const playerPlayoffsGameLogsUrl = 'https://statsapi.web.nhl.com/api/v1/people/8479339/stats?stats=playoffGameLog'
 
+const teamsUrl = 'https://statsapi.web.nhl.com/api/v1/teams?season=20192020'
+const teamInfoUrl = 'https://statsapi.web.nhl.com/api/v1/teams/26'
+const teamStatsUrl = 'https://statsapi.web.nhl.com/api/v1/teams/26/stats?stats=statsSingleSeason&season=20182019'
+const teamRosterUrl = 'https://statsapi.web.nhl.com/api/v1/teams/26/roster?season=20182019'
+const teamsStandingsUrl = 'https://statsapi.web.nhl.com/api/v1/standings/wildCardWithLeaders?expand=standings.record&season=20182019'
+
 let fakeFetch 
 
 const stubFetchToReturnResponseFrom = (url) => {
@@ -43,6 +49,13 @@ const {
   playerPlayoffsGameLogsLoader,
   playersLoader,
   playersReportLoader,
+
+  teamInfoLoader,
+  teamStatsLoader,
+  teamRosterLoader,
+  teamsLoader,
+  teamsStandingsLoader
+
 } = nhlLoaders
 
 describe.only('nhl loader', function() {
@@ -50,86 +63,156 @@ describe.only('nhl loader', function() {
     fakeFetch.resetHistory()
   })
 
-  it('does not make multiple requests to the same resource', async function() {
-    stubFetchToReturnResponseFrom(playerBioUrl)
-  	await playerBioLoader.load('8479339').then(() => playerBioLoader.load('8479339'))
-    sinon.assert.calledOnce(fakeFetch)
+  describe('basic functionality', () => {
+    it('batching: does not make multiple requests to the same resource', async function() {
+      stubFetchToReturnResponseFrom(playerBioUrl)
+      
+    	await playerBioLoader.load('8479339').then(() => playerBioLoader.load('8479339'))
+
+      sinon.assert.calledOnce(fakeFetch)
+    })
   })
 
-  it('playerBioLoader loads player bio', async function() {
-    stubFetchToReturnResponseFrom(playerBioUrl)
-    const bio = await playerBioLoader.load('8479339')
-    assert.deepEqual(bio, testData[playerBioUrl].people[0])
+  describe('player', () => {
+    it('playerBioLoader loads player bio', async function() {
+      stubFetchToReturnResponseFrom(playerBioUrl)
+
+      const bio = await playerBioLoader.load('8479339')
+
+      assert.deepEqual(bio, testData[playerBioUrl].people[0])
+    })
+
+    it('playerDraftLoader loads player draft info', async function() {
+      stubFetchToReturnResponseFrom(playerDraftUrl)
+
+      const draft = await playerDraftLoader.load('8479339')
+
+      assert.deepEqual(draft, testData[playerDraftUrl].data[0])
+    })
+
+    it('playerCareerSeasonStatsLoader loads player career season stats', async function() {
+      stubFetchToReturnResponseFrom(playerSeasonStatsUrl)
+
+      const seasonStats = await playerCareerSeasonStatsLoader.load('8479339')
+
+      assert.deepEqual(seasonStats, expectedData.playerCareerSeasonStats)
+    })
+
+    it('playerCareerPlayoffsStatsLoader loads player career playoffs stats', async function() {
+      stubFetchToReturnResponseFrom(playerPlayoffsStatsUrl)
+
+      const playoffStats = await playerCareerPlayoffsStatsLoader.load('8479339')
+
+      assert.deepEqual(playoffStats, expectedData.playerCareerPlayoffStats)
+    })
+
+    it('playerSeasonGameLogsLoader loads player season game logs', async function() {
+      stubFetchToReturnResponseFrom(playerSeasonGameLogsUrl)
+
+      const seasonGameLogs = await playerSeasonGameLogsLoader.load('8479339')
+
+      assert.deepEqual(seasonGameLogs, testData[playerSeasonGameLogsUrl].stats[0].splits)
+    })
+
+    it('playerPlayoffsGameLogsLoader loads player playoffs game logs', async function() {
+      stubFetchToReturnResponseFrom(playerPlayoffsGameLogsUrl)
+
+      const seasonGameLogs = await playerPlayoffsGameLogsLoader.load('8479339')
+
+      assert.deepEqual(seasonGameLogs, testData[playerPlayoffsGameLogsUrl].stats[0].splits)
+    })
   })
 
-  it('playerDraftLoader loads player draft info', async function() {
-    stubFetchToReturnResponseFrom(playerDraftUrl)
-    const draft = await playerDraftLoader.load('8479339')
-    assert.deepEqual(draft, testData[playerDraftUrl].data[0])
+  describe('players', () => {
+    it('playersLoader loads all players in history with basic information only to minimize payload', async function() {
+      const fakePlayer = {
+        playerBirthDate: 1990, 
+        playerName: 'a', 
+        playerId: 1, 
+        playerNationality: 'AUS', 
+        playerPositionCode: 'C',
+        ignored: 'this value'
+      }
+      stubFetchToReturn([{ data: fakePlayer }])
+
+      const allPlayers = await playersLoader.load('all')
+
+      assert.deepEqual(allPlayers, map(omit(['ignored']), [fakePlayer, fakePlayer]))
+      sinon.assert.calledTwice(fakeFetch)
+    })
+
+    it('playersReportLoader returns a skaters report for a given season', async function() {
+      const fakePlayer = {
+        playerBirthDate: 1990, 
+        playerName: 'a', 
+        playerId: 1, 
+        playerNationality: 'AUS', 
+        playerPositionCode: 'C',
+      }
+      stubFetchToReturn([{ data: fakePlayer }])
+
+      const skatersReport = await playersReportLoader.load('20192020:skaters')
+
+      assert.equal(fakeFetch.callCount, 4)
+    })
+
+    it('playersReportLoader returns a goalies report for a given season', async function() {
+      const fakePlayer = {
+        playerBirthDate: 1990, 
+        playerName: 'a', 
+        playerId: 1, 
+        playerNationality: 'AUS', 
+        playerPositionCode: 'C',
+      }
+      stubFetchToReturn([{ data: fakePlayer }])
+
+      const skatersReport = await playersReportLoader.load('20192020:goalies')
+
+      assert.equal(fakeFetch.callCount, 2)
+    })
   })
 
-  it('playerCareerSeasonStatsLoader loads player career season stats', async function() {
-    stubFetchToReturnResponseFrom(playerSeasonStatsUrl)
-    const seasonStats = await playerCareerSeasonStatsLoader.load('8479339')
-    assert.deepEqual(seasonStats, expectedData.playerCareerSeasonStats)
+  describe('team', () => {
+    it('teamInfo loads team info', async function() {
+      stubFetchToReturnResponseFrom(teamInfoUrl)
+
+      const teamInfo = await teamInfoLoader.load('26')
+
+      assert.deepEqual(teamInfo, testData[teamInfoUrl].teams)
+    })
+
+    it('teamStatsLoader loads team stats', async function() {
+      stubFetchToReturnResponseFrom(teamStatsUrl)
+
+      const teamStats = await teamStatsLoader.load('20182019:26')
+
+      assert.deepEqual(teamStats, expectedData.teamStats)
+    })
+
+    it('teamRosterLoader loads team rosters', async function() {
+      stubFetchToReturnResponseFrom(teamRosterUrl)
+
+      const teamRoster = await teamRosterLoader.load('20182019:26')
+
+      assert.deepEqual(teamRoster, expectedData.teamRoster)
+    })
   })
 
-  it('playerCareerPlayoffsStatsLoader loads player career playoffs stats', async function() {
-    stubFetchToReturnResponseFrom(playerPlayoffsStatsUrl)
-    const playoffStats = await playerCareerPlayoffsStatsLoader.load('8479339')
-    assert.deepEqual(playoffStats, expectedData.playerCareerPlayoffStats)
-  })
+  describe('teams', () => {
+    it('teamsLoader loads teams', async function() {
+      stubFetchToReturnResponseFrom(teamsUrl)
 
-  it('playerSeasonGameLogsLoader loads player season game logs', async function() {
-    stubFetchToReturnResponseFrom(playerSeasonGameLogsUrl)
-    const seasonGameLogs = await playerSeasonGameLogsLoader.load('8479339')
-    assert.deepEqual(seasonGameLogs, testData[playerSeasonGameLogsUrl].stats[0].splits)
-  })
+      const teams = await teamsLoader.load('20192020')
 
-  it('playerPlayoffsGameLogsLoader loads player playoffs game logs', async function() {
-    stubFetchToReturnResponseFrom(playerPlayoffsGameLogsUrl)
-    const seasonGameLogs = await playerPlayoffsGameLogsLoader.load('8479339')
-    assert.deepEqual(seasonGameLogs, testData[playerPlayoffsGameLogsUrl].stats[0].splits)
-  })
+      assert.deepEqual(teams, testData[teamsUrl].teams)
+    })
 
-  it('playersLoader loads all players in history with basic information only to minimize payload', async function() {
-    const fakePlayer = {
-      playerBirthDate: 1990, 
-      playerName: 'a', 
-      playerId: 1, 
-      playerNationality: 'AUS', 
-      playerPositionCode: 'C',
-      ignored: 'this value'
-    }
-    stubFetchToReturn([{ data: fakePlayer }])
-    const allPlayers = await playersLoader.load('all')
-    assert.deepEqual(allPlayers, map(omit(['ignored']), [fakePlayer, fakePlayer]))
-    sinon.assert.calledTwice(fakeFetch)
-  })
+    it('teamsStandings loads teams standings', async function() {
+      stubFetchToReturnResponseFrom(teamsStandingsUrl)
 
-  it('playersReportLoader returns a skaters report for a given season', async function() {
-    const fakePlayer = {
-      playerBirthDate: 1990, 
-      playerName: 'a', 
-      playerId: 1, 
-      playerNationality: 'AUS', 
-      playerPositionCode: 'C',
-    }
-    stubFetchToReturn([{ data: fakePlayer }])
-    const skatersReport = await playersReportLoader.load('20192020:skaters')
-    assert.equal(fakeFetch.callCount, 4)
-  })
+      const teamsStandings = await teamsStandingsLoader.load('20182019')
 
-  it('playersReportLoader returns a goalies report for a given season', async function() {
-    const fakePlayer = {
-      playerBirthDate: 1990, 
-      playerName: 'a', 
-      playerId: 1, 
-      playerNationality: 'AUS', 
-      playerPositionCode: 'C',
-    }
-    stubFetchToReturn([{ data: fakePlayer }])
-    const skatersReport = await playersReportLoader.load('20192020:goalies')
-    assert.equal(fakeFetch.callCount, 2)
+      assert.deepEqual(teamsStandings, testData[teamsStandingsUrl].records[0])
+    })
   })
 })
