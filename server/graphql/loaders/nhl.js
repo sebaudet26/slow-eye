@@ -327,10 +327,7 @@ const batchTeamRosterFetcher = async (ids) => {
 			return {
 				...player.person,
 				jerseyNumber: player.jerseyNumber,
-				positionCode: player.position.code,
-				positionName: player.position.name,
-				positionType: player.position.type,
-				positionAbbreviation: player.position.abbreviation,
+				position: player.position,
 			}
 		})
 	})
@@ -365,81 +362,87 @@ const batchTeamStandingsFetcher = async (seasons) => {
 
 // Game -----
 
-// const fetchBoxscore = async (gameId) => {
-//   const resource = `/game/${gameId}/boxscore`;
-//   const boxscoreResponse = await nhlStatsApi(resource, 60);
-//   return {
-//     id: gameId,
-//     ...prop('teams', boxscoreResponse),
-//   };
-// };
+const batchGameBoxscoreFetcher = async (gameIds) => {
+	const data = await Promise.all(gameIds.map((id) => {
+		return new ApiRequest({
+			league: 'NHL',
+			apiType: 'STATS_API',
+			resource: `/game/${id}/boxscore`,
+			expiraion: 60
+		}).fetch()
+	}))
 
-// const fetchLiveFeed = async (gameId) => {
-//   const resource = `/game/${gameId}/feed/live`;
-//   const liveFeedResponse = await nhlStatsApi(resource, 60);
-//   return {
-//     id: gameId,
-//     ...liveFeedResponse,
-//   };
-// };
+	return map(propOr({}, 'teams'), data)
+}
 
-// const fetchTeamRanking = async (teamId) => {
-//   const standingsResponse = await nhlStatsApi('/standings', 60 * 60);
-//   const teamStanding = pipe(
-//     map(o => o.teamRecords.map(t => ({ conference: o.conference, division: o.division, ...t }))),
-//     flatten,
-//     filter(pathEq(['team', 'id'], teamId)),
-//     head,
-//   )(standingsResponse.records);
+const batchGameLivefeedFetcher = async (gameIds) => {
+	const data = await Promise.all(gameIds.map((id) => {
+		return new ApiRequest({
+			league: 'NHL',
+			apiType: 'STATS_API',
+			resource: `/game/${id}/feed/live`,
+			expiration: 60
+		}).fetch()
+	}))
 
-//   return {
-//     conference: teamStanding.conferenceRank,
-//     conferenceName: teamStanding.conference.name,
-//     division: teamStanding.divisionRank,
-//     divisionName: teamStanding.division.name,
-//     league: teamStanding.leagueRank,
-//   };
-// };
+	return data	
+}
 
-// const fetchGameHighlights = async (id) => {
-//   try {
-//     const resource = `/game/${id}/content`;
-//     const gameContentResponse = await nhlStatsApi(resource, 60 * 60);
-//     const goalHighlightsUrls = map(
-//       o => ({
-//         ...pick([
-//           'statsEventId',
-//           'periodTime',
-//           'period',
-//         ], o),
-//         url: pipe(
-//           pathOr([], ['highlight', 'playbacks']),
-//           last,
-//           pathOr('', ['url']),
-//         )(o),
-//       }),
-//       filter(o => o.type === 'GOAL', pathOr([], ['media', 'milestones', 'items'], gameContentResponse)),
-//     );
-//     const gameRecapUrl = pipe(
-//       pathOr([], ['media', 'epg']),
-//       find(propEq('title', 'Recap')),
-//       propOr([], ['items']),
-//       last,
-//       propOr({}, ['playbacks']),
-//       last,
-//       prop(['url']),
-//     )(gameContentResponse);
-//     return {
-//       recap: gameRecapUrl,
-//       goals: goalHighlightsUrls,
-//     };
-//   } catch (e) {
-//     console.error(e);
-//   }
-// };
+const batchGameHighlightsFetcher = async (gameIds) => {
+	const data = await Promise.all(gameIds.map((id) => {
+		return new ApiRequest({
+			league: 'NHL',
+			apiType: 'STATS_API',
+			resource: `/game/${id}/content`,
+			expiration: 60
+		}).fetch()
+	}))
+
+  const getHighlightsFromGame = (type = 'GOAL') => pipe(
+  	pathOr([], ['media', 'milestones', 'items']),
+  	filter(o => o.type === type),
+  	map(
+	    o => ({
+	      ...pick(['statsEventId', 'periodTime', 'period',])(o),
+	      url: pipe(
+	        pathOr([], ['highlight', 'playbacks']),
+	        last,
+	        pathOr('', ['url']),
+	      )(o),
+    	}),
+    ),
+  );
+
+  const getRecapFromGame = pipe(
+    pathOr([], ['media', 'epg']),
+    find(propEq('title', 'Recap')),
+    propOr([], ['items']),
+    last,
+    propOr({}, ['playbacks']),
+    last,
+    prop(['url']),
+  );
+
+  return map(game => ({
+    recap: getRecapFromGame(game),
+    goalsHighlights: getHighlightsFromGame()(game),
+  }), data);
+}
 
 // Games -----
 
+const batchGamesScheduleFetcher = async (dates) => {
+	const data = await Promise.all(dates.map((date) => {
+		return new ApiRequest({
+			league: 'NHL',
+			apiType: 'STATS_API',
+			resource: `/schedule?date=${date}`,
+			expiration: 60
+		}).fetch()
+	}))
+
+	return map(pathOr([], ['dates', 0, 'games']))(data)
+}
 // const fetchGames = async (args) => {
 //   let resource = '/schedule';
 //   let cacheExp = 60 * 60;
@@ -471,7 +474,7 @@ const batchTeamStandingsFetcher = async (seasons) => {
 
 // const takeHomeTeam = path(['teams', 'home']);
 // const takeAwayTeam = path(['teams', 'away']);
-
+	
 // const fetchTeamSchedule = async (teamId) => {
 //   const resource = `/schedule?teamId=${teamId}&startDate=2019-09-01&endDate=${moment.tz('America/New_York').subtract(1, 'day').endOf('day').format('YYYY-MM-DD')}`;
 //   const teamSchedule = await nhlStatsApi(resource);
@@ -715,5 +718,11 @@ module.exports = {
 
 	teamsLoader: new DataLoader(batchTeamsFetcher),
 	teamsStandingsLoader: new DataLoader(batchTeamStandingsFetcher),
+
+	gameBoxscoreLoader: new DataLoader(batchGameBoxscoreFetcher),
+	gameLivefeedLoader: new DataLoader(batchGameLivefeedFetcher),
+	gameHighlightsLoader: new DataLoader(batchGameHighlightsFetcher),
+
+	gamesScheduleLoader: new DataLoader(batchGamesScheduleFetcher),
 
 }

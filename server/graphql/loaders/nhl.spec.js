@@ -20,6 +20,12 @@ const teamStatsUrl = 'https://statsapi.web.nhl.com/api/v1/teams/26/stats?stats=s
 const teamRosterUrl = 'https://statsapi.web.nhl.com/api/v1/teams/26/roster?season=20182019'
 const teamsStandingsUrl = 'https://statsapi.web.nhl.com/api/v1/standings/wildCardWithLeaders?expand=standings.record&season=20182019'
 
+const gameBoxscoreUrl = 'https://statsapi.web.nhl.com/api/v1/game/2019020067/boxscore'
+const gameLivefeedUrl = 'https://statsapi.web.nhl.com/api/v1/game/2019020067/feed/live' 
+const gameHighlightsUrl = 'https://statsapi.web.nhl.com/api/v1/game/2019020067/content'
+
+const gamesScheduleUrl = 'https://statsapi.web.nhl.com/api/v1/schedule?date=2019-10-13'
+
 let fakeFetch 
 
 const stubFetchToReturnResponseFrom = (url) => {
@@ -54,7 +60,13 @@ const {
   teamStatsLoader,
   teamRosterLoader,
   teamsLoader,
-  teamsStandingsLoader
+  teamsStandingsLoader,
+
+  gameBoxscoreLoader,
+  gameLivefeedLoader,
+  gameHighlightsLoader,
+
+  gamesScheduleLoader,
 
 } = nhlLoaders
 
@@ -213,6 +225,42 @@ describe.only('nhl loader', function() {
       const teamsStandings = await teamsStandingsLoader.load('20182019')
 
       assert.deepEqual(teamsStandings, testData[teamsStandingsUrl].records[0])
+    })
+  })
+
+  describe('game', () => {
+    it('gameBoxscoreLoader loads boxscore', async function() {
+      stubFetchToReturnResponseFrom(gameBoxscoreUrl)
+
+      const gameBoxscore = await gameBoxscoreLoader.load('2019020067')
+
+      assert.deepEqual(gameBoxscore, testData[gameBoxscoreUrl].teams)
+    })
+
+    it('gameLivefeedLoader loads livefeed', async function() {
+      stubFetchToReturnResponseFrom(gameLivefeedUrl)
+
+      const gameLivefeed = await gameLivefeedLoader.load('2019020067')
+
+      assert.deepEqual(gameLivefeed, testData[gameLivefeedUrl])
+    })
+
+    it('gameHighlights loads highlights', async function() {
+      stubFetchToReturnResponseFrom(gameHighlightsUrl)
+
+      const gameHighlights = await gameHighlightsLoader.load('2019020067')
+
+      assert.deepEqual(gameHighlights, expectedData.gameHighlights)
+    })
+  })
+
+  describe('games', () => {
+    it('gamesSchedule', async function() {
+      stubFetchToReturnResponseFrom(gamesScheduleUrl)
+
+      const gamesSchedule = await gamesScheduleLoader.load('2019-10-13')
+
+      assert.deepEqual(gamesSchedule, testData[gamesScheduleUrl].dates[0].games)
     })
   })
 })

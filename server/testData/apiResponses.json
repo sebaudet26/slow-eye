@@ -961,5 +961,432 @@
 	      "lastUpdated" : "2019-10-13T01:36:36Z"
 	    }]
 	  }]
+	},
+	"https://statsapi.web.nhl.com/api/v1/game/2019020067/boxscore": {
+	  "copyright" : "NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2019. All Rights Reserved.",
+	  "teams" : {
+	    "away" : {
+	      "team" : {
+	        "id" : 13,
+	        "name" : "Florida Panthers",
+	        "link" : "/api/v1/teams/13"
+	      },
+	      "teamStats" : {
+	        "teamSkaterStats" : {
+	          "goals" : 2,
+	          "pim" : 7,
+	          "shots" : 37,
+	          "powerPlayPercentage" : "0.0",
+	          "powerPlayGoals" : 0.0,
+	          "powerPlayOpportunities" : 3.0,
+	          "faceOffWinPercentage" : "53.3",
+	          "blocked" : 16,
+	          "takeaways" : 3,
+	          "giveaways" : 20,
+	          "hits" : 28
+	        }
+	      },
+	      "players" : {
+	        "ID8471735" : {
+	          "person" : {
+	            "id" : 8471735,
+	            "fullName" : "Keith Yandle",
+	            "link" : "/api/v1/people/8471735",
+	            "firstName" : "Keith",
+	            "lastName" : "Yandle",
+	            "primaryNumber" : "3",
+	            "birthDate" : "1986-09-09",
+	            "currentAge" : 33,
+	            "birthCity" : "Boston",
+	            "birthStateProvince" : "MA",
+	            "birthCountry" : "USA",
+	            "nationality" : "USA",
+	            "height" : "6' 1\"",
+	            "weight" : 192,
+	            "active" : true,
+	            "alternateCaptain" : true,
+	            "captain" : false,
+	            "rookie" : false,
+	            "shootsCatches" : "L",
+	            "rosterStatus" : "Y",
+	            "currentTeam" : {
+	              "id" : 13,
+	              "name" : "Florida Panthers",
+	              "link" : "/api/v1/teams/13"
+	            },
+	            "primaryPosition" : {
+	              "code" : "D",
+	              "name" : "Defenseman",
+	              "type" : "Defenseman",
+	              "abbreviation" : "D"
+	            }
+	          },
+	          "jerseyNumber" : "3",
+	          "position" : {
+	            "code" : "D",
+	            "name" : "Defenseman",
+	            "type" : "Defenseman",
+	            "abbreviation" : "D"
+	          },
+	          "stats" : {
+	            "skaterStats" : {
+	              "timeOnIce" : "18:35",
+	              "assists" : 0,
+	              "goals" : 0,
+	              "shots" : 3,
+	              "hits" : 1,
+	              "powerPlayGoals" : 0,
+	              "powerPlayAssists" : 0,
+	              "penaltyMinutes" : 0,
+	              "faceOffWins" : 0,
+	              "faceoffTaken" : 0,
+	              "takeaways" : 0,
+	              "giveaways" : 1,
+	              "shortHandedGoals" : 0,
+	              "shortHandedAssists" : 0,
+	              "blocked" : 1,
+	              "plusMinus" : -1,
+	              "evenTimeOnIce" : "15:04",
+	              "powerPlayTimeOnIce" : "3:31",
+	              "shortHandedTimeOnIce" : "0:00"
+	            }
+	          }
+	        }
+	      },
+	      "goalies" : [ 8478470 ],
+	      "skaters" : [ 8477384, 8471735, 8477932, 8471873, 8474098, 8477963, 8475792, 8476456, 8477493, 8476875, 8476389, 8477346, 8478569, 8478843, 8474149, 8474884, 8478211, 8478366, 8475796, 8479404 ],
+	      "onIce" : [ ],
+	      "onIcePlus" : [ ],
+	      "scratches" : [ 8475796, 8479404 ],
+	      "penaltyBox" : [ ],
+	      "coaches" : [ {
+	        "person" : {
+	          "fullName" : "Joel Quenneville",
+	          "link" : "/api/v1/people/null"
+	        },
+	        "position" : {
+	          "code" : "HC",
+	          "name" : "Head Coach",
+	          "type" : "Head Coach",
+	          "abbreviation" : "Head Coach"
+	        }
+	      } ]
+	    },
+	    "home" : {
+	      "team" : {
+	        "id" : 2,
+	        "name" : "New York Islanders",
+	        "link" : "/api/v1/teams/2"
+	      },
+	      "teamStats" : {
+	        "teamSkaterStats" : {
+	          "goals" : 2,
+	          "pim" : 11,
+	          "shots" : 28,
+	          "powerPlayPercentage" : "0.0",
+	          "powerPlayGoals" : 0.0,
+	          "powerPlayOpportunities" : 1.0,
+	          "faceOffWinPercentage" : "46.7",
+	          "blocked" : 20,
+	          "takeaways" : 10,
+	          "giveaways" : 20,
+	          "hits" : 24
+	        }
+	      },
+	      "players" : {
+	        "ID8474709" : {
+	          "person" : {
+	            "id" : 8474709,
+	            "fullName" : "Matt Martin",
+	            "link" : "/api/v1/people/8474709",
+	            "firstName" : "Matt",
+	            "lastName" : "Martin",
+	            "primaryNumber" : "17",
+	            "birthDate" : "1989-05-08",
+	            "currentAge" : 30,
+	            "birthCity" : "Windsor",
+	            "birthStateProvince" : "ON",
+	            "birthCountry" : "CAN",
+	            "nationality" : "CAN",
+	            "height" : "6' 3\"",
+	            "weight" : 220,
+	            "active" : true,
+	            "alternateCaptain" : false,
+	            "captain" : false,
+	            "rookie" : false,
+	            "shootsCatches" : "L",
+	            "rosterStatus" : "Y",
+	            "currentTeam" : {
+	              "id" : 2,
+	              "name" : "New York Islanders",
+	              "link" : "/api/v1/teams/2"
+	            },
+	            "primaryPosition" : {
+	              "code" : "L",
+	              "name" : "Left Wing",
+	              "type" : "Forward",
+	              "abbreviation" : "LW"
+	            }
+	          },
+	          "jerseyNumber" : "17",
+	          "position" : {
+	            "code" : "N/A",
+	            "name" : "Unknown",
+	            "type" : "Unknown",
+	            "abbreviation" : "N/A"
+	          },
+	          "stats" : {
+	            "goalieStats" : {
+	              "timeOnIce" : "64:39",
+	              "assists" : 0,
+	              "goals" : 0,
+	              "pim" : 0,
+	              "shots" : 37,
+	              "saves" : 35,
+	              "powerPlaySaves" : 2,
+	              "shortHandedSaves" : 0,
+	              "evenSaves" : 33,
+	              "shortHandedShotsAgainst" : 0,
+	              "evenShotsAgainst" : 35,
+	              "powerPlayShotsAgainst" : 2,
+	              "decision" : "W",
+	              "savePercentage" : 94.5945945945946,
+	              "powerPlaySavePercentage" : 100.0,
+	              "evenStrengthSavePercentage" : 94.28571428571428
+	            }
+            }
+	        }
+	      },
+		    "goalies" : [ 8473575 ],
+	      "skaters" : [ 8475181, 8476917, 8477506, 8474586, 8473544, 8474573, 8478445, 8475832, 8473504, 8478463, 8476429, 8478038, 8475314, 8477936, 8475754, 8477527, 8473463, 8470187, 8480865, 8474709, 8475231 ],
+	      "onIce" : [ ],
+	      "onIcePlus" : [ ],
+	      "scratches" : [ 8480865, 8474709, 8475231 ],
+	      "penaltyBox" : [ ],
+	      "coaches" : [ {
+	        "person" : {
+	          "fullName" : "Barry Trotz",
+	          "link" : "/api/v1/people/null"
+	        },
+	        "position" : {
+	          "code" : "HC",
+	          "name" : "Head Coach",
+	          "type" : "Head Coach",
+	          "abbreviation" : "Head Coach"
+	        }
+	      } ]
+	    }
+	  },
+    "officials" : [ {
+	    "official" : {
+		      "id" : 2457,
+		      "fullName" : "Gord Dwyer",
+		      "link" : "/api/v1/people/2457"
+		    },
+		    "officialType" : "Referee"
+		  }, {
+		    "official" : {
+		      "id" : 6818,
+		      "fullName" : "Jake Brenk",
+		      "link" : "/api/v1/people/6818"
+		    },
+		    "officialType" : "Referee"
+		  }, {
+		    "official" : {
+		      "id" : 4694,
+		      "fullName" : "Shandor Alphonso",
+		      "link" : "/api/v1/people/4694"
+		    },
+		    "officialType" : "Linesman"
+		  }, {
+		    "official" : {
+		      "id" : 7403,
+		      "fullName" : "Tyson Baker",
+		      "link" : "/api/v1/people/7403"
+		    },
+		    "officialType" : "Linesman"
+		  } 
+		]
+  },
+  "https://statsapi.web.nhl.com/api/v1/game/2019020067/feed/live": {
+  	"gameData": {
+			"game": {
+				"type": "R"
+			}, 		
+  		"status": {
+  			"abstractGameState":	"Final",
+				"codedGameState":	"7",
+				"detailedState":	"Final",
+				"statusCode":	"7",
+				"startTimeTBD":	false
+  		}
+  	},
+  	"liveData": {
+  		"plays": {
+  			"allPlays": [
+  				{
+  					"result": {
+  						"event":	"Goal",
+							"eventCode":	"NYI114",
+							"eventTypeId":	"GOAL",
+							"description":	"Denis Malgin (1) Wrist S…), MacKenzie Weegar (1)",
+							"secondaryType":	"Wrist Shot",
+							"gameWinningGoal":	false,
+							"emptyNet":	false,
+							"strength": {
+								"name": "Even"
+							}
+						},
+						"about": {
+							"eventIdx":	27,
+							"eventId":	114,
+							"period":	1,
+							"periodType":	"REGULAR",
+							"ordinalNum":	"1st",
+							"periodTime":	"05:34",
+							"periodTimeRemaining":	"14:26",
+							"dateTime":	"2019-10-12T23:14:56Z"
+  					}
+  				}
+  			],
+  			"scoringPlays": [ 0 ],
+  			"currentPlay": {
+  				"result": {
+  					"event":	"Game End",
+						"eventCode":	"NYI828",
+						"eventTypeId":	"GAME_END",
+						"description":	"Game End"
+  				},
+  				"about": {
+  					"eventIdx":	364,
+						"eventId":	828,
+						"period":	5,
+						"periodType":	"SHOOTOUT",
+						"ordinalNum":	"SO",
+						"periodTime":	"00:00",
+						"periodTimeRemaining":	"00:00",
+						"dateTime":	"2019-10-13T01:49:03Z"
+  				}
+  			}
+  		},
+  		"linescore": {
+  			"currentPeriod": 5,
+  			"currentPeriodOrdinal": "SO",
+  			"currentPeriodTimeRemaining": "Final"
+  		}
+  	}
+  },
+  "https://statsapi.web.nhl.com/api/v1/game/2019020067/content": {
+  	"copyright":	"NHL and the NHL Shield a…9. All Rights Reserved.",
+		"link":	"/api/v1/game/2019020067/content",
+		"media": {
+			"epg": [{
+				"title":	"Recap",
+				"items": [{
+					"playbacks": [{
+							"url": "http://md-akc.med.nhl.com/mp4/nhl/2019/10/13/508d4c0e-b44f-480e-842f-a5b157a9c75c/1570935302686/asset_1800k.mp4"
+					}]
+				}]
+			}],
+			"milestones": {
+				"items": [{
+					"title":	"Goal",
+					"description":	"Denis Malgin (1)",
+					"type":	"GOAL",
+					"timeAbsolute":	"2019-10-12T23:15:03+0000",
+					"timeOffset":	"874",
+					"period":	"1",
+					"statsEventId":	"114",
+					"teamId":	"13",
+					"playerId":	"8478843",
+					"periodTime":	"05:34",
+					"ordinalNum":	"1st",
+					"highlight": {
+						"type":	"video",
+						"id":	"69582503",
+						"date":	"2019-10-12T19:00:00-0400",
+						"title":	"Dadonov sets up Malgin ",
+						"blurb":	"FLA@NYI: Dadonov, Malgin… up to open the scoring",
+						"description":	"Evgenii Dadonov turns an… lead in the 1st period",
+						"duration":	"00:45",
+						"authFlow":	false,
+						"mediaPlaybackId":	"69582503",
+						"mediaState":	"MEDIA_ARCHIVE",
+						"playbacks":	[
+							{
+								"url":	"http://md-akc.med.nhl.com/mp4/nhl/2019/10/12/b04bcf90-b53b-4615-9876-7543152ea29d/1570922513961/asset_1800k.mp4"
+							}
+						]
+					}
+				}]
+			}
+		}
+	},
+	"https://statsapi.web.nhl.com/api/v1/schedule?date=2019-10-13": {
+	  "copyright" : "NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2019. All Rights Reserved.",
+	  "totalItems" : 3,
+	  "totalEvents" : 0,
+	  "totalGames" : 3,
+	  "totalMatches" : 0,
+	  "wait" : 10,
+	  "dates" : [ {
+	    "date" : "2019-10-13",
+	    "totalItems" : 3,
+	    "totalEvents" : 0,
+	    "totalGames" : 3,
+	    "totalMatches" : 0,
+	    "games" : [ {
+	      "gamePk" : 2019020075,
+	      "link" : "/api/v1/game/2019020075/feed/live",
+	      "gameType" : "R",
+	      "season" : "20192020",
+	      "gameDate" : "2019-10-13T23:00:00Z",
+	      "status" : {
+	        "abstractGameState" : "Preview",
+	        "codedGameState" : "1",
+	        "detailedState" : "Scheduled",
+	        "statusCode" : "1",
+	        "startTimeTBD" : false
+	      },
+	      "teams" : {
+	        "away" : {
+	          "leagueRecord" : {
+	            "wins" : 3,
+	            "losses" : 2,
+	            "ot" : 0,
+	            "type" : "league"
+	          },
+	          "score" : 0,
+	          "team" : {
+	            "id" : 5,
+	            "name" : "Pittsburgh Penguins",
+	            "link" : "/api/v1/teams/5"
+	          }
+	        },
+	        "home" : {
+	          "leagueRecord" : {
+	            "wins" : 4,
+	            "losses" : 2,
+	            "ot" : 0,
+	            "type" : "league"
+	          },
+	          "score" : 0,
+	          "team" : {
+	            "id" : 52,
+	            "name" : "Winnipeg Jets",
+	            "link" : "/api/v1/teams/52"
+	          }
+	        }
+	      },
+	      "venue" : {
+	        "id" : 5058,
+	        "name" : "Bell MTS Place",
+	        "link" : "/api/v1/venues/5058"
+	      },
+	      "content" : {
+	        "link" : "/api/v1/game/2019020075/content"
+	      }
+	    }]
+	  }]
 	}
 }

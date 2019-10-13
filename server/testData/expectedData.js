@@ -319,10 +319,23 @@ module.exports = {
       "id": 8469454,
       "jerseyNumber": "17",
       "link": "/api/v1/people/8469454",
-      "positionAbbreviation": "LW",
-      "positionCode": "L",
-      "positionName": "Left Wing",
-      "positionType": "Forward"
+      "position": {
+        "abbreviation": "LW",
+        "code": "L",
+        "name": "Left Wing",
+        "type": "Forward"
+      }
     }
-  ]
+  ],
+  gameHighlights: {
+    "goalsHighlights": [
+      {
+        "period": "1",
+        "periodTime": "05:34",
+        "statsEventId": "114",
+        "url": "http://md-akc.med.nhl.com/mp4/nhl/2019/10/12/b04bcf90-b53b-4615-9876-7543152ea29d/1570922513961/asset_1800k.mp4"
+      }
+    ],
+    "recap": "http://md-akc.med.nhl.com/mp4/nhl/2019/10/13/508d4c0e-b44f-480e-842f-a5b157a9c75c/1570935302686/asset_1800k.mp4"
+  }
 }
