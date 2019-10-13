@@ -1388,5 +1388,176 @@
 	      }
 	    }]
 	  }]
+	},
+	"https://statsapi.web.nhl.com/api/v1/teams?season=20192020": {
+		"teams": [{
+			"id":	1,
+			"name":	"New Jersey Devils"
+		}]
+	},
+	"https://statsapi.web.nhl.com/api/v1/schedule?teamId=1&startDate=2019-09-01&endDate=2019-10-13": {
+	  "copyright" : "NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2019. All Rights Reserved.",
+	  "totalItems" : 1,
+	  "totalEvents" : 0,
+	  "totalGames" : 1,
+	  "totalMatches" : 0,
+	  "wait" : 10,
+	  "dates" : [ {
+	    "date" : "2019-09-16",
+	    "totalItems" : 1,
+	    "totalEvents" : 0,
+	    "totalGames" : 1,
+	    "totalMatches" : 0,
+	    "games" : [ {
+	      "gamePk" : 2019010003,
+	      "link" : "/api/v1/game/2019010003/feed/live",
+	      "gameType" : "R",
+	      "season" : "20192020",
+	      "gameDate" : "2019-09-16T23:00:00Z",
+	      "status" : {
+	        "abstractGameState" : "Final",
+	        "codedGameState" : "6",
+	        "detailedState" : "Final",
+	        "statusCode" : "6",
+	        "startTimeTBD" : false
+	      },
+	      "teams" : {
+	        "away" : {
+	          "leagueRecord" : {
+	            "wins" : 0,
+	            "losses" : 0,
+	            "ot" : 1,
+	            "type" : "league"
+	          },
+	          "score" : 3,
+	          "team" : {
+	            "id" : 6,
+	            "name" : "Boston Bruins",
+	            "link" : "/api/v1/teams/6"
+	          }
+	        },
+	        "home" : {
+	          "leagueRecord" : {
+	            "wins" : 1,
+	            "losses" : 1,
+	            "ot" : 0,
+	            "type" : "league"
+	          },
+	          "score" : 4,
+	          "team" : {
+	            "id" : 1,
+	            "name" : "New Jersey Devils",
+	            "link" : "/api/v1/teams/1"
+	          }
+	        }
+	      },
+	      "venue" : {
+	        "name" : "Prudential Center",
+	        "link" : "/api/v1/venues/null"
+	      },
+	      "content" : {
+	        "link" : "/api/v1/game/2019010003/content"
+	      }
+	    }]
+	  }]
+	},
+	"https://statsapi.web.nhl.com/api/v1/people/8478402/stats?stats=gameLog": {
+	  "copyright" : "NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2019. All Rights Reserved.",
+	  "stats" : [ {
+	    "type" : {
+	      "displayName" : "gameLog"
+	    },
+	    "splits" : [ {
+	      "season" : "20192020",
+	      "stat" : {
+	        "timeOnIce" : "20:55",
+	        "assists" : 1,
+	        "goals" : 1,
+	        "pim" : 2,
+	        "shots" : 3,
+	        "games" : 1,
+	        "hits" : 1,
+	        "powerPlayGoals" : 1,
+	        "powerPlayPoints" : 1,
+	        "powerPlayTimeOnIce" : "03:07",
+	        "evenTimeOnIce" : "17:48",
+	        "penaltyMinutes" : "2",
+	        "faceOffPct" : 37.5,
+	        "shotPct" : 33.3,
+	        "gameWinningGoals" : 1,
+	        "overTimeGoals" : 0,
+	        "shortHandedGoals" : 0,
+	        "shortHandedPoints" : 0,
+	        "shortHandedTimeOnIce" : "00:00",
+	        "blocked" : 0,
+	        "plusMinus" : 2,
+	        "points" : 2,
+	        "shifts" : 22
+	      },
+	      "team" : {
+	        "id" : 22,
+	        "name" : "Edmonton Oilers",
+	        "link" : "/api/v1/teams/22"
+	      },
+	      "opponent" : {
+	        "id" : 3,
+	        "name" : "New York Rangers",
+	        "link" : "/api/v1/teams/3"
+	      },
+	      "date" : "2019-10-12",
+	      "isHome" : false,
+	      "isWin" : true,
+	      "isOT" : false,
+	      "game" : {
+	        "gamePk" : 2019020061,
+	        "link" : "/api/v1/game/2019020061/feed/live",
+	        "content" : {
+	          "link" : "/api/v1/game/2019020061/content"
+	        }
+	      }
+    	} ]
+	  } ]
+	},
+	"https://api.nhle.com/stats/rest/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22}]&cayenneExp=gameTypeId=2%20and%20seasonId%3E=20192020%20and%20seasonId%3C=20192020": {
+	  "data": [{
+      "assists": 8,
+      "faceoffWinPctg": 0.5348,
+      "gameWinningGoals": 2,
+      "gamesPlayed": 5,
+      "goals": 4,
+      "otGoals": 0,
+      "penaltyMinutes": 4,
+      "playerBirthCity": "Richmond Hill",
+      "playerBirthCountry": "CAN",
+      "playerBirthDate": "1997-01-13",
+      "playerBirthStateProvince": "ON",
+      "playerDraftOverallPickNo": 1,
+      "playerDraftRoundNo": 1,
+      "playerDraftYear": 2015,
+      "playerFirstName": "Connor",
+      "playerHeight": 73,
+      "playerId": 8478402,
+      "playerInHockeyHof": 0,
+      "playerIsActive": 1,
+      "playerLastName": "McDavid",
+      "playerName": "Connor McDavid",
+      "playerNationality": "CAN",
+      "playerPositionCode": "C",
+      "playerShootsCatches": "L",
+      "playerTeamsPlayedFor": "EDM",
+      "playerWeight": 193,
+      "plusMinus": 3,
+      "points": 12,
+      "pointsPerGame": 2.4,
+      "ppGoals": 2,
+      "ppPoints": 7,
+      "seasonId": 20192020,
+      "shGoals": 0,
+      "shPoints": 0,
+      "shiftsPerGame": 23,
+      "shootingPctg": 0.2666,
+      "shots": 15,
+      "timeOnIcePerGame": 1351.6
+	 	}]
 	}
 }

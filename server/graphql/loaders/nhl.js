@@ -1,20 +1,3 @@
-/*
-
-year
-=> league 
-	=> draft/season/playoffs/standings/schedule
-	=> game
-		=> boxscore/liveFeed
-			=> teams/team/record 
-			=> venue/players/player 
-				=> bio/seasionStats/playoffStats/seasonGameLogs/playoffGameLogs/draft
-				=> country/position/stat
-
-now
-=> teamStreaks/playerStreaks
-
-*/
-
 const {
   contains,
   descend,
@@ -45,10 +28,12 @@ const {
 } = require('ramda');
 
 const ApiRequest = require('../../libs/api/api')
+const cache = require('../../libs/redis')
 const DataLoader = require('dataloader')
 
 const {
-	calculateTeamPointsStreak
+	calculateTeamPointsStreak,
+	calculatePlayerPointsStreak,
 } = require('./nhlHelpers')
 
 
@@ -154,9 +139,11 @@ const batchPlayerSeasonGameLogsFetcher = async (playerIds) => {
 			resource: `/people/${id}/stats?stats=gameLog`,
 		}).fetch()
 	}))
-
-	return map(path(['stats', 0, 'splits']))(data)
+	
+	return map(pathOr([], ['stats', 0, 'splits']))(data)
 }
+
+const playerSeasonGameLogsLoader = new DataLoader(batchPlayerSeasonGameLogsFetcher)
 
 const batchPlayerPlayoffsGameLogsFetcher = async (playerIds) => {
 	const data = await Promise.all(playerIds.map((id) => {
@@ -452,35 +439,39 @@ const batchGamesScheduleFetcher = async (dates) => {
 
 // Streaks -----
 
-const emptyRecord = { wins: 0, losses: 0, ot: 0 }
-const teamStreakDefaultNumberOfGames = 15;
-const playerStreakDefaultNumberOfGames = 5;
 const defaultTeamsLimit = 10;
 const defaultPlayersLimit = 5;
-const takeHomeTeam = path(['teams', 'home']);
-const takeAwayTeam = path(['teams', 'away']);
 	
 const batchTeamScheduleFetcher = async (teamIds) => {
-	const endDate = `${moment.tz('America/New_York').subtract(1, 'day').endOf('day').format('YYYY-MM-DD')}`
+	const endDate = process.env.NODE_ENV == 'test' 
+		? '2019-10-13' 
+		: `${moment.tz('America/New_York').subtract(1, 'day').endOf('day').format('YYYY-MM-DD')}`
+
 	const data = await Promise.all(teamIds.map((id) => {
-		new ApiRequest({
+		return new ApiRequest({
 			league: 'NHL',
 			apiType: 'STATS_API',
-			resource: `/schedule?teamId=${teamId}&startDate=${CURRENT_YEAR}-09-01&endDate=${endDate}`,
+			resource: `/schedule?teamId=${id}&startDate=${CURRENT_YEAR}-09-01&endDate=${endDate}`,
 		}).fetch()
 	}))
   
-  return teamSchedule.dates.map(date => ({ date: date.date, game: date.games[0] }));
+  return data.map((team) => {
+  	return pipe(
+  		propOr([], 'dates'), 
+  		map(date => ({ date: date.date, game: date.games[0] }))
+  	)(team)
+  })
 }
 
 const teamScheduleLoader = new DataLoader(batchTeamScheduleFetcher)
 
 const calculateTeamsStreaks = async () => {
-	const cached = await cache.get('team_streaks')
-    
-  if (cached) {
-    return take(args.limit || defaultTeamsLimit, JSON.parse(cached));
-  }
+	if (cache.connected) {
+		const cache = cache.get('team_streaks')
+		if (cache) {
+			return JSON.parse(cache)
+		}
+	}
 
   const teams = await new ApiRequest({
 		league: 'NHL',
@@ -488,9 +479,9 @@ const calculateTeamsStreaks = async () => {
 		resource: `/teams?season=${CURRENT_SEASON}`,
 	})
 	.fetch()
-	.then((data) => Promise.resolve(propOr([], 'teams')))
-	.then((teams) => map(pick(['id', 'name', 'teamName', 'abbreviation'])))
-
+	.then((data) => Promise.resolve(propOr([], 'teams')(data)))
+	.then((teams) => map(pick(['id', 'name', 'teamName', 'abbreviation']))(teams))
+	
   const teamsWithSchedules = await Promise.all(teams.map(async team => ({
     ...team,
     schedule: await teamScheduleLoader.load(team.id),
@@ -498,134 +489,84 @@ const calculateTeamsStreaks = async () => {
 
   const teamsStreaks = pipe(
     map(calculateTeamPointsStreak),
-    filter(team => team.streak.isValid),
     sortWith([descend(path(['streak', 'points']))]),
     map(omit(['schedule'])),
   )(teamsWithSchedules)
 
-  console.log('Caching streaks')
+ 	if (cache.connected) {
+		cache.set('player_streaks', JSON.stringify(streaks))
+	}
 
-  cache
-    .set(
-      'team_streaks',
-      JSON.stringify(teamsStreaks),
-      'EX',
-      getSecondsUntilMidnight(),
-    )
+  return teamsStreaks;
+}
 
-  return take(args.limit || defaultTeamsLimit, teamsStreaks);
+const fetchByBatchOf = (batchSize) => async (cumulative, players) => {
+  const batch = take(batchSize, players);
+
+  const responses = await Promise.all(batch.map(async (p) => {
+    const logs = await playerSeasonGameLogsLoader.load(p.playerId);
+    return {
+      ...p,
+      logs,
+    };
+  }));
+  const newCumulative = [...cumulative, ...responses];
+  if (players.length <= batchSize) {
+    return newCumulative;
+  }
+  const final = await fetchByTen(newCumulative, takeLast(players.length - batchSize, players));
+  return final;
+};
+
+const calculatePlayerStreaks = async () => {
+	if (cache.connected) {
+		const cache = cache.get('player_streaks')
+		if (cache) {
+			return JSON.parse(cache)
+		}
+	}
+  const players = await new ApiRequest({
+		league: 'NHL',
+		apiType: 'BASIC',
+		resource: '/skaters?isAggregate=false&reportType=basic&reportName=skatersummary' +
+							'&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22}]' +
+							`&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${CURRENT_SEASON}%20and%20seasonId%3C=${CURRENT_SEASON}`
+	})
+	.fetch()
+
+  // get game logs for all players
+  const playersLogs = await fetchByBatchOf(10)([], players.data);
+  console.log(`${playersLogs.length} players have logs`);
+
+  // calculate streaks
+  const streaks = pipe(
+    map(calculatePlayerPointsStreak),
+    sortWith([
+      descend(path(['streak', 'points'])),
+      descend(path(['streak', 'goals'])),
+    ]),
+    map(pick(['streak', 'playerName', 'playerTeamsPlayedFor', 'playerPositionCode'])),
+  )(playersLogs)
+
+  if (cache.connected) {
+		cache.set('player_streaks', JSON.stringify(streaks))
+	}
+  
+  return streaks
 }
 
 
+const batchStreaksFetcher = async (streakTypes) => {
+	return Promise.all(streakTypes.map((type) => {
+		switch (type) {
+			case 'teams':
+			return calculateTeamsStreaks()
 
-// const calculatePlayerPointsStreak = player => ({
-//   ...player,
-//   streak: {
-//     points: pipe(
-//       prop('logs'),
-//       take(playerStreakDefaultNumberOfGames),
-//       map(path(['stat', 'points'])),
-//       sum,
-//     )(player),
-//     goals: pipe(
-//       prop('logs'),
-//       take(playerStreakDefaultNumberOfGames),
-//       map(path(['stat', 'goals'])),
-//       sum,
-//     )(player),
-//     assists: pipe(
-//       prop('logs'),
-//       take(playerStreakDefaultNumberOfGames),
-//       map(path(['stat', 'assists'])),
-//       sum,
-//     )(player),
-//     shots: pipe(
-//       prop('logs'),
-//       take(playerStreakDefaultNumberOfGames),
-//       map(path(['stat', 'shots'])),
-//       sum,
-//     )(player),
-//     hits: pipe(
-//       prop('logs'),
-//       take(playerStreakDefaultNumberOfGames),
-//       map(path(['stat', 'hits'])),
-//       sum,
-//     )(player),
-//     pim: pipe(
-//       prop('logs'),
-//       take(playerStreakDefaultNumberOfGames),
-//       map(path(['stat', 'penaltyMinutes'])),
-//       sum,
-//     )(player),
-//     powerPlayPoints: pipe(
-//       prop('logs'),
-//       take(playerStreakDefaultNumberOfGames),
-//       map(path(['stat', 'powerPlayPoints'])),
-//       sum,
-//     )(player),
-//     plusMinus: pipe(
-//       prop('logs'),
-//       take(playerStreakDefaultNumberOfGames),
-//       map(path(['stat', 'plusMinus'])),
-//       sum,
-//     )(player),
-//     games: playerStreakDefaultNumberOfGames,
-//   },
-// });
-
-// const fetchByTen = async (cumulative, players) => {
-//   const batch = take(10, players);
-//   console.log(cumulative.length, players.length);
-//   const responses = await Promise.all(batch.map(async (p) => {
-//     const logs = await fetchGameLogsForPlayerId(p.playerId);
-//     return {
-//       ...p,
-//       logs,
-//     };
-//   }));
-//   const newCumulative = [...cumulative, ...responses];
-//   if (players.length <= 10) {
-//     return newCumulative;
-//   }
-//   const final = await fetchByTen(newCumulative, takeLast(players.length - 10, players));
-//   return final;
-// };
-
-// const calculatePlayerStreaks = async (args = {}) => {
-//   try {
-//     const cached = await cache.get('players_streaks');
-//     if (cached && !args.forced) {
-//       return take(args.limit || defaultPlayersLimit, JSON.parse(cached));
-//     }
-//     const skatersummaryAll = '/skaters?isAggregate=false&reportType=basic&reportName=skatersummary&cayenneExp=gameTypeId=2%20and%20seasonId%3E=20192020%20and%20seasonId%3C=20192020&sort=[{%22property%22:%22playerId%22}]';
-
-//     const players = await nhlApi(skatersummaryAll, 60 * 60 * 24);
-
-//     // get game logs for all players
-//     const playersLogs = await fetchByTen([], players.data);
-//     console.log(`${playersLogs.length} players have logs`);
-
-//     // calculate streaks
-//     const streaks = pipe(
-//       map(calculatePlayerPointsStreak),
-//       sortWith([
-//         descend(path(['streak', 'points'])),
-//         descend(path(['streak', 'goals'])),
-//       ]),
-//       map(omit(['logs'])),
-//     )(playersLogs);
-//     console.log(`Saving streaks for the next ${getSecondsUntilMidnight() / 60 / 60} hours`);
-//     cache
-//       .set(
-//         'players_streaks',
-//         JSON.stringify(streaks),
-//       );
-
-//     return take(args.limit || defaultPlayersLimit, streaks);
-//   } catch (e) {
-//     console.error(e);
-//   }
-// };
+			case 'players':
+			return calculatePlayerStreaks()
+		}
+	}))
+}
 
 // const fetchDraft = async (args) => {
 //   const resource = `/draft?cayenneExp=draftYear=${args.year}`;
@@ -639,7 +580,7 @@ module.exports = {
 	playerDraftLoader: new DataLoader(batchPlayerDraftFetcher),
 	playerCareerSeasonStatsLoader: new DataLoader(batchCareerStatsFetcher),
 	playerCareerPlayoffsStatsLoader: new DataLoader(batchCareerPlayoffsStatsFetcher),
-	playerSeasonGameLogsLoader: new DataLoader(batchPlayerSeasonGameLogsFetcher),
+	playerSeasonGameLogsLoader,
 	playerPlayoffsGameLogsLoader: new DataLoader(batchPlayerPlayoffsGameLogsFetcher),
 
 	playersLoader: new DataLoader(playersFetcher),
@@ -658,5 +599,5 @@ module.exports = {
 
 	gamesScheduleLoader: new DataLoader(batchGamesScheduleFetcher),
 
-	calculateTeamsStreaks: new DataLoader(calculateTeamsStreaks, { batch: false })
+	streakLoader: new DataLoader(batchStreaksFetcher),
 }

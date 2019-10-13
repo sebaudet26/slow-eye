@@ -23,8 +23,8 @@
     "lint:js": "npm run lint:eslint -- . ",
     "pretest": "npm run test:clean",
     "test:clean": "rimraf ./coverage",
-    "test": "./node_modules/mocha/bin/mocha -c -S server/**/*.spec.js",
-    "test:watch": "./node_modules/mocha/bin/mocha -c -S -R min -w server/**/*.spec.js"
+    "test": "NODE_ENV='test' ./node_modules/mocha/bin/mocha -c -S server/**/*.spec.js",
+    "test:watch": "NODE_ENV='test' ./node_modules/mocha/bin/mocha -c -S -R min -w server/**/*.spec.js"
   },
   "dependencies": {
     "add-asset-html-webpack-plugin": "2.1.3",

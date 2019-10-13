@@ -38,7 +38,7 @@ function stubFetchToReturn(data) {
 class FakeApi {
   constructor(args) {
     const { url } = new ApiRequest({ ...args, skipCache: true })
-    // console.log(url)
+    console.log(url)
     this.fetch = () => {
       fakeFetch()
       return Promise.resolve(fakeData || testData[url])
@@ -72,6 +72,7 @@ const {
 
   gamesScheduleLoader,
 
+  streakLoader,
 } = nhlLoaders
 
 describe('nhl loader', function() {
@@ -237,9 +238,17 @@ describe('nhl loader', function() {
     })
   })
 
-  describe('teams streaks', () => {
-    it('returns team streaks', async function () {
+  describe('streaks', () => {
+    it('returns teams streaks', async function () {
+      const hotTeams = await streakLoader.load('teams')
+      
+      assert.deepEqual(hotTeams, expectedData.hotTeams)
+    })    
 
+    it('returns players streaks', async function () {
+      const hotPlayers = await streakLoader.load('players')
+      
+      assert.deepEqual(hotPlayers, expectedData.hotPlayers)
     })
   })
 })

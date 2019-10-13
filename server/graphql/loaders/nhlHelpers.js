@@ -1,3 +1,38 @@
+const {
+  contains,
+  descend,
+  filter,
+  find,
+  flatten,
+  head,
+  last,
+  map,
+  mergeAll,
+  mergeLeft,
+  omit,
+  path,
+  pathEq,
+  pathOr,
+  pick,
+  pipe,
+  prop,
+  propEq,
+  propOr,
+  reverse,
+  sum,
+  sortBy,
+  sortWith,
+  tail,
+  take,
+  takeLast,
+} = require('ramda');
+
+const emptyRecord = { wins: 0, losses: 0, ot: 0 }
+const teamStreakDefaultNumberOfGames = 15;
+const playerStreakDefaultNumberOfGames = 5;
+const takeHomeTeam = path(['teams', 'home']);
+const takeAwayTeam = path(['teams', 'away']);
+
 const calculateTeamPointsStreak = (team) => {
   const gamesToConsider = pipe(
     prop('schedule'),
@@ -7,28 +42,13 @@ const calculateTeamPointsStreak = (team) => {
     take(teamStreakDefaultNumberOfGames + 1)
   )(team)
 
-  const goalsFor = pipe(
-    tail,
-    map(game => (game.teams.home.team.id === team.id ? takeHomeTeam(game) : takeAwayTeam(game))),
-    map(prop('score')),
-    sum,
-  )(gamesToConsider)
-
-  const goalsAgainst = pipe(
-    tail,
-    map(game => (game.teams.home.team.id !== team.id ? takeHomeTeam(game) : takeAwayTeam(game))),
-    map(prop('score')),
-    sum,
-  )(gamesToConsider)
-
   const firstGame = last(gamesToConsider)
   const lastGame = head(gamesToConsider)
-
 
   let initialRecord = emptyRecord
   let latestRecord  = emptyRecord
 
-  if (gamesToConsider.length > 1) {
+  if (gamesToConsider.length) {
     latestRecord = lastGame.teams.home.team.id === team.id
       ? lastGame.teams.home.leagueRecord
       : lastGame.teams.away.leagueRecord
@@ -40,14 +60,15 @@ const calculateTeamPointsStreak = (team) => {
       : firstGame.teams.away.leagueRecord
   }
 
+  const wins = latestRecord.wins - initialRecord.wins
+  const losses = latestRecord.losses - initialRecord.losses
+  const ot = latestRecord.ot - initialRecord.ot
+
   const streak = {
-    wins: latestRecord.wins - initialRecord.wins,
-    losses: latestRecord.losses - initialRecord.losses,
-    ot: latestRecord.ot - initialRecord.ot,
-    games: teamStreakDefaultNumberOfGames,
-    isValid: latestRecord.wins >= initialRecord.wins,
-    goalsAgainst,
-    goalsFor,
+    wins,
+    losses,
+    ot,
+    games: wins+losses+ot,
   }
 
   return {
@@ -59,6 +80,62 @@ const calculateTeamPointsStreak = (team) => {
   }
 }
 
+const calculatePlayerPointsStreak = player => ({
+  ...player,
+  streak: {
+    points: pipe(
+      prop('logs'),
+      take(playerStreakDefaultNumberOfGames),
+      map(path(['stat', 'points'])),
+      sum,
+    )(player),
+    goals: pipe(
+      prop('logs'),
+      take(playerStreakDefaultNumberOfGames),
+      map(path(['stat', 'goals'])),
+      sum,
+    )(player),
+    assists: pipe(
+      prop('logs'),
+      take(playerStreakDefaultNumberOfGames),
+      map(path(['stat', 'assists'])),
+      sum,
+    )(player),
+    shots: pipe(
+      prop('logs'),
+      take(playerStreakDefaultNumberOfGames),
+      map(path(['stat', 'shots'])),
+      sum,
+    )(player),
+    hits: pipe(
+      prop('logs'),
+      take(playerStreakDefaultNumberOfGames),
+      map(path(['stat', 'hits'])),
+      sum,
+    )(player),
+    pim: pipe(
+      prop('logs'),
+      take(playerStreakDefaultNumberOfGames),
+      map(path(['stat', 'penaltyMinutes'])),
+      sum,
+    )(player),
+    powerPlayPoints: pipe(
+      prop('logs'),
+      take(playerStreakDefaultNumberOfGames),
+      map(path(['stat', 'powerPlayPoints'])),
+      sum,
+    )(player),
+    plusMinus: pipe(
+      prop('logs'),
+      take(playerStreakDefaultNumberOfGames),
+      map(path(['stat', 'plusMinus'])),
+      sum,
+    )(player),
+    games: playerStreakDefaultNumberOfGames,
+  },
+});
+
 module.exports = {
 	calculateTeamPointsStreak,
+	calculatePlayerPointsStreak,
 }

@@ -337,5 +337,30 @@ module.exports = {
       }
     ],
     "recap": "http://md-akc.med.nhl.com/mp4/nhl/2019/10/13/508d4c0e-b44f-480e-842f-a5b157a9c75c/1570935302686/asset_1800k.mp4"
-  }
+  },
+  hotTeams: [
+    {
+      id: 1,
+      name: 'New Jersey Devils',
+      streak: { wins: 1, losses: 1, ot: 0, games: 2, points: 2 }
+    }
+  ],
+  hotPlayers: [
+    {
+      streak: {
+        points: 2,
+        goals: 1,
+        assists: 1,
+        shots: 3,
+        hits: 1,
+        pim: 2,
+        powerPlayPoints: 1,
+        plusMinus: 2,
+        games: 5
+      },
+      playerName: 'Connor McDavid',
+      playerTeamsPlayedFor: 'EDM',
+      playerPositionCode: 'C'
+    }
+  ]
 }
