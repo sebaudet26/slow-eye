@@ -1,6 +1,7 @@
 const proxyquire = require('proxyquire').noCallThru()
 const sinon = require('sinon')
 const chai = require('chai')
+const { map, omit } = require('ramda')
 
 const { assert } = chai
 const testData = require('../../testData/apiResponses.json')
@@ -15,8 +16,12 @@ const playerPlayoffsGameLogsUrl = 'https://statsapi.web.nhl.com/api/v1/people/84
 
 let fakeFetch 
 
-stubFetchToReturnResponseFrom = (url) => {
+const stubFetchToReturnResponseFrom = (url) => {
   fakeFetch = sinon.stub().resolves(testData[url])
+}
+
+const stubFetchToReturn = (data) => {
+  fakeFetch = sinon.stub().resolves(data)
 }
 
 class FakeApi{
@@ -36,9 +41,11 @@ const {
   playerCareerPlayoffsStatsLoader,
   playerSeasonGameLogsLoader,
   playerPlayoffsGameLogsLoader,
+  playersLoader,
+  playersReportLoader,
 } = nhlLoaders
 
-describe('nhl loader', function() {
+describe.only('nhl loader', function() {
   afterEach(() => {
     fakeFetch.resetHistory()
   })
@@ -83,5 +90,46 @@ describe('nhl loader', function() {
     stubFetchToReturnResponseFrom(playerPlayoffsGameLogsUrl)
     const seasonGameLogs = await playerPlayoffsGameLogsLoader.load('8479339')
     assert.deepEqual(seasonGameLogs, testData[playerPlayoffsGameLogsUrl].stats[0].splits)
+  })
+
+  it('playersLoader loads all players in history with basic information only to minimize payload', async function() {
+    const fakePlayer = {
+      playerBirthDate: 1990, 
+      playerName: 'a', 
+      playerId: 1, 
+      playerNationality: 'AUS', 
+      playerPositionCode: 'C',
+      ignored: 'this value'
+    }
+    stubFetchToReturn([{ data: fakePlayer }])
+    const allPlayers = await playersLoader.load('all')
+    assert.deepEqual(allPlayers, map(omit(['ignored']), [fakePlayer, fakePlayer]))
+    sinon.assert.calledTwice(fakeFetch)
+  })
+
+  it('playersReportLoader returns a skaters report for a given season', async function() {
+    const fakePlayer = {
+      playerBirthDate: 1990, 
+      playerName: 'a', 
+      playerId: 1, 
+      playerNationality: 'AUS', 
+      playerPositionCode: 'C',
+    }
+    stubFetchToReturn([{ data: fakePlayer }])
+    const skatersReport = await playersReportLoader.load('20192020:skaters')
+    assert.equal(fakeFetch.callCount, 4)
+  })
+
+  it('playersReportLoader returns a goalies report for a given season', async function() {
+    const fakePlayer = {
+      playerBirthDate: 1990, 
+      playerName: 'a', 
+      playerId: 1, 
+      playerNationality: 'AUS', 
+      playerPositionCode: 'C',
+    }
+    stubFetchToReturn([{ data: fakePlayer }])
+    const skatersReport = await playersReportLoader.load('20192020:goalies')
+    assert.equal(fakeFetch.callCount, 2)
   })
 })
