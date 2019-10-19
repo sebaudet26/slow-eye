@@ -6,9 +6,9 @@ import {
 import { Helmet } from 'react-helmet';
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
-import { fetchDivisionStandings } from '../../../../server/libs/mlbApi.js';
 import StandingsTable from '../../../components/Table/mlb/StandingsTable';
 
+const fetchDivisionStandings = () => {}
 export default class MLBStandingsPage extends React.Component {
   constructor() {
     super();

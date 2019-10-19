@@ -6,7 +6,7 @@ const {
   GraphQLList,
   GraphQLInt,
   GraphQLFloat,
-} = require('graphql');
+} = require('graphql')
 // const _ = require('lodash');
 // const {
 //   equals,

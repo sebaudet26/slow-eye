@@ -41,15 +41,16 @@ class ApiRequest {
     this.expiration = expiration || getSecondsUntilMidnight()
     this.url = `${BASE_URLS[league][apiType]}${this.resource}`
     this.skipCache = skipCache || process.env.SKIP_CACHE
-    this.cache = cache
+    this.cache = cache.instance
   }
 
   async tryCache() {
     if (this.skipCache) return this
     if (!this.resource) throw new Error('you must set the resource')
-    const cachedValue = await cache.get(this.resource)
+    const cachedValue = await this.cache.get(this.resource)
     this.data = JSON.parse(cachedValue)
-    return this
+    console.log(`fetched from cache ${this.resource}`)
+    return this.data
   }
 
   async saveToCache() {
@@ -71,13 +72,13 @@ class ApiRequest {
 
   async fetch() {
     await this.tryCache()
-    if (this.data) return this
+    if (this.data) return this.data
     console.log(`fetching ${this.url}`)
     const response = await nodeFetch(this.url)
     const data = await response.json()
     this.data = data
     await this.saveToCache()
-    return this
+    return this.data
   }
 }
 
