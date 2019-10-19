@@ -38,7 +38,7 @@ function stubFetchToReturn(data) {
 class FakeApi {
   constructor(args) {
     const { url } = new ApiRequest({ ...args, skipCache: true })
-    console.log(url)
+    // console.log(url)
     this.fetch = () => {
       fakeFetch()
       return Promise.resolve(fakeData || testData[url])
@@ -93,37 +93,109 @@ describe('nhl loader', function() {
     it('playerBioLoader loads player bio', async function() {
       const bio = await playerBioLoader.load('8479339')
 
-      assert.deepEqual(bio, testData[playerBioUrl].people[0])
+      const expectedFields = [
+        'id',               'fullName',
+        'link',             'firstName',
+        'lastName',         'primaryNumber',
+        'birthDate',        'currentAge',
+        'birthCity',        'birthCountry',
+        'nationality',      'height',
+        'weight',           'active',
+        'alternateCaptain', 'captain',
+        'rookie',           'shootsCatches',
+        'rosterStatus',     'currentTeam',
+        'primaryPosition'
+      ]
+      assert.containsAllKeys(bio, expectedFields)
     })
 
     it('playerDraftLoader loads player draft info', async function() {
       const draft = await playerDraftLoader.load('8479339')
 
-      assert.deepEqual(draft, testData[playerDraftUrl].data[0])
+      const expectedFields = [
+        'id',                 'amateurClubName',
+        'amateurLeague',      'birthDate',
+        'birthPlace',         'countryCode',
+        'csPlayerId',         'draftYear',
+        'draftedByTeamId',    'firstName',
+        'height',             'lastName',
+        'overallPickNumber',  'pickInRound',
+        'playerId',           'playerName',
+        'position',           'removedOutright',
+        'removedOutrightWhy', 'roundNumber',
+        'shootsCatches',      'supplementalDraft',
+        'teamPickHistory',    'triCode',
+        'weight'
+      ]
+      assert.containsAllKeys(draft, expectedFields)
     })
 
     it('playerCareerSeasonStatsLoader loads player career season stats', async function() {
       const seasonStats = await playerCareerSeasonStatsLoader.load('8479339')
 
-      assert.deepEqual(seasonStats, expectedData.playerCareerSeasonStats)
+      const expectedFields = [ 'season', 'stat', 'team', 'league', 'sequenceNumber' ]
+      const expectedStats = [
+        'assists',
+        'goals',
+        'pim',
+        'shots',
+        'games',
+        'powerPlayGoals',
+        'penaltyMinutes',
+        'gameWinningGoals',
+        'shortHandedGoals',
+        'plusMinus',
+        'points'
+      ]
+
+      assert.equal(seasonStats.length, 6)
+      seasonStats.forEach(season => assert.containsAllKeys(season.stat, expectedStats))
     })
 
     it('playerCareerPlayoffsStatsLoader loads player career playoffs stats', async function() {
       const playoffStats = await playerCareerPlayoffsStatsLoader.load('8479339')
 
-      assert.deepEqual(playoffStats, expectedData.playerCareerPlayoffStats)
+      const expectedFields = [ 'season', 'stat', 'team', 'league', 'sequenceNumber' ]
+      const expectedStats = [
+        'timeOnIce',            'assists',
+        'goals',                'pim',
+        'shots',                'games',
+        'hits',                 'powerPlayGoals',
+        'powerPlayPoints',      'powerPlayTimeOnIce',
+        'evenTimeOnIce',        'penaltyMinutes',
+        'faceOffPct',           'shotPct',
+        'gameWinningGoals',     'overTimeGoals',
+        'shortHandedGoals',     'shortHandedPoints',
+        'shortHandedTimeOnIce', 'blocked',
+        'plusMinus',            'points',
+        'shifts'
+      ]
+
+      assert.equal(playoffStats.length, 2)
+      playoffStats.forEach((playoff) => {
+        assert.containsAllKeys(playoff, expectedFields)
+        assert.containsAllKeys(playoff.stat, expectedStats)
+      })
     })
 
     it('playerSeasonGameLogsLoader loads player season game logs', async function() {
       const seasonGameLogs = await playerSeasonGameLogsLoader.load('8479339')
 
-      assert.deepEqual(seasonGameLogs, testData[playerSeasonGameLogsUrl].stats[0].splits)
+      const expectedFields = [
+        'season', 'stat',
+        'team',   'opponent',
+        'date',   'isHome',
+        'isWin',  'isOT',
+        'game'
+      ]
+      assert.equal(seasonGameLogs.length, 9)
+      seasonGameLogs.forEach(log => assert.containsAllKeys(log, expectedFields))
     })
 
-    it('playerPlayoffsGameLogsLoader loads player playoffs game logs', async function() {
-      const seasonGameLogs = await playerPlayoffsGameLogsLoader.load('8479339')
+    it.skip('TBD playerPlayoffsGameLogsLoader loads player playoffs game logs', async function() {
+      const playoffGameLogs = await playerPlayoffsGameLogsLoader.load('8479339')
 
-      assert.deepEqual(seasonGameLogs, testData[playerPlayoffsGameLogsUrl].stats[0].splits)
+      assert.deepEqual(playoffGameLogs, [])
     })
   })
 
@@ -180,19 +252,79 @@ describe('nhl loader', function() {
     it('teamInfo loads team info', async function() {
       const teamInfo = await teamInfoLoader.load('26')
 
-      assert.deepEqual(teamInfo, testData[teamInfoUrl].teams)
+      const expectedFields = [
+        'id',              'name',
+        'link',            'venue',
+        'abbreviation',    'teamName',
+        'locationName',    'firstYearOfPlay',
+        'division',        'conference',
+        'franchise',       'shortName',
+        'officialSiteUrl', 'franchiseId',
+        'active'
+      ]
+      assert.containsAllKeys(teamInfo, expectedFields)
     })
 
     it('teamStatsLoader loads team stats', async function() {
       const teamStats = await teamStatsLoader.load('20182019:26')
 
-      assert.deepEqual(teamStats, expectedData.teamStats)
+      const expectedStats = [
+        'gamesPlayed',            'wins',
+        'losses',                 'ot',
+        'pts',                    'ptPctg',
+        'goalsPerGame',           'goalsAgainstPerGame',
+        'evGGARatio',             'powerPlayPercentage',
+        'powerPlayGoals',         'powerPlayGoalsAgainst',
+        'powerPlayOpportunities', 'penaltyKillPercentage',
+        'shotsPerGame',           'shotsAllowed',
+        'winScoreFirst',          'winOppScoreFirst',
+        'winLeadFirstPer',        'winLeadSecondPer',
+        'winOutshootOpp',         'winOutshotByOpp',
+        'faceOffsTaken',          'faceOffsWon',
+        'faceOffsLost',           'faceOffWinPercentage',
+        'shootingPctg',           'savePctg'
+      ]
+      const expectedRankings = [
+        'wins',
+        'losses',
+        'ot',
+        'pts',
+        'ptPctg',
+        'goalsPerGame',
+        'goalsAgainstPerGame',
+        'evGGARatio',
+        'powerPlayPercentage',
+        'powerPlayGoals',
+        'powerPlayGoalsAgainst',
+        'powerPlayOpportunities',
+        'penaltyKillOpportunities',
+        'penaltyKillPercentage',
+        'shotsPerGame',
+        'shotsAllowed',
+        'winScoreFirst',
+        'winOppScoreFirst',
+        'winLeadFirstPer',
+        'winLeadSecondPer',
+        'winOutshootOpp',
+        'winOutshotByOpp',
+        'faceOffsTaken',
+        'faceOffsWon',
+        'faceOffsLost',
+        'faceOffWinPercentage',
+        'savePctRank',
+        'shootingPctRank'
+      ]
+      assert.containsAllKeys(teamStats, ['stats', 'rankings'])
+      assert.containsAllKeys(teamStats.stats, expectedStats)
+      assert.containsAllKeys(teamStats.rankings, expectedRankings)
     })
 
     it('teamRosterLoader loads team rosters', async function() {
       const teamRoster = await teamRosterLoader.load('20182019:26')
 
-      assert.deepEqual(teamRoster, expectedData.teamRoster)
+      const expectedFields = [ 'id', 'fullName', 'link', 'jerseyNumber', 'position' ]
+      assert.equal(teamRoster.length, 37)
+      teamRoster.forEach(player => assert.containsAllKeys(player, expectedFields))
     })
   })
 
@@ -200,13 +332,41 @@ describe('nhl loader', function() {
     it('teamsLoader loads teams', async function() {
       const teams = await teamsLoader.load('20192020')
 
-      assert.deepEqual(teams, testData[teamsUrl].teams)
+      const expectedFields = [
+        'id',              'name',
+        'link',            'venue',
+        'abbreviation',    'teamName',
+        'locationName',    'firstYearOfPlay',
+        'division',        'conference',
+        'franchise',       'shortName',
+        'officialSiteUrl', 'franchiseId',
+        'active'
+      ]
+      assert.equal(teams.length, 31)
+      teams.forEach(team => assert.containsAllKeys(team, expectedFields))
     })
 
     it('teamsStandingsLoader loads teams standings', async function() {
       const teamsStandings = await teamsStandingsLoader.load('20182019')
 
-      assert.deepEqual(teamsStandings, testData[teamsStandingsUrl].records[0])
+      const expectedFields = [ 'standingsType', 'league', 'conference', 'season', 'teamRecords' ]
+      const expectedStats = [
+        'team',               'leagueRecord',
+        'goalsAgainst',       'goalsScored',
+        'points',             'divisionRank',
+        'divisionL10Rank',    'divisionRoadRank',
+        'divisionHomeRank',   'conferenceRank',
+        'conferenceL10Rank',  'conferenceRoadRank',
+        'conferenceHomeRank', 'leagueRank',
+        'leagueL10Rank',      'leagueRoadRank',
+        'leagueHomeRank',     'wildCardRank',
+        'row',                'gamesPlayed',
+        'streak',             'records',            
+        'lastUpdated'
+      ]
+      assert.containsAllKeys(teamsStandings, expectedFields)
+      assert.equal(teamsStandings.teamRecords.length, 10)
+      teamsStandings.teamRecords.forEach(standing => assert.containsAllKeys(standing, expectedStats))
     })
   })
 
@@ -214,19 +374,32 @@ describe('nhl loader', function() {
     it('gameBoxscoreLoader loads boxscore', async function() {
       const gameBoxscore = await gameBoxscoreLoader.load('2019020067')
 
-      assert.deepEqual(gameBoxscore, testData[gameBoxscoreUrl].teams)
+      const expectedTeamFields = [
+        'team',       'teamStats',
+        'players',    'goalies',
+        'skaters',    'onIce',
+        'onIcePlus',  'scratches',
+        'penaltyBox', 'coaches'
+      ]
+
+      assert.containsAllKeys(gameBoxscore.away, expectedTeamFields)
+      assert.containsAllKeys(gameBoxscore.home, expectedTeamFields)
     })
 
     it('gameLivefeedLoader loads livefeed', async function() {
       const gameLivefeed = await gameLivefeedLoader.load('2019020067')
 
-      assert.deepEqual(gameLivefeed, testData[gameLivefeedUrl])
+      const expectedFields = [ 'copyright', 'gamePk', 'link', 'metaData', 'gameData', 'liveData' ]
+      assert.containsAllKeys(gameLivefeed, expectedFields)
     })
 
     it('gameHighlights loads highlights', async function() {
       const gameHighlights = await gameHighlightsLoader.load('2019020067')
 
-      assert.deepEqual(gameHighlights, expectedData.gameHighlights)
+      assert.containsAllKeys(gameHighlights, ['recap', 'goalsHighlights'])
+      assert.equal(gameHighlights.recap, 'http://md-akc.med.nhl.com/mp4/nhl/2019/10/13/508d4c0e-b44f-480e-842f-a5b157a9c75c/1570935302686/asset_1800k.mp4')
+      assert.equal(gameHighlights.goalsHighlights.length, 5)
+      gameHighlights.goalsHighlights.forEach(goal => assert.containsAllKeys(goal, [ 'statsEventId', 'periodTime', 'period', 'url' ]))
     })
   })
 
@@ -234,7 +407,15 @@ describe('nhl loader', function() {
     it('gamesSchedule', async function() {
       const gamesSchedule = await gamesScheduleLoader.load('2019-10-13')
 
-      assert.deepEqual(gamesSchedule, testData[gamesScheduleUrl].dates[0].games)
+      const expectedFields = [
+        'gamePk',   'link',
+        'gameType', 'season',
+        'gameDate', 'status',
+        'teams',    'venue',
+        'content'
+      ]
+      assert.equal(gamesSchedule.length, 3)
+      gamesSchedule.forEach(game => assert.containsAllKeys(game, expectedFields))
     })
   })
 
@@ -242,13 +423,38 @@ describe('nhl loader', function() {
     it('returns teams streaks', async function () {
       const hotTeams = await streakLoader.load('teams')
       
-      assert.deepEqual(hotTeams, expectedData.hotTeams)
+      const expectedHotTeam = {
+        id: 1,
+        name: 'New Jersey Devils',
+        teamName: 'Devils',
+        abbreviation: 'NJD',
+        streak: { wins: 0, losses: 3, ot: 2, games: 5, points: 2 }
+      }
+      assert.equal(hotTeams.length, 31)
+      assert.deepEqual(hotTeams[0], expectedHotTeam)
     })    
 
     it('returns players streaks', async function () {
       const hotPlayers = await streakLoader.load('players')
       
-      assert.deepEqual(hotPlayers, expectedData.hotPlayers)
+      const expectedHotPlayer = {
+        streak: {
+          points: 9,
+          goals: 3,
+          assists: 6,
+          shots: 13,
+          hits: 5,
+          pim: 2,
+          powerPlayPoints: 5,
+          plusMinus: 4,
+          games: 5
+        },
+        playerName: 'Connor McDavid',
+        playerTeamsPlayedFor: 'EDM',
+        playerPositionCode: 'C'
+      }
+      assert.equal(hotPlayers.length, 653)
+      assert.deepEqual(hotPlayers[0], expectedHotPlayer)
     })
   })
 })

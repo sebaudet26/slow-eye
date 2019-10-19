@@ -282,7 +282,7 @@ const batchTeamInfoFetcher = async (teamIds) => {
 		}).fetch()
 	}))
 
-	return map(propOr([], 'teams'), data)
+	return map(pathOr({}, ['teams', 0]), data)
 }
 
 const batchTeamStatsFetcher = async (ids) => {
@@ -514,7 +514,7 @@ const fetchByBatchOf = (batchSize) => async (cumulative, players) => {
   if (players.length <= batchSize) {
     return newCumulative;
   }
-  const final = await fetchByTen(newCumulative, takeLast(players.length - batchSize, players));
+  const final = await fetchByBatchOf(10)(newCumulative, takeLast(players.length - batchSize, players));
   return final;
 };
 

@@ -25,7 +25,7 @@ const BASE_URLS = {
   }, 
   MLB: {
     BASIC: 'https://statsapi.mlb.com/api/v1',
-    LOOKUP: 'https://lookup-service-prod.mlb.com',
+    LOOKUP: 'https://lookup-service-prod.mlb.com/json',
   }
 }
 
