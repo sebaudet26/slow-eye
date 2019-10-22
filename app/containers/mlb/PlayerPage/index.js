@@ -4,11 +4,11 @@ import { Helmet } from 'react-helmet';
 import {
   isNil, isEmpty,
 } from 'ramda';
-import { fetchPlayer } from '../../../../server/libs/mlbApi.js';
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import CareerStatsTable from '../../../components/Table/mlb/CareerStatsTable';
 
+const fetchPlayer = () => {}
 const urlParams = new URLSearchParams(window.location.search);
 
 export default class MLBPlayerPage extends React.Component {

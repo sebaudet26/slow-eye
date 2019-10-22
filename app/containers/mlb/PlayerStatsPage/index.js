@@ -10,8 +10,11 @@ import {
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import { saveToLS, getFromLS } from '../../../utils/localStorage';
-import { fetchBattingLeaders, fetchPitchingLeaders, fetchTeams } from '../../../../server/libs/mlbApi.js';
 import PlayersTable from '../../../components/Table/mlb/PlayersTable';
+
+const fetchBattingLeaders = () => {}
+const fetchPitchingLeaders = () => {}
+const fetchTeams = () => {}
 
 const urlParams = new URLSearchParams(window.location.search);
 

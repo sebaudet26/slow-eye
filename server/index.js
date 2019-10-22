@@ -7,8 +7,8 @@ const logger = require('./util/logger');
 const port = require('./util/port');
 const setup = require('./middlewares/frontendMiddleware');
 const graphql = require('./middlewares/graphql');
-require('./libs/redisApi');
-require('./libs/nhlApi');
+require('./libs/redis').connect()
+require('./libs/api/api')
 
 require('./libs/automatedJobs');
 
