@@ -22,7 +22,7 @@ const BASE_URLS = {
     BASIC: 'https://api.nhle.com/stats/rest',
     RECORDS_API: 'https://records.nhl.com/site/api',
     STATS_API: 'https://statsapi.web.nhl.com/api/v1',
-  }, 
+  },
   MLB: {
     BASIC: 'https://statsapi.mlb.com/api/v1',
     LOOKUP: 'https://lookup-service-prod.mlb.com/json',
@@ -71,9 +71,10 @@ class ApiRequest {
   }
 
   async fetch() {
+    console.log(`fetching ${this.url}`)
     await this.tryCache()
     if (this.data) return this.data
-    console.log(`fetching ${this.url}`)
+    console.log(`source ${this.url}`)
     const response = await nodeFetch(this.url)
     const data = await response.json()
     this.data = data

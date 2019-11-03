@@ -7,8 +7,8 @@ const {
   GraphQLFloat,
 } = require('graphql')
 
-const { 
-	equals, 
+const {
+	equals,
 	lte,
 	map,
 	path,
@@ -19,10 +19,13 @@ const {
 	take,
 } = require('ramda')
 
-const { 
+const {
 	playerBioLoader,
+  playerDraftLoader,
 	playerCareerSeasonStatsLoader,
+  playerCareerPlayoffsStatsLoader,
 	playerSeasonGameLogsLoader,
+  playerPlayoffsGameLogsLoader,
 } = require('../loaders/nhl')
 
 const {
@@ -31,72 +34,78 @@ const {
   hotColdPoints,
   hotColdGames,
   hotColdPlusMinus,
-} = require('../streaks');
+} = require('../streaks')
 
+const {
+  Time,
+  PlayerHeight,
+  PlayerWeight,
+
+
+  GoalieStats,
+  UsageStats,
+  FaceoffStats,
+  OffensiveStats,
+  DefensiveStats,
+  GameLogAdditionalInfo,
+} = require('./deconstructors')
+
+const POUNDS_TO_KILOGRAMS = 0.453592
 const forwardsAbbreviations = ['C', 'LW', 'RW']
 
+const timeStringToTimeType = (timeString = '') => {
+  return {
+    minutes: Number(timeString.split(':')[0]) || 0,
+    seconds: Number(timeString.split(':')[1]) || 0,
+  }
+}
 const resolveProp = propName => obj => Promise.resolve(obj[propName])
 const resolvePath = objPath => obj => Promise.resolve(path(objPath, obj))
 
 const itself = (p = {}) => p
 
-const PlayerHeight = new GraphQLObjectType({
-  name: 'PlayerHeight',
-  fields: {
-  	feet: { type: GraphQLInt, resolve: height => height.split('\' ')[0] },
-  	inches: { type: GraphQLInt, resolve: height => height.split('\' ')[0].replace('\"', '') },
-  },
-})
-const PlayerWeight = new GraphQLObjectType({
-  name: 'PlayerWeight',
-  fields: {
-  	pounds: { type: GraphQLInt, resolve: weight =>  weight },
-  	kilograms: { type: GraphQLInt, resolve: weight => Math.round(weight * 0.453592) },
-  },
-})
-
 const PlayerBio = new GraphQLObjectType({
   name: 'PlayerBio',
   fields: {
-    firstName: { 
-    	type: GraphQLString, 
+    firstName: {
+    	type: GraphQLString,
     	resolve: p => playerBioLoader.load(p.id).then(resolveProp('firstName'))
     },
-    lastName: { 
-    	type: GraphQLString, 
+    lastName: {
+    	type: GraphQLString,
     	resolve: p => playerBioLoader.load(p.id).then(resolveProp('lastName'))
     },
-    birthDate: { 
-    	type: GraphQLString, 
+    birthDate: {
+    	type: GraphQLString,
     	resolve: p => playerBioLoader.load(p.id).then(resolveProp('birthDate'))
     },
-    birthCity: { 
-    	type: GraphQLString, 
+    birthCity: {
+    	type: GraphQLString,
     	resolve: p => playerBioLoader.load(p.id).then(resolveProp('birthCity'))
     },
-    birthState: { 
-    	type: GraphQLString, 
+    birthState: {
+    	type: GraphQLString,
     	resolve: p => playerBioLoader.load(p.id).then(resolveProp('birthStateProvince'))
     },
-    birthCountry: { 
-    	type: GraphQLString, 
+    birthCountry: {
+    	type: GraphQLString,
     	resolve: p => playerBioLoader.load(p.id).then(resolveProp('birthCountry'))
     },
-    shootsCatches: { 
-    	type: GraphQLString, 
+    shootsCatches: {
+    	type: GraphQLString,
     	resolve: p => playerBioLoader.load(p.id).then(resolveProp('shootsCatches'))
     },
     // integers
-    height: { 
-    	type: PlayerHeight, 
+    height: {
+    	type: PlayerHeight,
     	resolve: p => playerBioLoader.load(p.id).then(resolveProp('height'))
     },
-    weight: { 
-    	type: PlayerWeight, 
+    weight: {
+    	type: PlayerWeight,
     	resolve: p => playerBioLoader.load(p.id).then(resolveProp('weight'))
     },
-    age: { 
-    	type: GraphQLInt, 
+    age: {
+    	type: GraphQLInt,
     	resolve: p => playerBioLoader.load(p.id).then(resolveProp('currentAge'))
     },
     jerseyNumber: {
@@ -110,12 +119,12 @@ const PlayerStatus = new GraphQLObjectType({
 	name: 'PlayerStatus',
 	fields: {
 		// booleans
-    isActive: { 
-    	type: GraphQLBoolean, 
+    isActive: {
+    	type: GraphQLBoolean,
     	resolve: p => playerBioLoader.load(p.id).then(resolveProp('active'))
     },
-    isRookie: { 
-    	type: GraphQLBoolean, 
+    isRookie: {
+    	type: GraphQLBoolean,
     	resolve: p => playerBioLoader.load(p.id).then(resolveProp('rookie'))
     },
     isVeteran: {
@@ -127,12 +136,12 @@ const PlayerStatus = new GraphQLObjectType({
 	        lte(500),
 	      ))
     },
-    isCaptain: { 
-    	type: GraphQLBoolean, 
+    isCaptain: {
+    	type: GraphQLBoolean,
     	resolve: p => playerBioLoader.load(p.id).then(resolveProp('captain'))
     },
-    isAlternate: { 
-    	type: GraphQLBoolean, 
+    isAlternate: {
+    	type: GraphQLBoolean,
     	resolve: p => playerBioLoader.load(p.id).then(resolveProp('alternateCaptain'))
     },
     isInjured: {
@@ -178,7 +187,7 @@ const PlayerPosition = new GraphQLObjectType({
       	.then(pipe(
 	        prop('primaryPosition'),
 	        prop('abbreviation'),
-	        forwardsAbbreviations.includes,
+	        abb => forwardsAbbreviations.includes(abb),
 	      ))
     },
   }
@@ -205,7 +214,8 @@ const PlayerStreak = new GraphQLObjectType({
     },
     hotColdPoints: {
       type: GraphQLInt,
-      resolve: p => playerSeasonGameLogsLoader.load(p.id).then(hotColdPoints)
+      resolve: p => playerSeasonGameLogsLoader.load(p.id)
+        .then(hotColdPoints)
     },
     hotColdGames: {
       type: GraphQLInt,
@@ -213,47 +223,140 @@ const PlayerStreak = new GraphQLObjectType({
     },
     hotColdPlusMinus: {
       type: GraphQLInt,
-      resolve: p => playerSeasonGameLogsLoader.load(p.id).then(hotColdPlusMinus)
+      resolve: p => playerSeasonGameLogsLoader.load(p.id)
+        .then(hotColdPlusMinus)
     },
   }
 })
 
-//     // Lazy load team info
-//     team: {
-//       type: TeamInfo,
-//       resolve: p => p.team || fetchInfoForTeamId(p.teamId),
-//     },
-
-
 const PlayerDraft = new GraphQLObjectType({
 	name: 'PlayerDraft',
 	fields: {
-//     year: { type: GraphQLInt, resolve: prop('draftYear') },
-//     round: { type: GraphQLInt, resolve: prop('roundNumber') },
-//     pickOverall: { type: GraphQLInt, resolve: prop('overallPickNumber') },
-//     pickInRound: { type: GraphQLInt, resolve: prop('pickInRound') },
-//     team: { type: TeamInfo, resolve: p => fetchInfoForTeamId(p.draftedByTeamId) },
+    amateurTeam: {
+      type: GraphQLString,
+      resolve: p => playerDraftLoader.load(p.id)
+        .then(resolveProp('amateurClubName'))
+    },
+    amateurLeague: {
+      type: GraphQLString,
+      resolve: p => playerDraftLoader.load(p.id)
+        .then(resolveProp('amateurLeague'))
+    },
+    draftYear: {
+      type: GraphQLInt,
+      resolve: p => playerDraftLoader.load(p.id)
+        .then(resolveProp('draftYear')),
+    },
+    pickHistory: {
+      type: new GraphQLList(GraphQLString),
+      resolve: p => playerDraftLoader.load(p.id)
+        .then(resolveProp('teamPickHistory'))
+        .then(history => history.split(',')),
+    },
+    round: {
+      type: GraphQLInt,
+      resolve: p => playerDraftLoader.load(p.id)
+        .then(resolveProp('roundNumber')),
+    },
+    pickInRound: {
+      type: GraphQLInt,
+      resolve: p => playerDraftLoader.load(p.id)
+        .then(resolveProp('pickInRound')),
+    },
+    overall: {
+      type: GraphQLInt,
+      resolve: p => playerDraftLoader.load(p.id)
+        .then(resolveProp('overallPickNumber')),
+    },
+    // draftedByTeam: {
+    //   type: TeamInfo,
+    //   resolve: p => playerDraftLoader.load(p.id).then(resolveProp('draftedByTeamId')),
+    // },
+	},
+});
+
+
+const PlayerSeason = new GraphQLObjectType({
+	name: 'PlayerSeason',
+	fields: {
+    season: {
+      type: GraphQLString,
+      resolve: resolvePath(['season']),
+    },
+    teamId: {
+      type: GraphQLInt,
+      resolve: resolvePath(['team', 'id']),
+    },
+    teamName: {
+      type: GraphQLString,
+      resolve: resolvePath(['team', 'name']),
+    },
+    leagueName: {
+      type: GraphQLString,
+      resolve: resolvePath(['league', 'name']),
+    },
+    games: {
+      type: GraphQLInt,
+      resolve: resolvePath(['stat', 'games']),
+    },
+
+    offensive: {
+      type: OffensiveStats,
+      resolve: itself,
+    },
+
+    defensive: {
+      type: DefensiveStats,
+      resolve: itself,
+    },
+
+    faceoffStats: {
+      type: FaceoffStats,
+      resolve: itself,
+    },
+
+    usageStats: {
+      type: UsageStats,
+      resolve: itself,
+    },
+
+    goalieStats: {
+      type: GoalieStats,
+      resolve: itself,
+    },
+
+    gameInfo: {
+      type: GameLogAdditionalInfo,
+      resolve: itself,
+    },
 	},
 });
 
 const PlayerCareer = new GraphQLObjectType({
-	name: 'PlayerCareer',
-	fields: {
-
-	},
-});
+  name: 'PlayerCareer',
+  fields: {
+    seasons: {
+      type: new GraphQLList(PlayerSeason),
+      resolve: p => playerCareerSeasonStatsLoader.load(p.id)
+    },
+    playoffs: {
+      type: new GraphQLList(PlayerSeason),
+      resolve: p => playerCareerPlayoffsStatsLoader.load(p.id)
+    }
+  },
+})
 
 const PlayerGameLogs = new GraphQLObjectType({
 	name: 'PlayerGameLogs',
 	fields: {
-
-	},
-});
-
-const PlayerStats = new GraphQLObjectType({
-	name: 'PlayerStats',
-	fields: {
-
+    season: {
+      type: new GraphQLList(PlayerSeason),
+      resolve: p => playerSeasonGameLogsLoader.load(p.id),
+    },
+    playoff: {
+      type: new GraphQLList(PlayerSeason),
+      resolve: p => playerPlayoffsGameLogsLoader.load(p.id),
+    },
 	},
 });
 
@@ -261,7 +364,7 @@ const PlayerStats = new GraphQLObjectType({
 const TeamInfo = new GraphQLObjectType({
 	name: 'TeamInfo',
 	fields: () => ({
-  	id: { type: GraphQLInt, resolve: (p) => p },
+  	id: { type: GraphQLInt, resolve: itself },
 	}),
 });
 
@@ -273,10 +376,428 @@ module.exports = new GraphQLObjectType({
     status: { type: PlayerStatus, resolve: itself },
     position: { type: PlayerPosition, resolve: itself },
     streak: { type: PlayerStreak, resolve: itself },
-    team: { 
-    	type: TeamInfo, 
-    	resolve: p => playerBioLoader.load(p.id)
-    		.then(resolvePath(['currentTeam', 'id']))
-    }
+    draft: { type: PlayerDraft, resolve: itself },
+    career: { type: PlayerCareer, resolve: itself },
+    gameLogs: { type: PlayerGameLogs, resolve: itself },
+    // team: {
+    // 	type: TeamInfo,
+    // 	resolve: p => playerBioLoader.load(p.id)
+    // 		.then(resolvePath(['currentTeam', 'id']))
+    // },
   },
 })
+
+// TODO: Implement $first and $last filters on game logs
+
+
+/* test query
+{
+  nhl{
+    #  8471679   8477956
+    player(id: 8477956) {
+      id
+      bio {
+        age
+        lastName
+        firstName
+        birthDate
+        birthCity
+        birthState
+        birthCountry
+        shootsCatches
+        jerseyNumber
+        height {
+          feet
+          inches
+        }
+        weight{
+          kilograms
+          pounds
+        }
+      }
+      status {
+        isActive
+        isRookie
+        isVeteran
+        isCaptain
+        isAlternate
+        isInjured
+      }
+      position {
+        position
+        isGoalie
+        isDefenseman
+        isForward
+      }
+      streak {
+        isHot
+        isCold
+        hotColdGames
+        hotColdPoints
+        hotColdPlusMinus
+      }
+      draft {
+        amateurTeam
+        amateurLeague
+        draftYear
+        round
+        pickInRound
+        overall
+        pickHistory
+      }
+
+      career {
+
+        seasons {
+          season
+          leagueName
+          teamName
+          teamId
+          games
+
+          offensive {
+            assists
+            goals
+            shots
+            points
+            powerPlayGoals
+            powerPlayPoints
+            gameWinningGoals
+            overTimeGoals
+            shortHandedGoals
+            shortHandedPoints
+            shotPct
+          }
+
+          defensive {
+            penaltyMinutes
+            hits
+            plusMinus
+            pim
+            takeaways
+            giveaways
+            blocked
+          }
+
+          goalieStats {
+            ot
+            shutouts
+            ties
+            wins
+            losses
+            saves
+            powerPlaySaves
+            shortHandedSaves
+            evenSaves
+            shortHandedShots
+            evenShots
+            powerPlayShots
+            savePercentage
+            goalAgainstAverage
+            gamesStarted
+            shotsAgainst
+            goalsAgainst
+            powerPlaySavePercentage
+            shortHandedSavePercentage
+            evenStrengthSavePercentage
+          }
+
+
+          faceoffStats {
+            faceOffPct
+            faceOffWins
+            faceOffTaken
+          }
+
+          usageStats {
+            shifts
+            timeOnIce {
+              minutes
+              seconds
+            }
+            powerPlayTimeOnIce {
+              minutes
+              seconds
+            }
+            evenTimeOnIce {
+              minutes
+              seconds
+            }
+            shortHandedTimeOnIce {
+              minutes
+              seconds
+            }
+          }
+        }
+
+        playoffs {
+          season
+          leagueName
+          teamName
+          teamId
+          games
+
+          offensive {
+            assists
+            goals
+            shots
+            points
+            powerPlayGoals
+            powerPlayPoints
+            gameWinningGoals
+            overTimeGoals
+            shortHandedGoals
+            shortHandedPoints
+            shotPct
+          }
+
+          defensive {
+            penaltyMinutes
+            hits
+            plusMinus
+            pim
+            takeaways
+            giveaways
+            blocked
+          }
+
+          goalieStats {
+            ot
+            shutouts
+            ties
+            wins
+            losses
+            saves
+            powerPlaySaves
+            shortHandedSaves
+            evenSaves
+            shortHandedShots
+            evenShots
+            powerPlayShots
+            savePercentage
+            goalAgainstAverage
+            gamesStarted
+            shotsAgainst
+            goalsAgainst
+            powerPlaySavePercentage
+            shortHandedSavePercentage
+            evenStrengthSavePercentage
+          }
+
+
+          faceoffStats {
+            faceOffPct
+            faceOffWins
+            faceOffTaken
+          }
+
+          usageStats {
+            shifts
+            timeOnIce {
+              minutes
+              seconds
+            }
+            powerPlayTimeOnIce {
+              minutes
+              seconds
+            }
+            evenTimeOnIce {
+              minutes
+              seconds
+            }
+            shortHandedTimeOnIce {
+              minutes
+              seconds
+            }
+          }
+        }
+      }
+
+      gameLogs {
+
+        season {
+          season
+          leagueName
+          teamName
+          teamId
+          games
+
+          gameInfo {
+            date
+            isHome
+            isWin
+            isOT
+            opponentTeamId
+            gameId
+          }
+
+          offensive {
+            assists
+            goals
+            shots
+            points
+            powerPlayGoals
+            powerPlayPoints
+            gameWinningGoals
+            overTimeGoals
+            shortHandedGoals
+            shortHandedPoints
+            shotPct
+          }
+
+          defensive {
+            penaltyMinutes
+            hits
+            plusMinus
+            pim
+            takeaways
+            giveaways
+            blocked
+          }
+
+          goalieStats {
+            ot
+            shutouts
+            ties
+            wins
+            losses
+            saves
+            powerPlaySaves
+            shortHandedSaves
+            evenSaves
+            shortHandedShots
+            evenShots
+            powerPlayShots
+            savePercentage
+            goalAgainstAverage
+            gamesStarted
+            shotsAgainst
+            goalsAgainst
+            powerPlaySavePercentage
+            shortHandedSavePercentage
+            evenStrengthSavePercentage
+          }
+
+
+          faceoffStats {
+            faceOffPct
+            faceOffWins
+            faceOffTaken
+          }
+
+          usageStats {
+            shifts
+            timeOnIce {
+              minutes
+              seconds
+            }
+            powerPlayTimeOnIce {
+              minutes
+              seconds
+            }
+            evenTimeOnIce {
+              minutes
+              seconds
+            }
+            shortHandedTimeOnIce {
+              minutes
+              seconds
+            }
+          }
+        }
+
+        playoff {
+          season
+          leagueName
+          teamName
+          teamId
+          games
+
+          gameInfo {
+            date
+            isHome
+            isWin
+            isOT
+            opponentTeamId
+            gameId
+          }
+
+          offensive {
+            assists
+            goals
+            shots
+            points
+            powerPlayGoals
+            powerPlayPoints
+            gameWinningGoals
+            overTimeGoals
+            shortHandedGoals
+            shortHandedPoints
+            shotPct
+          }
+
+          defensive {
+            penaltyMinutes
+            hits
+            plusMinus
+            pim
+            takeaways
+            giveaways
+            blocked
+          }
+
+          goalieStats {
+            ot
+            shutouts
+            ties
+            wins
+            losses
+            saves
+            powerPlaySaves
+            shortHandedSaves
+            evenSaves
+            shortHandedShots
+            evenShots
+            powerPlayShots
+            savePercentage
+            goalAgainstAverage
+            gamesStarted
+            shotsAgainst
+            goalsAgainst
+            powerPlaySavePercentage
+            shortHandedSavePercentage
+            evenStrengthSavePercentage
+          }
+
+          faceoffStats {
+            faceOffPct
+            faceOffWins
+            faceOffTaken
+          }
+
+          usageStats {
+            shifts
+            timeOnIce {
+              minutes
+              seconds
+            }
+            powerPlayTimeOnIce {
+              minutes
+              seconds
+            }
+            evenTimeOnIce {
+              minutes
+              seconds
+            }
+            shortHandedTimeOnIce {
+              minutes
+              seconds
+            }
+          }
+        }
+      }
+
+    }
+  }
+}
+*/

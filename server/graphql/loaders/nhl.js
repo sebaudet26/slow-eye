@@ -64,13 +64,13 @@ const isInternational = pipe(
 
 const batchPlayerBioFetcher = async (playerIds) => {
   const data = await Promise.all(playerIds.map((id) => {
-  	return new ApiRequest({ 
-  		league: 'NHL', 
-  		apiType: 'STATS_API', 
-  		resource: `/people/${id}` 
+  	return new ApiRequest({
+  		league: 'NHL',
+  		apiType: 'STATS_API',
+  		resource: `/people/${id}`
   	}).fetch()
   }))
-  
+
   return map(path(['people', 0]))(data)
 }
 
@@ -97,17 +97,17 @@ const batchCareerStatsFetcher = async (playerIds) => {
 
 	return data.map((player) => {
 		const professionalSeasons = pipe(
-			path(['stats', 0, 'splits']), 
+			path(['stats', 0, 'splits']),
 			filter(isSeasonProfessional)
 		)(player);
 	  const internationalCompetitions = pipe(
-	  	path(['stats', 0, 'splits']), 
+	  	path(['stats', 0, 'splits']),
 	  	filter(isInternational)
 	  )(player);
 	  // if pro, return nhl seasons and international competitions only
 	  if (professionalSeasons.length) {
 	    return [
-	    	...internationalCompetitions, 
+	    	// ...internationalCompetitions,
 	    	...professionalSeasons
 	    ];
 	  }
@@ -126,8 +126,8 @@ const batchCareerPlayoffsStatsFetcher = async (playerIds) => {
 	}))
 
   return map(pipe(
-  	pathOr([], ['stats', 0, 'splits']), 
-  	filter(isSeasonProfessional), 
+  	pathOr([], ['stats', 0, 'splits']),
+  	filter(isSeasonProfessional),
   ))(data)
 }
 
@@ -139,7 +139,7 @@ const batchPlayerSeasonGameLogsFetcher = async (playerIds) => {
 			resource: `/people/${id}/stats?stats=gameLog`,
 		}).fetch()
 	}))
-	
+
 	return map(pathOr([], ['stats', 0, 'splits']))(data)
 }
 
@@ -209,7 +209,7 @@ const reportFetcher = async (season, type) => {
 	  		'&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22}]' +
 	  		`&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`,
 
-	  		'/skaters?isAggregate=false&reportType=basic&reportName=realtime' + 
+	  		'/skaters?isAggregate=false&reportType=basic&reportName=realtime' +
 	  		'&sort=[{%22property%22:%22playerId%22}]' +
 	  		`&cayenneExp=gameTypeId=2%20and%20gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`,
 
@@ -312,7 +312,7 @@ const batchTeamRosterFetcher = async (ids) => {
 			resource: `/teams/${teamId}/roster?season=${season}`,
 		}).fetch()
 	}))
-	
+
 	const rosters = map(propOr([], 'roster'), data)
 
 	return rosters.map((roster) => {
@@ -349,7 +349,7 @@ const batchTeamStandingsFetcher = async (seasons) => {
 		}).fetch()
 	}))
 
-	return map(pathOr([], ['records', 0]), data)	
+	return map(pathOr([], ['records', 0]), data)
 }
 
 
@@ -378,7 +378,7 @@ const batchGameLivefeedFetcher = async (gameIds) => {
 		}).fetch()
 	}))
 
-	return data	
+	return data
 }
 
 const batchGameHighlightsFetcher = async (gameIds) => {
@@ -441,10 +441,10 @@ const batchGamesScheduleFetcher = async (dates) => {
 
 const defaultTeamsLimit = 10;
 const defaultPlayersLimit = 5;
-	
+
 const batchTeamScheduleFetcher = async (teamIds) => {
-	const endDate = process.env.NODE_ENV == 'test' 
-		? '2019-10-13' 
+	const endDate = process.env.NODE_ENV == 'test'
+		? '2019-10-13'
 		: `${moment.tz('America/New_York').subtract(1, 'day').endOf('day').format('YYYY-MM-DD')}`
 
 	const data = await Promise.all(teamIds.map((id) => {
@@ -454,10 +454,10 @@ const batchTeamScheduleFetcher = async (teamIds) => {
 			resource: `/schedule?teamId=${id}&startDate=${CURRENT_YEAR}-09-01&endDate=${endDate}`,
 		}).fetch()
 	}))
-  
+
   return data.map((team) => {
   	return pipe(
-  		propOr([], 'dates'), 
+  		propOr([], 'dates'),
   		map(date => ({ date: date.date, game: date.games[0] }))
   	)(team)
   })
@@ -481,7 +481,7 @@ const calculateTeamsStreaks = async () => {
 	.fetch()
 	.then((data) => Promise.resolve(propOr([], 'teams')(data)))
 	.then((teams) => map(pick(['id', 'name', 'teamName', 'abbreviation']))(teams))
-	
+
   const teamsWithSchedules = await Promise.all(teams.map(async team => ({
     ...team,
     schedule: await teamScheduleLoader.load(team.id),
@@ -551,7 +551,7 @@ const calculatePlayerStreaks = async () => {
   if (cache.connected) {
 		cache.set('player_streaks', JSON.stringify(streaks))
 	}
-  
+
   return streaks
 }
 
