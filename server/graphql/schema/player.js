@@ -40,14 +40,7 @@ const {
   Time,
   PlayerHeight,
   PlayerWeight,
-
-
-  GoalieStats,
-  UsageStats,
-  FaceoffStats,
-  OffensiveStats,
-  DefensiveStats,
-  GameLogAdditionalInfo,
+  PlayerStatistic,
 } = require('./deconstructors')
 
 const POUNDS_TO_KILOGRAMS = 0.453592
@@ -69,48 +62,59 @@ const PlayerBio = new GraphQLObjectType({
   fields: {
     firstName: {
     	type: GraphQLString,
-    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('firstName'))
+    	resolve: p => playerBioLoader.load(p.id)
+        .then(resolveProp('firstName'))
     },
     lastName: {
     	type: GraphQLString,
-    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('lastName'))
+    	resolve: p => playerBioLoader.load(p.id)
+        .then(resolveProp('lastName'))
     },
     birthDate: {
     	type: GraphQLString,
-    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('birthDate'))
+    	resolve: p => playerBioLoader.load(p.id)
+        .then(resolveProp('birthDate'))
     },
     birthCity: {
     	type: GraphQLString,
-    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('birthCity'))
+    	resolve: p => playerBioLoader.load(p.id)
+        .then(resolveProp('birthCity'))
     },
     birthState: {
     	type: GraphQLString,
-    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('birthStateProvince'))
+    	resolve: p => playerBioLoader.load(p.id)
+        .then(resolveProp('birthStateProvince'))
     },
     birthCountry: {
     	type: GraphQLString,
-    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('birthCountry'))
+    	resolve: p => playerBioLoader.load(p.id)
+        .then(resolveProp('birthCountry'))
     },
     shootsCatches: {
     	type: GraphQLString,
-    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('shootsCatches'))
+    	resolve: p => playerBioLoader.load(p.id)
+        .then(resolveProp('shootsCatches'))
     },
     // integers
     height: {
     	type: PlayerHeight,
-    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('height'))
+    	resolve: p => playerBioLoader.load(p.id)
+        .then(resolveProp('height'))
     },
     weight: {
     	type: PlayerWeight,
-    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('weight'))
+    	resolve: p => playerBioLoader.load(p.id)
+        .then(resolveProp('weight'))
     },
     age: {
     	type: GraphQLInt,
-    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('currentAge'))
+    	resolve: p => playerBioLoader.load(p.id)
+        .then(resolveProp('currentAge'))
     },
     jerseyNumber: {
     	type: GraphQLInt,
-    	resolve: p => playerBioLoader.load(p.id).then(p => Number(p['primaryNumber']))
+    	resolve: p => playerBioLoader.load(p.id)
+        .then(p => Number(p['primaryNumber']))
     },
 	}
 })
@@ -118,14 +122,15 @@ const PlayerBio = new GraphQLObjectType({
 const PlayerStatus = new GraphQLObjectType({
 	name: 'PlayerStatus',
 	fields: {
-		// booleans
     isActive: {
     	type: GraphQLBoolean,
-    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('active'))
+    	resolve: p => playerBioLoader.load(p.id)
+        .then(resolveProp('active'))
     },
     isRookie: {
     	type: GraphQLBoolean,
-    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('rookie'))
+    	resolve: p => playerBioLoader.load(p.id)
+        .then(resolveProp('rookie'))
     },
     isVeteran: {
     	type: GraphQLBoolean,
@@ -138,11 +143,13 @@ const PlayerStatus = new GraphQLObjectType({
     },
     isCaptain: {
     	type: GraphQLBoolean,
-    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('captain'))
+    	resolve: p => playerBioLoader.load(p.id)
+        .then(resolveProp('captain'))
     },
     isAlternate: {
     	type: GraphQLBoolean,
-    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('alternateCaptain'))
+    	resolve: p => playerBioLoader.load(p.id)
+        .then(resolveProp('alternateCaptain'))
     },
     isInjured: {
       type: GraphQLBoolean,
@@ -275,72 +282,15 @@ const PlayerDraft = new GraphQLObjectType({
 	},
 });
 
-
-const PlayerSeason = new GraphQLObjectType({
-	name: 'PlayerSeason',
-	fields: {
-    season: {
-      type: GraphQLString,
-      resolve: resolvePath(['season']),
-    },
-    teamId: {
-      type: GraphQLInt,
-      resolve: resolvePath(['team', 'id']),
-    },
-    teamName: {
-      type: GraphQLString,
-      resolve: resolvePath(['team', 'name']),
-    },
-    leagueName: {
-      type: GraphQLString,
-      resolve: resolvePath(['league', 'name']),
-    },
-    games: {
-      type: GraphQLInt,
-      resolve: resolvePath(['stat', 'games']),
-    },
-
-    offensive: {
-      type: OffensiveStats,
-      resolve: itself,
-    },
-
-    defensive: {
-      type: DefensiveStats,
-      resolve: itself,
-    },
-
-    faceoffStats: {
-      type: FaceoffStats,
-      resolve: itself,
-    },
-
-    usageStats: {
-      type: UsageStats,
-      resolve: itself,
-    },
-
-    goalieStats: {
-      type: GoalieStats,
-      resolve: itself,
-    },
-
-    gameInfo: {
-      type: GameLogAdditionalInfo,
-      resolve: itself,
-    },
-	},
-});
-
 const PlayerCareer = new GraphQLObjectType({
   name: 'PlayerCareer',
   fields: {
     seasons: {
-      type: new GraphQLList(PlayerSeason),
+      type: new GraphQLList(PlayerStatistic),
       resolve: p => playerCareerSeasonStatsLoader.load(p.id)
     },
     playoffs: {
-      type: new GraphQLList(PlayerSeason),
+      type: new GraphQLList(PlayerStatistic),
       resolve: p => playerCareerPlayoffsStatsLoader.load(p.id)
     }
   },
@@ -350,11 +300,11 @@ const PlayerGameLogs = new GraphQLObjectType({
 	name: 'PlayerGameLogs',
 	fields: {
     season: {
-      type: new GraphQLList(PlayerSeason),
+      type: new GraphQLList(PlayerStatistic),
       resolve: p => playerSeasonGameLogsLoader.load(p.id),
     },
     playoff: {
-      type: new GraphQLList(PlayerSeason),
+      type: new GraphQLList(PlayerStatistic),
       resolve: p => playerPlayoffsGameLogsLoader.load(p.id),
     },
 	},

@@ -22,6 +22,8 @@ const {
 const resolveProp = propName => obj => Promise.resolve(obj[propName])
 const resolvePath = objPath => obj => Promise.resolve(path(objPath, obj))
 
+const itself = (p = {}) => p
+
 const POUNDS_TO_KILOGRAMS = 0.453592
 const forwardsAbbreviations = ['C', 'LW', 'RW']
 
@@ -306,10 +308,67 @@ const GameLogAdditionalInfo = new GraphQLObjectType({
   }
 })
 
+const PlayerStatistic = new GraphQLObjectType({
+  name: 'PlayerStatistic',
+  fields: {
+    season: {
+      type: GraphQLString,
+      resolve: resolvePath(['season']),
+    },
+    teamId: {
+      type: GraphQLInt,
+      resolve: resolvePath(['team', 'id']),
+    },
+    teamName: {
+      type: GraphQLString,
+      resolve: resolvePath(['team', 'name']),
+    },
+    leagueName: {
+      type: GraphQLString,
+      resolve: resolvePath(['league', 'name']),
+    },
+    games: {
+      type: GraphQLInt,
+      resolve: resolvePath(['stat', 'games']),
+    },
+
+    offensive: {
+      type: OffensiveStats,
+      resolve: itself,
+    },
+
+    defensive: {
+      type: DefensiveStats,
+      resolve: itself,
+    },
+
+    faceoffStats: {
+      type: FaceoffStats,
+      resolve: itself,
+    },
+
+    usageStats: {
+      type: UsageStats,
+      resolve: itself,
+    },
+
+    goalieStats: {
+      type: GoalieStats,
+      resolve: itself,
+    },
+
+    gameInfo: {
+      type: GameLogAdditionalInfo,
+      resolve: itself,
+    },
+  },
+});
+
 module.exports = {
 	Time,
 	PlayerWeight,
 	PlayerHeight,
+  PlayerStatistic,
 
 	GoalieStats,
 	UsageStats,

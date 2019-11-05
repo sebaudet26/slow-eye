@@ -25,10 +25,11 @@ const {
   tail,
   take,
   takeLast,
-} = require('ramda');
+} = require('ramda')
+const moment = require('moment-timezone')
 
 const ApiRequest = require('../../libs/api/api')
-const cache = require('../../libs/redis')
+const cache = require('../../libs/redis').instance
 const DataLoader = require('dataloader')
 
 const {
@@ -466,11 +467,9 @@ const batchTeamScheduleFetcher = async (teamIds) => {
 const teamScheduleLoader = new DataLoader(batchTeamScheduleFetcher)
 
 const calculateTeamsStreaks = async () => {
-	if (cache.connected) {
-		const cache = cache.get('team_streaks')
-		if (cache) {
-			return JSON.parse(cache)
-		}
+	const cached_value = await cache.get('team_streaks')
+	if (cached_value) {
+		return JSON.parse(cached_value)
 	}
 
   const teams = await new ApiRequest({
@@ -493,9 +492,7 @@ const calculateTeamsStreaks = async () => {
     map(omit(['schedule'])),
   )(teamsWithSchedules)
 
- 	if (cache.connected) {
-		cache.set('player_streaks', JSON.stringify(streaks))
-	}
+	cache.set('team_streaks', JSON.stringify(teamsStreaks))
 
   return teamsStreaks;
 }
@@ -519,12 +516,11 @@ const fetchByBatchOf = (batchSize) => async (cumulative, players) => {
 };
 
 const calculatePlayerStreaks = async () => {
-	if (cache.connected) {
-		const cache = cache.get('player_streaks')
-		if (cache) {
-			return JSON.parse(cache)
-		}
+	const cached_value = await cache.get('player_streaks')
+	if (cached_value) {
+		return JSON.parse(cached_value)
 	}
+
   const players = await new ApiRequest({
 		league: 'NHL',
 		apiType: 'BASIC',
@@ -545,12 +541,11 @@ const calculatePlayerStreaks = async () => {
       descend(path(['streak', 'points'])),
       descend(path(['streak', 'goals'])),
     ]),
-    map(pick(['streak', 'playerName', 'playerTeamsPlayedFor', 'playerPositionCode'])),
+    map(pick(['playerId', 'streak', 'playerName', 'playerTeamsPlayedFor', 'playerPositionCode'])),
   )(playersLogs)
 
-  if (cache.connected) {
-		cache.set('player_streaks', JSON.stringify(streaks))
-	}
+  // cache streaks
+	cache.set('player_streaks', JSON.stringify(streaks))
 
   return streaks
 }
@@ -575,7 +570,6 @@ const batchStreaksFetcher = async (streakTypes) => {
 // };
 
 module.exports = {
-
 	playerBioLoader: new DataLoader(batchPlayerBioFetcher),
 	playerDraftLoader: new DataLoader(batchPlayerDraftFetcher),
 	playerCareerSeasonStatsLoader: new DataLoader(batchCareerStatsFetcher),

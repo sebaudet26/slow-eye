@@ -29,6 +29,8 @@ class Cache {
   constructor() {
     if (this.instance) return this.instance
     this.connected = false
+    this.connect()
+    return this
   }
 
   connect() {

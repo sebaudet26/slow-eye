@@ -49,7 +49,7 @@ class ApiRequest {
     if (!this.resource) throw new Error('you must set the resource')
     const cachedValue = await this.cache.get(this.resource)
     this.data = JSON.parse(cachedValue)
-    console.log(`fetched from cache ${this.resource}`)
+    // console.log(`fetched from cache ${this.resource}`)
     return this.data
   }
 
@@ -71,10 +71,8 @@ class ApiRequest {
   }
 
   async fetch() {
-    console.log(`fetching ${this.url}`)
     await this.tryCache()
     if (this.data) return this.data
-    console.log(`source ${this.url}`)
     const response = await nodeFetch(this.url)
     const data = await response.json()
     this.data = data
