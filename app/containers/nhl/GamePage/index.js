@@ -161,7 +161,7 @@ class GamePage extends React.Component {
     return (
       <div>
         <Header selectedLeague="NHL" />
-        <Query query={getGameQuery} variables={{ id }}>
+        <Query query={getGameQuery} variables={{ id }} fetchPolicy="no-cache">
           {({ loading, error, data }) => {
             if (loading) return (<LoadingIndicator />);
             if (error) return (<EmptyState isError />);
@@ -185,6 +185,8 @@ class GamePage extends React.Component {
                 <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${boxscore.home.team.id}-20182019-light`} />
               </svg>
             );
+
+            console.log(data);
 
             return (
               <div className="game-page">
