@@ -1,5 +1,7 @@
 import React from 'react';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import {
+  Tab, Tabs, TabList, TabPanel,
+} from 'react-tabs';
 import CareerStatsTable from '../../../components/Table/CareerStatsTable';
 import GameLogTable from '../../../components/Table/GameLogTable';
 import { saveToLS, getFromLS } from '../../../utils/localStorage';
@@ -14,7 +16,9 @@ class Statistics extends React.Component {
   }
 
   render() {
-    const { internationalStats, careerPlayoffStats, proStats, logs, isPro, info } = this.props;
+    const {
+      internationalStats, careerPlayoffStats, proStats, logs, isPro, info,
+    } = this.props;
     if (!internationalStats.length && !logs.length) {
       return (
         <div className="container">
@@ -30,39 +34,32 @@ class Statistics extends React.Component {
         defaultIndex={Number(getFromLS(`playerTabIndex${urlParams.get('id')}`)) || 0}
         onSelect={i => saveToLS(`playerTabIndex${urlParams.get('id')}`, i)}
       >
-      <TabList>
+        <TabList>
+          <div className="container">
+            <Tab>Career Stats</Tab>
+            {logs.length && <Tab>Game Logs</Tab>}
+          </div>
+        </TabList>
         <div className="container">
-          <Tab>Career Stats</Tab>
-          {internationalStats.length && <Tab>International</Tab>}
-          {logs.length && <Tab>Game Logs</Tab>}
-        </div>
-      </TabList>
-      <div className="container">
-        {proStats.length && (
+          {proStats.length && (
           <TabPanel>
-          <h3>Season Stats</h3>
-          <CareerStatsTable stats={proStats} info={info} showTotalRow={isPro} />
-          {careerPlayoffStats.length && (
+            <h3>Season Stats</h3>
+            <CareerStatsTable stats={proStats} info={info} showTotalRow={isPro} />
+            {careerPlayoffStats.length && (
             <div>
-            <h3>Playoff Stats</h3>
-            <CareerStatsTable stats={careerPlayoffStats} info={info} showTotalRow={isPro} />
+              <h3>Playoff Stats</h3>
+              <CareerStatsTable stats={careerPlayoffStats} info={info} showTotalRow={isPro} />
             </div>
+            )}
+          </TabPanel>
           )}
-          </TabPanel>
-        )}
-        {internationalStats.length && (
+          {logs.length && (
           <TabPanel>
-          <h3>International</h3>
-          <CareerStatsTable stats={internationalStats} info={info} showTotalRow />
+            <h3>Game Logs</h3>
+            <GameLogTable logs={logs} info={info} />
           </TabPanel>
-        )}
-        {logs.length && (
-          <TabPanel>
-          <h3>Game Logs</h3>
-          <GameLogTable logs={logs} info={info} />
-          </TabPanel>
-        )}
-      </div>
+          )}
+        </div>
       </Tabs>
     );
   }
