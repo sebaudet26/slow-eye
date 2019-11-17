@@ -71,6 +71,7 @@ class ApiRequest {
   }
 
   async fetch() {
+    console.log(this.url)
     await this.tryCache()
     if (this.data) return this.data
     const response = await nodeFetch(this.url)

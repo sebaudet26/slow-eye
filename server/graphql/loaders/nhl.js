@@ -198,8 +198,8 @@ const reportFetcher = async (season, type) => {
   		return await Promise.all([
   			// rookies
 	  		'/skaters?isAggregate=false&reportType=basic&reportName=skatersummary' +
-	  		'&sort=[{%22property%22:%22playerId%22}]',
-	  		`&cayenneExp=playerRookieSeasonInd=1%20and%20gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}` +
+	  		'&sort=[{%22property%22:%22playerId%22}]' +
+	  		`&cayenneExp=playerRookieSeasonInd=1%20and%20gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`,
 
 	  		'/skaters?isAggregate=false&reportType=basic&reportName=realtime' +
 	  		'&sort=[{%22property%22:%22playerId%22}]' +
@@ -221,14 +221,15 @@ const reportFetcher = async (season, type) => {
 					resource,
 				}).fetch()
 			}))
-			.then((arr) => Promise.resolve(map(map(pathOr([], ['data'])), arr)))
+			.then((arr) => Promise.resolve(map(pathOr([], ['data']), arr)))
 			.then(([rookieSummary, rookieRealtime, allSummary, allRealtime]) => {
   			const rookiesPlayerIds = map(prop('playerId'), rookieSummary);
-  			return Promise.resolve([
-					rookieSummary.map((item, k) => mergeLeft(rookieSummary[k], { ...rookieRealtime[k], rookie: true })),
-          allSummary.filter(item => !rookiesPlayerIds.includes(item.playerId))
+  			const final = [
+					...rookieSummary.map((item, k) => mergeLeft(rookieSummary[k], { ...rookieRealtime[k], rookie: true })),
+          ...allSummary.filter(item => !rookiesPlayerIds.includes(item.playerId))
           	.map((item, k) => mergeLeft(allSummary[k], { ...allRealtime[k], rookie: false })),
-  			])
+  			]
+  			return Promise.resolve(final)
 			})
 
 
@@ -248,14 +249,15 @@ const reportFetcher = async (season, type) => {
 					resource,
 				}).fetch()
 			}))
-			.then((arr) => Promise.resolve(map(map(pathOr([], ['data'])), arr)))
+			.then((arr) => Promise.resolve(map(pathOr([], ['data']), arr)))
 			.then(([rookies, all]) => {
 		    const rookiesPlayerIds = map(prop('playerId'), rookies);
-        return Promise.resolve([
+        const final = [
           ...rookies.map((item, k) => ({ ...rookies[k], rookie: true })),
           ...all.filter(item => !rookiesPlayerIds.includes(item.playerId))
           	.map((item, k) => ({ ...item, rookie: false }))
-        ]);
+        ]
+        return Promise.resolve(final)
 			})
 	}
 }
@@ -266,7 +268,7 @@ const batchReportFetcher = async (ids) => {
 		return reportFetcher(season, type)
 	}))
 
-	return flatten(data)
+	return data
 }
 
 // TODO: hardcoded feature flag lol
@@ -350,7 +352,7 @@ const batchTeamStandingsFetcher = async (seasons) => {
 		}).fetch()
 	}))
 
-	return map(pathOr([], ['records', 0]), data)
+	return map(pathOr([], ['records']), data)
 }
 
 
