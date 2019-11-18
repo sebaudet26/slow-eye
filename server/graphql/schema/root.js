@@ -10,16 +10,20 @@ const Player = require('./player')
 const Streaks = require('./streaks')
 const Standings = require('./standings')
 const Report = require('./report')
+const Team = require('./team')
 
-const { playersFetcher } = require('../loaders/nhl')
+const { prop, sortBy } = require('ramda')
+
+const { teamsLoader } = require('../loaders/nhl')
 
 const itself = () => ({})
 
-const Team = new GraphQLObjectType({
-  name: 'Team',
+const TeamId = new GraphQLObjectType({
+  name: 'TeamId',
   fields: {
-    id: { type: GraphQLInt, resolve: team => team.id },
-    name: { type: GraphQLString, resolve: team => team.name },
+    id: { type: GraphQLInt, resolve: doc => doc.id },
+    name: { type: GraphQLString, resolve: doc => doc.name },
+    abbreviation: { type: GraphQLString, resolve: doc => doc.abbreviation },
   }
 })
 
@@ -31,7 +35,26 @@ const NHLQuery = new GraphQLObjectType({
       args: {
         id: { type: GraphQLInt },
       },
-      resolve: (_, args) =>  ({ id: args.id })
+      resolve: (_, args) =>  ({ id: args.id }),
+    },
+
+    team: {
+      type: Team,
+      args: {
+        id: { type: GraphQLInt },
+        season: { type: GraphQLString },
+      },
+      resolve: (_, args) => ({ id: args.id, season: args.season }),
+    },
+
+    teams: {
+      type: new GraphQLList(TeamId),
+      args: {
+        season: { type: GraphQLString },
+      },
+      resolve: (_, args) => teamsLoader.load(args.season).then((teams) => {
+        return sortBy(prop('name'), teams)
+      }),
     },
 
     leaders: {
@@ -39,7 +62,7 @@ const NHLQuery = new GraphQLObjectType({
       args: {
         season: { type: GraphQLString },
       },
-      resolve: (_, args) =>  ({ season: args.season })
+      resolve: (_, args) =>  ({ season: args.season }),
     },
 
     standings: {
@@ -70,6 +93,57 @@ module.exports = schema
 
 
 /*
+query teams {
+  nhl {
+    teams (season:"20182019") {
+      id
+      name
+    }
+  }
+}
+
+query team {
+  nhl {
+    team (id: 1, season:"20182019") {
+      id
+      name
+      abbreviation
+      teamName
+      locationName
+      shortName
+      active
+      gamesPlayed
+      wins
+      losses
+      ot
+      pts
+      powerPlayGoals
+      powerPlayGoalsAgainst
+      faceOffsTaken
+      faceOffsWon
+      faceOffsLost
+      powerPlayOpportunities
+      goalsPerGame
+      goalsAgainstPerGame
+      evGGARatio
+      shotsPerGame
+      shotsAllowed
+      winScoreFirst
+      winOppScoreFirst
+      winLeadFirstPer
+      winLeadSecondPer
+      winOutshootOpp
+      winOutshotByOpp
+      shootingPctg
+      savePctg
+      ptPctg
+      powerPlayPercentage
+      penaltyKillPercentage
+      faceOffWinPercentage
+    }
+  }
+}
+
 query leaders {
   nhl {
     leaders (season: "20182019") {

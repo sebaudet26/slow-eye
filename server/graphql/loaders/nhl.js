@@ -565,12 +565,6 @@ const batchStreaksFetcher = async (streakTypes) => {
 	}))
 }
 
-// const fetchDraft = async (args) => {
-//   const resource = `/draft?cayenneExp=draftYear=${args.year}`;
-//   const draftResponse = await nhlRecordsApi(resource, 60 * 60 * 24 * 300);
-//   return draftResponse.data;
-// };
-
 module.exports = {
 	playerBioLoader: new DataLoader(batchPlayerBioFetcher),
 	playerDraftLoader: new DataLoader(batchPlayerDraftFetcher),
