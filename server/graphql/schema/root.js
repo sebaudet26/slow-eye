@@ -11,19 +11,33 @@ const Streaks = require('./streaks')
 const Standings = require('./standings')
 const Report = require('./report')
 const Team = require('./team')
+const ScheduledGame = require('./schedule')
+const Game = require('./game')
 
 const { prop, sortBy } = require('ramda')
 
-const { teamsLoader } = require('../loaders/nhl')
+const { teamsLoader, gamesScheduleLoader, playersLoader } = require('../loaders/nhl')
 
-const itself = () => ({})
+const providedArgs = (_, args) => args || {}
 
-const TeamId = new GraphQLObjectType({
-  name: 'TeamId',
+const TeamName = new GraphQLObjectType({
+  name: 'TeamName',
   fields: {
     id: { type: GraphQLInt, resolve: doc => doc.id },
     name: { type: GraphQLString, resolve: doc => doc.name },
     abbreviation: { type: GraphQLString, resolve: doc => doc.abbreviation },
+  }
+})
+
+const PlayerName = new GraphQLObjectType({
+  name: 'PlayerName',
+  fields: {
+    id: { type: GraphQLInt, resolve: doc => doc.playerId },
+    name: { type: GraphQLString, resolve: doc => doc.playerName },
+    birthDate: { type: GraphQLString, resolve: doc => doc.playerBirthDate },
+    nationality: { type: GraphQLString, resolve: doc => doc.playerNationality },
+    position: { type: GraphQLString, resolve: doc => doc.playerPositionCode },
+
   }
 })
 
@@ -35,7 +49,7 @@ const NHLQuery = new GraphQLObjectType({
       args: {
         id: { type: GraphQLInt },
       },
-      resolve: (_, args) =>  ({ id: args.id }),
+      resolve: providedArgs,
     },
 
     team: {
@@ -44,11 +58,50 @@ const NHLQuery = new GraphQLObjectType({
         id: { type: GraphQLInt },
         season: { type: GraphQLString },
       },
-      resolve: (_, args) => ({ id: args.id, season: args.season }),
+      resolve: providedArgs,
+    },
+
+    game: {
+      type: Game,
+      args: {
+        id: { type: GraphQLInt },
+      },
+      resolve: providedArgs,
+    },
+
+    leaders: {
+      type: Report,
+      args: {
+        season: { type: GraphQLString },
+      },
+      resolve: providedArgs,
+    },
+
+    standings: {
+      type: Standings,
+      args: {
+        season: { type: GraphQLString },
+      },
+      resolve: providedArgs,
+    },
+
+    streaks: {
+      type: Streaks,
+      resolve: providedArgs,
+    },
+
+    players: {
+      type: new GraphQLList(PlayerName),
+      args: {
+        season: { type: GraphQLString },
+      },
+      resolve: (_, args) => playersLoader.load(args.season).then((players) => {
+        return sortBy(prop('playerName'), players)
+      }),
     },
 
     teams: {
-      type: new GraphQLList(TeamId),
+      type: new GraphQLList(TeamName),
       args: {
         season: { type: GraphQLString },
       },
@@ -57,25 +110,14 @@ const NHLQuery = new GraphQLObjectType({
       }),
     },
 
-    leaders: {
-      type: Report,
+    schedule: {
+      type: new GraphQLList(ScheduledGame),
       args: {
-        season: { type: GraphQLString },
+        dates: { type: new GraphQLList(GraphQLString) },
       },
-      resolve: (_, args) =>  ({ season: args.season }),
-    },
-
-    standings: {
-      type: Standings,
-      args: {
-        season: { type: GraphQLString },
-      },
-      resolve: (_, args) =>  ({ season: args.season }),
-    },
-
-    streaks: {
-      type: Streaks,
-      resolve: itself,
+      resolve: (_, args) => gamesScheduleLoader.load(args.dates).then((teams) => {
+        return sortBy(prop('gameDate'), teams)
+      })
     }
   },
 })
@@ -84,7 +126,7 @@ const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     fields: {
-      nhl: { type: NHLQuery, resolve: itself }
+      nhl: { type: NHLQuery, resolve: providedArgs }
     },
   })
 })
@@ -93,6 +135,65 @@ module.exports = schema
 
 
 /*
+query players {
+  nhl {
+    players (season: "all") {
+      id
+      name
+      birthDate
+      nationality
+      position
+    }
+  }
+}
+
+query game {
+  nhl {
+    game (id: 2019020263) {
+      recap
+      goalsHighlights {
+        statsEventId
+        periodTime
+        period
+        url
+      }
+    }
+  }
+}
+
+
+query schedule {
+  nhl {
+    schedule (dates: ["2019-11-10"]) {
+      id
+      gameType
+      season
+      gameDate
+      abstractGameState
+      codedGameState
+      detailedState
+      statusCode
+      startTimeTBD
+      awayTeam {
+        id
+        name
+        score
+        wins
+        losses
+        ot
+      }
+      homeTeam {
+        id
+        name
+        score
+        wins
+        losses
+        ot
+      }
+    }
+  }
+}
+
 query teams {
   nhl {
     teams (season:"20182019") {
@@ -140,6 +241,12 @@ query team {
       powerPlayPercentage
       penaltyKillPercentage
       faceOffWinPercentage
+      roster {
+        id
+        name
+        position
+        jerseyNumber
+      }
     }
   }
 }

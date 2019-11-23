@@ -182,8 +182,8 @@ const playersFetcher = async (seasons) => {
 		])
 		.then((seasonData) => {
 			return Promise.resolve(pipe(
-				flatten,
 				map(pathOr([], ['data'])),
+				flatten,
 				map(pick(['playerBirthDate', 'playerName', 'playerId', 'playerNationality', 'playerPositionCode'])),
 			)(seasonData))
 		})
