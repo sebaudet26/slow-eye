@@ -30,7 +30,7 @@ const moment = require('moment-timezone')
 const DataLoader = require('dataloader')
 
 const ApiRequest = require('../../libs/api/api')
-const cache = require('../../libs/redis').instance
+const cache = require('../../libs/redis')
 
 const {
 	calculateTeamPointsStreak,
@@ -493,7 +493,7 @@ const calculateTeamsStreaks = async () => {
     map(omit(['schedule'])),
   )(teamsWithSchedules)
 
-	cache.set('team_streaks', JSON.stringify(teamsStreaks))
+	cache.instance.set('team_streaks', JSON.stringify(teamsStreaks))
 
   return teamsStreaks;
 }
@@ -546,7 +546,7 @@ const calculatePlayerStreaks = async () => {
   )(playersLogs)
 
   // cache streaks
-	cache.set('player_streaks', JSON.stringify(streaks))
+	cache.instance.set('player_streaks', JSON.stringify(streaks))
 
   return streaks
 }

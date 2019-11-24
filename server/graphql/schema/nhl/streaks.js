@@ -6,6 +6,10 @@ const {
 } = require('graphql')
 
 const {
+  take
+} = require('ramda')
+
+const {
   resolveProp,
   resolvePath,
 } = require('./deconstructors/index')
@@ -49,11 +53,17 @@ const Streaks = new GraphQLObjectType({
   fields: {
 		players: {
 		  type: new GraphQLList(PlayersStreak),
-		  resolve: () => streakLoader.load('players'),
+      args: {
+        limit: { type: GraphQLInt },
+      },
+		  resolve: (_, args) => streakLoader.load('players').then(take(args.limit || 5)),
 		},
 		teams: {
 		  type: new GraphQLList(TeamsStreak),
-		  resolve: () => streakLoader.load('teams'),
+      args: {
+        limit: { type: GraphQLInt },
+      },
+		  resolve: (_, args) => streakLoader.load('teams').then(take(args.limit || 10)),
 		},
 	},
 })

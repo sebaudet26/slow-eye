@@ -2,7 +2,7 @@ const moment = require('moment-timezone')
 const nodeFetch = require('node-fetch')
 const fs = require('fs')
 
-const cache = require('./../redis').instance
+const cache = require('./../redis')
 
 let recordedResponses = {}
 
@@ -55,7 +55,7 @@ class ApiRequest {
     this.expiration = expiration || getSecondsUntilMidnight()
     this.url = `${BASE_URLS[league][apiType]}${this.resource}`
     this.skipCache = skipCache || process.env.SKIP_CACHE || process.env.RUN_IN_RECORDING_MODE
-    this.cache = cache
+    this.cache = cache.instance
   }
 
   async tryCache() {

@@ -23,12 +23,12 @@ class HomePage extends React.Component {
       //
     } else {
       return (
-        <div className="home-header" style={{ backgroundImage: `url("https://nhl.bamcontent.com/images/actionshots/${data.playerStreaks[0].id}@2x.jpg")` }}>
+        <div className="home-header" style={{ backgroundImage: `url("https://nhl.bamcontent.com/images/actionshots/${data.nhl.streaks.players[0].id}@2x.jpg")` }}>
           <div className="container">
             <h1>The best place to view the NHL's latest scores and stats.</h1>
             <div className="home-header-featured">
               <div>This Week's Featured Player</div>
-              <a href="/player?id=8474565" className="home-header-featured-name">{data.playerStreaks[0].name}</a>
+              <a href="/player?id=8474565" className="home-header-featured-name">{data.nhl.streaks.players[0].name}</a>
             </div>
           </div>
         </div>
@@ -37,11 +37,11 @@ class HomePage extends React.Component {
   }
 
   displayPlayerStreaks() {
-    const data = this.props.data;
-    if (data.loading) {
+    if (this.props.data.loading) {
       // Put Skeleton Loader Here
     } else {
-      return data.playerStreaks.map(player => (
+      const { players } = this.props.data.nhl.streaks
+      return players.map(player => (
         <a key={player.id} href={`/player?id=${player.id}`} className="card card-player" style={{ backgroundImage: `url("https://nhl.bamcontent.com/images/actionshots/${player.id}_low_resolution.jpg")` }}>
           <div className="card-content">
             <div className="card-content-name">
@@ -66,11 +66,11 @@ class HomePage extends React.Component {
   }
 
   displayTeamStreaks() {
-    const data = this.props.data.teamsStreaks;
-    if (data === undefined) {
+    if (this.props.data.loading) {
       // Put Skeleton Loader Here
     } else {
-      return data.map((team, k) => (
+      const { teams } = this.props.data.nhl.streaks
+      return teams.map((team, k) => (
         <a key={team.id} href={`/team?id=${team.id}`} className="card card-team">
           <div className="card-content">
             <div className="card-content-rank">

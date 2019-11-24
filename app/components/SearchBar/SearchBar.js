@@ -19,19 +19,19 @@ const debounce = (func, delay) => {
 };
 
 const optionsQuery = gql`
-query {
-  players {
-    info {
-      id
-      fullName
+  query {
+    nhl {
+      players (season: "all") {
+        id
+        name
+      }
+      teams (season:"20182019") {
+        id
+        name
+        abbreviation
+      }
     }
-  }
-  teams {
-    id
-    name
-    abbreviation
-  }
-}`;
+  }`
 
 const renderOption = cursor => (opt, i) => (
   <a
@@ -39,7 +39,6 @@ const renderOption = cursor => (opt, i) => (
     key={`option-${i}`}
     href={`/${opt.linkType}?id=${opt.id}`}
     className={`options-item${cursor == i ? ' active' : ''}`}
-
   >
     {
       opt.linkType === 'player'
@@ -127,9 +126,9 @@ class SearchBar extends React.Component {
     }
   }
 
-
   render() {
     const { query, cursor } = this.state;
+
     return (
       <div className="searchBar">
         <form className="searchBar-form">
@@ -142,17 +141,17 @@ class SearchBar extends React.Component {
             onKeyDown={this.handleKeyDown}
             onClick={this.showOptions}
           />
-
           <Query query={optionsQuery}>
             {({ loading, error, data }) => {
               if (loading) return (null);
               if (error) return ('Error');
+              const { players = [], teams = [] } = data.nhl
 
               const options = [
-                ...data.players.map(p => ({
-                  id: p.info.id, string: p.info.fullName, linkType: 'player',
+                ...players.map(p => ({
+                  id: p.id, string: p.name, linkType: 'player',
                 })),
-                ...data.teams.map(t => ({
+                ...teams.map(t => ({
                   id: t.id, string: t.name, linkType: 'team', abbreviation: t.abbreviation,
                 })),
               ];
@@ -160,36 +159,17 @@ class SearchBar extends React.Component {
               return (
                 <div>
                   {
-                      this.state.showOptions
-                        ? (
-                          <div
-                            className="options"
-                            ref={(element) => {
-                              this.optionsList = element;
-                            }}
-                          >
-                            {
-                          query
-                            ? pipe(
-                              filter(stringMatches(query)),
-                              take(5),
-                              mapObjIndexed(renderOption(cursor)),
-                              values,
-                            )(options)
-                            : null
-                        }
-                          </div>
-                        )
-                        : null
-                    }
+                    this.state.showOptions && (
+                      <div className="options" ref={(element) => { this.optionsList = element; }}>
+                      {query ? pipe(filter(stringMatches(query)), take(5), mapObjIndexed(renderOption(cursor)), values)(options) : null}
+                      </div>
+                    )
+                  }
                 </div>
-
-
               );
             }}
           </Query>
         </form>
-
       </div>
     );
   }
