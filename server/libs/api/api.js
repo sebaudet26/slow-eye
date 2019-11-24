@@ -2,7 +2,7 @@ const moment = require('moment-timezone')
 const nodeFetch = require('node-fetch')
 const fs = require('fs')
 
-const cache = require('./../redis')
+const cache = require('./../redis').instance
 
 let recordedResponses = {}
 
@@ -12,7 +12,12 @@ const recordingsPath = resolve(process.cwd(), 'server/integrationTest/recordedRe
 
 
 // technically 2AM to leave some time for Western coast to be at end of day
-const getSecondsUntilMidnight = () => Math.round((moment.tz('America/New_York').endOf('day').add(2, 'hours').valueOf() - moment.tz('America/New_York').valueOf()) / 1000)
+const getSecondsUntilMidnight = () => Math.round(
+  (
+    moment.tz('America/New_York').endOf('day').add(2, 'hours').valueOf() -
+    moment.tz('America/New_York').valueOf()
+  ) / 1000
+)
 
 const APIS = {
   NHL: {
@@ -50,7 +55,7 @@ class ApiRequest {
     this.expiration = expiration || getSecondsUntilMidnight()
     this.url = `${BASE_URLS[league][apiType]}${this.resource}`
     this.skipCache = skipCache || process.env.SKIP_CACHE || process.env.RUN_IN_RECORDING_MODE
-    this.cache = cache.instance
+    this.cache = cache
   }
 
   async tryCache() {
