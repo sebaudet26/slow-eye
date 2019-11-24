@@ -14,14 +14,21 @@ class Statistics extends React.Component {
   }
 
   render() {
-    const { internationalStats, careerPlayoffStats, proStats, logs, isPro, info } = this.props;
+    const {
+      proStats,
+      playoffStats,
+      internationalStats,
+      logs,
+      isPro,
+      position,
+     } = this.props;
     if (!internationalStats.length && !logs.length) {
       return (
         <div className="container">
           <h3>Season Stats</h3>
-          <CareerStatsTable stats={proStats} info={info} showTotalRow={isPro} />
+          <CareerStatsTable stats={proStats} position={position} showTotalRow={isPro} />
           <h3>Playoff Stats</h3>
-          <CareerStatsTable stats={careerPlayoffStats} info={info} showTotalRow={isPro} />
+          <CareerStatsTable stats={playoffStats} position={position} showTotalRow={isPro} />
         </div>
       );
     }
@@ -41,11 +48,11 @@ class Statistics extends React.Component {
         {proStats.length && (
           <TabPanel>
           <h3>Season Stats</h3>
-          <CareerStatsTable stats={proStats} info={info} showTotalRow={isPro} />
-          {careerPlayoffStats.length && (
+          <CareerStatsTable stats={proStats} position={position} showTotalRow={isPro} />
+          {playoffStats.length && (
             <div>
             <h3>Playoff Stats</h3>
-            <CareerStatsTable stats={careerPlayoffStats} info={info} showTotalRow={isPro} />
+            <CareerStatsTable stats={playoffStats} position={position} showTotalRow={isPro} />
             </div>
           )}
           </TabPanel>
@@ -53,13 +60,13 @@ class Statistics extends React.Component {
         {internationalStats.length && (
           <TabPanel>
           <h3>International</h3>
-          <CareerStatsTable stats={internationalStats} info={info} showTotalRow />
+          <CareerStatsTable stats={internationalStats} position={position} showTotalRow />
           </TabPanel>
         )}
         {logs.length && (
           <TabPanel>
           <h3>Game Logs</h3>
-          <GameLogTable logs={logs} info={info} />
+          <GameLogTable logs={logs} position={position} />
           </TabPanel>
         )}
       </div>

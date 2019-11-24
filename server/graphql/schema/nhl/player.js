@@ -149,7 +149,7 @@ const PlayerStatus = new GraphQLObjectType({
 const PlayerPosition = new GraphQLObjectType({
   name: 'PlayerPosition',
   fields: {
-  	position: {
+  	code: {
   		type: GraphQLString,
 			resolve: p => playerBioLoader.load(p.id)
 				.then(resolvePath(['primaryPosition', 'abbreviation']))
@@ -231,7 +231,7 @@ const PlayerDraft = new GraphQLObjectType({
       type: GraphQLString,
       resolve: p => playerDraftLoader.load(p.id).then(resolveProp('amateurLeague'))
     },
-    draftYear: {
+    year: {
       type: GraphQLInt,
       resolve: p => playerDraftLoader.load(p.id).then(resolveProp('draftYear')),
     },
@@ -282,10 +282,17 @@ const PlayerGameLogs = new GraphQLObjectType({
 	},
 });
 
-const TeamInfo = new GraphQLObjectType({
-	name: 'TeamInfo',
+const PlayerTeam = new GraphQLObjectType({
+	name: 'PlayerTeam',
 	fields: () => ({
-  	id: { type: GraphQLInt, resolve: itself },
+  	id: {
+      type: GraphQLInt,
+      resolve: p => playerBioLoader.load(p.id).then(resolvePath(['currentTeam', 'id'])),
+    },
+    name: {
+      type: GraphQLString,
+      resolve: p => playerBioLoader.load(p.id).then(resolvePath(['currentTeam', 'name'])),
+    },
 	}),
 });
 
@@ -293,6 +300,7 @@ module.exports = new GraphQLObjectType({
   name: 'NHLPlayer',
   fields: {
   	id: { type: GraphQLInt, resolve: (p) => p.id },
+    team: { type: PlayerTeam, resolve: itself },
     bio: { type: PlayerBio, resolve: itself },
     status: { type: PlayerStatus, resolve: itself },
     position: { type: PlayerPosition, resolve: itself },

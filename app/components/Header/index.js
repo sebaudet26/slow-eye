@@ -54,17 +54,13 @@ class Header extends React.Component {
         <div className="header-wrapper">
           <NavLink
             className="header-brand"
-            to={
-              this.state.selectedLeague === 'NHL' ? NHLHomeLink : MLBHomeLink
-            }
+            to={this.state.selectedLeague === 'NHL' ? NHLHomeLink : MLBHomeLink}
           >
             <Logo />
             <span className="header-brand-name">Sealstats</span>
           </NavLink>
           <LeagueSwitch league={this.state.selectedLeague} switchLeague={this.switchLeague.bind(this)} />
-          {
-            this.state.selectedLeague === 'NHL' ? (<SearchBar />) : null
-          }
+          {this.state.selectedLeague === 'NHL' ? (<SearchBar />) : null}
           {
             this.state.selectedLeague === 'NHL' ? (
               <div className="header-nav">

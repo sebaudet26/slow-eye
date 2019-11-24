@@ -2,156 +2,381 @@ import { gql } from 'apollo-boost';
 
 const getPlayerQuery = gql`
 query($id: Int) {
-  player (id: $id) {
-    isActive
-    isInjured
-    isVeteran
-    isHot
-    isCold
-    hotColdPoints
-    hotColdGames
-    hotColdPlusMinus
-    hasNHLExperience
-    info {
-      firstName
-      lastName
-      shootsCatches
-      birthDate
-      birthCity
-      birthStateProvince
-      birthCountry
-      nationality
-      height
-      weight
-      captain
-      fullName
-      currentAge
-      rosterStatus
-      isGoalie
-      currentTeamInfo {
-        id
-        name
-        teamName
-        abbreviation
-      }
-      primaryPosition {
-        name
-        abbreviation
-      }
-      draftInfo {
-        year
-        round
-        pickOverall
-        pickInRound
-        team {
-          name
+  nhl {
+    player(id: $id) {
+      id
+      bio {
+        age
+        lastName
+        firstName
+        birthDate
+        birthCity
+        birthState
+        birthCountry
+        shootsCatches
+        jerseyNumber
+        height {
+          feet
+          inches
+        }
+        weight {
+          kilograms
+          pounds
         }
       }
-    }
-    careerStats {
-      season
       team {
-        name
-        abbreviation
         id
-      }
-      league {
         name
       }
-      stat {
-        assists
-        goals
-        points
-        games
-        plusMinus
-        shots
-        shotPct
-        hits
-        pim
-        blocked
-        timeOnIcePerGame
-        saves
-        goalsAgainst
-        shutouts
-        gamesStarted
-        timeOnIce
-        savePercentage
-        goalAgainstAverage
-        wins
-        losses
-        ot
-        ties
+      status {
+        isActive
+        isRookie
+        isVeteran
+        isCaptain
+        isAlternate
+        isInjured
       }
-    }
-    careerPlayoffStats {
-      season
-      team {
-        name
-        abbreviation
-        id
+      position {
+        code
+        isGoalie
+        isDefenseman
+        isForward
       }
-      league {
-        name
+      streak {
+        isHot
+        isCold
+        hotColdGames
+        hotColdPoints
+        hotColdPlusMinus
       }
-      stat {
-        assists
-        goals
-        points
-        games
-        plusMinus
-        shots
-        shotPct
-        hits
-        pim
-        blocked
-        timeOnIcePerGame
-        saves
-        goalsAgainst
-        shutouts
-        gamesStarted
-        timeOnIce
-        savePercentage
-        goalAgainstAverage
-        wins
-        losses
-        ot
-        ties
+      draft {
+        amateurTeam
+        amateurLeague
+        year
+        round
+        pickInRound
+        overall
+        pickHistory
       }
-    }
-    logs {
-      date
-      isWin
-      isOT
-      opponent {
-        shortName
-        teamName
-        id
-        abbreviation
+      career {
+        seasons {
+          season
+          leagueName
+          teamName
+          teamId
+          games
+          offensive {
+            assists
+            goals
+            shots
+            points
+            powerPlayGoals
+            powerPlayPoints
+            gameWinningGoals
+            overTimeGoals
+            shortHandedGoals
+            shortHandedPoints
+            shotPct
+          }
+          defensive {
+            penaltyMinutes
+            hits
+            plusMinus
+            pim
+            takeaways
+            giveaways
+            blocked
+          }
+          goalieStats {
+            ot
+            shutouts
+            ties
+            wins
+            losses
+            saves
+            powerPlaySaves
+            shortHandedSaves
+            evenSaves
+            shortHandedShots
+            evenShots
+            powerPlayShots
+            savePercentage
+            goalAgainstAverage
+            gamesStarted
+            shotsAgainst
+            goalsAgainst
+            powerPlaySavePercentage
+            shortHandedSavePercentage
+            evenStrengthSavePercentage
+          }
+          faceoffStats {
+            faceOffPct
+            faceOffWins
+            faceOffTaken
+          }
+          usageStats {
+            shifts
+            timeOnIce {
+              minutes
+              seconds
+            }
+            powerPlayTimeOnIce {
+              minutes
+              seconds
+            }
+            evenTimeOnIce {
+              minutes
+              seconds
+            }
+            shortHandedTimeOnIce {
+              minutes
+              seconds
+            }
+          }
+        }
+        playoffs {
+          season
+          leagueName
+          teamName
+          teamId
+          games
+          offensive {
+            assists
+            goals
+            shots
+            points
+            powerPlayGoals
+            powerPlayPoints
+            gameWinningGoals
+            overTimeGoals
+            shortHandedGoals
+            shortHandedPoints
+            shotPct
+          }
+          defensive {
+            penaltyMinutes
+            hits
+            plusMinus
+            pim
+            takeaways
+            giveaways
+            blocked
+          }
+          goalieStats {
+            ot
+            shutouts
+            ties
+            wins
+            losses
+            saves
+            powerPlaySaves
+            shortHandedSaves
+            evenSaves
+            shortHandedShots
+            evenShots
+            powerPlayShots
+            savePercentage
+            goalAgainstAverage
+            gamesStarted
+            shotsAgainst
+            goalsAgainst
+            powerPlaySavePercentage
+            shortHandedSavePercentage
+            evenStrengthSavePercentage
+          }
+          faceoffStats {
+            faceOffPct
+            faceOffWins
+            faceOffTaken
+          }
+          usageStats {
+            shifts
+            timeOnIce {
+              minutes
+              seconds
+            }
+            powerPlayTimeOnIce {
+              minutes
+              seconds
+            }
+            evenTimeOnIce {
+              minutes
+              seconds
+            }
+            shortHandedTimeOnIce {
+              minutes
+              seconds
+            }
+          }
+        }
       }
-      stat {
-        goals
-        assists
-        points
-        plusMinus
-        hits
-        blocked
-        powerPlayGoals
-        shortHandedGoals
-        gameWinningGoals
-        pim
-        shots
-        timeOnIce
-        shifts
-        saves
-        goalsAgainst
-        shutouts
-        gamesStarted
-        timeOnIce
-        savePercentage
-        goalAgainstAverage
-        wins
-        losses
-        ot
+      gameLogs {
+        season {
+          season
+          leagueName
+          teamName
+          teamId
+          games
+          gameInfo {
+            date
+            isHome
+            isWin
+            isOT
+            opponentTeamId
+            gameId
+          }
+          offensive {
+            assists
+            goals
+            shots
+            points
+            powerPlayGoals
+            powerPlayPoints
+            gameWinningGoals
+            overTimeGoals
+            shortHandedGoals
+            shortHandedPoints
+            shotPct
+          }
+          defensive {
+            penaltyMinutes
+            hits
+            plusMinus
+            pim
+            takeaways
+            giveaways
+            blocked
+          }
+          goalieStats {
+            ot
+            shutouts
+            ties
+            wins
+            losses
+            saves
+            powerPlaySaves
+            shortHandedSaves
+            evenSaves
+            shortHandedShots
+            evenShots
+            powerPlayShots
+            savePercentage
+            goalAgainstAverage
+            gamesStarted
+            shotsAgainst
+            goalsAgainst
+            powerPlaySavePercentage
+            shortHandedSavePercentage
+            evenStrengthSavePercentage
+          }
+          faceoffStats {
+            faceOffPct
+            faceOffWins
+            faceOffTaken
+          }
+          usageStats {
+            shifts
+            timeOnIce {
+              minutes
+              seconds
+            }
+            powerPlayTimeOnIce {
+              minutes
+              seconds
+            }
+            evenTimeOnIce {
+              minutes
+              seconds
+            }
+            shortHandedTimeOnIce {
+              minutes
+              seconds
+            }
+          }
+        }
+        playoff {
+          season
+          leagueName
+          teamName
+          teamId
+          games
+          gameInfo {
+            date
+            isHome
+            isWin
+            isOT
+            opponentTeamId
+            gameId
+          }
+          offensive {
+            assists
+            goals
+            shots
+            points
+            powerPlayGoals
+            powerPlayPoints
+            gameWinningGoals
+            overTimeGoals
+            shortHandedGoals
+            shortHandedPoints
+            shotPct
+          }
+          defensive {
+            penaltyMinutes
+            hits
+            plusMinus
+            pim
+            takeaways
+            giveaways
+            blocked
+          }
+          goalieStats {
+            ot
+            shutouts
+            ties
+            wins
+            losses
+            saves
+            powerPlaySaves
+            shortHandedSaves
+            evenSaves
+            shortHandedShots
+            evenShots
+            powerPlayShots
+            savePercentage
+            goalAgainstAverage
+            gamesStarted
+            shotsAgainst
+            goalsAgainst
+            powerPlaySavePercentage
+            shortHandedSavePercentage
+            evenStrengthSavePercentage
+          }
+          faceoffStats {
+            faceOffPct
+            faceOffWins
+            faceOffTaken
+          }
+          usageStats {
+            shifts
+            timeOnIce {
+              minutes
+              seconds
+            }
+            powerPlayTimeOnIce {
+              minutes
+              seconds
+            }
+            evenTimeOnIce {
+              minutes
+              seconds
+            }
+            shortHandedTimeOnIce {
+              minutes
+              seconds
+            }
+          }
+        }
       }
     }
   }

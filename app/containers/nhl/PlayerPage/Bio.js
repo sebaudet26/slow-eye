@@ -9,23 +9,23 @@ class Bio extends React.Component {
   }
 
   render() {
-    const { playerInfo } = this.props;
+    const { bio } = this.props;
 
     return (
       <div>
         <p>
           <span className="bold">Born</span>
-          {` ${moment(playerInfo.birthDate).format('LL')} (${moment().diff(playerInfo.birthDate, 'years')} yrs. ago) `}
+          {` ${moment(bio.birthDate).format('LL')} (${moment().diff(bio.birthDate, 'years')} yrs. ago) `}
         </p>
         <p>
           <span className="bold"> Birthplace</span>
-          {` ${[playerInfo.birthCity, playerInfo.birthStateProvince || '', playerInfo.birthCountry].filter(Boolean).join(', ')} `}
+          {` ${[bio.birthCity, bio.birthStateProvince || '', bio.birthCountry].filter(Boolean).join(', ')} `}
         </p>
         <p>
           <span className="bold">Height</span>
-          {` ${playerInfo.height} ft. `}
+          {` ${bio.height.feet} ft. ${bio.height.inches} `}
           <span className="bold">Weight</span>
-          {` ${playerInfo.weight} lbs. `}
+          {` ${bio.weight.pounds} lbs. `}
         </p>
       </div>
     );

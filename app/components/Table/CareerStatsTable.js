@@ -39,7 +39,7 @@ const useAcronyms = (leagueName) => {
   return leagueName;
 };
 
-const CareerStatsTable = ({ stats, info, showTotalRow }) => (
+const CareerStatsTable = ({ stats, position, showTotalRow }) => (
   <div>
     <ReactTable
       showPagination={false}
@@ -70,15 +70,15 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
           maxWidth: 250,
           minWidth: 225,
           className: 'border-right text-left team-cell',
-          accessor: prop('team'),
+          accessor: prop('teamId'),
           Cell: row => (
             <div>
               {
-                  row.value.id ? (
+                  row.value && (
                     <svg className="team-cell-logo">
-                      <use xlinkHref={`/public/images/teams/season/${row.original.season}.svg#team-${row.value.id}-${row.original.season}-light`} />
+                      <use xlinkHref={`/public/images/teams/season/${row.original.season}.svg#team-${row.value}-${row.original.season}-light`} />
                     </svg>
-                  ) : null
+                  )
                 }
               {row.value.name}
             </div>
@@ -97,7 +97,7 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
           id: 'goals',
           maxWidth: 85,
           minWidth: 55,
-          show: info.primaryPosition.name !== 'Goalie',
+          show: !position.isGoalie,
           accessor: d => pathOr('-', ['stat', 'goals'], d),
           Footer: showTotalRow && sumNumbers(stats, ['stat', 'goals']),
         },
@@ -106,7 +106,7 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
           id: 'assists',
           maxWidth: 85,
           minWidth: 55,
-          show: info.primaryPosition.name !== 'Goalie',
+          show: !position.isGoalie,
           accessor: d => pathOr('-', ['stat', 'assists'], d),
           Footer: showTotalRow && sumNumbers(stats, ['stat', 'assists']),
         },
@@ -115,7 +115,7 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
           id: 'points',
           maxWidth: 85,
           minWidth: 65,
-          show: info.primaryPosition.name !== 'Goalie',
+          show: !position.isGoalie,
           accessor: d => pathOr('-', ['stat', 'points'], d),
           Footer: showTotalRow && sumNumbers(stats, ['stat', 'points']),
         },
@@ -124,7 +124,7 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
           id: 'plusMinus',
           maxWidth: 85,
           minWidth: 50,
-          show: info.primaryPosition.name !== 'Goalie',
+          show: !position.isGoalie,
           accessor: d => pathOr('-', ['stat', 'plusMinus'], d),
           Footer: showTotalRow && sumNumbers(stats, ['stat', 'plusMinus']),
         },
@@ -133,7 +133,7 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
           id: 'pim',
           maxWidth: 85,
           minWidth: 55,
-          show: info.primaryPosition.name !== 'Goalie',
+          show: !position.isGoalie,
           accessor: d => pathOr('-', ['stat', 'pim'], d),
           Footer: showTotalRow && sumNumbers(stats, ['stat', 'pim']),
         },
@@ -142,7 +142,7 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
           id: 'hits',
           maxWidth: 85,
           minWidth: 65,
-          show: info.primaryPosition.name !== 'Goalie',
+          show: !position.isGoalie,
           accessor: d => pathOr('-', ['stat', 'hits'], d),
           Footer: showTotalRow && sumNumbers(stats, ['stat', 'hits']),
         },
@@ -151,7 +151,7 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
           id: 'blocked',
           maxWidth: 85,
           minWidth: 55,
-          show: info.primaryPosition.name !== 'Goalie',
+          show: !position.isGoalie,
           accessor: d => pathOr('-', ['stat', 'blocked'], d),
           Footer: showTotalRow && sumNumbers(stats, ['stat', 'blocked']),
         },
@@ -160,7 +160,7 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
           id: 'shots',
           maxWidth: 85,
           minWidth: 65,
-          show: info.primaryPosition.name !== 'Goalie',
+          show: !position.isGoalie,
           accessor: d => pathOr('-', ['stat', 'shots'], d),
           Footer: showTotalRow && sumNumbers(stats, ['stat', 'shots']),
         },
@@ -169,7 +169,7 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
           id: 'shotPct',
           maxWidth: 85,
           minWidth: 60,
-          show: info.primaryPosition.name !== 'Goalie',
+          show: !position.isGoalie,
           accessor: pathOr('-', ['stat', 'shotPct']),
           Cell: row => (
             <span>{typeof row.value === 'number' ? Number(row.value).toFixed(1) : '-'}</span>
@@ -187,7 +187,7 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
           id: 'wins',
           maxWidth: 85,
           minWidth: 55,
-          show: info.primaryPosition.name === 'Goalie',
+          show: position.isGoalie,
           filterable: false,
           accessor: d => pathOr('-', ['stat', 'wins'], d),
           Footer: showTotalRow && sumNumbers(stats, ['stat', 'wins']),
@@ -197,7 +197,7 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
           id: 'losses',
           maxWidth: 85,
           minWidth: 55,
-          show: info.primaryPosition.name === 'Goalie',
+          show: position.isGoalie,
           filterable: false,
           accessor: d => pathOr('-', ['stat', 'losses'], d),
           Footer: showTotalRow && sumNumbers(stats, ['stat', 'losses']),
@@ -207,7 +207,7 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
           id: 'ot',
           maxWidth: 85,
           minWidth: 50,
-          show: info.primaryPosition.name === 'Goalie',
+          show: position.isGoalie,
           filterable: false,
           accessor: d => pathOr('-', ['stat', 'ot'], d),
           Footer: showTotalRow && sumNumbers(stats, ['stat', 'ot']),
@@ -217,7 +217,7 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
           id: 'shutouts',
           maxWidth: 85,
           minWidth: 50,
-          show: info.primaryPosition.name === 'Goalie',
+          show: position.isGoalie,
           filterable: false,
           accessor: d => pathOr('-', ['stat', 'shutouts'], d),
           Footer: showTotalRow && sumNumbers(stats, ['stat', 'shutouts']),
@@ -227,7 +227,7 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
           id: 'savePercentage',
           maxWidth: 85,
           minWidth: 70,
-          show: info.primaryPosition.name === 'Goalie',
+          show: position.isGoalie,
           filterable: false,
           accessor: pathOr('-', ['stat', 'savePercentage']),
           Cell: row => (
@@ -240,7 +240,7 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
           id: 'goalAgainstAverage',
           maxWidth: 85,
           minWidth: 60,
-          show: info.primaryPosition.name === 'Goalie',
+          show: position.isGoalie,
           filterable: false,
           accessor: pathOr('-', ['stat', 'goalAgainstAverage']),
           Cell: row => (
@@ -254,7 +254,7 @@ const CareerStatsTable = ({ stats, info, showTotalRow }) => (
           id: 'saves',
           maxWidth: 85,
           minWidth: 70,
-          show: info.primaryPosition.name === 'Goalie',
+          show: position.isGoalie,
           filterable: false,
           accessor: d => pathOr('-', ['stat', 'saves'], d),
           Footer: showTotalRow && sumNumbers(stats, ['stat', 'saves']),

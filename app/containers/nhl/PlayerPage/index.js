@@ -16,41 +16,43 @@ import Bio from './Bio';
 import './style.scss';
 
 const urlParams = new URLSearchParams(window.location.search);
-const id = Number(urlParams.get('id'));
+const internationalLeagueNames = ['WJC-A', 'WC-A', 'Olympics']
 
 export default class PlayerPage extends React.Component {
   render() {
+    console.warn(Number(urlParams.get('id')))
     return (
       <div>
         <Header selectedLeague="NHL" />
-        <Query query={getPlayerQuery} variables={{ id }}>
+        <Query query={getPlayerQuery} variables={{ id: Number(urlParams.get('id')) }}>
           {({ loading, error, data }) => {
-            if (loading) return (<LoadingIndicator />);
-            if (error) return (<EmptyState isError />);
+            if (loading) return (<LoadingIndicator />)
+            if (error) return (<EmptyState isError />)
 
-            const player = data.player;
+            const { player } = data.nhl
 
             const {
-              careerStats = [], careerPlayoffStats = [], info = {}, logs = [], isActive,
-            } = player;
-            const {
-              primaryPosition = {},
-              currentTeamInfo = {},
-              draftInfo = {},
-              shootsCatches,
-              nationality,
-            } = info;
+              id,
+              team,
+              teamName = '',
+              bio,
+              status,
+              position,
+              streak,
+              draft,
+              career,
+              gameLogs,
+            }  = player
 
-            const isPro = player.hasNHLExperience;
-            const internationalLeagueNames = ['WJC-A', 'WC-A', 'Olympics'];
-            const proStats = reject(stat => contains(stat.league.name, internationalLeagueNames))(careerStats);
-            const internationalStats = filter(stat => contains(stat.league.name, internationalLeagueNames))(careerStats);
-
+            const proStats = reject(stat => contains(stat.leagueName, internationalLeagueNames))(career.seasons)
+            const internationalStats = filter(stat => contains(stat.leagueName, internationalLeagueNames))(career.seasons)
+            const isPro = true
+            console.warn(`/public/images/teams/${team.name.replace(' ', '-').toLowerCase()}.png`)
             return (
               <div className="player-page">
                 <Helmet
-                  titlePrefix={`${info.firstName} ${info.lastName}`}
-                  contentPrefix={`${info.firstName} ${info.lastName} stats.`}
+                  titlePrefix={`${bio.firstName} ${bio.lastName}`}
+                  contentPrefix={`${bio.firstName} ${bio.lastName} stats.`}
                 />
                 <div className="page-header wTabs">
                   <div className="container">
@@ -58,23 +60,21 @@ export default class PlayerPage extends React.Component {
                       <div className="player-img">
                         <PlayerImage id={urlParams.get('id')} />
                         <div className="icon-wrapper player-img-country">
-                          <img src={`/public/images/country/${nationality}.svg`} />
+                          <img src={`/public/images/country/${bio.birthCountry}.svg`} />
                         </div>
-                        {currentTeamInfo && (
-                         <div className="icon-wrapper player-img-team">
-                           <img src={`/public/images/teams/${currentTeamInfo.teamName.replace(' ', '-').toLowerCase()}.png`} className="" />
-                         </div>
-                        )}
+                        <div className="icon-wrapper player-img-team">
+                          <img src={`/public/images/teams/${team.name.replace(' ', '-').toLowerCase()}.png`} className="" />
+                        </div>
                       </div>
                       <div className="player-info">
-                        <h2>{`${info.firstName} ${info.lastName}`}</h2>
+                        <h2>{`${bio.firstName} ${bio.lastName}`}</h2>
                         <p>
-                          {currentTeamInfo && <a href={`/team?id=${currentTeamInfo.id}`}>{`${currentTeamInfo.name}, `}</a>}
-                          {`${primaryPosition.abbreviation}, Shoots ${shootsCatches}`}
+                          <a href={`/team?id=${team.id}`}>{`${team.name}, `}</a>
+                          {`${position.code}, Shoots ${bio.shootsCatches}`}
                         </p>
                         <div className="player-desc">
-                          <Bio playerInfo={info} />
-                          <DraftInfo draftInfo={draftInfo} />
+                          <Bio bio={bio} />
+                          <DraftInfo draft={draft} />
                         </div>
                         {isPro && <CareerSummary player={player}/>}
                       </div>
@@ -83,12 +83,12 @@ export default class PlayerPage extends React.Component {
                 </div>
                 {
                   <Statistics
-                    internationalStats={internationalStats}
-                    careerPlayoffStats={careerPlayoffStats}
                     proStats={proStats}
-                    logs={logs}
+                    playoffStats={career.playoffs}
+                    internationalStats={internationalStats}
+                    logs={gameLogs}
                     isPro={isPro}
-                    info={info}
+                    position={position}
                   />
                 }
               </div>

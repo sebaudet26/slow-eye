@@ -1,5 +1,6 @@
 import React from 'react';
 import { toOrdinal } from '../../../utils/misc';
+import { last } from 'ramda'
 
 class DraftInfo extends React.Component {
   constructor(props) {
@@ -9,19 +10,20 @@ class DraftInfo extends React.Component {
   }
 
   render() {
-    const { draftInfo } = this.props;
+    const { draft } = this.props;
+
     return (
       <div className="player-desc-right">
         {
-          draftInfo ? (
+          draft ? (
             <div>
               <p>
                 <span className="bold">Drafted by</span>
-                {` ${draftInfo.team.name}`}
+                {` ${last(draft.pickHistory)}`}
               </p>
               <p>
-                <span>{`${toOrdinal(draftInfo.round)}  Round, `}</span>
-                <span>{`#${draftInfo.pickOverall} Overall, ${draftInfo.year} NHL Draft`}</span>
+                <span>{`${toOrdinal(draft.round)}  Round, `}</span>
+                <span>{`#${draft.overall} Overall, ${draft.year} NHL Draft`}</span>
               </p>
             </div>
           ) : <span>Undrafted</span>
