@@ -3,22 +3,15 @@ const {
   GraphQLString,
   GraphQLList,
   GraphQLInt,
-  GraphQLFloat,
 } = require('graphql')
 
 const {
-	path,
-	pathOr,
-	pipe,
-	prop,
-} = require('ramda')
+  toNumber,
+  resolveProp,
+  resolvePath,
+} = require('./deconstructors/index')
 
-const resolveProp = propName => obj => Promise.resolve(obj[propName])
-const resolvePath = objPath => obj => Promise.resolve(path(objPath, obj))
-
-const { teamsStandingsLoader } = require('../loaders/nhl')
-
-const itself = (p = {}) => p
+const { teamsStandingsLoader } = require('../../loaders/nhl')
 
 const Conference = new GraphQLObjectType({
 	name: 'Conference',
@@ -33,15 +26,15 @@ const Ranking = new GraphQLObjectType({
 	fields: {
 		divisionRank: {
 			type: GraphQLInt,
-			resolve: ranking => resolveProp('divisionRank')(ranking).then((rank) => Number(rank))
+			resolve: ranking => resolveProp('divisionRank')(ranking).then(toNumber)
 		},
 		conferenceRank: {
 			type: GraphQLInt,
-			resolve: ranking => resolveProp('conferenceRank')(ranking).then((rank) => Number(rank))
+			resolve: ranking => resolveProp('conferenceRank')(ranking).then(toNumber)
 		},
 		leagueRank: {
 			type: GraphQLInt,
-			resolve: ranking => resolveProp('leagueRank')(ranking).then((rank) => Number(rank))
+			resolve: ranking => resolveProp('leagueRank')(ranking).then(toNumber)
 		},
 	}
 })
@@ -72,19 +65,19 @@ const Standing = new GraphQLObjectType({
     },
     divisionRank: {
     	type: GraphQLInt,
-    	resolve: pipe(prop('divisionRank'), Number),
+    	resolve: (doc) => resolveProp('divisionRank')(doc).then(toNumber),
     },
     conferenceRank: {
     	type: GraphQLInt,
-    	resolve: pipe(prop('conferenceRank'), Number),
+    	resolve: (doc) => resolveProp('conferenceRank')(doc).then(toNumber),
     },
     leagueRank: {
     	type: GraphQLInt,
-    	resolve: pipe(prop('leagueRank'), Number),
+    	resolve: (doc) => resolveProp('leagueRank')(doc).then(toNumber),
     },
     wildCardRank: {
     	type: GraphQLInt,
-    	resolve: pipe(prop('wildCardRank'), Number),
+    	resolve: (doc) => resolveProp('wildCardRank')(doc).then(toNumber),
     },
     gamesPlayed: {
     	type: GraphQLInt,

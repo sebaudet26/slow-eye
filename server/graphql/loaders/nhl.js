@@ -27,16 +27,16 @@ const {
   takeLast,
 } = require('ramda')
 const moment = require('moment-timezone')
-
-const ApiRequest = require('../../libs/api/api')
-const cache = require('../../libs/redis').instance
 const DataLoader = require('dataloader')
 
+const ApiRequest = require('../../libs/api/api')
+const Cache = require('../../libs/redis')
 const {
 	calculateTeamPointsStreak,
 	calculatePlayerPointsStreak,
-} = require('./nhlHelpers')
+} = require('../helpers/nhl/streaks')
 
+const cache = new Cache()
 
 // Definitions
 const CURRENT_SEASON = '20192020'
@@ -469,7 +469,7 @@ const batchTeamScheduleFetcher = async (teamIds) => {
 const teamScheduleLoader = new DataLoader(batchTeamScheduleFetcher)
 
 const calculateTeamsStreaks = async () => {
-	const cached_value = await cache.get('team_streaks')
+	const cached_value = await cache.instance.get('team_streaks')
 	if (cached_value) {
 		return JSON.parse(cached_value)
 	}
@@ -518,7 +518,7 @@ const fetchByBatchOf = (batchSize) => async (cumulative, players) => {
 };
 
 const calculatePlayerStreaks = async () => {
-	const cached_value = await cache.get('player_streaks')
+	const cached_value = await cache.instance.get('player_streaks')
 	if (cached_value) {
 		return JSON.parse(cached_value)
 	}

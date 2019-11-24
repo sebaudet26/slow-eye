@@ -1,5 +1,4 @@
 const {
-  GraphQLBoolean,
   GraphQLObjectType,
   GraphQLString,
   GraphQLList,
@@ -8,27 +7,16 @@ const {
 } = require('graphql')
 
 const {
-	equals,
-	lte,
-	map,
-	path,
-	pathOr,
-	pipe,
-	prop,
-	sum,
-	take,
-} = require('ramda')
-
-const {
   gameBoxscoreLoader,
 	gameLivefeedLoader,
 	gameHighlightsLoader,
-} = require('../loaders/nhl')
+} = require('../../loaders/nhl')
 
-const resolveProp = propName => obj => Promise.resolve(obj[propName])
-const resolvePath = objPath => obj => Promise.resolve(path(objPath, obj))
-
-const itself = (p = {}) => p
+const {
+	toNumber,
+	resolvePath,
+	resolveProp,
+} = require('./deconstructors/index')
 
 const Highlight = new GraphQLObjectType({
 	name: 'Highlight',
@@ -54,11 +42,11 @@ const GameTeamStats = new GraphQLObjectType({
 	  hits: { type: GraphQLInt, resolve: resolveProp('hits') },
 	  faceOffWinPercentage: {
 	  	type: GraphQLFloat,
-	  	resolve: doc => resolveProp('faceOffWinPercentage')(doc).then((str) => Number(str))
+	  	resolve: doc => resolveProp('faceOffWinPercentage')(doc).then(toNumber)
 	  },
 	  powerPlayPercentage: {
 	  	type: GraphQLFloat,
-	  	resolve: doc => resolveProp('powerPlayPercentage')(doc).then((str) => Number(str))
+	  	resolve: doc => resolveProp('powerPlayPercentage')(doc).then(toNumber)
 	  },
 	}
 })

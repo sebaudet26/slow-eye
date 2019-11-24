@@ -8,30 +8,14 @@ const {
 } = require('graphql')
 
 const {
-	equals,
-	lte,
-	map,
-	path,
-	pathOr,
-	pipe,
-	prop,
-	sum,
-	take,
-} = require('ramda')
-
-const {
-	PlayerWeight,
-	PlayerHeight,
+  resolveProp,
+  PlayerWeight,
+  PlayerHeight,
 } = require('./deconstructors')
 
 const {
   playersReportLoader,
-} = require('../loaders/nhl')
-
-const resolveProp = propName => obj => Promise.resolve(obj[propName])
-const resolvePath = objPath => obj => Promise.resolve(path(objPath, obj))
-
-const itself = (p = {}) => p
+} = require('../../loaders/nhl')
 
 
 const Stat = new GraphQLObjectType({

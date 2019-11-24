@@ -136,6 +136,6 @@ const calculatePlayerPointsStreak = player => ({
 });
 
 module.exports = {
-	calculateTeamPointsStreak,
-	calculatePlayerPointsStreak,
+  calculateTeamPointsStreak,
+  calculatePlayerPointsStreak,
 }

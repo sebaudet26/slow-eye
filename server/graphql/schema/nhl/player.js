@@ -8,15 +8,15 @@ const {
 } = require('graphql')
 
 const {
-	equals,
-	lte,
-	map,
-	path,
-	pathOr,
-	pipe,
-	prop,
-	sum,
-	take,
+  pipe,
+  prop,
+  map,
+  pathOr,
+  sum,
+  path,
+  lte,
+  equals,
+  take,
 } = require('ramda')
 
 const {
@@ -26,7 +26,7 @@ const {
   playerCareerPlayoffsStatsLoader,
 	playerSeasonGameLogsLoader,
   playerPlayoffsGameLogsLoader,
-} = require('../loaders/nhl')
+} = require('../../loaders/nhl')
 
 const {
   isHot,
@@ -34,14 +34,17 @@ const {
   hotColdPoints,
   hotColdGames,
   hotColdPlusMinus,
-} = require('../streaks')
+} = require('../../helpers/nhl/streaks')
 
 const {
+  itself,
+  resolveProp,
+  resolvePath,
   Time,
   PlayerHeight,
   PlayerWeight,
   PlayerStatistic,
-} = require('./deconstructors')
+} = require('./deconstructors/index')
 
 const POUNDS_TO_KILOGRAMS = 0.453592
 const forwardsAbbreviations = ['C', 'LW', 'RW']
@@ -52,64 +55,49 @@ const timeStringToTimeType = (timeString = '') => {
     seconds: Number(timeString.split(':')[1]) || 0,
   }
 }
-const resolveProp = propName => obj => Promise.resolve(obj[propName])
-const resolvePath = objPath => obj => Promise.resolve(path(objPath, obj))
-
-const itself = (p = {}) => p
-
 const PlayerBio = new GraphQLObjectType({
   name: 'PlayerBio',
   fields: {
     firstName: {
     	type: GraphQLString,
-    	resolve: p => playerBioLoader.load(p.id)
-        .then(resolveProp('firstName'))
+    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('firstName'))
     },
     lastName: {
     	type: GraphQLString,
-    	resolve: p => playerBioLoader.load(p.id)
-        .then(resolveProp('lastName'))
+    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('lastName'))
     },
     birthDate: {
     	type: GraphQLString,
-    	resolve: p => playerBioLoader.load(p.id)
-        .then(resolveProp('birthDate'))
+    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('birthDate'))
     },
     birthCity: {
     	type: GraphQLString,
-    	resolve: p => playerBioLoader.load(p.id)
-        .then(resolveProp('birthCity'))
+    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('birthCity'))
     },
     birthState: {
     	type: GraphQLString,
-    	resolve: p => playerBioLoader.load(p.id)
-        .then(resolveProp('birthStateProvince'))
+    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('birthStateProvince'))
     },
     birthCountry: {
     	type: GraphQLString,
-    	resolve: p => playerBioLoader.load(p.id)
-        .then(resolveProp('birthCountry'))
+    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('birthCountry'))
     },
     shootsCatches: {
     	type: GraphQLString,
-    	resolve: p => playerBioLoader.load(p.id)
-        .then(resolveProp('shootsCatches'))
+    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('shootsCatches'))
     },
     // integers
     height: {
     	type: PlayerHeight,
-    	resolve: p => playerBioLoader.load(p.id)
-        .then(resolveProp('height'))
+    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('height'))
     },
     weight: {
     	type: PlayerWeight,
-    	resolve: p => playerBioLoader.load(p.id)
-        .then(resolveProp('weight'))
+    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('weight'))
     },
     age: {
     	type: GraphQLInt,
-    	resolve: p => playerBioLoader.load(p.id)
-        .then(resolveProp('currentAge'))
+    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('currentAge'))
     },
     jerseyNumber: {
     	type: GraphQLInt,
@@ -124,13 +112,11 @@ const PlayerStatus = new GraphQLObjectType({
 	fields: {
     isActive: {
     	type: GraphQLBoolean,
-    	resolve: p => playerBioLoader.load(p.id)
-        .then(resolveProp('active'))
+    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('active'))
     },
     isRookie: {
     	type: GraphQLBoolean,
-    	resolve: p => playerBioLoader.load(p.id)
-        .then(resolveProp('rookie'))
+    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('rookie'))
     },
     isVeteran: {
     	type: GraphQLBoolean,
@@ -143,13 +129,11 @@ const PlayerStatus = new GraphQLObjectType({
     },
     isCaptain: {
     	type: GraphQLBoolean,
-    	resolve: p => playerBioLoader.load(p.id)
-        .then(resolveProp('captain'))
+    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('captain'))
     },
     isAlternate: {
     	type: GraphQLBoolean,
-    	resolve: p => playerBioLoader.load(p.id)
-        .then(resolveProp('alternateCaptain'))
+    	resolve: p => playerBioLoader.load(p.id).then(resolveProp('alternateCaptain'))
     },
     isInjured: {
       type: GraphQLBoolean,
@@ -241,39 +225,31 @@ const PlayerDraft = new GraphQLObjectType({
 	fields: {
     amateurTeam: {
       type: GraphQLString,
-      resolve: p => playerDraftLoader.load(p.id)
-        .then(resolveProp('amateurClubName'))
+      resolve: p => playerDraftLoader.load(p.id).then(resolveProp('amateurClubName'))
     },
     amateurLeague: {
       type: GraphQLString,
-      resolve: p => playerDraftLoader.load(p.id)
-        .then(resolveProp('amateurLeague'))
+      resolve: p => playerDraftLoader.load(p.id).then(resolveProp('amateurLeague'))
     },
     draftYear: {
       type: GraphQLInt,
-      resolve: p => playerDraftLoader.load(p.id)
-        .then(resolveProp('draftYear')),
+      resolve: p => playerDraftLoader.load(p.id).then(resolveProp('draftYear')),
     },
     pickHistory: {
       type: new GraphQLList(GraphQLString),
-      resolve: p => playerDraftLoader.load(p.id)
-        .then(resolveProp('teamPickHistory'))
-        .then(history => history.split(',')),
+      resolve: p => playerDraftLoader.load(p.id).then(resolveProp('teamPickHistory')).then(history => history.split(',')),
     },
     round: {
       type: GraphQLInt,
-      resolve: p => playerDraftLoader.load(p.id)
-        .then(resolveProp('roundNumber')),
+      resolve: p => playerDraftLoader.load(p.id).then(resolveProp('roundNumber')),
     },
     pickInRound: {
       type: GraphQLInt,
-      resolve: p => playerDraftLoader.load(p.id)
-        .then(resolveProp('pickInRound')),
+      resolve: p => playerDraftLoader.load(p.id).then(resolveProp('pickInRound')),
     },
     overall: {
       type: GraphQLInt,
-      resolve: p => playerDraftLoader.load(p.id)
-        .then(resolveProp('overallPickNumber')),
+      resolve: p => playerDraftLoader.load(p.id).then(resolveProp('overallPickNumber')),
     },
 	},
 });

@@ -8,30 +8,18 @@ const {
 } = require('graphql')
 
 const {
-	equals,
-	lte,
-	map,
-	path,
-	pathOr,
-	pipe,
-	prop,
-	sum,
-	take,
-} = require('ramda')
+	resolveProp,
+	resolvePath,
+} = require('./deconstructors/index')
 
 const {
   gamesScheduleLoader,
-} = require('../loaders/nhl')
+} = require('../../loaders/nhl')
 
 const {
   getFinalPeriod,
   getStatusText,
-} = require('../nhlGames')
-
-const resolveProp = propName => obj => Promise.resolve(obj[propName])
-const resolvePath = objPath => obj => Promise.resolve(path(objPath, obj))
-
-const itself = (p = {}) => p
+} = require('../../helpers/nhl/games')
 
 const TeamRecord = new GraphQLObjectType({
 	name: 'TeamRecord',

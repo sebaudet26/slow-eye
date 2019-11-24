@@ -8,33 +8,18 @@ const {
 } = require('graphql')
 
 const {
-	equals,
-	lte,
-	map,
-	path,
-	pathOr,
-	pipe,
-	prop,
-	sum,
-	take,
-} = require('ramda')
-
-const {
+  resolveProp,
+  resolvePath,
 	PlayerWeight,
 	PlayerHeight,
-} = require('./deconstructors')
-
-const resolveProp = propName => obj => Promise.resolve(obj[propName])
-const resolvePath = objPath => obj => Promise.resolve(path(objPath, obj))
-
-const itself = (p = {}) => p
+} = require('./deconstructors/index')
 
 const {
 	teamsLoader,
   teamRosterLoader,
 	teamInfoLoader,
 	teamStatsLoader,
-} = require('../loaders/nhl')
+} = require('../../loaders/nhl')
 
 const Player = new GraphQLObjectType({
   name: 'Player',
@@ -45,7 +30,6 @@ const Player = new GraphQLObjectType({
     position: { type: GraphQLString, resolve: resolvePath(['position', 'code']) },
   },
 })
-
 
 const Team = new GraphQLObjectType({
   name: 'Team',

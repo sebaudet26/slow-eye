@@ -47,7 +47,7 @@ class ApiRequest {
   async tryCache() {
     if (this.skipCache) return this
     if (!this.resource) throw new Error('you must set the resource')
-    const cachedValue = await this.cache.get(this.resource)
+    const cachedValue = await this.cache.get(this.url)
     this.data = JSON.parse(cachedValue)
     // console.log(`fetched from cache ${this.resource}`)
     return this.data
@@ -55,14 +55,14 @@ class ApiRequest {
 
   async saveToCache() {
     if (this.skipCache) return this
-    if (!this.resource || !this.expiration) {
+    if (!this.url || !this.expiration) {
       throw new Error('you must set the resource and expiration')
     }
     if (!this.data) throw new Error('you must have data to save to cache')
     this
       .cache
       .set(
-        this.resource,
+        this.url,
         JSON.stringify(this.data),
         'EX',
         this.expiration
