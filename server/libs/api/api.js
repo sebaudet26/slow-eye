@@ -81,6 +81,9 @@ class ApiRequest {
 
   async fetch() {
     console.log(this.url)
+    if (process.env.USE_RECORDINGS) {
+      return require(recordingsPath)[this.url]
+    }
     await this.tryCache()
     if (this.data) return this.data
     const response = await nodeFetch(this.url)
@@ -102,7 +105,7 @@ process.on('SIGINT', () => {
     console.log(Object.keys(recordedResponses))
     fs.writeFileSync(recordingsPath, JSON.stringify(recordedResponses, null, 2))
   }
-  process.exit(2)
+  process.abort()
 })
 
 module.exports = ApiRequest

@@ -70,11 +70,11 @@ class Cache {
 
 let singleton
 const getSingleton = () => {
-  if (singleton) {
-    return singleton
+  if (!singleton) {
+    singleton = new Cache()
   }
 
-  return new Cache()
+  return singleton
 }
 
 module.exports = getSingleton()

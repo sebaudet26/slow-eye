@@ -5,10 +5,7 @@ const port = require('./util/port');
 
 // Does not do anything for now
 // require('./libs/automatedJobs');
-
-// Connect redis singleton
-require('./libs/redis').connect()
-
+const cache = require('./libs/redis')
 const server = require('./server')
 
 // get the intended host and port number, use localhost and port 3000 if not provided
@@ -17,13 +14,14 @@ const host = process.env.HOST || 'localhost';
 // Start your app.
 server.listen(port, host, (err) => {
   if (err) {
-    return logger.error(err.message);
+    return logger.error(err.message)
   }
 
   // For nginx
   if (process.env.NODE_ENV === 'production') {
-    fs.openSync('/tmp/app-initialized', 'w');
+    fs.openSync('/tmp/app-initialized', 'w')
   }
 
-  return logger.appStarted(port, host);
+  logger.appStarted(port, host)
+  cache.connect()
 });
