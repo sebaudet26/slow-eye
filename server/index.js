@@ -1,36 +1,21 @@
 require('./util/loadDevEnv');
-const express = require('express');
-const { resolve } = require('path');
-const bodyParser = require('body-parser');
 const fs = require('fs');
 const logger = require('./util/logger');
 const port = require('./util/port');
-const setup = require('./middlewares/frontendMiddleware');
-const graphql = require('./middlewares/graphql');
-require('./libs/api/api')
-require('./libs/automatedJobs');
 
-const Cache = require('./libs/redis')
-new Cache().connect()
+// Does not do anything for now
+// require('./libs/automatedJobs');
 
-const app = express();
+// Connect redis singleton
+require('./libs/redis').connect()
 
-app.use('/public/images', express.static('app/public/images'));
-
-app.use(bodyParser.json());
-
-app.use('/graphql', graphql);
-
-setup(app, {
-  outputPath: resolve(process.cwd(), 'build'),
-  publicPath: '/',
-});
+const server = require('./server')
 
 // get the intended host and port number, use localhost and port 3000 if not provided
 const host = process.env.HOST || 'localhost';
 
 // Start your app.
-app.listen(port, host, (err) => {
+server.listen(port, host, (err) => {
   if (err) {
     return logger.error(err.message);
   }

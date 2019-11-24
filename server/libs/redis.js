@@ -68,4 +68,13 @@ class Cache {
   }
 }
 
-module.exports = Cache
+let singleton
+const getSingleton = () => {
+  if (singleton) {
+    return singleton
+  }
+
+  return new Cache()
+}
+
+module.exports = getSingleton()

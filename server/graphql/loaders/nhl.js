@@ -30,13 +30,12 @@ const moment = require('moment-timezone')
 const DataLoader = require('dataloader')
 
 const ApiRequest = require('../../libs/api/api')
-const Cache = require('../../libs/redis')
+const cache = require('../../libs/redis').instance
+
 const {
 	calculateTeamPointsStreak,
 	calculatePlayerPointsStreak,
 } = require('../helpers/nhl/streaks')
-
-const cache = new Cache()
 
 // Definitions
 const CURRENT_SEASON = '20192020'

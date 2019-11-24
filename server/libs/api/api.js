@@ -1,6 +1,15 @@
 const moment = require('moment-timezone')
 const nodeFetch = require('node-fetch')
+const fs = require('fs')
+
 const cache = require('./../redis')
+
+let recordedResponses = {}
+
+const { resolve } = require('path');
+
+const recordingsPath = resolve(process.cwd(), 'server/integrationTest/recordedResponses.json')
+
 
 // technically 2AM to leave some time for Western coast to be at end of day
 const getSecondsUntilMidnight = () => Math.round((moment.tz('America/New_York').endOf('day').add(2, 'hours').valueOf() - moment.tz('America/New_York').valueOf()) / 1000)
@@ -40,7 +49,7 @@ class ApiRequest {
     this.resource = resource
     this.expiration = expiration || getSecondsUntilMidnight()
     this.url = `${BASE_URLS[league][apiType]}${this.resource}`
-    this.skipCache = skipCache || process.env.SKIP_CACHE
+    this.skipCache = skipCache || process.env.SKIP_CACHE || process.env.RUN_IN_RECORDING_MODE
     this.cache = cache.instance
   }
 
@@ -77,9 +86,23 @@ class ApiRequest {
     const response = await nodeFetch(this.url)
     const data = await response.json()
     this.data = data
+    if (process.env.RUN_IN_RECORDING_MODE) {
+      console.log('recorded', this.url)
+      recordedResponses[this.url] = this.data
+    }
     await this.saveToCache()
     return this.data
   }
 }
+
+process.on('SIGINT', () => {
+  console.log('SIGINT')
+  if (process.env.RUN_IN_RECORDING_MODE) {
+    console.log('saved recording')
+    console.log(Object.keys(recordedResponses))
+    fs.writeFileSync(recordingsPath, JSON.stringify(recordedResponses, null, 2))
+  }
+  process.exit(2)
+})
 
 module.exports = ApiRequest
