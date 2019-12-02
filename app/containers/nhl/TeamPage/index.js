@@ -59,7 +59,7 @@ class TeamPage extends React.Component {
 
             return (
               <div className="team-page">
-                <Helmet titlePrefix={team.name} contentPrefix={`${team.name} roster and stats.`}/>
+                <Helmet titlePrefix={team.name} contentPrefix={`${team.name} roster and stats.`} />
                 <div className="page-header wTabs">
                   <div className="container">
                     <div className="team-wrapper">

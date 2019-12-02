@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { gql } from 'apollo-boost';
 import { Query } from 'react-apollo';
+import { dynamicSort } from '../../utils/sort';
 import './style.scss';
 
 const teamsQuery = gql`
@@ -73,7 +74,7 @@ class Dropdown extends React.Component {
                           if (loading) return (null);
                           if (error) return ('Error');
 
-                          const teams = data.teams;
+                          const teams = data.teams.sort(dynamicSort('name'));
 
                           return teams.map(team => (
                             <a key={team.id} href={`/team?id=${team.id}`}>

@@ -158,7 +158,7 @@ class ScorePage extends React.Component {
             </div>
           </div>
           <div className="container">
-            <Helmet titlePrefix="NHL Scores" contentPrefix="View Live NHL Scores."/>
+            <Helmet titlePrefix="NHL Scores" contentPrefix="View Live NHL Scores." />
             <div className="scoreboard-wrapper">
               <div className="scoreboard-wrapper-results">
                 <Query

@@ -7,6 +7,7 @@ import Footer from '../../../components/Footer';
 import PlayersTable from '../../../components/Table/PlayersTable';
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import EmptyState from '../../../components/EmptyState';
+import { dynamicSort } from '../../../utils/sort';
 import './style.scss';
 
 class PlayerStatsPage extends React.PureComponent {
@@ -21,9 +22,8 @@ class PlayerStatsPage extends React.PureComponent {
               if (loading) return (<LoadingIndicator />);
               if (error) return (<EmptyState isError />);
 
-
               const players = data.playersReport;
-              const teams = data.teams;
+              const teams = data.teams.sort(dynamicSort('name'));
 
               return (
                 <PlayersTable

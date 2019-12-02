@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 
-const title = 'Seal-Stats.com';
+const title = 'sealstats.com';
 const content = "Seal Stats is the best place to view NHL stats. User-friendly and fast.";
 
 class Header extends React.Component {
