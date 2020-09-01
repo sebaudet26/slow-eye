@@ -9,6 +9,7 @@ const {
 
 const {
   resolveProp,
+  resolveOneOf,
   PlayerWeight,
   PlayerHeight,
 } = require('./deconstructors')
@@ -25,13 +26,13 @@ const Stat = new GraphQLObjectType({
     playerBirthDate: { type: GraphQLString, resolve: resolveProp('playerBirthDate') },
     playerFirstName: { type: GraphQLString, resolve: resolveProp('playerFirstName') },
     playerLastName: { type: GraphQLString, resolve: resolveProp('playerLastName') },
-    playerName: { type: GraphQLString, resolve: resolveProp('playerName') },
+    playerName: { type: GraphQLString, resolve: (doc) => doc.playerName || doc.skaterFullName },
     playerNationality: { type: GraphQLString, resolve: resolveProp('playerNationality') },
-    playerPositionCode: { type: GraphQLString, resolve: resolveProp('playerPositionCode') },
-    playerShootsCatches: { type: GraphQLString, resolve: resolveProp('playerShootsCatches') },
+    playerPositionCode: { type: GraphQLString, resolve: doc => doc.playerPositionCode || doc.positionCode },
+    playerShootsCatches: { type: GraphQLString, resolve: doc => doc.playerShootsCatches || doc.shootsCatches },
     playerTeamsPlayedFor: {
     	type: new GraphQLList(GraphQLString),
-    	resolve: teams => resolveProp('playerTeamsPlayedFor')(teams).then((str) => str.split(','))
+    	resolve: doc => Promise.resolve(doc.teamAbbrevs || doc.playerTeamsPlayedFor).then((str = '') => str.split(','))
     },
     gamesPlayed: { type: GraphQLInt, resolve: resolveProp('gamesPlayed') },
     gamesStarted: { type: GraphQLInt, resolve: resolveProp('gamesStarted') },

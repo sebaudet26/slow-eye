@@ -394,7 +394,7 @@ const player = `query {
         isInjured
       }
       position {
-        position
+        code
         isGoalie
         isDefenseman
         isForward
@@ -409,7 +409,7 @@ const player = `query {
       draft {
         amateurTeam
         amateurLeague
-        draftYear
+        year
         round
         pickInRound
         overall

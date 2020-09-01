@@ -20,6 +20,16 @@ const {
 } = require('ramda')
 
 const resolveProp = propName => obj => Promise.resolve(obj[propName])
+const resolveOneOf = props => obj => {
+  let value
+  props.forEach((prop) => {
+    if (obj[prop]) {
+      value = obj[prop]
+    }
+  })
+  Promise.resolve(value)
+}
+
 const resolvePath = objPath => obj => Promise.resolve(path(objPath, obj))
 
 const toNumber = (rank) => Number(rank)
@@ -196,6 +206,7 @@ module.exports = {
 	providedArgs: (_, args) => args || {},
 	resolveProp,
 	resolvePath,
+  resolveOneOf,
 	toNumber,
 	itself,
 	timeStringToTimeType,

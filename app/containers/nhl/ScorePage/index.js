@@ -38,6 +38,16 @@ const buildPaddedDateRange = (middleMoment) => {
 const buildPrevAccessor = (date, i) => moment(date).subtract(i, 'days').format(storeKeyFormat);
 const buildNextAccessor = (date, i) => moment(date).add(i, 'days').format(storeKeyFormat);
 
+const buildDateRange = currentDate => ([
+  moment(currentDate).subtract(3, 'days').format(storeKeyFormat),
+  moment(currentDate).subtract(2, 'days').format(storeKeyFormat),
+  moment(currentDate).subtract(1, 'days').format(storeKeyFormat),
+  currentDate,
+  moment(currentDate).add(1, 'days').format(storeKeyFormat),
+  moment(currentDate).add(2, 'days').format(storeKeyFormat),
+  moment(currentDate).add(3, 'days').format(storeKeyFormat),
+])
+
 const convertToOptions = moments => moments.map(moment => ({
   value: moment.format(storeKeyFormat),
   label: moment.format(dayLabelFormat),
@@ -46,20 +56,15 @@ const convertToOptions = moments => moments.map(moment => ({
 class ScorePage extends React.Component {
   constructor(props) {
     super(props);
-    const days = buildPaddedDateRange(moment().subtract(12, 'hours'));
+    const days = buildPaddedDateRange(moment().subtract(extendDayHours, 'hours'));
     const currentDate = days[Math.round(days.length / 2)].format(storeKeyFormat);
     this.state = {
       currentDate,
-      // This is clunky as fuck -> Create an array for this
-      y1date: buildPrevAccessor(currentDate, 1),
-      y2date: buildPrevAccessor(currentDate, 2),
-      y3date: buildPrevAccessor(currentDate, 3),
-      n1date: buildNextAccessor(currentDate, 1),
-      n2date: buildNextAccessor(currentDate, 2),
-      n3date: buildNextAccessor(currentDate, 3),
+      dates: buildDateRange(currentDate),
       daysOptions: convertToOptions(days),
       gamesAccessor: [],
     };
+    console.log('dates', this.state.dates)
     this.handleNewDateSelected = this.handleNewDateSelected.bind(this);
     this.handleNewCalendarDate = this.handleNewCalendarDate.bind(this);
   }
@@ -75,55 +80,18 @@ class ScorePage extends React.Component {
   }
 
   handleNewDateSelected(newDate) {
-    this.setState({
-      currentDate: newDate,
-      y1date: buildPrevAccessor(newDate, 1),
-      y2date: buildPrevAccessor(newDate, 2),
-      y3date: buildPrevAccessor(newDate, 3),
-      n1date: buildNextAccessor(newDate, 1),
-      n2date: buildNextAccessor(newDate, 2),
-      n3date: buildNextAccessor(newDate, 3),
-    });
+    this.setState({ dates: buildDateRange(newDate) });
   }
 
   renderGamesAccessor(data) {
     this.setState({
-      gamesAccessor: [
-        {
-          date: this.state.currentDate,
-          nbGames: data.currentDate.length,
-        },
-        {
-          date: this.state.y1date,
-          nbGames: data.y1date.length,
-        },
-        {
-          date: this.state.y2date,
-          nbGames: data.y2date.length,
-        },
-        {
-          date: this.state.y3date,
-          nbGames: data.y3date.length,
-        },
-        {
-          date: this.state.n1date,
-          nbGames: data.n1date.length,
-        },
-        {
-          date: this.state.n2date,
-          nbGames: data.n2date.length,
-        },
-        {
-          date: this.state.n3date,
-          nbGames: data.n3date.length,
-        },
-      ],
+      gamesAccessor: this.state.dates.map(date => ({ date: date, nbGames: 5 }))
     });
   }
 
   render() {
     const {
-      currentDate, daysOptions, y1date, y2date, y3date, n1date, n2date, n3date, gamesAccessor,
+      currentDate, daysOptions, dates, gamesAccessor,
     } = this.state;
     return (
       <div>
@@ -164,7 +132,7 @@ class ScorePage extends React.Component {
                 <Query
                   query={getScoresQuery}
                   variables={{
-                    date: currentDate, y1date, y2date, y3date, n1date, n2date, n3date,
+                    dates: this.state.dates
                   }}
                   onCompleted={data => this.renderGamesAccessor(data)}
                 >
@@ -173,15 +141,16 @@ class ScorePage extends React.Component {
                   }) => {
                     if (loading) return (<LoadingIndicator />);
                     if (error) return (<EmptyState isError />);
-
-                    const games = data.currentDate;
-
-                    if (games.length < 1) {
+                    console.log('dates', this.state.dates)
+                    console.log('data', data)
+                    const todaysGames = data.nhl.schedule;
+                    console.log('todaysGames', todaysGames)
+                    if (todaysGames.length < 1) {
                       return (
                         <EmptyState />
                       );
                     }
-                    return games.map(game => (
+                    return todaysGames.map(game => (
                       <ScoreCard key={game.id} game={game} />
                     ));
                   }}

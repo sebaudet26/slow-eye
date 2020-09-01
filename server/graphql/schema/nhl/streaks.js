@@ -20,7 +20,7 @@ const PlayersStreak = new GraphQLObjectType({
   name: 'PlayersStreak',
   fields: {
     id: { type: GraphQLInt, resolve: resolveProp('playerId') },
-    name: { type: GraphQLString, resolve: resolveProp('playerName') },
+    name: { type: GraphQLString, resolve: resolveProp('skaterFullName') },
     games: { type: GraphQLInt, resolve: resolvePath(['streak', 'games']) },
     goals: { type: GraphQLInt, resolve: resolvePath(['streak', 'goals']) },
     assists: { type: GraphQLInt, resolve: resolvePath(['streak', 'assists']) },

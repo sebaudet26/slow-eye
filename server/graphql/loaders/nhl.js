@@ -160,33 +160,51 @@ const batchPlayerPlayoffsGameLogsFetcher = async (playerIds) => {
 // Players -----
 
 const playersFetcher = async (seasons) => {
+  const totalPlayers = await cache.instance.get('total_players') || 7192
+  const totalGoalies = await cache.instance.get('total_goalies') || 810
+
+  // const cached_value = await cache.instance.get('players_list:' + seasons.join(','))
+  // if (cached_value) {
+  //   return JSON.parse(cached_value)
+  // }
+
 	const data = await Promise.all(seasons.map((season) => {
 		const seasonStart = season == 'all' ? '19171918' : season
 		const seasonEnd = season == 'all' ? CURRENT_SEASON : season
-		return Promise.all([
-			new ApiRequest({
-				league: 'NHL',
-				apiType: 'BASIC',
-				resource: '/skaters?isAggregate=true&reportType=basic&reportName=bios' +
-									'&sort=[{%22property%22:%22playerBirthDate%22,%22direction%22:%22DESC%22}]' +
-									`&cayenneExp=seasonId%3E=${seasonStart}%20and%20seasonId%3C=${seasonEnd}`,
-			}).fetch(),
-			new ApiRequest({
-				league: 'NHL',
-				apiType: 'BASIC',
-				resource: '/goalies?isAggregate=true&reportType=goalie_basic&reportName=goaliebios' +
-									'&sort=[{%22property%22:%22playerBirthDate%22,%22direction%22:%22DESC%22}]' +
-									`&cayenneExp=seasonId%3E=${seasonStart}%20and%20seasonId%3C=${seasonEnd}`,
-			}).fetch(),
-		])
+
+
+    const playerIntervals = parseInt(totalPlayers / 100) + 1
+    const goalieIntervals = parseInt(totalGoalies / 100) + 1
+
+    const requests = new Array(playerIntervals + goalieIntervals)
+
+    for (let i = 0; i<playerIntervals; i++) {
+      requests.push(new ApiRequest({
+        league: 'NHL',
+        apiType: 'BASIC',
+        resource: `/en/skater/bios?isAggregate=true&isGame=false&sort=%5B%7B%22property%22:%22birthDate%22,%22direction%22:%22ASC_CI%22%7D,%7B%22property%22:%22skaterFullName%22,%22direction%22:%22ASC_CI%22%7D%5D&start=${i*100}&limit=100&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=${seasonEnd}%20and%20seasonId%3E=${seasonStart}`
+      }))
+    }
+    for (let i = 0; i<goalieIntervals; i++) {
+      requests.push(new ApiRequest({
+        league: 'NHL',
+        apiType: 'BASIC',
+        resource: `/en/goalie/bios?isAggregate=true&isGame=false&sort=%5B%7B%22property%22:%22birthDate%22,%22direction%22:%22ASC_CI%22%7D,%7B%22property%22:%22goalieFullName%22,%22direction%22:%22ASC_CI%22%7D%5D&start=${i*100}&limit=100&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=${seasonEnd}%20and%20seasonId%3E=${seasonStart}`
+      }))
+    }
+
+		return Promise
+    .all(requests.map(request => request.fetch()))
 		.then((seasonData) => {
 			return Promise.resolve(pipe(
 				map(pathOr([], ['data'])),
 				flatten,
-				map(pick(['playerBirthDate', 'playerName', 'playerId', 'playerNationality', 'playerPositionCode'])),
+				map(pick(['skaterFullName', 'goalieFullName', 'birthDate', 'playerId', 'nationalityCode', 'positionCode'])),
 			)(seasonData))
 		})
 	}))
+
+  cache.instance.set('players_list:' + seasons.join(','), JSON.stringify(data))
 
 	return data
 }
@@ -194,70 +212,24 @@ const playersFetcher = async (seasons) => {
 const reportFetcher = async (season, type) => {
 	switch (type) {
 		case 'skaters':
-  		return await Promise.all([
-  			// rookies
-	  		'/skaters?isAggregate=false&reportType=basic&reportName=skatersummary' +
-	  		'&sort=[{%22property%22:%22playerId%22}]' +
-	  		`&cayenneExp=playerRookieSeasonInd=1%20and%20gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`,
-
-	  		'/skaters?isAggregate=false&reportType=basic&reportName=realtime' +
-	  		'&sort=[{%22property%22:%22playerId%22}]' +
-	  		`&cayenneExp=playerRookieSeasonInd=1%20and%20gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`,
-
-	  		// all players
-	  		'/skaters?isAggregate=false&reportType=basic&reportName=skatersummary' +
-	  		'&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22}]' +
-	  		`&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`,
-
-	  		'/skaters?isAggregate=false&reportType=basic&reportName=realtime' +
-	  		'&sort=[{%22property%22:%22playerId%22}]' +
-	  		`&cayenneExp=gameTypeId=2%20and%20gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}`,
-
-	  	].map((resource) => {
-	  		return new ApiRequest({
-					league: 'NHL',
-					apiType: 'BASIC',
-					resource,
-				}).fetch()
-			}))
-			.then((arr) => Promise.resolve(map(pathOr([], ['data']), arr)))
-			.then(([rookieSummary, rookieRealtime, allSummary, allRealtime]) => {
-  			const rookiesPlayerIds = map(prop('playerId'), rookieSummary);
-  			const final = [
-					...rookieSummary.map((item, k) => mergeLeft(rookieSummary[k], { ...rookieRealtime[k], rookie: true })),
-          ...allSummary.filter(item => !rookiesPlayerIds.includes(item.playerId))
-          	.map((item, k) => mergeLeft(allSummary[k], { ...allRealtime[k], rookie: false })),
-  			]
-  			return Promise.resolve(final)
+	  	const skaters = await new ApiRequest({
+				league: 'NHL',
+				apiType: 'BASIC',
+				resource: `/en/skater/summary?isAggregate=false&isGame=false&sort=%5B%7B%22property%22:%22points%22,%22direction%22:%22DESC%22%7D%5D&start=0&limit=100&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=${season}%20and%20seasonId%3E=${season}`,
 			})
+      .fetch()
 
+      return pathOr([], ['data'])(skaters)
 
 		case 'goalies':
-			return await Promise.all([
-				'/goalies?isAggregate=false&reportType=goalie_basic&reportName=goaliesummary' +
-				'&sort=[{%22property%22:%22playerId%22}]' +
-				`&cayenneExp=playerRookieSeasonInd=1%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}%20and%20gameTypeId=2`,
-
-				'/goalies?isAggregate=false&reportType=goalie_basic&reportName=goaliesummary' +
-				'&sort=[{%22property%22:%22playerId%22}]' +
-				`&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${season}%20and%20seasonId%3C=${season}%20and%20gameTypeId=2`,
-			].map((resource) => {
-	  		return new ApiRequest({
-					league: 'NHL',
-					apiType: 'BASIC',
-					resource,
-				}).fetch()
-			}))
-			.then((arr) => Promise.resolve(map(pathOr([], ['data']), arr)))
-			.then(([rookies, all]) => {
-		    const rookiesPlayerIds = map(prop('playerId'), rookies);
-        const final = [
-          ...rookies.map((item, k) => ({ ...rookies[k], rookie: true })),
-          ...all.filter(item => !rookiesPlayerIds.includes(item.playerId))
-          	.map((item, k) => ({ ...item, rookie: false }))
-        ]
-        return Promise.resolve(final)
+	  	const goalies = await new ApiRequest({
+				league: 'NHL',
+				apiType: 'BASIC',
+				resource: `/en/goalie/summary?isAggregate=false&isGame=false&sort=%5B%7B%22property%22:%22wins%22,%22direction%22:%22DESC%22%7D,%7B%22property%22:%22savePct%22,%22direction%22:%22DESC%22%7D%5D&start=0&limit=100&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=3%20and%20seasonId%3C=${season}%20and%20seasonId%3E=${season}`,
 			})
+      .fetch()
+
+			return pathOr([], ['data'])(goalies)
 	}
 }
 
@@ -266,12 +238,8 @@ const batchReportFetcher = async (ids) => {
 		const [season, type] = id.split(':')
 		return reportFetcher(season, type)
 	}))
-
 	return data
 }
-
-// TODO: hardcoded feature flag lol
-// const IS_PLAYOFFS_TIME = false;
 
 // Team -----
 
@@ -427,6 +395,7 @@ const batchGameHighlightsFetcher = async (gameIds) => {
 // Games -----
 
 const batchGamesScheduleFetcher = async (dates) => {
+  console.log('dates', dates)
 	const data = await Promise.all(dates.map((date) => {
 		return new ApiRequest({
 			league: 'NHL',
@@ -499,10 +468,16 @@ const calculateTeamsStreaks = async () => {
 }
 
 const fetchByBatchOf = (batchSize) => async (cumulative, players) => {
+  console.log(`${players.length} remaining`)
   const batch = take(batchSize, players);
 
   const responses = await Promise.all(batch.map(async (p) => {
-    const logs = await playerSeasonGameLogsLoader.load(p.playerId);
+    let logs
+    try {
+      logs = await playerSeasonGameLogsLoader.load(p.playerId);
+    } catch(e) {
+      logs = {}
+    }
     return {
       ...p,
       logs,
@@ -512,9 +487,13 @@ const fetchByBatchOf = (batchSize) => async (cumulative, players) => {
   if (players.length <= batchSize) {
     return newCumulative;
   }
+  await new Promise(r => setTimeout(r, 500))
   const final = await fetchByBatchOf(10)(newCumulative, takeLast(players.length - batchSize, players));
+
   return final;
 };
+
+const playersLoader = new DataLoader(playersFetcher)
 
 const calculatePlayerStreaks = async () => {
 	const cached_value = await cache.instance.get('player_streaks')
@@ -522,18 +501,11 @@ const calculatePlayerStreaks = async () => {
 		return JSON.parse(cached_value)
 	}
 
-  const players = await new ApiRequest({
-		league: 'NHL',
-		apiType: 'BASIC',
-		resource: '/skaters?isAggregate=false&reportType=basic&reportName=skatersummary' +
-							'&sort=[{%22property%22:%22points%22,%22direction%22:%22DESC%22}]' +
-							`&cayenneExp=gameTypeId=2%20and%20seasonId%3E=${CURRENT_SEASON}%20and%20seasonId%3C=${CURRENT_SEASON}`
-	})
-	.fetch()
+  const response = await playersLoader.load(CURRENT_SEASON)
 
   // get game logs for all players
-  const playersLogs = await fetchByBatchOf(10)([], players.data);
-  console.log(`${playersLogs.length} players have logs`);
+  console.log(`need to fetch logs for ${response.length} players`)
+  const playersLogs = await fetchByBatchOf(10)([], response);
 
   // calculate streaks
   const streaks = pipe(
@@ -542,7 +514,7 @@ const calculatePlayerStreaks = async () => {
       descend(path(['streak', 'points'])),
       descend(path(['streak', 'goals'])),
     ]),
-    map(pick(['playerId', 'streak', 'playerName', 'playerTeamsPlayedFor', 'playerPositionCode'])),
+    map(pick(['playerId', 'streak', 'skaterFullName', 'playerTeamsPlayedFor', 'positionCode'])),
   )(playersLogs)
 
   // cache streaks
@@ -564,6 +536,8 @@ const batchStreaksFetcher = async (streakTypes) => {
 	}))
 }
 
+
+
 module.exports = {
 	playerBioLoader: new DataLoader(batchPlayerBioFetcher),
 	playerDraftLoader: new DataLoader(batchPlayerDraftFetcher),
@@ -572,7 +546,7 @@ module.exports = {
 	playerSeasonGameLogsLoader,
 	playerPlayoffsGameLogsLoader: new DataLoader(batchPlayerPlayoffsGameLogsFetcher),
 
-	playersLoader: new DataLoader(playersFetcher),
+	playersLoader,
 	playersReportLoader: new DataLoader(batchReportFetcher),
 
 	teamInfoLoader: new DataLoader(batchTeamInfoFetcher),

@@ -14,7 +14,7 @@ const Team = require('./team')
 const ScheduledGame = require('./schedule')
 const Game = require('./game')
 
-const { prop, sortBy } = require('ramda')
+const { flatten, prop, sortBy } = require('ramda')
 
 const {
   providedArgs,
@@ -39,10 +39,10 @@ const PlayerName = new GraphQLObjectType({
   name: 'PlayerName',
   fields: {
     id: { type: GraphQLInt, resolve: doc => doc.playerId },
-    name: { type: GraphQLString, resolve: doc => doc.playerName },
-    birthDate: { type: GraphQLString, resolve: doc => doc.playerBirthDate },
-    nationality: { type: GraphQLString, resolve: doc => doc.playerNationality },
-    position: { type: GraphQLString, resolve: doc => doc.playerPositionCode },
+    name: { type: GraphQLString, resolve: doc => doc.skaterFullName || doc.goalieFullName },
+    birthDate: { type: GraphQLString, resolve: doc => doc.birthDate },
+    nationality: { type: GraphQLString, resolve: doc => doc.nationalityCode },
+    position: { type: GraphQLString, resolve: doc => doc.positionCode || 'G' },
 
   }
 })
@@ -121,9 +121,11 @@ const NHLQuery = new GraphQLObjectType({
       args: {
         dates: { type: new GraphQLList(GraphQLString) },
       },
-      resolve: (_, args) => gamesScheduleLoader.load(args.dates).then((teams) => {
-        return sortBy(prop('gameDate'), teams)
-      })
+      resolve: (_, args) => Promise
+        .all(args.dates.map(date => gamesScheduleLoader.load(date)))
+        .then((games) => {
+          return sortBy(prop('gameDate'), flatten(games))
+        })
     }
   },
 })
