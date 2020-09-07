@@ -34,10 +34,6 @@ const buildPaddedDateRange = (middleMoment) => {
   return options;
 };
 
-// Combine these two functions and add argument to determine if add or subtract
-const buildPrevAccessor = (date, i) => moment(date).subtract(i, 'days').format(storeKeyFormat);
-const buildNextAccessor = (date, i) => moment(date).add(i, 'days').format(storeKeyFormat);
-
 const buildDateRange = currentDate => ([
   moment(currentDate).subtract(3, 'days').format(storeKeyFormat),
   moment(currentDate).subtract(2, 'days').format(storeKeyFormat),
@@ -64,13 +60,13 @@ class ScorePage extends React.Component {
       daysOptions: convertToOptions(days),
       gamesAccessor: [],
     };
-    console.log('dates', this.state.dates)
     this.handleNewDateSelected = this.handleNewDateSelected.bind(this);
     this.handleNewCalendarDate = this.handleNewCalendarDate.bind(this);
   }
 
   handleNewCalendarDate(newDate) {
     this.setState({
+      currentDate: newDate,
       daysOptions: convertToOptions(
         buildPaddedDateRange(moment(newDate)),
       ),
@@ -80,12 +76,15 @@ class ScorePage extends React.Component {
   }
 
   handleNewDateSelected(newDate) {
-    this.setState({ dates: buildDateRange(newDate) });
+    this.setState({ currentDate: newDate, dates: buildDateRange(newDate) });
   }
 
   renderGamesAccessor(data) {
     this.setState({
-      gamesAccessor: this.state.dates.map(date => ({ date: date, nbGames: 5 }))
+      gamesAccessor: this.state.dates.map(date => ({ 
+        date: date, 
+        nbGames: data.nhl.schedule.filter(game => game.dateString == date).length 
+      }))
     });
   }
 
@@ -141,10 +140,7 @@ class ScorePage extends React.Component {
                   }) => {
                     if (loading) return (<LoadingIndicator />);
                     if (error) return (<EmptyState isError />);
-                    console.log('dates', this.state.dates)
-                    console.log('data', data)
-                    const todaysGames = data.nhl.schedule;
-                    console.log('todaysGames', todaysGames)
+                    const todaysGames = data.nhl.schedule.filter(game => game.dateString == this.state.currentDate);
                     if (todaysGames.length < 1) {
                       return (
                         <EmptyState />

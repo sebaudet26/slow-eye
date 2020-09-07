@@ -395,17 +395,16 @@ const batchGameHighlightsFetcher = async (gameIds) => {
 // Games -----
 
 const batchGamesScheduleFetcher = async (dates) => {
-  console.log('dates', dates)
 	const data = await Promise.all(dates.map((date) => {
 		return new ApiRequest({
 			league: 'NHL',
 			apiType: 'STATS_API',
-			resource: `/schedule?date=${date}`,
+			resource: `/schedule?date=${date}&hydrate=team,linescore,game(content(media(epg)),seriesSummary),seriesSummary(series)&site=en_nhlCA`,
 			expiration: 60
 		}).fetch()
 	}))
 
-	return map(pathOr([], ['dates', 0, 'games']))(data)
+  return map(pathOr([], ['dates', 0, 'games']))(data)
 }
 
 // Streaks -----
@@ -543,9 +542,11 @@ module.exports = {
 	playerDraftLoader: new DataLoader(batchPlayerDraftFetcher),
 	playerCareerSeasonStatsLoader: new DataLoader(batchCareerStatsFetcher),
 	playerCareerPlayoffsStatsLoader: new DataLoader(batchCareerPlayoffsStatsFetcher),
+  // TODO: use fetcher instead of loader
 	playerSeasonGameLogsLoader,
 	playerPlayoffsGameLogsLoader: new DataLoader(batchPlayerPlayoffsGameLogsFetcher),
 
+  // TODO: use fetcher instead of loader
 	playersLoader,
 	playersReportLoader: new DataLoader(batchReportFetcher),
 

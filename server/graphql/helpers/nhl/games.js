@@ -18,6 +18,8 @@ const toOrdinal = (n) => {
 
 const isScheduled = game => game.status.detailedState === 'Scheduled';
 
+const getDateString = game => moment(game.gameDate).format('YYYY-MM-DD')
+
 const calculateGameTime = (lastEventObject) => {
   if (!lastEventObject) {
     return 'Starting Soon';
@@ -41,10 +43,8 @@ const calculateGameTime = (lastEventObject) => {
   return `${lastEvent.period} - ${lastEvent.periodTimeRemaining}`;
 };
 
-const getStatusText = (status, liveFeed, gameDate) => {
-  const statusCode = status
-    ? status.codedGameState
-    : liveFeed.gameData.status.codedGameState;
+const getStatusText = (game, liveFeed) => {
+  const statusCode = game.status.statusCode
 
   const lastTenPlays = pipe(
     pathOr([], ['liveData', 'plays', 'allPlays']),
@@ -53,35 +53,52 @@ const getStatusText = (status, liveFeed, gameDate) => {
 
   switch (statusCode) {
     case '1':
-      return `${moment(gameDate).format('h:mm A')}`;
+      return `Scheduled at ${moment(game.gameDate).format('h:mm A')} (EST)`;
     case '3':
       return `${calculateGameTime(last(lastTenPlays))}`;
     case '4':
       return `${calculateGameTime(last(lastTenPlays))}`;
+    case '7': 
+      return ['Final', getFinalPeriod(lastTenPlays, game.gameType == 'P')].join(' ')
     default:
       return '';
   }
 };
 
-const getFinalPeriod = (lastTenPlays) => {
+const getFinalPeriod = (lastTenPlays, isPlayoff) => {
   if (
     !lastTenPlays
     || !lastTenPlays.length
     || !last(lastTenPlays).about
   ) {
-    return '';
+    return null;
   }
 
-  switch (last(lastTenPlays).about.period) {
-    case 3:
-      return '';
-    case 4:
-      return '(OT)';
-    case 5:
-      return '(S/O)';
-    default:
-      return '';
+  if (isPlayoff) {
+    switch (last(lastTenPlays).about.period) {
+      case 4:
+        return '(OT)';
+      case 5:
+        return '(2OT)';      
+      case 5:
+        return '(3OT)';      
+      case 5:
+        return '(4OT)';
+      default:
+        return null;
+    }
+  } else {
+    switch (last(lastTenPlays).about.period) {
+      case 3:
+        return '';
+      case 4:
+        return '(OT)';
+      case 5:
+        return '(S/O)';
+      default:
+        return null;
+    }
   }
 };
 
-module.exports = { getStatusText, getFinalPeriod };
+module.exports = { isScheduled, getStatusText, getFinalPeriod, getDateString };

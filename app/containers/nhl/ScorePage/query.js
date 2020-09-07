@@ -5,9 +5,16 @@ const getScoresQuery = gql`
     nhl {
       schedule (dates: $dates) {
         id
-        gameType
+        type
+        recap
+        isScheduled
+        statusText
+        currentPeriod
+        currentPeriodTime
+        seriesSummary
         season
-        gameDate
+        dateString
+        dateTime
         abstractGameState
         codedGameState
         detailedState

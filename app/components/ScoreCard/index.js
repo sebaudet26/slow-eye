@@ -9,14 +9,11 @@ const ScoreCard = ({ game }) => (
   <div className="game-card-wrapper">
     <div className="game-card">
       <div className="game-card-header">
-        {game.status.friendlyStatus}
-        {' '}
+        {game.isScheduled ? game.statusText : [game.currentPeriodTime, game.currentPeriod].join(' ')}
         <span>
-          {game.statusText}
-          {game.liveFeed.finalPeriod}
           {
             game.seriesSummary && (
-              <span className="game-card-series-summary">{game.seriesSummary.seriesStatusShort || ''}</span>
+              <span className="game-card-series-summary">{game.seriesSummary}</span>
             )
           }
 
@@ -24,62 +21,60 @@ const ScoreCard = ({ game }) => (
       </div>
       <div className="game-card-team">
         <svg key={Math.random()} className="game-card-team-img">
-          <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${game.teams.away.team.id}-20182019-light`} />
+          <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${game.awayTeam.id}-20182019-light`} />
         </svg>
-        <a className="game-card-team-name" href={`/team?id=${game.teams.away.team.id}`}>
-          {game.teams.away.team.name}
+        <a className="game-card-team-name" href={`/team?id=${game.awayTeam.id}`}>
+          {game.awayTeam.name}
         </a>
         <div className="game-card-team-score">
           {
-            game.status.isScheduled ? (
+            game.isScheduled ? (
               <span>
-                {game.teams.away.leagueRecord.wins}
+                {game.awayTeam.wins}
                 {'-'}
-                {game.teams.away.leagueRecord.losses}
-                {''}
-                { game.teams.away.leagueRecord.ot ? `-${game.teams.away.leagueRecord.ot}` : game.seriesSummary
-                }
+                {game.awayTeam.losses}
+                {'-'}
+                {game.awayTeam.ot}
               </span>
             ) : (
-              game.teams.away.score
+              game.awayTeam.score
             )
           }
         </div>
       </div>
       <div className="game-card-team">
         <svg key={Math.random()} className="game-card-team-img">
-          <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${game.teams.home.team.id}-20182019-light`} />
+          <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${game.homeTeam.id}-20182019-light`} />
         </svg>
-        <a className="game-card-team-name" href={`/team?id=${game.teams.home.team.id}`}>
-          {game.teams.home.team.name}
+        <a className="game-card-team-name" href={`/team?id=${game.homeTeam.id}`}>
+          {game.homeTeam.name}
         </a>
         <div className="game-card-team-score">
           {
-            game.status.isScheduled ? (
+            game.isScheduled ? (
               <span>
-                {game.teams.home.leagueRecord.wins}
+                {game.homeTeam.wins}
                 {'-'}
-                {game.teams.home.leagueRecord.losses}
-                {''}
-                { game.teams.away.leagueRecord.ot ? `-${game.teams.away.leagueRecord.ot}` : game.seriesSummary
-                }
+                {game.homeTeam.losses}
+                {'-'}
+                {game.homeTeam.ot}
               </span>
             ) : (
-              game.teams.home.score
+              game.homeTeam.score
             )
           }
         </div>
       </div>
       {
-        !game.status.isScheduled && (
+        !game.isScheduled && (
           <div className="game-card-footer">
             <a href={`/game?id=${game.id}`}>
                 Summary
             </a>
             {
-              pathOr(false, ['highlights', 'recap'], game) && (
+              pathOr(false, ['recap'], game) && (
                 <span>
-                  <VideoPlayer url={game.highlights.recap} callToAction="Game Recap" />
+                  <VideoPlayer url={game.recap} callToAction="Game Recap" />
                 </span>
               )
             }

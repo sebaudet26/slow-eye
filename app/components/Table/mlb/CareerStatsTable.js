@@ -26,7 +26,6 @@ const ReactTableFixedColumns = withFixedColumns(ReactTable);
 class CareerStatsTable extends React.PureComponent {
   render() {
     const stats = this.props.stats;
-    console.log(stats);
     return (
       <ReactTableFixedColumns
         showPagination={false}

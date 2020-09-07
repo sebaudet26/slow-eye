@@ -122,10 +122,8 @@ const NHLQuery = new GraphQLObjectType({
         dates: { type: new GraphQLList(GraphQLString) },
       },
       resolve: (_, args) => Promise
-        .all(args.dates.map(date => gamesScheduleLoader.load(date)))
-        .then((games) => {
-          return sortBy(prop('gameDate'), flatten(games))
-        })
+        .all((args.dates || []).map(date => gamesScheduleLoader.load(date)))
+        .then(games => flatten(games))
     }
   },
 })
