@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { reject, filter, contains } from 'ramda';
+import { contains, filter, last, reject } from 'ramda';
 import { Query } from 'react-apollo';
 import { getPlayerQuery } from './query.js';
 import Header from '../../../components/Header';
@@ -33,8 +33,6 @@ export default class PlayerPage extends React.Component {
 
             const {
               id,
-              team,
-              teamName = '',
               bio,
               status,
               position,
@@ -44,10 +42,11 @@ export default class PlayerPage extends React.Component {
               gameLogs,
             }  = player
 
+            const { teamName , teamId } = last(career.seasons || [])
+
             const proStats = reject(stat => contains(stat.leagueName, internationalLeagueNames))(career.seasons)
             const internationalStats = filter(stat => contains(stat.leagueName, internationalLeagueNames))(career.seasons)
             const isPro = true
-            console.warn(`/public/images/teams/${team.name.replace(' ', '-').toLowerCase()}.png`)
             return (
               <div className="player-page">
                 <Helmet
@@ -63,13 +62,13 @@ export default class PlayerPage extends React.Component {
                           <img src={`/public/images/country/${bio.birthCountry}.svg`} />
                         </div>
                         <div className="icon-wrapper player-img-team">
-                          <img src={`/public/images/teams/${team.name.replace(' ', '-').toLowerCase()}.png`} className="" />
+                          <img src={`/public/images/teams/${teamName.replace(' ', '-').toLowerCase()}.png`} className="" />
                         </div>
                       </div>
                       <div className="player-info">
                         <h2>{`${bio.firstName} ${bio.lastName}`}</h2>
                         <p>
-                          <a href={`/team?id=${team.id}`}>{`${team.name}, `}</a>
+                          <a href={`/team?id=${teamId}`}>{`${teamName}, `}</a>
                           {`${position.code}, Shoots ${bio.shootsCatches}`}
                         </p>
                         <div className="player-desc">

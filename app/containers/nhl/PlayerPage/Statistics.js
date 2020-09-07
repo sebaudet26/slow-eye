@@ -22,6 +22,7 @@ class Statistics extends React.Component {
       isPro,
       position,
      } = this.props;
+    console.log('statistics', this.props)
     if (!internationalStats.length && !logs.length) {
       return (
         <div className="container">

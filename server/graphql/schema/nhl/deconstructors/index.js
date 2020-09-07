@@ -71,8 +71,8 @@ const PlayerWeight = new GraphQLObjectType({
 })
 
 
-const GoalieStats = new GraphQLObjectType({
-  name: 'GoalieStats',
+const PlayerStat = new GraphQLObjectType({
+  name: 'PlayerStat',
   fields: {
     ot: { type: GraphQLInt, resolve: resolvePath(['stat', 'ot']) },
     shutouts: { type: GraphQLInt, resolve: resolvePath(['stat', 'shutouts']) },
@@ -94,32 +94,18 @@ const GoalieStats = new GraphQLObjectType({
     powerPlaySavePercentage: { type: GraphQLFloat, resolve: resolvePath(['stat', 'powerPlaySavePercentage']) },
     shortHandedSavePercentage: { type: GraphQLFloat, resolve: resolvePath(['stat', 'shortHandedSavePercentage']) },
     evenStrengthSavePercentage: { type: GraphQLFloat, resolve: resolvePath(['stat', 'evenStrengthSavePercentage']) },
-  },
-})
 
-const UsageStats = new GraphQLObjectType({
-  name: 'TimeStats',
-  fields: {
+
     shifts: { type: GraphQLInt, resolve: resolvePath(['stat', 'shifts']) },
     timeOnIce: { type: Time, resolve: p => resolvePath(['stat', 'timeOnIce'])(p).then(timeStringToTimeType) },
     powerPlayTimeOnIce: { type: Time, resolve: p => resolvePath(['stat', 'powerPlayTimeOnIce'])(p).then(timeStringToTimeType) },
     evenTimeOnIce: { type: Time, resolve: p => resolvePath(['stat', 'evenTimeOnIce'])(p).then(timeStringToTimeType) },
     shortHandedTimeOnIce: { type: Time, resolve: p => resolvePath(['stat', 'shortHandedTimeOnIce'])(p).then(timeStringToTimeType) },
-  }
-})
 
-const FaceoffStats = new GraphQLObjectType({
-  name: 'FaceoffStats',
-  fields: {
     faceOffPct: { type: GraphQLFloat, resolve: resolvePath(['stat', 'faceOffPct']) },
     faceOffWins: { type: GraphQLInt, resolve: resolvePath(['stat', 'faceOffWins']) },
     faceOffTaken: { type: GraphQLInt, resolve: resolvePath(['stat', 'faceoffTaken']) },
-  },
-})
 
-const OffensiveStats = new GraphQLObjectType({
-  name: 'OffensiveStats',
-  fields: {
     assists: { type: GraphQLInt, resolve: resolvePath(['stat', 'assists']) },
     goals: { type: GraphQLInt, resolve: resolvePath(['stat', 'goals']) },
     points: { type: GraphQLInt, resolve: resolvePath(['stat', 'points']) },
@@ -131,12 +117,7 @@ const OffensiveStats = new GraphQLObjectType({
     shortHandedPoints: { type: GraphQLInt, resolve: resolvePath(['stat', 'shortHandedPoints']) },
     shotPct: { type: GraphQLFloat, resolve: resolvePath(['stat', 'shotPct']) },
     shots: { type: GraphQLInt, resolve: resolvePath(['stat', 'shots']) },
-  },
-})
-
-const DefensiveStats = new GraphQLObjectType({
-  name: 'DefensiveStats',
-  fields: {
+    
     pim: { type: GraphQLInt, resolve: resolvePath(['stat', 'pim']) },
     hits: { type: GraphQLInt, resolve: resolvePath(['stat', 'hits']) },
     plusMinus: { type: GraphQLInt, resolve: resolvePath(['stat', 'plusMinus']) },
@@ -144,7 +125,7 @@ const DefensiveStats = new GraphQLObjectType({
     penaltyMinutes: { type: GraphQLFloat, resolve: p => resolvePath(['stat', 'penaltyMinutes'])(p).then((minutes) => Number(minutes)) },
     takeaways: { type: GraphQLInt, resolve: resolvePath(['stat', 'takeaways']) },
     giveaways: { type: GraphQLInt, resolve: resolvePath(['stat', 'giveaways']) },
-  }
+  },
 })
 
 const GameLogAdditionalInfo = new GraphQLObjectType({
@@ -167,18 +148,8 @@ const PlayerStatistic = new GraphQLObjectType({
     teamName: { type: GraphQLString, resolve: resolvePath(['team', 'name']) },
     leagueName: { type: GraphQLString, resolve: resolvePath(['league', 'name']) },
     games: { type: GraphQLInt, resolve: resolvePath(['stat', 'games']) },
-
-    offensive: { type: OffensiveStats, resolve: itself },
-
-    defensive: { type: DefensiveStats, resolve: itself },
-
-    faceoffStats: { type: FaceoffStats, resolve: itself },
-
-    usageStats: { type: UsageStats, resolve: itself },
-
-    goalieStats: { type: GoalieStats, resolve: itself },
-
     gameInfo: { type: GameLogAdditionalInfo, resolve: itself },
+    stat: { type: PlayerStat, resolve: itself },
   },
 });
 
@@ -219,10 +190,5 @@ module.exports = {
 	PlayerHeight,
   PlayerStatistic,
 
-	GoalieStats,
-	UsageStats,
-	FaceoffStats,
-	OffensiveStats,
-	DefensiveStats,
 	GameLogAdditionalInfo,
 }

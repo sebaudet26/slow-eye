@@ -62,7 +62,7 @@ const CareerStatsTable = ({ stats, position, showTotalRow }) => (
           maxWidth: 100,
           minWidth: 75,
           className: 'text-left',
-          accessor: d => useAcronyms(pathOr('-', ['league', 'name'], d)),
+          accessor: d => useAcronyms(pathOr('-', ['leagueName'], d)),
         },
         {
           Header: 'Team',
@@ -80,7 +80,7 @@ const CareerStatsTable = ({ stats, position, showTotalRow }) => (
                     </svg>
                   )
                 }
-              {row.value.name}
+              {row.original.teamName}
             </div>
           ),
         },
@@ -89,8 +89,8 @@ const CareerStatsTable = ({ stats, position, showTotalRow }) => (
           id: 'games',
           maxWidth: 85,
           minWidth: 65,
-          accessor: d => pathOr('-', ['stat', 'games'], d),
-          Footer: showTotalRow && sumNumbers(stats, ['stat', 'games']),
+          accessor: d => pathOr('-', ['games'], d),
+          Footer: showTotalRow && sumNumbers(stats, ['games']),
         },
         {
           Header: 'G',
@@ -246,7 +246,7 @@ const CareerStatsTable = ({ stats, position, showTotalRow }) => (
           Cell: row => (
             <span>{typeof row.value === 'number' ? Number(row.value).toFixed(2) : '-'}</span>
           ),
-          Footer: showTotalRow && (sumByPath(stats, ['stat', 'goalsAgainst']) / sumByPath(stats, ['stat', 'games'])).toFixed(2),
+          Footer: showTotalRow && (sumByPath(stats, ['stat', 'goalsAgainst']) / sumByPath(stats, ['games'])).toFixed(2),
           sortMethod: (a, b) => (a > b ? -1 : 1),
         },
         {
@@ -268,7 +268,8 @@ const CareerStatsTable = ({ stats, position, showTotalRow }) => (
 
 CareerStatsTable.propTypes = {
   stats: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  info: PropTypes.shape({}).isRequired,
+  position: PropTypes.shape({}).isRequired,
+  showTotalRow: PropTypes.bool.isRequired,
 };
 
 export default CareerStatsTable;

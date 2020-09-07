@@ -9,17 +9,17 @@ const commonStats = [
 ];
 
 const goalieStats = [
-  { label: 'W', pathToValue: ['goalieStats', 'wins'] },
-  { label: 'L', pathToValue: ['goalieStats', 'losses'] },
-  { label: 'OT', pathToValue: ['goalieStats', 'ot'] },
-  { label: 'SO', pathToValue: ['goalieStats', 'shutouts'] },
+  { label: 'W', pathToValue: ['stat', 'wins'] },
+  { label: 'L', pathToValue: ['stat', 'losses'] },
+  { label: 'OT', pathToValue: ['stat', 'ot'] },
+  { label: 'SO', pathToValue: ['stat', 'shutouts'] },
 ];
 
 const skaterStats = [
-  { label: 'G', pathToValue: ['offensive', 'goals'] },
-  { label: 'A', pathToValue: ['offensive', 'assists'] },
-  { label: 'Pts', pathToValue: ['offensive', 'points'] },
-  { label: '+/-', pathToValue: ['defensive', 'plusMinus'] },
+  { label: 'G', pathToValue: ['stat', 'goals'] },
+  { label: 'A', pathToValue: ['stat', 'assists'] },
+  { label: 'Pts', pathToValue: ['stat', 'points'] },
+  { label: '+/-', pathToValue: ['stat', 'plusMinus'] },
 ]
 
 const renderCareerStat = ({ isActive, career }) => ({ pathToValue, label }) => (

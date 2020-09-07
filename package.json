@@ -88,7 +88,7 @@
     "react-slick": "^0.23.2",
     "react-spinners": "^0.5.1",
     "react-spotify-player": "^1.0.4",
-    "react-table": "^6.8.6",
+    "react-table": "6.7.4",
     "react-table-hoc-fixed-columns": "^1.0.4",
     "react-tabs": "^3.0.0",
     "react-test-renderer": "^16.4.0",

@@ -65,7 +65,8 @@ query($id: Int) {
           teamName
           teamId
           games
-          offensive {
+
+          stat {
             assists
             goals
             shots
@@ -77,8 +78,6 @@ query($id: Int) {
             shortHandedGoals
             shortHandedPoints
             shotPct
-          }
-          defensive {
             penaltyMinutes
             hits
             plusMinus
@@ -86,8 +85,6 @@ query($id: Int) {
             takeaways
             giveaways
             blocked
-          }
-          goalieStats {
             ot
             shutouts
             ties
@@ -108,13 +105,9 @@ query($id: Int) {
             powerPlaySavePercentage
             shortHandedSavePercentage
             evenStrengthSavePercentage
-          }
-          faceoffStats {
             faceOffPct
             faceOffWins
             faceOffTaken
-          }
-          usageStats {
             shifts
             timeOnIce {
               minutes
@@ -140,7 +133,7 @@ query($id: Int) {
           teamName
           teamId
           games
-          offensive {
+          stat {
             assists
             goals
             shots
@@ -152,8 +145,6 @@ query($id: Int) {
             shortHandedGoals
             shortHandedPoints
             shotPct
-          }
-          defensive {
             penaltyMinutes
             hits
             plusMinus
@@ -161,8 +152,6 @@ query($id: Int) {
             takeaways
             giveaways
             blocked
-          }
-          goalieStats {
             ot
             shutouts
             ties
@@ -183,13 +172,9 @@ query($id: Int) {
             powerPlaySavePercentage
             shortHandedSavePercentage
             evenStrengthSavePercentage
-          }
-          faceoffStats {
             faceOffPct
             faceOffWins
             faceOffTaken
-          }
-          usageStats {
             shifts
             timeOnIce {
               minutes
@@ -225,7 +210,7 @@ query($id: Int) {
             opponentTeamId
             gameId
           }
-          offensive {
+          stat {
             assists
             goals
             shots
@@ -237,8 +222,6 @@ query($id: Int) {
             shortHandedGoals
             shortHandedPoints
             shotPct
-          }
-          defensive {
             penaltyMinutes
             hits
             plusMinus
@@ -246,8 +229,6 @@ query($id: Int) {
             takeaways
             giveaways
             blocked
-          }
-          goalieStats {
             ot
             shutouts
             ties
@@ -268,13 +249,9 @@ query($id: Int) {
             powerPlaySavePercentage
             shortHandedSavePercentage
             evenStrengthSavePercentage
-          }
-          faceoffStats {
             faceOffPct
             faceOffWins
             faceOffTaken
-          }
-          usageStats {
             shifts
             timeOnIce {
               minutes
@@ -308,7 +285,7 @@ query($id: Int) {
             opponentTeamId
             gameId
           }
-          offensive {
+          stat {
             assists
             goals
             shots
@@ -320,8 +297,6 @@ query($id: Int) {
             shortHandedGoals
             shortHandedPoints
             shotPct
-          }
-          defensive {
             penaltyMinutes
             hits
             plusMinus
@@ -329,8 +304,6 @@ query($id: Int) {
             takeaways
             giveaways
             blocked
-          }
-          goalieStats {
             ot
             shutouts
             ties
@@ -351,13 +324,9 @@ query($id: Int) {
             powerPlaySavePercentage
             shortHandedSavePercentage
             evenStrengthSavePercentage
-          }
-          faceoffStats {
             faceOffPct
             faceOffWins
             faceOffTaken
-          }
-          usageStats {
             shifts
             timeOnIce {
               minutes
