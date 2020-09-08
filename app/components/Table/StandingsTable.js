@@ -10,37 +10,36 @@ import './styles.scss';
 
 const ReactTableFixedColumns = withFixedColumns(ReactTable);
 // TODO: team logo and team link
-const StandingsTable = ({ subStandings, isWildCardTable }) => (
+const StandingsTable = ({ records, tableHeader, isWildCardTable }) => (
   <ReactTableFixedColumns
     showPagination={false}
     sortable={false}
     resizable={false}
-    data={subStandings.teamRecords}
+    data={records}
     columns={[
       {
         Header: '',
         id: 'rank',
         className: 'text-center',
-        accessor: pathOr(0, [isWildCardTable ? 'wildCardRank' : 'divisionRank']),
-        maxWidth: 30,
-        minWidth: 30,
+        accessor: row => isWildCardTable ? row.conferenceRank : row.divisionRank,
+        maxWidth: 40,
+        minWidth: 40,
         fixed: 'left',
       },
       {
-        Header: isWildCardTable ? 'Wild Card' : subStandings.division.name,
+        Header: tableHeader,
         id: 'name',
         className: 'text-left team-cell',
-        accessor: prop('team'),
+        accessor: prop('teamId'),
         maxWidth: 300,
         minWidth: 125,
         fixed: 'left',
         Cell: row => (
-          <a href={`./team?id=${row.value.id}`}>
+          <a href={`./team?id=${row.value}`}>
             <svg key={Math.random()} className="team-cell-logo">
-              <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${row.value.id}-20182019-light`} />
+              <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${row.value}-20182019-light`} />
             </svg>
-            <span className="hidden-mobile">{row.value.name}</span>
-            <span className="hidden-desktop">{row.value.abbreviation}</span>
+            <span className="hidden-mobile">{row.original.teamName}</span>
           </a>
         ),
       },
@@ -56,7 +55,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         Header: 'W',
         id: 'wins',
         className: 'text-center',
-        accessor: pathOr(0, ['leagueRecord', 'wins']),
+        accessor: pathOr(0, ['record', 'wins']),
         maxWidth: 65,
         minWidth: 40,
       },
@@ -64,7 +63,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         Header: 'L',
         id: 'losses',
         className: 'text-center',
-        accessor: pathOr(0, ['leagueRecord', 'losses']),
+        accessor: pathOr(0, ['record', 'losses']),
         maxWidth: 65,
         minWidth: 40,
       },
@@ -72,7 +71,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         Header: 'OTL',
         id: 'otl',
         className: 'text-center',
-        accessor: pathOr(0, ['leagueRecord', 'ot']),
+        accessor: pathOr(0, ['record', 'ot']),
         maxWidth: 65,
         minWidth: 40,
       },
@@ -104,7 +103,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         Header: 'Home',
         id: 'home',
         className: 'text-center',
-        accessor: pipe(pathOr('N/A', ['records', 'overallRecords', 0]), pick(['wins', 'losses', 'ot']), values, join('-')),
+        accessor: pipe(pathOr({}, ['homeRecord']), pick(['wins', 'losses', 'ot']), values, join('-')),
         maxWidth: 90,
         minWidth: 80,
       },
@@ -112,7 +111,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         Header: 'Away',
         id: 'away',
         className: 'text-center',
-        accessor: pipe(pathOr('N/A', ['records', 'overallRecords', 1]), pick(['wins', 'losses', 'ot']), values, join('-')),
+        accessor: pipe(pathOr({}, ['awayRecord']), pick(['wins', 'losses', 'ot']), values, join('-')),
         maxWidth: 90,
         minWidth: 80,
       },
@@ -120,7 +119,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         Header: 'S/O',
         id: 'so',
         className: 'text-center',
-        accessor: pipe(pathOr('N/A', ['records', 'overallRecords', 2]), pick(['wins', 'losses']), values, join('-')),
+        accessor: pipe(pathOr({}, ['shootOutsRecord']), pick(['wins', 'losses']), values, join('-')),
         maxWidth: 65,
         minWidth: 45,
       },
@@ -128,7 +127,7 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         Header: 'L10',
         id: 'l10',
         className: 'text-center',
-        accessor: pipe(pathOr('N/A', ['records', 'overallRecords', 3]), pick(['wins', 'losses', 'ot']), values, join('-')),
+        accessor: pipe(pathOr({}, ['lastTenRecord']), pick(['wins', 'losses', 'ot']), values, join('-')),
         maxWidth: 80,
         minWidth: 60,
       },
@@ -136,18 +135,19 @@ const StandingsTable = ({ subStandings, isWildCardTable }) => (
         Header: 'STRK',
         id: 'streak',
         className: 'text-center',
-        accessor: pathOr('N/A', ['streak', 'code']),
+        accessor: pathOr('N/A', ['streak']),
         maxWidth: 70,
         minWidth: 50,
       },
     ]}
-    defaultPageSize={subStandings.teamRecords.length}
+    defaultPageSize={records.length}
     className="standings-stats wildCard"
   />
 );
 
 StandingsTable.propTypes = {
-  subStandings: PropTypes.shape({}).isRequired,
+  records: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  tableHeader: PropTypes.string.isRequired,
   isWildCardTable: PropTypes.bool.isRequired,
 };
 
@@ -155,13 +155,38 @@ const Standings = ({ standings }) => (
   !isEmpty(standings) ? (
     <div>
       <h3 className="no-margin-top">Eastern Conference</h3>
-      <StandingsTable subStandings={standings[3]} isWildCardTable={false} />
-      <StandingsTable subStandings={standings[2]} isWildCardTable={false} />
-      <StandingsTable subStandings={standings[0]} isWildCardTable />
+      <StandingsTable 
+        records={standings.filter(team => team.divisionName == "Atlantic" && (team.isDivisionLeader && team.divisionRank < 4))} 
+        tableHeader={'Atlantic'}
+        isWildCardTable={false} 
+      />      
+      <StandingsTable 
+        records={standings.filter(team => team.divisionName == "Metropolitan" && (team.isDivisionLeader && team.divisionRank < 4))} 
+        tableHeader={'Metropolitan'}
+        isWildCardTable={false} 
+      />
+      <StandingsTable 
+        records={standings.filter(team => team.conferencName == "Eastern" && (team.isWildCard || team.divisionRank > 3)).sort((a, b) => a.conferenceRank - b.conferenceRank)} 
+        tableHeader={'Wild Card'}
+        isWildCardTable 
+      />
+
       <h3>Western Conference</h3>
-      <StandingsTable subStandings={standings[4]} isWildCardTable={false} />
-      <StandingsTable subStandings={standings[5]} isWildCardTable={false} />
-      <StandingsTable subStandings={standings[1]} isWildCardTable />
+      <StandingsTable 
+        records={standings.filter(team => team.divisionName == "Central" && (team.isDivisionLeader && team.divisionRank < 4))} 
+        tableHeader={'Central'}
+        isWildCardTable={false} 
+      />      
+      <StandingsTable 
+        records={standings.filter(team => team.divisionName == "Pacific" && (team.isDivisionLeader && team.divisionRank < 4))} 
+        tableHeader={'Pacific'}
+        isWildCardTable={false} 
+      />
+      <StandingsTable 
+        records={standings.filter(team => team.conferencName == "Western" && (team.isWildCard || team.divisionRank > 3)).sort((a, b) => a.conferenceRank - b.conferenceRank)} 
+        tableHeader={'Wild Card'}
+        isWildCardTable 
+      />
     </div>
   ) : null
 );

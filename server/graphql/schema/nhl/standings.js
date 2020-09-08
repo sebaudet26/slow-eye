@@ -3,6 +3,7 @@ const {
   GraphQLString,
   GraphQLList,
   GraphQLInt,
+  GraphQLBoolean,
 } = require('graphql')
 
 const {
@@ -10,6 +11,8 @@ const {
   resolveProp,
   resolvePath,
 } = require('./deconstructors/index')
+
+const { flatten, takeLast } = require('ramda')
 
 const { teamsStandingsLoader } = require('../../loaders/nhl')
 
@@ -49,7 +52,7 @@ const Record = new GraphQLObjectType({
 })
 
 const Standing = new GraphQLObjectType({
-  name: 'Standings',
+  name: 'Standing',
   fields: {
     goalsAgainst: {
     	type: GraphQLInt,
@@ -109,28 +112,43 @@ const Standing = new GraphQLObjectType({
     },
     teamId: { type: GraphQLInt, resolve: resolvePath(['team', 'id']) },
     teamName: { type: GraphQLString, resolve: resolvePath(['team', 'name']) },
+    divisionName: { type: GraphQLString, resolve: resolveProp('divisionName') },
+    conferencName: { type: GraphQLString, resolve: resolveProp('conferenceName') },
+    isWildCard: { type: GraphQLBoolean, resolve: resolveProp('isWildCard') },
+    isDivisionLeader: { type: GraphQLBoolean, resolve: resolveProp('isDivisionLeader') },
   }
 })
 
 const Standings = new GraphQLObjectType({
-	name: 'Standing',
+	name: 'Standings',
 	fields: {
 		season: {
 			type: GraphQLString,
 			resolve: args => args.season
 		},
-		wildCard: {
+		record: {
 			type: new GraphQLList(Standing),
 			resolve: args => teamsStandingsLoader.load(args.season).then((standings) => {
-				const eastern = standings[0]
-				const western = standings[1]
-				eastern.teamRecords.forEach((record) => {
-					record.conference = eastern.conference.name
-				})
-				western.teamRecords.forEach((record) => {
-					record.conference = western.conference.name
-				})
-				return Promise.resolve([...eastern.teamRecords, ...western.teamRecords])
+                console.log(standings)
+                standings.forEach((standing) => {
+                    console.log(standing.standingsType)
+                    standing.teamRecords.forEach((record) => {
+                        if (standing.conference) {
+                            record.conferenceName = standing.conference.name
+                        }
+                        if (standing.division) {
+                            record.divisionName = standing.division.name
+                        }
+                        if (standing.standingsType == 'divisionLeaders') {
+                            record.isWildCard = false
+                            record.isDivisionLeader = true
+                        } else {
+                            record.isWildCard = true
+                            record.isDivisionLeader = false
+                        }
+                    })
+                })
+				return Promise.resolve(flatten(standings.map(standing => standing.teamRecords)))
 			}),
 		}
 	}

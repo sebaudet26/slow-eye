@@ -1,51 +1,51 @@
 import { gql } from 'apollo-boost';
 
 const getStandingsQuery = gql`
-{
-  standings {
-    type
-    conference {
-      name
-    }
-    division {
-      name
-    }
-    teamRecords {
-      records {
-        overallRecords {
-          wins
-          losses
-          ot
-          type
-        }
-      }
-      gamesPlayed
-      goalsScored
-      goalsAgainst
-      conferenceRank
-      divisionRank
-      wildCardRank
-      leagueRecord {
-        wins
-        losses
-        ot
-      }
-      streak {
-        code
-      }
-      points
-      team {
-        id
-        name
-        abbreviation
-      }
-      records {
-        overallRecords {
-          type
+query($season: String) {
+  nhl {
+    standings(season: $season) {
+      season
+      record {
+        goalsAgainst
+        goalsScored
+        points
+        conferencName
+        divisionName
+        isDivisionLeader
+        isWildCard
+        divisionRank
+        conferenceRank
+        leagueRank
+        wildCardRank
+        gamesPlayed
+        streak
+        record {
           wins
           losses
           ot
         }
+        awayRecord {
+          wins
+          losses
+          ot
+        }
+        homeRecord {
+          wins
+          losses
+          ot
+        }
+        shootOutsRecord {
+          wins
+          losses
+          ot
+        }
+        lastTenRecord{
+          wins
+          losses
+          ot
+        }
+        teamId
+        teamName
       }
     }
   }

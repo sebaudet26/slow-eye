@@ -21,17 +21,20 @@ class StandingsPage extends React.Component {
             </div>
           </div>
           <div className="container">
-            <Helmet titlePrefix="NHL Standings" contentPrefix="View NHL Standings."/>
-            <Query query={getStandingsQuery}>
+            <Helmet titlePrefix="NHL Standings" contentPrefix="View NHL Standings." />
+            <Query query={getStandingsQuery} variables={{ season: "20192020" }} >
               {({ loading, error, data }) => {
                 if (loading) return (<LoadingIndicator />);
                 if (error) return (<EmptyState isError />);
 
-                const standings = data.standings;
+                const standings = data.nhl.standings;
+                console.log('standings', standings)
+                if (standings && standings.record) {
+                  return <StandingsTable standings={standings.record} />
+                } else {
+                  return <EmptyState />
+                }
 
-                return (
-                  <StandingsTable standings={standings} />
-                );
               }}
             </Query>
           </div>
