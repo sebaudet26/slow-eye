@@ -21,46 +21,46 @@ const ScoreCard = ({ game }) => (
       </div>
       <div className="game-card-team">
         <svg key={Math.random()} className="game-card-team-img">
-          <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${game.awayTeam.id}-20182019-light`} />
+          <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${game.away.teamId}-20182019-light`} />
         </svg>
-        <a className="game-card-team-name" href={`/team?id=${game.awayTeam.id}`}>
-          {game.awayTeam.name}
+        <a className="game-card-team-name" href={`/team?id=${game.away.teamId}`}>
+          {game.away.name}
         </a>
         <div className="game-card-team-score">
           {
             game.isScheduled ? (
               <span>
-                {game.awayTeam.wins}
+                {game.away.wins}
                 {'-'}
-                {game.awayTeam.losses}
+                {game.away.losses}
                 {'-'}
-                {game.awayTeam.ot}
+                {game.away.ot}
               </span>
             ) : (
-              game.awayTeam.score
+              game.away.score
             )
           }
         </div>
       </div>
       <div className="game-card-team">
         <svg key={Math.random()} className="game-card-team-img">
-          <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${game.homeTeam.id}-20182019-light`} />
+          <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${game.home.teamId}-20182019-light`} />
         </svg>
-        <a className="game-card-team-name" href={`/team?id=${game.homeTeam.id}`}>
-          {game.homeTeam.name}
+        <a className="game-card-team-name" href={`/team?id=${game.home.teamId}`}>
+          {game.home.name}
         </a>
         <div className="game-card-team-score">
           {
             game.isScheduled ? (
               <span>
-                {game.homeTeam.wins}
+                {game.home.wins}
                 {'-'}
-                {game.homeTeam.losses}
+                {game.home.losses}
                 {'-'}
-                {game.homeTeam.ot}
+                {game.home.ot}
               </span>
             ) : (
-              game.homeTeam.score
+              game.home.score
             )
           }
         </div>

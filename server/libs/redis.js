@@ -9,15 +9,6 @@ const getMsUntilFourAM = () => Math.round(
     .valueOf() - moment().valueOf(),
 )
 
-const flushCache = () => {
-  cache.client.flushdb((err, succeeded) => {
-    console.log('Flushed command was succeessful: ', succeeded)
-    if (err) {
-      console.log('Cache flushing failed because', err)
-    }
-  })
-}
-
 const makeCacheClient = () => {
   const redisClient = redis.createClient({
     host: process.env.REDIS_URL,
@@ -57,14 +48,23 @@ class Cache {
         // FOR DELETING ALL CACHE
         console.log(`Cache will be cleared in ${(getMsUntilFourAM() / 1000 / 60 / 60).toFixed(1)} hours`)
         if (process.env.FLUSH_CACHE_ON_STARTUP) {
-          flushCache()
+          this.flushCache()
         }
-        setTimeout(flushCache, getMsUntilFourAM())
+        setTimeout(this.flushCache, getMsUntilFourAM())
       } catch (e) {
         throw new Error(`Failed to insert value in redis client ${e.toString()}`)
       }
     })
     return this
+  }
+
+  flushCache() {
+    this.instance.client.flushdb((err, succeeded) => {
+      console.log('Flushed command was succeessful: ', succeeded)
+      if (err) {
+        console.log('Cache flushing failed because', err)
+      }
+    })
   }
 }
 

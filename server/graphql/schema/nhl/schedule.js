@@ -28,7 +28,7 @@ const {
 const TeamRecord = new GraphQLObjectType({
 	name: 'TeamRecord',
 	fields: {
-		id: { type: GraphQLInt, resolve: resolvePath(['team', 'id']) },
+		teamId: { type: GraphQLInt, resolve: resolvePath(['team', 'id']) },
 		name: { type: GraphQLString, resolve: resolvePath(['team', 'name']) },
 		score: { type: GraphQLInt, resolve: resolveProp('score') },
 		wins: { type: GraphQLInt, resolve: resolvePath(['leagueRecord', 'wins']) },
@@ -88,8 +88,8 @@ const ScheduledGame = new GraphQLObjectType({
 		detailedState: { type: GraphQLString, resolve: resolvePath(['status', 'detailedState']) },
 		statusCode: { type: GraphQLString, resolve: resolvePath(['status', 'statusCode']) },
 		startTimeTBD: { type: GraphQLBoolean, resolve: resolvePath(['startTimeTBD']) },
-		awayTeam: { type: TeamRecord, resolve: resolvePath(['teams', 'away']) },
-		homeTeam: { type: TeamRecord, resolve: resolvePath(['teams', 'home']) },
+		away: { type: TeamRecord, resolve: resolvePath(['teams', 'away']) },
+		home: { type: TeamRecord, resolve: resolvePath(['teams', 'home']) },
 	},
 })
 

@@ -5,7 +5,6 @@ import Slider from 'react-slick';
 import {
   sortBy, prop, values, find, propEq,
 } from 'ramda';
-import ScoreCard from '../ScoreCard';
 import LeftArrow from './images/left.svg';
 import RightArrow from './images/right.svg';
 import './slick-theme.min.scss';

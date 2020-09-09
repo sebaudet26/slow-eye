@@ -20,16 +20,16 @@ const getScoresQuery = gql`
         detailedState
         statusCode
         startTimeTBD
-        awayTeam {
-          id
+        away {
+          teamId
           name
           score
           wins
           losses
           ot
         }
-        homeTeam {
-          id
+        home {
+          teamId
           name
           score
           wins
