@@ -1,200 +1,143 @@
 import { gql } from 'apollo-boost';
 
 const getGameQuery = gql`
-query($id: String) {
-  game (id: $id) {
-    id
-    statusText
-    highlights {
+query($id: Int) {
+  nhl {
+    game (id: $id) {
       recap
-      goals {
-        statsEventId
-        periodTime
-        period
-        url
-      }
-    }
-    liveFeed {
-      shootoutSummary {
-        away {
-          scores
-          attempts
-        }
-        home {
-          scores
-          attempts
-        }
-      }
-      penaltySummary {
-        type
-        severity
+      statusText
+      lastEventPeriod
+      penalties {
+        teamId
+        teamName
+        description
         minutes
-        period
+        periodNumber
         periodTime
-        team {
+        type
+        player {
+          id
           name
-          triCode
-          id
-        }
-        receiver {
-          id
-          fullName
         }
       }
-      goalSummary {
-        period
-    		periodTime
-        isWinningGoal
-        isEmptyNet
+      goals {
+        teamId
+        teamName
+        description
+        isGameWinningGoal
+        periodNumber
+        periodTime
+        periodDescription
+        videoLink
+        scoreAway
+        scoreHome
+        emptyNet
         strength
-        team {
-          name
-          triCode
-          id
-        }
         scorer {
           id
-          fullName
+          name
           seasonTotal
         }
         assists {
           id
-          fullName
+          name
           seasonTotal
         }
       }
-      lastTenPlays {
-        period
-        periodTimeRemaining
-        periodType
-        periodTime
-        description
-      }
-      status {
-        codedGameState
-        detailedState
-        friendlyStatus
-      }
-    }
-    boxscore {
-      away {
-        team {
+      awayTeam {
+        wins
+        losses
+        ot
+        pts
+        coach
+        teamId
+        teamName
+        playerStats {
           id
           name
-          teamName
-          abbreviation
-          locationName
-        }
-        seasonTeamStats {
-          record
-          splits {
-            wins
-            losses
-            ot
-            pts
-          }
+          jerseyNumber
+          position
+          assists
+          goals
+          shots
+          hits
+          powerPlayGoals
+          powerPlayAssists
+          penaltyMinutes
+          faceOffWins
+          faceoffTaken
+          takeaways
+          giveaways
+          shortHandedGoals
+          shortHandedAssists
+          blocked
+          plusMinus
+          faceOffPct
+          timeOnIce
+          evenTimeOnIce
+          powerPlayTimeOnIce
+          shortHandedTimeOnIce
         }
         teamStats {
           goals
-          shots
           pim
+          shots
           powerPlayGoals
           powerPlayOpportunities
-          faceOffWinPercentage
           blocked
           takeaways
           giveaways
           hits
-        }
-        players {
-          person {
-            id
-            fullName
-          }
-          jerseyNumber
-          position {
-            abbreviation
-          }
-          boxscore {
-            goals
-            assists
-            shots
-            hits
-            plusMinus
-            blocked
-            takeaways
-            giveaways
-            timeOnIce
-            penaltyMinutes
-            pim
-            faceOffWins
-            faceOffTaken
-            powerPlaySavePercentage
-            evenStrengthSavePercentage
-            shortHandedSavePercentage
-            savePercentage
-            saves
-          }
+          faceOffWinPercentage
+          powerPlayPercentage
         }
       }
-      home {
-        team {
+      homeTeam {
+        wins
+        losses
+        ot
+        pts
+        coach
+        teamId
+        teamName
+        playerStats {
           id
           name
-          teamName
-          abbreviation
-          locationName
+          jerseyNumber
+          position
+          assists
+          goals
+          shots
+          hits
+          powerPlayGoals
+          powerPlayAssists
+          penaltyMinutes
+          faceOffWins
+          faceoffTaken
+          takeaways
+          giveaways
+          shortHandedGoals
+          shortHandedAssists
+          blocked
+          plusMinus
+          faceOffPct
+          timeOnIce
+          evenTimeOnIce
+          powerPlayTimeOnIce
+          shortHandedTimeOnIce
         }
         teamStats {
           goals
-          shots
           pim
+          shots
           powerPlayGoals
           powerPlayOpportunities
-          faceOffWinPercentage
           blocked
           takeaways
           giveaways
           hits
-        }
-        seasonTeamStats {
-          record
-          splits {
-            wins
-            losses
-            ot
-            pts
-          }
-        }
-        players {
-          person {
-            id
-            fullName
-          }
-          position {
-            abbreviation
-          }
-          jerseyNumber
-          boxscore {
-            goals
-            assists
-            shots
-            hits
-            plusMinus
-            blocked
-            takeaways
-            giveaways
-            timeOnIce
-            penaltyMinutes
-            pim
-            faceOffWins
-            faceOffTaken
-            powerPlaySavePercentage
-            evenStrengthSavePercentage
-            shortHandedSavePercentage
-            savePercentage
-            saves
-          }
+          faceOffWinPercentage
+          powerPlayPercentage
         }
       }
     }

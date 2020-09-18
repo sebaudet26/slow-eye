@@ -4,12 +4,20 @@ const {
   GraphQLList,
   GraphQLInt,
   GraphQLFloat,
+  GraphQlBoolean,
 } = require('graphql')
+
+const { last, pathOr } = require('ramda')
+
+const {
+  getStatusText,
+} = require('../../helpers/nhl/games')
 
 const {
   gameBoxscoreLoader,
 	gameLivefeedLoader,
 	gameHighlightsLoader,
+	teamStatsLoader,
 } = require('../../loaders/nhl')
 
 const {
@@ -84,7 +92,7 @@ const GamePlayer = new GraphQLObjectType({
 const GameTeam = new GraphQLObjectType({
 	name: 'GameTeam',
 	fields: {
-		teamId: { type:GraphQLInt, resolve: resolvePath(['team', 'id']) },
+		teamId: { type: GraphQLInt, resolve: resolvePath(['team', 'id']) },
 		teamName: { type: GraphQLString, resolve: resolvePath(['team', 'name']) },
     coach: { type: GraphQLString, resolve: resolvePath(['coaches', 0, 'person', 'fullName']) },
     teamStats: { type: GameTeamStats, resolve: resolvePath(['teamStats', 'teamSkaterStats']) },
@@ -92,7 +100,61 @@ const GameTeam = new GraphQLObjectType({
     	type: new GraphQLList(GamePlayer),
     	resolve: (doc) => Object.values(doc.players || {}),
     },
-	}
+    // TODO: hardcoded current season
+    wins: { type: GraphQLInt, resolve: doc => teamStatsLoader.load(`20192020:${doc.team.id}`).then(resolvePath(['stats', 'wins'])) },
+    losses: { type: GraphQLInt, resolve: doc => teamStatsLoader.load(`20192020:${doc.team.id}`).then(resolvePath(['stats', 'losses'])) },
+    ot: { type: GraphQLInt, resolve: doc => teamStatsLoader.load(`20192020:${doc.team.id}`).then(resolvePath(['stats', 'ot'])) },
+    pts: { type: GraphQLInt, resolve: doc => teamStatsLoader.load(`20192020:${doc.team.id}`).then(resolvePath(['stats', 'pts'])) },
+	},
+})
+
+const GameGoalPlayer = new GraphQLObjectType({
+	name: 'GameGoalPlayer',
+	fields: {
+		id: { type: GraphQLInt, resolve: resolvePath(['player', 'id']) },
+		seasonTotal: { type: GraphQLInt, resolve: resolvePath(['seasonTotal']) },
+		name: { type: GraphQLString, resolve: resolvePath(['player', 'fullName']) },
+	},
+})
+
+const GamePenatly = new GraphQLObjectType({
+	name: 'GamePenatly',
+	fields: {
+		teamId: { type: GraphQLInt, resolve: resolvePath(['team', 'id']) },
+		teamName: { type: GraphQLString, resolve: resolvePath(['team', 'name']) },
+		description: { type: GraphQLString, resolve: resolvePath(['result', 'description']) },
+		minutes: { type: GraphQLInt, resolve: resolvePath(['result', 'penaltyMinutes']) },
+		periodNumber: { type: GraphQLInt, resolve: resolvePath(['about', 'period']) },
+		periodTime: { type: GraphQLString, resolve: resolvePath(['about', 'periodTime']) },
+		type: { type: GraphQLString, resolve: resolvePath(['result', 'secondaryType']) },
+		player: { type: GameGoalPlayer, resolve: doc => pathOr({}, ['players', 0], doc) },
+	},
+})
+
+const GameGoal = new GraphQLObjectType({
+	name: 'GameGoal',
+	fields: {
+		teamId: { type: GraphQLInt, resolve: resolvePath(['team', 'id']) },
+		teamName: { type: GraphQLString, resolve: resolvePath(['team', 'name']) },
+		description: { type: GraphQLString, resolve: resolvePath(['result', 'description']) },
+		isGameWinningGoal: { type: GraphQLString, resolve: resolvePath(['result', 'gameWinningGoal']) },
+		emptyNet: { type: GraphQLString, resolve: resolvePath(['result', 'emptyNet']) },
+		strength: { type: GraphQLString, resolve: resolvePath(['result', 'strength', 'code']) },
+		periodNumber: { type: GraphQLInt, resolve: resolvePath(['about', 'period']) },
+		periodTime: { type: GraphQLString, resolve: resolvePath(['about', 'periodTime']) },
+		periodDescription: { type: GraphQLString, resolve: resolvePath(['about', 'ordinalNum']) },
+		scoreAway: { type: GraphQLString, resolve: resolvePath(['about', 'goals', 'away']) },
+		scoreHome: { type: GraphQLString, resolve: resolvePath(['about', 'goals', 'home']) },
+		videoLink: { type: GraphQLString, resolve: doc => doc.videoLink[0] && doc.videoLink[0].url },
+		scorer: { type: GameGoalPlayer, resolve: doc => pathOr({}, ['players', 0], doc) },
+		assists: { 
+			type: new GraphQLList(GameGoalPlayer), 
+			resolve: doc => [
+				pathOr(null, ['players', 1], doc), 
+				pathOr(null, ['players', 2], doc),
+			].filter(d => d),
+		},
+	},
 })
 
 const Game = new GraphQLObjectType({
@@ -102,10 +164,44 @@ const Game = new GraphQLObjectType({
 			type: GraphQLString,
 			resolve: doc => gameHighlightsLoader.load(doc.id).then(resolveProp('recap'))
 		},
-		goalsHighlights: {
-			type: new GraphQLList(Highlight),
-			resolve: doc => gameHighlightsLoader.load(doc.id).then(resolveProp('goalsHighlights'))
+		lastEventPeriod: {
+			type: GraphQLInt,
+			resolve: doc => gameHighlightsLoader
+				.load(doc.id)
+        .then(liveFeed => pathOr(0, ['currentPlay', 'about', 'period'], liveFeed))
 		},
+		penalties: {
+			type: new GraphQLList(GamePenatly),
+			resolve: doc => gameLivefeedLoader
+				.load(doc.id)
+				.then((livefeed) => {
+					const penalties = livefeed.liveData.plays.penaltyPlays.map((eventId) => {
+						return livefeed.liveData.plays.allPlays[eventId]
+					})
+					return penalties
+				})
+		},
+		goals: {
+			type: new GraphQLList(GameGoal),
+			resolve: doc => Promise.all([
+				gameLivefeedLoader.load(doc.id),
+				gameHighlightsLoader.load(doc.id),
+			]).then(([livefeed, highlights]) => {
+				const goalPlays = livefeed.liveData.plays.scoringPlays.map((eventId) => {
+					return livefeed.liveData.plays.allPlays[eventId]
+				})
+				goalPlays.forEach((play) => {
+					play.videoLink = highlights.goalsHighlights.filter(highlight => parseInt(highlight.statsEventId) == parseInt(play.about.eventId))
+				})
+				return goalPlays
+			})
+		},
+		statusText: { 
+      type: GraphQLString, 
+      resolve: (doc) => gameLivefeedLoader
+        .load(doc.id)
+        .then(liveFeed => getStatusText(liveFeed.gameData, liveFeed))
+    },
 		awayTeam: {
 			type: GameTeam,
 			resolve: doc => gameBoxscoreLoader.load(doc.id).then(resolveProp('away')),

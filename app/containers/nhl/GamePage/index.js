@@ -40,7 +40,7 @@ import PlayerImage from '../../../components/PlayerImage';
 import VideoPlayer from '../../../components/VideoPlayer';
 
 const urlParams = new URLSearchParams(window.location.search);
-const id = urlParams.get('id');
+const id = parseInt(urlParams.get('id'));
 
 const renderGoalInfo = isShootout => goal => (
   <div key={Math.random()} className="card-cell">
@@ -51,7 +51,7 @@ const renderGoalInfo = isShootout => goal => (
       />
       <div className="icon-wrapper">
         <svg className="goal-image-team" key={Math.random()}>
-          <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${goal.team.id}-20182019-light`} />
+          <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${goal.teamId}-20182019-light`} />
         </svg>
       </div>
     </div>
@@ -61,7 +61,7 @@ const renderGoalInfo = isShootout => goal => (
           key={goal.scorer.id}
           id={goal.scorer.id}
           name={[
-            goal.scorer.fullName,
+            goal.scorer.name,
             isShootout ? '' : `(${goal.scorer.seasonTotal})`,
           ].join(' ')}
         />
@@ -72,7 +72,7 @@ const renderGoalInfo = isShootout => goal => (
           <PlayerName
             key={player.id}
             id={player.id}
-            name={`${player.fullName} (${player.seasonTotal})`}
+            name={`${player.name} (${player.seasonTotal})`}
           />
         ))
       }
@@ -88,7 +88,7 @@ const renderGoalInfo = isShootout => goal => (
       }
     </div>
     <div className="goal-video card-cell-item">
-      {goal.videoUrl ? <VideoPlayer url={goal.videoUrl} /> : (<div />)}
+      {goal.videoLink ? <VideoPlayer url={goal.videoLink} /> : (<div />)}
     </div>
   </div>
 );
@@ -97,15 +97,15 @@ const renderPenaltyInfo = penalty => (
   <div key={Math.random()} className="card-cell penalty">
     <div className="card-cell-item penalty-team">
       <svg className="penalty-img" key={Math.random()}>
-        <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${penalty.team.id}-20182019-light`} />
+        <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${penalty.teamId}-20182019-light`} />
       </svg>
       {penalty.periodTime}
     </div>
     <div className="card-cell-item penalty-player">
       <PlayerName
         key={Math.random()}
-        id={penalty.receiver.id}
-        name={penalty.receiver.fullName}
+        id={penalty.player.id}
+        name={penalty.player.name}
       />
     </div>
     <div className="card-cell-item penalty-info">
@@ -116,7 +116,7 @@ const renderPenaltyInfo = penalty => (
   </div>
 );
 
-const renderGoalEvents = (events = [], videos = [], period) => (
+const renderGoalEvents = (goals = [], period) => (
   <div className="card">
     <div className="card-header">
       {
@@ -126,35 +126,44 @@ const renderGoalEvents = (events = [], videos = [], period) => (
       }
     </div>
     {
-      filter(propEq('period', period), events).length
-        ? map(
-          renderGoalInfo(period === 5),
-          pipe(
-            filter(propEq('period', period)),
-            mapObjIndexed((o, k) => ({
-              ...o,
-              videoUrl: pathOr('', [k, 'url'], videos),
-            })),
-            values,
-          )(events),
-        )
+      filter(propEq('periodNumber', period), goals).length
+        ? map(renderGoalInfo(period === 5), goals)
         : <div className="non-event">No Goals</div>
     }
   </div>
 );
 
-const renderPenaltyEvents = (events, period) => (
+const renderPenaltyEvents = (penalties, period) => (
   <div className="card">
     <div className="card-header">
       {period === 4 ? 'Overtime' : `${toOrdinal(period)} Period`}
     </div>
     {
-      filter(propEq('period', period), events).length
-        ? map(renderPenaltyInfo, filter(event => event.period === period, events))
+      filter(propEq('periodNumber', period), penalties).length
+        ? map(renderPenaltyInfo, filter(event => event.periodNumber === period, penalties))
         : <div className="non-event">No Penalties</div>
     }
   </div>
 );
+
+const renderTeamImage = (teamId) => (
+  <svg key={Math.random()} className="game-card-team-img">
+    <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${teamId}-20182019-light`} />
+  </svg>
+)
+
+const renderRecapVideo = (recapUrl) => (
+  recapUrl ? (
+    <VideoPlayer
+      url={recapUrl}
+      styles={{ textAlign: 'center', width: '100%', marginTop: '5px' }}
+    />
+  ) : (
+    <div className="game-mobile-result">
+    :
+    </div>
+  )
+)
 
 class GamePage extends React.Component {
   render() {
@@ -165,85 +174,66 @@ class GamePage extends React.Component {
           {({ loading, error, data }) => {
             if (loading) return (<LoadingIndicator />);
             if (error) return (<EmptyState isError />);
+            const game = data.nhl.game;
+            console.log('game', game)
 
-            const game = data.game;
+            const { 
+              awayTeam = {}, 
+              homeTeam = {}, 
+              goals = [], 
+              penalties = [], 
+              recap, 
+              lastEventPeriod, 
+              statusText,
+            } = game;
 
-            const { boxscore, liveFeed, highlights } = game;
-
-            const groupedHighlights = groupBy(prop('period'), highlights.goals || []);
-            const {
-              goalSummary = [], penaltySummary = [], lastTenPlays = [], shootoutSummary,
-            } = liveFeed;
-            const awayTeamImage = (
-              <svg key={Math.random()} className="game-card-team-img">
-                <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${boxscore.away.team.id}-20182019-light`} />
-              </svg>
-            );
-
-            const homeTeamImage = (
-              <svg key={Math.random()} className="game-card-team-img">
-                <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${boxscore.home.team.id}-20182019-light`} />
-              </svg>
-            );
+            console.log('goals', goals)
 
             return (
               <div className="game-page">
                 <Helmet
-                  titlePrefix={`${boxscore.away.team.teamName} @ ${boxscore.home.team.teamName}`}
-                  contentPrefix={`${boxscore.away.team.teamName} vs. ${boxscore.home.team.teamName} game page.`}
+                  titlePrefix={`${awayTeam.teamName} @ ${homeTeam.teamName}`}
+                  contentPrefix={`${awayTeam.teamName} vs. ${homeTeam.teamName} game page.`}
                 />
                 <div className="page-header wTabs">
                   <div className="container">
-                    <div className="game-mobile-details">{game.statusText}</div>
+                    <div className="game-mobile-details">{statusText}</div>
                     <div className="game-header">
                       <div className="game-header-team">
-                        {awayTeamImage}
+                        {renderTeamImage(awayTeam.teamId)}
                         <div className="game-header-team-name">
-                          <div className="city">{boxscore.away.team.location}</div>
-                          <div className="team">{boxscore.away.team.teamName}</div>
+                          <div className="city">{awayTeam.location}</div>
+                          <div className="team">{awayTeam.teamName}</div>
                           <div className="record">
-                            {boxscore.away.seasonTeamStats.record}
-                            {` ${boxscore.away.seasonTeamStats.splits[0].pts}pts`}
+                            {`${awayTeam.wins}-${awayTeam.losses}-${awayTeam.ot}`}
+                            {` ${awayTeam.pts}pts`}
                           </div>
                         </div>
                         <div className="game-header-team-score">
-                          {boxscore.away.teamStats.goals + (shootoutSummary && shootoutSummary.away.scores > shootoutSummary.home.scores ? 1 : 0)}
+                          {awayTeam.teamStats.goals + ('shootoutSummary' && 'shootoutSummary.away.scores > shootoutSummary.home.scores' ? 1 : 0)}
                         </div>
                       </div>
                       <div className="game-header-result">
                         <div className="hidden-mobile">
-                          <div>{game.liveFeed.status.friendlyStatus}</div>
                           <div>
-                            {game.statusText}
-                            {game.liveFeed.finalPeriod}
+                            {statusText}
                           </div>
                         </div>
-                        {
-                highlights && highlights.recap ? (
-                  <VideoPlayer
-                    url={highlights.recap}
-                    styles={{ textAlign: 'center', width: '100%', marginTop: '5px' }}
-                  />
-                ) : (
-                  <div className="game-mobile-result">
-                  :
-                  </div>
-                )
-              }
+                        {renderRecapVideo()}
                       </div>
                       <div className="game-header-team">
                         <div className="game-header-team-score">
-                          {boxscore.home.teamStats.goals + (shootoutSummary && shootoutSummary.home.scores > shootoutSummary.away.scores ? 1 : 0)}
+                          {homeTeam.teamStats.goals + ('shootoutSummary' && 'shootoutSummary.home.scores > shootoutSummary.away.scores' ? 1 : 0)}
                         </div>
                         <div className="game-header-team-name">
-                          <div className="city">{boxscore.home.team.location}</div>
-                          <div className="team">{boxscore.home.team.teamName}</div>
+                          <div className="city">{homeTeam.location}</div>
+                          <div className="team">{homeTeam.teamName}</div>
                           <div className="record">
-                            {boxscore.home.seasonTeamStats.record}
-                            {` ${boxscore.home.seasonTeamStats.splits[0].pts}pts`}
+                            {`${homeTeam.wins}-${homeTeam.losses}-${homeTeam.ot}`}
+                            {` ${homeTeam.pts}pts`}
                           </div>
                         </div>
-                        {homeTeamImage}
+                        {renderTeamImage(homeTeam.teamId)}
                       </div>
                     </div>
                   </div>
@@ -255,63 +245,49 @@ class GamePage extends React.Component {
                   <TabList>
                     <div className="container">
                       <div className="react-tabs-center">
-                        <Tab>{boxscore.away.team.teamName}</Tab>
+                        <Tab>{awayTeam.teamName}</Tab>
                         <Tab>Summary</Tab>
-                        <Tab>{boxscore.home.team.teamName}</Tab>
+                        <Tab>{homeTeam.teamName}</Tab>
                       </div>
                     </div>
                   </TabList>
                   <div className="container">
                     <TabPanel>
                       <BoxTable
-                        players={reject(isScratchedOrGoalie, boxscore.away.players)}
+                        players={reject(isScratchedOrGoalie, homeTeam.playerStats)}
                         goalieMode={false}
                       />
                       <BoxTable
-                        players={filter(isGoalie, boxscore.away.players)}
+                        players={filter(isGoalie, awayTeam.playerStats)}
                         goalieMode
                       />
-                      <div className="scratches">
-                        <span>Scratches: </span>
-                        {pipe(
-                          filter(isScratched),
-                          map(p => (
-                            <PlayerName
-                              key={p.person.id}
-                              id={p.person.id}
-                              name={p.person.fullName}
-                            />
-                          )),
-                        )(boxscore.away.players)}
-                      </div>
                     </TabPanel>
                     <TabPanel>
                       <div className="summary">
                         <div className="summary-col">
                           <h3>Scoring</h3>
-                          {renderGoalEvents(goalSummary, groupedHighlights['1'], 1)}
-                          {renderGoalEvents(goalSummary, groupedHighlights['2'], 2)}
-                          {renderGoalEvents(goalSummary, groupedHighlights['3'], 3)}
+                          {renderGoalEvents(goals, 1)}
+                          {renderGoalEvents(goals, 2)}
+                          {renderGoalEvents(goals, 3)}
                           {
-                    last(lastTenPlays)
-                      && (last(lastTenPlays).period === 4 || last(lastTenPlays).period === 5)
-                      ? renderGoalEvents(goalSummary, groupedHighlights['4'], 4)
-                      : null
-                  }
+                              (lastEventPeriod === 4 || lastEventPeriod === 5)
+                              ? renderGoalEvents(goals, 4)
+                              : null
+                          }
                           {
-                    last(lastTenPlays) && last(lastTenPlays).period === 5
-                      ? renderGoalEvents(goalSummary, groupedHighlights['5'], 5)
-                      : null
-                  }
+                              lastEventPeriod.period === 5
+                              ? renderGoalEvents(goals, 5)
+                              : null
+                          }
                           <h3>Penalties</h3>
-                          {renderPenaltyEvents(penaltySummary, 1)}
-                          {renderPenaltyEvents(penaltySummary, 2)}
-                          {renderPenaltyEvents(penaltySummary, 3)}
+                          {renderPenaltyEvents(penalties, 1)}
+                          {renderPenaltyEvents(penalties, 2)}
+                          {renderPenaltyEvents(penalties, 3)}
                           {
-                    last(lastTenPlays) && (last(lastTenPlays).period === 4 || last(lastTenPlays).period === 5)
-                      ? renderPenaltyEvents(penaltySummary, 4)
-                      : null
-                  }
+                              (lastEventPeriod === 4 || lastEventPeriod === 5)
+                              ? renderPenaltyEvents(penalties, 4)
+                              : null
+                          }
                         </div>
                         <div className="summary-col">
                           <h3>Team Stats</h3>
@@ -320,66 +296,50 @@ class GamePage extends React.Component {
                               <thead>
                                 <tr>
                                   <th />
-                                  <th>{awayTeamImage}</th>
-                                  <th>{homeTeamImage}</th>
+                                  <th>{renderTeamImage(awayTeam.teamId)}</th>
+                                  <th>{renderTeamImage(homeTeam.teamId)}</th>
                                 </tr>
                               </thead>
                               <tbody>
                                 <tr>
-                                  <td>
-                          Shots
-                                  </td>
-                                  <td>{boxscore.away.teamStats.shots}</td>
-                                  <td>{boxscore.home.teamStats.shots}</td>
+                                  <td>{'Shots'}</td>
+                                  <td>{awayTeam.teamStats.shots}</td>
+                                  <td>{homeTeam.teamStats.shots}</td>
                                 </tr>
                                 <tr>
-                                  <td>
-                          PIM
-                                  </td>
-                                  <td>{boxscore.away.teamStats.pim}</td>
-                                  <td>{boxscore.home.teamStats.pim}</td>
+                                  <td>{'PIM'}</td>
+                                  <td>{awayTeam.teamStats.pim}</td>
+                                  <td>{homeTeam.teamStats.pim}</td>
                                 </tr>
                                 <tr>
-                                  <td>
-                          PP
-                                  </td>
-                                  <td>{`${boxscore.away.teamStats.powerPlayGoals}/${boxscore.away.teamStats.powerPlayOpportunities}`}</td>
-                                  <td>{`${boxscore.home.teamStats.powerPlayGoals}/${boxscore.home.teamStats.powerPlayOpportunities}`}</td>
+                                  <td>{'PP'}</td>
+                                  <td>{`${awayTeam.teamStats.powerPlayGoals}/${awayTeam.teamStats.powerPlayOpportunities}`}</td>
+                                  <td>{`${homeTeam.teamStats.powerPlayGoals}/${homeTeam.teamStats.powerPlayOpportunities}`}</td>
                                 </tr>
                                 <tr>
-                                  <td>
-                          Hits
-                                  </td>
-                                  <td>{boxscore.away.teamStats.hits}</td>
-                                  <td>{boxscore.home.teamStats.hits}</td>
+                                  <td>{'Hits'}</td>
+                                  <td>{awayTeam.teamStats.hits}</td>
+                                  <td>{homeTeam.teamStats.hits}</td>
                                 </tr>
                                 <tr>
-                                  <td>
-                          FO%
-                                  </td>
-                                  <td>{boxscore.away.teamStats.faceOffWinPercentage.toFixed()}</td>
-                                  <td>{boxscore.home.teamStats.faceOffWinPercentage.toFixed()}</td>
+                                  <td>{'FO%'}</td>
+                                  <td>{awayTeam.teamStats.faceOffWinPercentage.toFixed()}</td>
+                                  <td>{homeTeam.teamStats.faceOffWinPercentage.toFixed()}</td>
                                 </tr>
                                 <tr>
-                                  <td>
-                          TK
-                                  </td>
-                                  <td>{boxscore.away.teamStats.takeaways}</td>
-                                  <td>{boxscore.home.teamStats.takeaways}</td>
+                                  <td>{'TK'}</td>
+                                  <td>{awayTeam.teamStats.takeaways}</td>
+                                  <td>{homeTeam.teamStats.takeaways}</td>
                                 </tr>
                                 <tr>
-                                  <td>
-                          GV
-                                  </td>
-                                  <td>{boxscore.away.teamStats.giveaways}</td>
-                                  <td>{boxscore.home.teamStats.giveaways}</td>
+                                  <td>{'GV'}</td>
+                                  <td>{awayTeam.teamStats.giveaways}</td>
+                                  <td>{homeTeam.teamStats.giveaways}</td>
                                 </tr>
                                 <tr>
-                                  <td>
-                          Bks
-                                  </td>
-                                  <td>{boxscore.away.teamStats.blocked}</td>
-                                  <td>{boxscore.home.teamStats.blocked}</td>
+                                  <td>{'Bks'}</td>
+                                  <td>{awayTeam.teamStats.blocked}</td>
+                                  <td>{homeTeam.teamStats.blocked}</td>
                                 </tr>
                               </tbody>
                             </table>
@@ -387,32 +347,15 @@ class GamePage extends React.Component {
                         </div>
                       </div>
                     </TabPanel>
-
-
                     <TabPanel>
                       <BoxTable
-                        players={reject(isScratchedOrGoalie, boxscore.home.players)}
+                        players={reject(isScratchedOrGoalie, homeTeam.playerStats)}
                         goalieMode={false}
                       />
                       <BoxTable
-                        players={filter(isGoalie, boxscore.home.players)}
+                        players={filter(isGoalie, homeTeam.playerStats)}
                         goalieMode
                       />
-                      <div className="scratches">
-                        <span>Scratches: </span>
-                        {
-                        pipe(
-                          filter(isScratched),
-                          map(p => (
-                            <PlayerName
-                              key={p.person.id}
-                              id={p.person.id}
-                              name={p.person.fullName}
-                            />
-                          )),
-                        )(boxscore.home.players)
-                      }
-                      </div>
                     </TabPanel>
                   </div>
                 </Tabs>

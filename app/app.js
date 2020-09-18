@@ -49,7 +49,6 @@ const client = new ApolloClient({
   uri: '/graphql',
 });
 
-
 const MOUNT_NODE = document.getElementById('app');
 
 const render = () => {
