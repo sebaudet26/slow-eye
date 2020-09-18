@@ -59,12 +59,23 @@ const NHLQuery = new GraphQLObjectType({
     },
 
     team: {
-      type: Team,
+      type: new GraphQLList(Team),
       args: {
         id: { type: GraphQLInt },
         season: { type: GraphQLString },
       },
-      resolve: providedArgs,
+      resolve: (_, args) => {
+        if (args.id) {
+          return [args]
+        } else {
+          return teamsLoader.load(args.season).then(teams => { 
+            teams.forEach(team => {
+              team.season = args.season
+            })
+            return teams
+          })
+        }
+      },
     },
 
     game: {

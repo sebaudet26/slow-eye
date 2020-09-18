@@ -23,14 +23,18 @@ class TeamStatsPage extends React.Component {
             </div>
           </div>
           <div className="container">
-            <Query query={getTeamsQuery}>
+            <Query query={getTeamsQuery} variables={{ season: "20192020" }}>
               {({ loading, error, data }) => {
                 if (loading) return (<LoadingIndicator />);
                 if (error) return (<EmptyState isError />);
+                const teamsStats = data.nhl.team;
+                console.log(teamsStats)
 
-                const teams = data.teams;
-
-                return <TeamsTable teams={teams} />;
+                if (teamsStats) {
+                  return <TeamsTable teams={teamsStats} />;
+                } else {
+                  return <EmptyState />
+                }
               }}
             </Query>
           </div>
