@@ -7,6 +7,8 @@ query($id: Int) {
       recap
       statusText
       lastEventPeriod
+      hasShootout
+      shootoutWinner
       penalties {
         teamId
         teamName
@@ -65,7 +67,7 @@ query($id: Int) {
           powerPlayAssists
           penaltyMinutes
           faceOffWins
-          faceoffTaken
+          faceOffTaken
           takeaways
           giveaways
           shortHandedGoals
@@ -77,6 +79,20 @@ query($id: Int) {
           evenTimeOnIce
           powerPlayTimeOnIce
           shortHandedTimeOnIce
+          shotsReceived
+          saves
+          powerPlaySaves
+          shortHandedSaves
+          evenSaves
+          shortHandedShotsAgainst
+          evenShotsAgainst
+          powerPlayShotsAgainst
+          savePercentage
+          powerPlaySavePercentage
+          shortHandedSavePercentage
+          evenStrengthSavePercentage
+          decision
+          shotsReceived
         }
         teamStats {
           goals
@@ -113,7 +129,7 @@ query($id: Int) {
           powerPlayAssists
           penaltyMinutes
           faceOffWins
-          faceoffTaken
+          faceOffTaken
           takeaways
           giveaways
           shortHandedGoals
@@ -125,6 +141,20 @@ query($id: Int) {
           evenTimeOnIce
           powerPlayTimeOnIce
           shortHandedTimeOnIce
+          shotsReceived
+          saves
+          powerPlaySaves
+          shortHandedSaves
+          evenSaves
+          shortHandedShotsAgainst
+          evenShotsAgainst
+          powerPlayShotsAgainst
+          savePercentage
+          powerPlaySavePercentage
+          shortHandedSavePercentage
+          evenStrengthSavePercentage
+          decision
+          shotsReceived
         }
         teamStats {
           goals

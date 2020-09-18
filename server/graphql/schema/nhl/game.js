@@ -4,10 +4,10 @@ const {
   GraphQLList,
   GraphQLInt,
   GraphQLFloat,
-  GraphQlBoolean,
+  GraphQLBoolean,
 } = require('graphql')
 
-const { last, pathOr } = require('ramda')
+const { filter, last, pathOr } = require('ramda')
 
 const {
   getStatusText,
@@ -72,9 +72,11 @@ const GamePlayer = new GraphQLObjectType({
 	  hits: { type: GraphQLInt, resolve: resolvePath(['stats', 'skaterStats', 'hits']) },
 	  powerPlayGoals: { type: GraphQLInt, resolve: resolvePath(['stats', 'skaterStats', 'powerPlayGoals']) },
 	  powerPlayAssists: { type: GraphQLInt, resolve: resolvePath(['stats', 'skaterStats', 'powerPlayAssists']) },
-	  penaltyMinutes: { type: GraphQLInt, resolve: resolvePath(['stats', 'skaterStats', 'penaltyMinutes']) },
+	  penaltyMinutes: { type: GraphQLInt, resolve: d => {
+			return pathOr(null, ['stats', 'skaterStats', 'penaltyMinutes'], d) || pathOr(null, ['stats', 'goalieStats', 'pim'], d) 
+		}},
 	  faceOffWins: { type: GraphQLInt, resolve: resolvePath(['stats', 'skaterStats', 'faceOffWins']) },
-	  faceoffTaken: { type: GraphQLInt, resolve: resolvePath(['stats', 'skaterStats', 'faceoffTaken']) },
+	  faceOffTaken: { type: GraphQLInt, resolve: resolvePath(['stats', 'skaterStats', 'faceOffTaken']) },
 	  takeaways: { type: GraphQLInt, resolve: resolvePath(['stats', 'skaterStats', 'takeaways']) },
 	  giveaways: { type: GraphQLInt, resolve: resolvePath(['stats', 'skaterStats', 'giveaways']) },
 	  shortHandedGoals: { type: GraphQLInt, resolve: resolvePath(['stats', 'skaterStats', 'shortHandedGoals']) },
@@ -82,10 +84,25 @@ const GamePlayer = new GraphQLObjectType({
 	  blocked: { type: GraphQLInt, resolve: resolvePath(['stats', 'skaterStats', 'blocked']) },
 	  plusMinus: { type: GraphQLInt, resolve: resolvePath(['stats', 'skaterStats', 'plusMinus']) },
 	  faceOffPct: { type: GraphQLFloat, resolve: resolvePath(['stats', 'skaterStats', 'faceOffPct']) },
-		timeOnIce: { type: GraphQLString, resolve: resolvePath(['stats', 'skaterStats', 'timeOnIce']) },
+		timeOnIce: { type: GraphQLString, resolve: d => {
+			return pathOr(null, ['stats', 'skaterStats', 'timeOnIce'], d) || pathOr(null, ['stats', 'goalieStats', 'timeOnIce'], d) 
+		}},
 	  evenTimeOnIce: { type: GraphQLString, resolve: resolvePath(['stats', 'skaterStats', 'evenTimeOnIce']) },
 	  powerPlayTimeOnIce: { type: GraphQLString, resolve: resolvePath(['stats', 'skaterStats', 'powerPlayTimeOnIce']) },
 	  shortHandedTimeOnIce: { type: GraphQLString, resolve: resolvePath(['stats', 'skaterStats', 'shortHandedTimeOnIce']) },
+	  shotsReceived: { type: GraphQLInt, resolve: resolvePath(['stats', 'goalieStats', 'shots']) },
+		saves: { type: GraphQLInt, resolve: resolvePath(['stats', 'goalieStats', 'saves']) },
+		powerPlaySaves: { type: GraphQLInt, resolve: resolvePath(['stats', 'goalieStats', 'powerPlaySaves']) },
+		shortHandedSaves: { type: GraphQLInt, resolve: resolvePath(['stats', 'goalieStats', 'shortHandedSaves']) },
+		evenSaves: { type: GraphQLInt, resolve: resolvePath(['stats', 'goalieStats', 'evenSaves']) },
+		shortHandedShotsAgainst: { type: GraphQLInt, resolve: resolvePath(['stats', 'goalieStats', 'shortHandedShotsAgainst']) },
+		evenShotsAgainst: { type: GraphQLInt, resolve: resolvePath(['stats', 'goalieStats', 'evenShotsAgainst']) },
+		powerPlayShotsAgainst: { type: GraphQLInt, resolve: resolvePath(['stats', 'goalieStats', 'powerPlayShotsAgainst']) },
+		savePercentage: { type: GraphQLFloat, resolve: resolvePath(['stats', 'goalieStats', 'savePercentage']) },
+		powerPlaySavePercentage: { type: GraphQLFloat, resolve: resolvePath(['stats', 'goalieStats', 'powerPlaySavePercentage']) },
+		shortHandedSavePercentage: { type: GraphQLFloat, resolve: resolvePath(['stats', 'goalieStats', 'shortHandedSavePercentage']) },
+		evenStrengthSavePercentage: { type: GraphQLFloat, resolve: resolvePath(['stats', 'goalieStats', 'evenStrengthSavePercentage']) },
+		decision: { type: GraphQLString, resolve: resolvePath(['stats', 'goalieStats', 'decision']) },
 	}
 })
 
@@ -149,10 +166,7 @@ const GameGoal = new GraphQLObjectType({
 		scorer: { type: GameGoalPlayer, resolve: doc => pathOr({}, ['players', 0], doc) },
 		assists: { 
 			type: new GraphQLList(GameGoalPlayer), 
-			resolve: doc => [
-				pathOr(null, ['players', 1], doc), 
-				pathOr(null, ['players', 2], doc),
-			].filter(d => d),
+			resolve: doc => filter(player => player.playerType	== 'Assist', doc.players || []), 
 		},
 	},
 })
@@ -163,6 +177,28 @@ const Game = new GraphQLObjectType({
 		recap: {
 			type: GraphQLString,
 			resolve: doc => gameHighlightsLoader.load(doc.id).then(resolveProp('recap'))
+		},
+		hasShootout: { 
+			type: GraphQLBoolean, 
+			resolve: doc => gameLivefeedLoader
+				.load(doc.id)
+				.then(livefeed => pathOr(false, ['liveData', 'linescore', 'hasShootout'], livefeed)) 
+		},
+		shootoutWinner: { 
+			type: GraphQLString, 
+			resolve: doc => gameLivefeedLoader
+				.load(doc.id)
+				.then(livefeed => {
+					const awayScore = pathOr(0, ['liveData', 'linescore', 'shootoutInfo', 'away', 'scores'], livefeed)
+					const homeScore = pathOr(0, ['liveData', 'linescore', 'shootoutInfo', 'home', 'scores'], livefeed)
+					if (awayScore > homeScore) {
+						return 'away'
+					} else if (homeScore > awayScore) {
+						return 'home'
+					} 
+					
+					return null
+				})
 		},
 		lastEventPeriod: {
 			type: GraphQLInt,

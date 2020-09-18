@@ -68,13 +68,15 @@ const renderGoalInfo = isShootout => goal => (
       </div>
       <div className="goal-details-assist">
         {
-        goal.assists.map(player => (
-          <PlayerName
-            key={player.id}
-            id={player.id}
-            name={`${player.name} (${player.seasonTotal})`}
-          />
-        ))
+          !isShootout 
+          ? goal.assists.map(player => (
+              <PlayerName
+                key={player.id}
+                id={player.id}
+                name={`${player.name} (${player.seasonTotal})`}
+              />
+            ))
+          : null
       }
       </div>
       {
@@ -116,8 +118,10 @@ const renderPenaltyInfo = penalty => (
   </div>
 );
 
-const renderGoalEvents = (goals = [], period) => (
-  <div className="card">
+const renderGoalEvents = (goals = [], period) => {
+  console.log(period, filter(propEq('periodNumber', period), goals))
+  return (
+  <div className="card" key={Math.random()}>
     <div className="card-header">
       {
         period === 5 ? 'Shootout'
@@ -127,11 +131,12 @@ const renderGoalEvents = (goals = [], period) => (
     </div>
     {
       filter(propEq('periodNumber', period), goals).length
-        ? map(renderGoalInfo(period === 5), goals)
+        ? map(renderGoalInfo(period === 5), filter(propEq('periodNumber', period), goals))
         : <div className="non-event">No Goals</div>
     }
   </div>
 );
+}
 
 const renderPenaltyEvents = (penalties, period) => (
   <div className="card">
@@ -140,7 +145,7 @@ const renderPenaltyEvents = (penalties, period) => (
     </div>
     {
       filter(propEq('periodNumber', period), penalties).length
-        ? map(renderPenaltyInfo, filter(event => event.periodNumber === period, penalties))
+        ? map(renderPenaltyInfo, filter(propEq('periodNumber', period), penalties))
         : <div className="non-event">No Penalties</div>
     }
   </div>
@@ -185,9 +190,11 @@ class GamePage extends React.Component {
               recap, 
               lastEventPeriod, 
               statusText,
+              hasShootout,
+              shootoutWinner,
             } = game;
 
-            console.log('goals', goals)
+            console.log('players', awayTeam.playerStats)
 
             return (
               <div className="game-page">
@@ -206,11 +213,11 @@ class GamePage extends React.Component {
                           <div className="team">{awayTeam.teamName}</div>
                           <div className="record">
                             {`${awayTeam.wins}-${awayTeam.losses}-${awayTeam.ot}`}
-                            {` ${awayTeam.pts}pts`}
+                            {` (${awayTeam.pts}pts)`}
                           </div>
                         </div>
                         <div className="game-header-team-score">
-                          {awayTeam.teamStats.goals + ('shootoutSummary' && 'shootoutSummary.away.scores > shootoutSummary.home.scores' ? 1 : 0)}
+                          {awayTeam.teamStats.goals + (hasShootout && shootoutWinner == 'away' ? 1 : 0)}
                         </div>
                       </div>
                       <div className="game-header-result">
@@ -219,18 +226,18 @@ class GamePage extends React.Component {
                             {statusText}
                           </div>
                         </div>
-                        {renderRecapVideo()}
+                        {renderRecapVideo(recap)}
                       </div>
                       <div className="game-header-team">
                         <div className="game-header-team-score">
-                          {homeTeam.teamStats.goals + ('shootoutSummary' && 'shootoutSummary.home.scores > shootoutSummary.away.scores' ? 1 : 0)}
+                          {homeTeam.teamStats.goals + (hasShootout && shootoutWinner == 'home' ? 1 : 0)}
                         </div>
                         <div className="game-header-team-name">
                           <div className="city">{homeTeam.location}</div>
                           <div className="team">{homeTeam.teamName}</div>
                           <div className="record">
                             {`${homeTeam.wins}-${homeTeam.losses}-${homeTeam.ot}`}
-                            {` ${homeTeam.pts}pts`}
+                            {` (${homeTeam.pts}pts)`}
                           </div>
                         </div>
                         {renderTeamImage(homeTeam.teamId)}
@@ -270,12 +277,12 @@ class GamePage extends React.Component {
                           {renderGoalEvents(goals, 2)}
                           {renderGoalEvents(goals, 3)}
                           {
-                              (lastEventPeriod === 4 || lastEventPeriod === 5)
+                              (lastEventPeriod > 3 || hasShootout)
                               ? renderGoalEvents(goals, 4)
                               : null
                           }
                           {
-                              lastEventPeriod.period === 5
+                              hasShootout
                               ? renderGoalEvents(goals, 5)
                               : null
                           }
@@ -284,7 +291,7 @@ class GamePage extends React.Component {
                           {renderPenaltyEvents(penalties, 2)}
                           {renderPenaltyEvents(penalties, 3)}
                           {
-                              (lastEventPeriod === 4 || lastEventPeriod === 5)
+                              (lastEventPeriod > 3 || hasShootout)
                               ? renderPenaltyEvents(penalties, 4)
                               : null
                           }

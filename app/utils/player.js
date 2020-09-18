@@ -2,8 +2,8 @@ import {
   equals, isNil, map, or, path, pipe, prop, sum, filter, length, pathOr, some,
 } from 'ramda';
 
-export const isScratched = pipe(prop('boxscore'), isNil);
-export const isGoalie = pipe(path(['position', 'abbreviation']), equals('G'));
+export const isScratched = pipe(prop('timeOnIce'), isNil);
+export const isGoalie = pipe(path(['position']), equals('G'));
 export const isScratchedOrGoalie = p => or(isGoalie(p), isScratched(p));
 
 export const sumNumbers = (data, pathToNumber) => pipe(
