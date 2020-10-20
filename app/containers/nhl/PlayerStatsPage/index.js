@@ -16,14 +16,14 @@ class PlayerStatsPage extends React.PureComponent {
         <Header selectedLeague="NHL" />
         <div className="playerStats-page">
           <Helmet titlePrefix="Player Stats" contentPrefix="View NHL Players Stats." />
-          <Query query={getPlayersQuery}>
+          <Query query={getPlayersQuery} variables={{ season: "20192020" }}>
             {({ loading, error, data }) => {
               if (loading) return (<LoadingIndicator />);
               if (error) return (<EmptyState isError />);
 
-
-              const players = data.playersReport;
-              const teams = data.teams;
+              const players = data.nhl.leaders.players;
+              const teams = data.nhl.teams;
+              console.log(players)
 
               return (
                 <PlayersTable

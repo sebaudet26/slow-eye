@@ -159,86 +159,105 @@ const batchPlayerPlayoffsGameLogsFetcher = async (playerIds) => {
 
 // Players -----
 
-const playersFetcher = async (seasons) => {
-  const totalPlayers = await cache.instance.get('total_players') || 7192
-  const totalGoalies = await cache.instance.get('total_goalies') || 810
+const interval = 100
 
-  // const cached_value = await cache.instance.get('players_list:' + seasons.join(','))
-  // if (cached_value) {
-  //   return JSON.parse(cached_value)
-  // }
+const recursiveFetch = async ({ buildRequest }) => {
+  // Make one request to know the limit
+  const initialResponse = await buildRequest(0).fetch()
+  const { total } = initialResponse
+  // Initiate the array to save time of allocating memory each time
+  const requests = new Array()
+  // Recursively request data until limit is reached
+  for (let i = 1; i < (total / interval); i++) {
+    // build new request url
+    requests.push(buildRequest(i * interval))
+  }
+
+  const all = await Promise.all(requests.map(request => request.fetch()))
+  all.push(initialResponse)
+  return pipe(
+    flatten,
+    map(pathOr([], ['data'])),
+    flatten,
+  )(all)
+}
+
+
+const playersFetcher = async (seasons) => {
+  const cached_value = await cache.instance.get('bios:' + seasons.join(','))
+  if (cached_value) {
+    return JSON.parse(cached_value)
+  }
 
 	const data = await Promise.all(seasons.map((season) => {
-		const seasonStart = season == 'all' ? '19171918' : season
-		const seasonEnd = season == 'all' ? CURRENT_SEASON : season
+    const seasonStart = season == 'all' ? '19171918' : season
+    const seasonEnd = season == 'all' ? CURRENT_SEASON : season
 
+    const buildPlayerRequest = startAt => new ApiRequest({
+      league: 'NHL',
+      apiType: 'BASIC',
+      resource: `/en/skater/bios?isAggregate=true&isGame=false&sort=%5B%7B%22property%22:%22birthDate%22,%22direction%22:%22ASC_CI%22%7D,%7B%22property%22:%22skaterFullName%22,%22direction%22:%22ASC_CI%22%7D%5D&start=${startAt}&limit=100&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=${seasonEnd}%20and%20seasonId%3E=${seasonStart}`
+    })
+    const buildGoalieRequest = startAt => new ApiRequest({
+      league: 'NHL',
+      apiType: 'BASIC',
+      resource: `/en/goalie/bios?isAggregate=true&isGame=false&sort=%5B%7B%22property%22:%22birthDate%22,%22direction%22:%22ASC_CI%22%7D,%7B%22property%22:%22goalieFullName%22,%22direction%22:%22ASC_CI%22%7D%5D&start=${startAt}&limit=100&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=${seasonEnd}%20and%20seasonId%3E=${seasonStart}`
+    })
 
-    const playerIntervals = parseInt(totalPlayers / 100) + 1
-    const goalieIntervals = parseInt(totalGoalies / 100) + 1
-
-    const requests = new Array(playerIntervals + goalieIntervals)
-
-    for (let i = 0; i<playerIntervals; i++) {
-      requests.push(new ApiRequest({
-        league: 'NHL',
-        apiType: 'BASIC',
-        resource: `/en/skater/bios?isAggregate=true&isGame=false&sort=%5B%7B%22property%22:%22birthDate%22,%22direction%22:%22ASC_CI%22%7D,%7B%22property%22:%22skaterFullName%22,%22direction%22:%22ASC_CI%22%7D%5D&start=${i*100}&limit=100&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=${seasonEnd}%20and%20seasonId%3E=${seasonStart}`
-      }))
-    }
-    for (let i = 0; i<goalieIntervals; i++) {
-      requests.push(new ApiRequest({
-        league: 'NHL',
-        apiType: 'BASIC',
-        resource: `/en/goalie/bios?isAggregate=true&isGame=false&sort=%5B%7B%22property%22:%22birthDate%22,%22direction%22:%22ASC_CI%22%7D,%7B%22property%22:%22goalieFullName%22,%22direction%22:%22ASC_CI%22%7D%5D&start=${i*100}&limit=100&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=${seasonEnd}%20and%20seasonId%3E=${seasonStart}`
-      }))
-    }
-
-		return Promise
-    .all(requests.map(request => request.fetch()))
-		.then((seasonData) => {
-			return Promise.resolve(pipe(
-				map(pathOr([], ['data'])),
-				flatten,
-				map(pick(['skaterFullName', 'goalieFullName', 'birthDate', 'playerId', 'nationalityCode', 'positionCode'])),
-			)(seasonData))
-		})
+    return Promise.all([
+      recursiveFetch({ buildRequest: buildPlayerRequest }),
+      recursiveFetch({ buildRequest: buildGoalieRequest }),
+    ])
 	}))
 
-  cache.instance.set('players_list:' + seasons.join(','), JSON.stringify(data))
-
+  cache.instance.set('bios:' + seasons.join(','), JSON.stringify(data))
 	return data
 }
 
-const reportFetcher = async (season, type) => {
-	switch (type) {
-		case 'skaters':
-	  	const skaters = await new ApiRequest({
-				league: 'NHL',
-				apiType: 'BASIC',
-				resource: `/en/skater/summary?isAggregate=false&isGame=false&sort=%5B%7B%22property%22:%22points%22,%22direction%22:%22DESC%22%7D%5D&start=0&limit=100&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=${season}%20and%20seasonId%3E=${season}`,
-			})
-      .fetch()
+const reportFetcher = async (seasons) => {
+  const cached_value = await cache.instance.get('report:' + seasons.join(','))
+  if (cached_value) {
+    return JSON.parse(cached_value)
+  }  
 
-      return pathOr([], ['data'])(skaters)
+  const data = await Promise.all(seasons.map((season) => {
+  	const buildSkaterRequest = startAt => new ApiRequest({
+  		league: 'NHL',
+  		apiType: 'BASIC',
+  		resource: `/en/skater/summary?isAggregate=false&isGame=false&sort=%5B%7B%22property%22:%22points%22,%22direction%22:%22DESC%22%7D%5D&start=${startAt}&limit=100&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=${season}%20and%20seasonId%3E=${season}`,
+  	})
 
-		case 'goalies':
-	  	const goalies = await new ApiRequest({
-				league: 'NHL',
-				apiType: 'BASIC',
-				resource: `/en/goalie/summary?isAggregate=false&isGame=false&sort=%5B%7B%22property%22:%22wins%22,%22direction%22:%22DESC%22%7D,%7B%22property%22:%22savePct%22,%22direction%22:%22DESC%22%7D%5D&start=0&limit=100&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=3%20and%20seasonId%3C=${season}%20and%20seasonId%3E=${season}`,
-			})
-      .fetch()
+  	const buildGoalieRequest = startAt => new ApiRequest({
+  		league: 'NHL',
+  		apiType: 'BASIC',
+  		resource: `/en/goalie/summary?isAggregate=false&isGame=false&sort=%5B%7B%22property%22:%22wins%22,%22direction%22:%22DESC%22%7D&start=${startAt}&limit=100&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=${season}%20and%20seasonId%3E=${season}`,
+  	})
 
-			return pathOr([], ['data'])(goalies)
-	}
+    return Promise.all([
+      recursiveFetch({ buildRequest: buildSkaterRequest }),
+      recursiveFetch({ buildRequest: buildGoalieRequest }),
+    ]) 
+  }))
+
+  cache.instance.set('report:' + seasons.join(','), JSON.stringify(data))
+  return data
 }
 
-const batchReportFetcher = async (ids) => {
-	const data = await Promise.all(ids.map((id) => {
-		const [season, type] = id.split(':')
-		return reportFetcher(season, type)
-	}))
-	return data
+const batchReportFetcher = async (seasons) => {
+	const data = await Promise.all([
+    reportFetcher(seasons), 
+    playersFetcher(seasons),
+  ])
+
+  const reports = flatten(data[0])
+  const bios = flatten(data[1])
+
+  const final = bios.map((bio) => {
+    const report = reports.find(element => element.playerId == bio.playerId)
+    return Object.assign(bio, report)
+  })
+
+  return [final]
 }
 
 // Team -----

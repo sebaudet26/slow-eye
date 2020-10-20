@@ -113,7 +113,7 @@ const NHLQuery = new GraphQLObjectType({
         season: { type: GraphQLString },
       },
       resolve: (_, args) => playersLoader.load(args.season).then((players) => {
-        return sortBy(prop('playerName'), players)
+        return sortBy(prop('playerName'), flatten(players))
       }),
     },
 

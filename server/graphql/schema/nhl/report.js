@@ -22,18 +22,16 @@ const {
 const Stat = new GraphQLObjectType({
   name: 'Stat',
   fields: {
-    playerBirthCountry: { type: GraphQLString, resolve: resolveProp('playerBirthCountry') },
-    playerBirthDate: { type: GraphQLString, resolve: resolveProp('playerBirthDate') },
-    playerFirstName: { type: GraphQLString, resolve: resolveProp('playerFirstName') },
-    playerLastName: { type: GraphQLString, resolve: resolveProp('playerLastName') },
-    playerName: { type: GraphQLString, resolve: (doc) => doc.playerName || doc.skaterFullName },
-    playerNationality: { type: GraphQLString, resolve: resolveProp('playerNationality') },
-    playerPositionCode: { type: GraphQLString, resolve: doc => doc.playerPositionCode || doc.positionCode },
+    playerBirthDate: { type: GraphQLString, resolve: resolveProp('birthDate') },
+    playerName: { type: GraphQLString, resolve: (doc) => doc.goalieFullName || doc.skaterFullName },
+    playerNationality: { type: GraphQLString, resolve: resolveProp('nationalityCode') },
+    playerPositionCode: { type: GraphQLString, resolve: doc => doc.playerPositionCode || doc.positionCode || 'G' },
     playerShootsCatches: { type: GraphQLString, resolve: doc => doc.playerShootsCatches || doc.shootsCatches },
     playerTeamsPlayedFor: {
     	type: new GraphQLList(GraphQLString),
     	resolve: doc => Promise.resolve(doc.teamAbbrevs || doc.playerTeamsPlayedFor).then((str = '') => str.split(','))
     },
+
     gamesPlayed: { type: GraphQLInt, resolve: resolveProp('gamesPlayed') },
     gamesStarted: { type: GraphQLInt, resolve: resolveProp('gamesStarted') },
     goalsAgainst: { type: GraphQLInt, resolve: resolveProp('goalsAgainst') },
@@ -53,7 +51,7 @@ const Stat = new GraphQLObjectType({
     timeOnIce: { type: GraphQLInt, resolve: resolveProp('timeOnIce') },
     wins: { type: GraphQLInt, resolve: resolveProp('wins') },
 
-    savePctg: { type: GraphQLFloat, resolve: resolveProp('savePctg') },
+    savePercentage: { type: GraphQLFloat, resolve: resolveProp('savePct') },
     goalsAgainstAverage: { type: GraphQLFloat, resolve: resolveProp('goalsAgainstAverage') },
     rookie: { type: GraphQLBoolean, resolve: resolveProp('rookie') },
 
@@ -80,27 +78,27 @@ const Stat = new GraphQLObjectType({
 
     missedShotsPerGame: { type: GraphQLFloat, resolve: resolveProp('missedShotsPerGame') },
     blockedShotsPerGame: { type: GraphQLFloat, resolve: resolveProp('blockedShotsPerGame') },
-    faceoffWinPctg: { type: GraphQLFloat, resolve: resolveProp('faceoffWinPctg') },
+    faceoffWinPctg: { type: GraphQLFloat, resolve: resolveProp('faceoffWinPct') },
     goalsPerGame: { type: GraphQLFloat, resolve: resolveProp('goalsPerGame') },
     hitsPerGame: { type: GraphQLFloat, resolve: resolveProp('hitsPerGame') },
-    shootingPctg: { type: GraphQLFloat, resolve: resolveProp('shootingPctg') },
+    shootingPctg: { type: GraphQLFloat, resolve: doc => {
+        return ((doc.shootingPct || 0) * 100).toFixed(0) 
+    }},
     shotsPerGame: { type: GraphQLFloat, resolve: resolveProp('shotsPerGame') },
     pointsPerGame: { type: GraphQLFloat, resolve: resolveProp('pointsPerGame') },
     shiftsPerGame: { type: GraphQLFloat, resolve: resolveProp('shiftsPerGame') },
-    timeOnIcePerGame: { type: GraphQLFloat, resolve: resolveProp('timeOnIcePerGame') },
+    timeOnIcePerGame: { type: GraphQLFloat, resolve: doc => {
+        return ((doc.timeOnIcePerGame || 0) / 60).toFixed(0)
+    }},
   },
 })
 
 const Report = new GraphQLObjectType({
 	name: 'Report',
 	fields: {
-		goalies: {
+		players: {
 			type: new GraphQLList(Stat),
-			resolve: args => playersReportLoader.load(`${args.season}:goalies`),
-		},
-		skaters: {
-			type: new GraphQLList(Stat),
-			resolve: args => playersReportLoader.load(`${args.season}:skaters`),
+			resolve: args => playersReportLoader.load(`${args.season}`),
 		}
 	},
 })

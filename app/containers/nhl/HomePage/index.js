@@ -23,7 +23,7 @@ class HomePage extends React.Component {
       //
     } else {
       return (
-        <div className="home-header" style={{ backgroundImage: `url("https://nhl.bamcontent.com/images/actionshots/${data.nhl.streaks.players[0].id}@2x.jpg")` }}>
+        <div className="home-header" style={{ backgroundImage: `url("https://cms.nhl.bamgrid.com/images/actionshots/${data.nhl.streaks.players[0].id}@2x.jpg")` }}>
           <div className="container">
             <h1>The best place to view the NHL's latest scores and stats.</h1>
             <div className="home-header-featured">
@@ -42,7 +42,7 @@ class HomePage extends React.Component {
     } else {
       const { players } = this.props.data.nhl.streaks
       return players.map(player => (
-        <a key={player.id} href={`/player?id=${player.id}`} className="card card-player" style={{ backgroundImage: `url("https://nhl.bamcontent.com/images/actionshots/${player.id}_low_resolution.jpg")` }}>
+        <a key={player.id} href={`/player?id=${player.id}`} className="card card-player" style={{ backgroundImage: `url("https://cms.nhl.bamgrid.com/images/actionshots/${player.id}_low_resolution.jpg")` }}>
           <div className="card-content">
             <div className="card-content-name">
               {player.name.split(' ')[0]}

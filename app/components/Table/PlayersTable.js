@@ -123,7 +123,6 @@ class PlayersTable extends React.PureComponent {
               <PositionFilter selected={posSelected} onChange={this.handlePosChange} />
               <TeamFilter options={teamOptions} selected={teamSelected} onChange={this.handleTeamChange} />
               <NationalityFilter selected={natSelected} onChange={this.handleNatChange} />
-              <ExperienceFilter selected={XPSelected} onChange={this.handleXPChange} />
             </div>
           </div>
         </div>
@@ -167,12 +166,12 @@ class PlayersTable extends React.PureComponent {
               {
                 Header: 'Name',
                 id: 'fullName',
-                accessor: prop('name'),
+                accessor: prop('playerName'),
                 className: 'text-left border-mobile',
                 maxWidth: 200,
                 minWidth: 110,
                 fixed: 'left',
-                Cell: row => <PlayerName id={row.original.id} name={row.value} />,
+                Cell: row => <PlayerName id={row.original.playerId} name={row.value} />,
               },
               {
                 Header: 'Pos',
@@ -182,7 +181,7 @@ class PlayersTable extends React.PureComponent {
                 minWidth: 50,
                 fixed: 'left',
                 accessor: (d) => {
-                  const pos = prop('positionCode', d);
+                  const pos = prop('playerPositionCode', d);
                   if (['L', 'R'].includes(pos)) {
                     return `${pos}W`;
                   }
@@ -205,21 +204,17 @@ class PlayersTable extends React.PureComponent {
                 maxWidth: 85,
                 minWidth: 75,
                 fixed: 'left',
-                Cell: pipe(
+                Cell: row => pipe(
                   prop('value'),
-                  map(prop('id')),
-                  map(id => <TeamLogo key={id} teamId={id} season="20182019" />),
-                ),
-                accessor: prop('teams'),
-                filterMethod: (filter, row) => pipe(
-                  prop(filter.id),
-                  reject(isNil),
-                  last,
-                  propOr('', 'abbreviation'),
-                  toLower,
-                  replace(/\s/g, ''),
-                  pipe(match(toLower(filter.value)), length, Boolean),
+                  map(abrv => <TeamLogo key={abrv} teamAbrv={abrv} />),
                 )(row),
+                accessor: prop('playerTeamsPlayedFor'),
+                filterMethod: (filter, row) => {
+                  if (filter.value && filter.value.length) {
+                    return row.team.filter(team => team == filter.value).length > 0
+                  }
+                  return true
+                },
               },
               {
                 Header: 'Nat.',
@@ -312,6 +307,18 @@ class PlayersTable extends React.PureComponent {
                 ),
               },
               {
+                Header: 'GWG',
+                id: 'gwg',
+                maxWidth: 65,
+                minWidth: 35,
+                show: not(isPosGoalie(posSelected)),
+                filterable: false,
+                accessor: prop('gameWinningGoals'),
+                Cell: row => (
+                  <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
+                ),
+              },
+              {
                 Header: 'SHG',
                 id: 'shortHandedGoals',
                 maxWidth: 65,
@@ -319,30 +326,6 @@ class PlayersTable extends React.PureComponent {
                 show: not(isPosGoalie(posSelected)),
                 filterable: false,
                 accessor: prop('shGoals'),
-                Cell: row => (
-                  <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
-                ),
-              },
-              {
-                Header: 'Hits',
-                id: 'hits',
-                maxWidth: 65,
-                minWidth: 35,
-                show: not(isPosGoalie(posSelected)),
-                filterable: false,
-                accessor: prop('hits'),
-                Cell: row => (
-                  <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
-                ),
-              },
-              {
-                Header: 'Bks',
-                id: 'blocked',
-                maxWidth: 65,
-                minWidth: 35,
-                show: not(isPosGoalie(posSelected)),
-                filterable: false,
-                accessor: prop('blockedShots'),
                 Cell: row => (
                   <span>{typeof row.value === 'number' ? Number(row.value) : '-'}</span>
                 ),
