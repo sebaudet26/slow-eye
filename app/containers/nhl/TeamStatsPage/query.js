@@ -22,7 +22,7 @@ query($season: String) {
       faceOffsWon
       faceOffsLost
       powerPlayOpportunities
-      goalsPerGame
+      goalsForPerGame
       goalsAgainstPerGame
       evGGARatio
       shotsPerGame

@@ -39,7 +39,7 @@ const {
 
 // Definitions
 const CURRENT_SEASON = '20192020'
-const CURRENT_YEAR = '2019'
+const CURRENT_YEAR = '2020'
 
 const professionalLeagueIds = [133];
 const isSeasonProfessional = pipe(
@@ -184,10 +184,11 @@ const recursiveFetch = async ({ buildRequest }) => {
 
 
 const playersFetcher = async (seasons) => {
-  const cached_value = await cache.instance.get('bios:' + seasons.join(','))
-  if (cached_value) {
-    return JSON.parse(cached_value)
-  }
+	console.log(seasons)
+  // const cached_value = await cache.instance.get('bios:' + seasons.join(','))
+  // if (cached_value) {
+  //   return JSON.parse(cached_value)
+  // }
 
 	const data = await Promise.all(seasons.map((season) => {
     const seasonStart = season == 'all' ? '19171918' : season
@@ -209,9 +210,10 @@ const playersFetcher = async (seasons) => {
       recursiveFetch({ buildRequest: buildGoalieRequest }),
     ])
 	}))
-
-  cache.instance.set('bios:' + seasons.join(','), JSON.stringify(data))
-	return data
+	console.log(data)
+	const allPlayers = data.map(players => flatten(players))
+  cache.instance.set('bios:' + seasons.join(','), JSON.stringify(allPlayers))
+	return allPlayers
 }
 
 const reportFetcher = async (seasons) => {
@@ -301,7 +303,8 @@ const batchTeamRosterFetcher = async (ids) => {
 			resource: `/teams/${teamId}/roster?season=${season}`,
 		}).fetch()
 	}))
-
+  
+  console.log(data)
 	const rosters = map(propOr([], 'roster'), data)
 
 	return rosters.map((roster) => {
@@ -515,11 +518,12 @@ const playersLoader = new DataLoader(playersFetcher)
 
 const calculatePlayerStreaks = async () => {
 	const cached_value = await cache.instance.get('player_streaks')
-	if (cached_value) {
-		return JSON.parse(cached_value)
-	}
-
-  const response = await playersLoader.load(CURRENT_SEASON)
+	console.log(cached_value)
+	// if (cached_value) {
+	// 	return JSON.parse(cached_value)
+	// }
+	console.log(CURRENT_SEASON)
+	const response = await playersLoader.load(CURRENT_SEASON)
 
   // get game logs for all players
   console.log(`need to fetch logs for ${response.length} players`)
@@ -537,7 +541,7 @@ const calculatePlayerStreaks = async () => {
 
   // cache streaks
 	cache.instance.set('player_streaks', JSON.stringify(streaks))
-
+	console.log(streaks)
   return streaks
 }
 

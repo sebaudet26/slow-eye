@@ -95,7 +95,7 @@ class TeamsTable extends React.PureComponent {
             {
               Header: 'GF',
               id: 'goalsfor',
-              accessor: d => Math.round(d.gamesPlayed * d.goalsPerGame),
+              accessor: d => Math.round(d.gamesPlayed * d.goalsForPerGame),
               maxWidth: 65,
               minWidth: 50,
             },
@@ -108,8 +108,8 @@ class TeamsTable extends React.PureComponent {
             },
             {
               Header: 'GF/GP',
-              id: 'goalsPerGame',
-              accessor: d => parseFloat(d.goalsPerGame).toFixed(2),
+              id: 'goalsForPerGame',
+              accessor: d => parseFloat(d.goalsForPerGame).toFixed(2),
               maxWidth: 65,
               minWidth: 55,
             },
@@ -123,7 +123,7 @@ class TeamsTable extends React.PureComponent {
             {
               Header: 'Diff.',
               id: 'goaldiff',
-              accessor: d => Number(d.goalsPerGame - d.goalsAgainstPerGame).toFixed(2),
+              accessor: d => Number(d.goalsForPerGame - d.goalsAgainstPerGame).toFixed(2),
               maxWidth: 65,
               minWidth: 55,
               sortMethod: (a, b) => (Number(a) > Number(b) ? 1 : -1),

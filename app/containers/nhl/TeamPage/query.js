@@ -9,14 +9,34 @@ query($id: Int) {
       id
       wins
       losses
+      ot
       gamesPlayed
+      divisionRank
+      conferenceRank
+      leagueRank
       teamName
       active
+      goalsForPerGame
+      goalsAgainstPerGame
+      powerPlayPercentage
+      penaltyKillPercentage
       roster {
         id
         name
         jerseyNumber
         position
+        shootsCatches
+        primaryNumber
+        currentAge
+        birthDate
+        height
+        weight
+        birthCity
+        nationality
+        draftYear
+        draftTeam
+        draftPick
+        draftRound
       }
     }
   }

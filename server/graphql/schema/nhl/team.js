@@ -21,15 +21,7 @@ const {
 	teamStatsLoader,
 } = require('../../loaders/nhl')
 
-const Player = new GraphQLObjectType({
-  name: 'Player',
-  fields: {
-    id: { type: GraphQLInt, resolve: resolveProp('id') },
-    name: { type: GraphQLString, resolve: resolveProp('fullName') },
-    jerseyNumber: { type: GraphQLString, resolve: resolveProp('jerseyNumber') },
-    position: { type: GraphQLString, resolve: resolvePath(['position', 'code']) },
-  },
-})
+const Player = require('./player')
 
 const Team = new GraphQLObjectType({
   name: 'Team',
@@ -52,7 +44,7 @@ const Team = new GraphQLObjectType({
     faceOffsWon: { type: GraphQLInt, resolve: doc => teamStatsLoader.load(`${doc.season}:${doc.id}`).then(resolvePath(['stats', 'faceOffsWon'])) },
     faceOffsLost: { type: GraphQLInt, resolve: doc => teamStatsLoader.load(`${doc.season}:${doc.id}`).then(resolvePath(['stats', 'faceOffsLost'])) },
     powerPlayOpportunities: { type: GraphQLInt, resolve: doc => teamStatsLoader.load(`${doc.season}:${doc.id}`).then(resolvePath(['stats', 'powerPlayOpportunities'])) },
-    goalsPerGame: { type: GraphQLFloat, resolve: doc => teamStatsLoader.load(`${doc.season}:${doc.id}`).then(resolvePath(['stats', 'goalsPerGame'])) },
+    goalsForPerGame: { type: GraphQLFloat, resolve: doc => teamStatsLoader.load(`${doc.season}:${doc.id}`).then(resolvePath(['stats', 'goalsPerGame'])) },
     goalsAgainstPerGame: { type: GraphQLFloat, resolve: doc => teamStatsLoader.load(`${doc.season}:${doc.id}`).then(resolvePath(['stats', 'goalsAgainstPerGame'])) },
     evGGARatio: { type: GraphQLFloat, resolve: doc => teamStatsLoader.load(`${doc.season}:${doc.id}`).then(resolvePath(['stats', 'evGGARatio'])) },
     shotsPerGame: { type: GraphQLFloat, resolve: doc => teamStatsLoader.load(`${doc.season}:${doc.id}`).then(resolvePath(['stats', 'shotsPerGame'])) },
@@ -65,7 +57,6 @@ const Team = new GraphQLObjectType({
     winOutshotByOpp: { type: GraphQLFloat, resolve: doc => teamStatsLoader.load(`${doc.season}:${doc.id}`).then(resolvePath(['stats', 'winOutshotByOpp'])) },
     shootingPctg: { type: GraphQLFloat, resolve: doc => teamStatsLoader.load(`${doc.season}:${doc.id}`).then(resolvePath(['stats', 'shootingPctg'])) },
     savePctg: { type: GraphQLFloat, resolve: doc => teamStatsLoader.load(`${doc.season}:${doc.id}`).then(resolvePath(['stats', 'savePctg'])) },
-
     ptPctg: { type: GraphQLFloat, resolve: doc => teamStatsLoader.load(`${doc.season}:${doc.id}`).then(resolvePath(['stats', 'ptPctg'])).then((value) => Number(value)) },
     powerPlayPercentage: { type: GraphQLFloat, resolve: doc => teamStatsLoader.load(`${doc.season}:${doc.id}`).then(resolvePath(['stats', 'powerPlayPercentage'])).then((value) => Number(value)) },
     penaltyKillPercentage: { type: GraphQLFloat, resolve: doc => teamStatsLoader.load(`${doc.season}:${doc.id}`).then(resolvePath(['stats', 'penaltyKillPercentage'])).then((value) => Number(value)) },
