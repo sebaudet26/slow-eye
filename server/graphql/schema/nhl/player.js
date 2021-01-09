@@ -237,7 +237,7 @@ const PlayerDraft = new GraphQLObjectType({
     },
     pickHistory: {
       type: new GraphQLList(GraphQLString),
-      resolve: p => playerDraftLoader.load(p.id).then(resolveProp('teamPickHistory')).then(history => history.split(',')),
+      resolve: p => playerDraftLoader.load(p.id).then(resolveProp('teamPickHistory')).then(history => (history || '').split(',')),
     },
     round: {
       type: GraphQLInt,

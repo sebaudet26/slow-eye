@@ -54,7 +54,7 @@ class TeamPage extends React.Component {
             if (loading) return (<LoadingIndicator />);
             if (error) return (<EmptyState isError />);
 
-            const team = data.team;
+            const team = data.nhl.team;
             const roster = team.roster;
 
             return (
@@ -73,9 +73,9 @@ class TeamPage extends React.Component {
                           <Dropdown name={team.name} />
                           <p>
                             <span>
-                              {`${toOrdinal(team.ranking.division)} Division, `}
-                              {`${toOrdinal(team.ranking.conference)} Conference, `}
-                              {`${toOrdinal(team.ranking.league)} League`}
+                              {`${toOrdinal(team.division)} Division, `}
+                              {`${toOrdinal(team.conference)} Conference, `}
+                              {`${toOrdinal(team.league)} League`}
                             </span>
                           </p>
                         </div>
@@ -83,17 +83,17 @@ class TeamPage extends React.Component {
                       { !team.stats ? null : (
                         <div className="team-info">
                           <div className="team-stats">
-                            {renderTeamStat('GP', team.stats.splits[0].gamesPlayed)}
-                            {renderTeamStat('W', team.stats.splits[0].wins)}
-                            {renderTeamStat('L', team.stats.splits[0].losses)}
-                            {renderTeamStat('OTL', team.stats.splits[0].ot)}
-                            {renderTeamStat('Pts', team.stats.splits[0].pts)}
+                            {renderTeamStat('GP', team.gamesPlayed)}
+                            {renderTeamStat('W', team.wins)}
+                            {renderTeamStat('L', team.losses)}
+                            {renderTeamStat('OTL', team.ot)}
+                            {renderTeamStat('Pts', team.pts)}
                           </div>
                           <div className="team-stats">
-                            {renderTeamStat('GF', Math.round(Number(team.stats.splits[0].gamesPlayed) * Number(team.stats.splits[0].goalsPerGame)))}
-                            {renderTeamStat('GA', Math.round(Number(team.stats.splits[0].gamesPlayed) * Number(team.stats.splits[0].goalsAgainstPerGame)))}
-                            {renderTeamStat('PP%', team.stats.splits[0].powerPlayPercentage)}
-                            {renderTeamStat('PK%', team.stats.splits[0].penaltyKillPercentage)}
+                            {renderTeamStat('GF', Math.round(Number(team.gamesPlayed) * Number(team.goalsPerGame)))}
+                            {renderTeamStat('GA', Math.round(Number(team.gamesPlayed) * Number(team.goalsAgainstPerGame)))}
+                            {renderTeamStat('PP%', team.powerPlayPercentage)}
+                            {renderTeamStat('PK%', team.penaltyKillPercentage)}
                           </div>
                         </div>
                       )}
@@ -117,15 +117,15 @@ class TeamPage extends React.Component {
                         <div className="team-chart">
                           <div className="team-chart-col">
                             <div className="team-chart-col-title">Left Wing</div>
-                            {this.renderChartCol(roster.filter(p => p.info.primaryPosition.abbreviation === 'LW'))}
+                            {this.renderChartCol(roster.filter(p => p.position.code === 'LW'))}
                           </div>
                           <div className="team-chart-col">
                             <div className="team-chart-col-title">Center</div>
-                            {this.renderChartCol(roster.filter(p => p.info.primaryPosition.abbreviation === 'C'))}
+                            {this.renderChartCol(roster.filter(p => p.position.code === 'C'))}
                           </div>
                           <div className="team-chart-col">
                             <div className="team-chart-col-title">Right Wing</div>
-                            {this.renderChartCol(roster.filter(p => p.info.primaryPosition.abbreviation === 'RW'))}
+                            {this.renderChartCol(roster.filter(p => p.position.code === 'RW'))}
                           </div>
                         </div>
                       </div>
@@ -135,8 +135,8 @@ class TeamPage extends React.Component {
                           <div className="team-chart-col-title">LD</div>
                           {
                             this.renderChartCol(roster.filter(p => (
-                              p.info.isDefenseman &&
-                              p.info.shootsCatches === 'L'
+                              p.position.isDefenseman &&
+                              p.bio.shootsCatches === 'L'
                             )))
                           }
                         </div>
@@ -144,8 +144,8 @@ class TeamPage extends React.Component {
                           <div className="team-chart-col-title">RD</div>
                           {
                             this.renderChartCol(roster.filter(p => (
-                              p.info.isDefenseman &&
-                              p.info.shootsCatches === 'R'
+                              p.position.isDefenseman &&
+                              p.bio.shootsCatches === 'R'
                             )))
                           }
                         </div>
@@ -154,7 +154,7 @@ class TeamPage extends React.Component {
                       <h3>Goalies</h3>
                       <div className="team-chart">
                         <div className="team-chart-col">
-                          {this.renderChartCol(roster.filter(p => p.info.isGoalie))}
+                          {this.renderChartCol(roster.filter(p => p.position.isGoalie))}
                         </div>
                         <div className="team-chart-col" />
                         <div className="team-chart-col" />
@@ -163,11 +163,11 @@ class TeamPage extends React.Component {
                     <TabPanel>
                       <div>
                         <h3>Forwards</h3>
-                        <RosterTable players={roster.filter(p => p.info.isForward)} />
+                        <RosterTable players={roster.filter(p => p.position.isForward)} />
                         <h3>Defensemen</h3>
-                        <RosterTable players={roster.filter(p => p.info.isDefenseman)} />
+                        <RosterTable players={roster.filter(p => p.position.isDefenseman)} />
                         <h3>Goalies</h3>
-                        <RosterTable players={roster.filter(p => p.info.isGoalie)} />
+                        <RosterTable players={roster.filter(p => p.position.isGoalie)} />
                       </div>
                     </TabPanel>
                   </div>

@@ -61,7 +61,6 @@ const Team = new GraphQLObjectType({
     powerPlayPercentage: { type: GraphQLFloat, resolve: doc => teamStatsLoader.load(`${doc.season}:${doc.id}`).then(resolvePath(['stats', 'powerPlayPercentage'])).then((value) => Number(value)) },
     penaltyKillPercentage: { type: GraphQLFloat, resolve: doc => teamStatsLoader.load(`${doc.season}:${doc.id}`).then(resolvePath(['stats', 'penaltyKillPercentage'])).then((value) => Number(value)) },
     faceOffWinPercentage: { type: GraphQLFloat, resolve: doc => teamStatsLoader.load(`${doc.season}:${doc.id}`).then(resolvePath(['stats', 'faceOffWinPercentage'])).then((value) => Number(value)) },
-
     roster: { type: new GraphQLList(Player), resolve: doc => teamRosterLoader.load(`${doc.season}:${doc.id}`) },
   }
 })

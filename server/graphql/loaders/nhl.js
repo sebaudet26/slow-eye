@@ -75,15 +75,30 @@ const batchPlayerBioFetcher = async (playerIds) => {
 }
 
 const batchPlayerDraftFetcher = async (playerIds) => {
-	const data = await Promise.all(playerIds.map((id) => {
-		return new ApiRequest({
+	let data
+	let cached_value = await cache.instance.get('drafts')
+  if (cached_value) {
+    data = JSON.parse(cached_value)
+	} else {
+		data = await new ApiRequest({
 			league: 'NHL',
 			apiType: 'RECORDS_API',
-			resource: `/draft?cayenneExp=playerId=${id}`,
+			resource: `/draft`,
 		}).fetch()
-	}))
+		data = data.data || []
+	}
+	
+	cache.instance.set('drafts', JSON.stringify(data))
+	let drafted = {}
+	data.filter(record => {
+		if (playerIds.includes(record.id)) {
+			drafted[record.id] = record
+		}
+	})
 
-  return map(path(['data', 0]))(data)
+  return playerIds.map(id => {
+		return drafted[id] || {}
+	})
 };
 
 const batchCareerStatsFetcher = async (playerIds) => {
@@ -184,11 +199,10 @@ const recursiveFetch = async ({ buildRequest }) => {
 
 
 const playersFetcher = async (seasons) => {
-	console.log(seasons)
-  // const cached_value = await cache.instance.get('bios:' + seasons.join(','))
-  // if (cached_value) {
-  //   return JSON.parse(cached_value)
-  // }
+  const cached_value = await cache.instance.get('bios:' + seasons.join(','))
+  if (cached_value) {
+    return JSON.parse(cached_value)
+  }
 
 	const data = await Promise.all(seasons.map((season) => {
     const seasonStart = season == 'all' ? '19171918' : season
@@ -210,7 +224,7 @@ const playersFetcher = async (seasons) => {
       recursiveFetch({ buildRequest: buildGoalieRequest }),
     ])
 	}))
-	console.log(data)
+
 	const allPlayers = data.map(players => flatten(players))
   cache.instance.set('bios:' + seasons.join(','), JSON.stringify(allPlayers))
 	return allPlayers
@@ -278,7 +292,8 @@ const batchTeamInfoFetcher = async (teamIds) => {
 
 const batchTeamStatsFetcher = async (ids) => {
 	const data = await Promise.all(ids.map((id) => {
-		const [season, teamId] = id.split(':')
+		let [season, teamId] = id.split(':')
+		season = season == 'undefined' ? CURRENT_SEASON : season
 		return new ApiRequest({
 			league: 'NHL',
 			apiType: 'STATS_API',
@@ -296,7 +311,8 @@ const batchTeamStatsFetcher = async (ids) => {
 
 const batchTeamRosterFetcher = async (ids) => {
 	const data = await Promise.all(ids.map((id) => {
-		const [season, teamId] = id.split(':')
+		let [season, teamId] = id.split(':')
+		season = season == 'undefined' ? CURRENT_SEASON : season
 		return new ApiRequest({
 			league: 'NHL',
 			apiType: 'STATS_API',
@@ -304,7 +320,6 @@ const batchTeamRosterFetcher = async (ids) => {
 		}).fetch()
 	}))
   
-  console.log(data)
 	const rosters = map(propOr([], 'roster'), data)
 
 	return rosters.map((roster) => {
