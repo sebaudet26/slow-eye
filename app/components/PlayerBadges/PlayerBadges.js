@@ -40,16 +40,26 @@ const VeteranBadge = (
 
 const PlayerBadges = ({ player }) => {
   const {
+    status,
+    streak,
+  } = player
+
+  const {
+    isVeteran,
+    isRookie,
+    isInjured,
+    isCaptain,
+    isAlternate,
+  } = status
+
+  const {
     isHot,
     isCold,
     hotColdGames,
     hotColdPoints,
     hotColdPlusMinus,
-    isVeteran,
-    isRookie,
-    isInjured,
-    position,
-  } = player;
+  } = streak
+
   return (
     <div className="player-badges">
       { isInjured && InjuredBadge }

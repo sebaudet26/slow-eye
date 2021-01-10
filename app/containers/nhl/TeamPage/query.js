@@ -9,6 +9,7 @@ query($id: Int) {
       wins
       losses
       ot
+      pts
       gamesPlayed
       name
       active
@@ -48,6 +49,23 @@ query($id: Int) {
           pickHistory
           amateurTeam
           amateurLeague
+        }
+        streak {
+          isHot
+          isCold
+          hotColdPoints
+        	isHot
+          isCold
+          hotColdGames
+          hotColdPoints
+          hotColdPlusMinus
+        }
+        status {
+          isVeteran
+          isRookie
+          isInjured
+          isCaptain
+          isAlternate
         }
       }
     }

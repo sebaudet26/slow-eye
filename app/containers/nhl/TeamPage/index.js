@@ -71,32 +71,30 @@ class TeamPage extends React.Component {
                         </div>
                         <div>
                           <Dropdown name={team.name} />
-                          <p>
+                          {/* <p>
                             <span>
                               {`${toOrdinal(team.division)} Division, `}
                               {`${toOrdinal(team.conference)} Conference, `}
                               {`${toOrdinal(team.league)} League`}
                             </span>
-                          </p>
+                          </p> */}
                         </div>
                       </div>
-                      { !team.stats ? null : (
-                        <div className="team-info">
-                          <div className="team-stats">
-                            {renderTeamStat('GP', team.gamesPlayed)}
-                            {renderTeamStat('W', team.wins)}
-                            {renderTeamStat('L', team.losses)}
-                            {renderTeamStat('OTL', team.ot)}
-                            {renderTeamStat('Pts', team.pts)}
-                          </div>
-                          <div className="team-stats">
-                            {renderTeamStat('GF', Math.round(Number(team.gamesPlayed) * Number(team.goalsPerGame)))}
-                            {renderTeamStat('GA', Math.round(Number(team.gamesPlayed) * Number(team.goalsAgainstPerGame)))}
-                            {renderTeamStat('PP%', team.powerPlayPercentage)}
-                            {renderTeamStat('PK%', team.penaltyKillPercentage)}
-                          </div>
+                      <div className="team-info">
+                        <div className="team-stats">
+                          {renderTeamStat('GP', team.gamesPlayed)}
+                          {renderTeamStat('W', team.wins)}
+                          {renderTeamStat('L', team.losses)}
+                          {renderTeamStat('OTL', team.ot)}
+                          {renderTeamStat('Pts', team.pts)}
                         </div>
-                      )}
+                        <div className="team-stats">
+                          {renderTeamStat('GF', Math.round(Number(team.gamesPlayed) * Number(team.goalsPerGame)))}
+                          {renderTeamStat('GA', Math.round(Number(team.gamesPlayed) * Number(team.goalsAgainstPerGame)))}
+                          {renderTeamStat('PP%', team.powerPlayPercentage)}
+                          {renderTeamStat('PK%', team.penaltyKillPercentage)}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

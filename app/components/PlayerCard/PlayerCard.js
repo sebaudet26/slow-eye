@@ -12,13 +12,13 @@ const PlayerCard = ({ player }) => (
       </div>
       <div className="player-card-header-item">
         <a href={`/player?id=${player.id}`}>
-          {player.bio.fullName}
+          {`${player.bio.firstName} ${player.bio.lastName}`}
         </a>
         <div className="country">
           <img src={`/public/images/country/${player.bio.birthCountry}.svg`} />
           {` ${player.bio.birthCountry}`}
         </div>
-        <div>{`${player.bio.currentAge} y.o.`}</div>
+        <div>{`${player.bio.age} y.o.`}</div>
       </div>
       <div className="player-card-header-item status">
         <PlayerBadges player={player} />

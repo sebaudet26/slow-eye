@@ -78,7 +78,7 @@ const batchPlayerDraftFetcher = async (playerIds) => {
 	let data
 	let cached_value = await cache.instance.get('drafts')
   if (cached_value) {
-    data = JSON.parse(cached_value)
+		data = JSON.parse(cached_value)
 	} else {
 		data = await new ApiRequest({
 			league: 'NHL',
@@ -91,8 +91,8 @@ const batchPlayerDraftFetcher = async (playerIds) => {
 	cache.instance.set('drafts', JSON.stringify(data))
 	let drafted = {}
 	data.filter(record => {
-		if (playerIds.includes(record.id)) {
-			drafted[record.id] = record
+		if (playerIds.includes(record.playerId)) {
+			drafted[record.playerId] = record
 		}
 	})
 
