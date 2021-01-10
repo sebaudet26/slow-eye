@@ -504,7 +504,6 @@ const calculateTeamsStreaks = async () => {
 }
 
 const fetchByBatchOf = (batchSize) => async (cumulative, players) => {
-  console.log(`${players.length} remaining`)
   const batch = take(batchSize, players);
 
   const responses = await Promise.all(batch.map(async (p) => {
@@ -533,15 +532,12 @@ const playersLoader = new DataLoader(playersFetcher)
 
 const calculatePlayerStreaks = async () => {
 	const cached_value = await cache.instance.get('player_streaks')
-	console.log(cached_value)
-	// if (cached_value) {
-	// 	return JSON.parse(cached_value)
-	// }
-	console.log(CURRENT_SEASON)
+	if (cached_value) {
+		return JSON.parse(cached_value)
+	}
 	const response = await playersLoader.load(CURRENT_SEASON)
 
   // get game logs for all players
-  console.log(`need to fetch logs for ${response.length} players`)
   const playersLogs = await fetchByBatchOf(10)([], response);
 
   // calculate streaks
@@ -556,7 +552,6 @@ const calculatePlayerStreaks = async () => {
 
   // cache streaks
 	cache.instance.set('player_streaks', JSON.stringify(streaks))
-	console.log(streaks)
   return streaks
 }
 

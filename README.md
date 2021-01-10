@@ -3,6 +3,12 @@ Made with ❤️
 Thank you to dword4 for documenting the NHL api
 https://github.com/dword4/nhlapi
 
+Next:
+Fix country filter on players stats page
+Add missing years team logos 
+Monitor caching effectiveness and display data on an endpoint
+Use logger module instead of console log
+
 TODO:
 
 ----------V2----------

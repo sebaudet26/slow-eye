@@ -129,9 +129,7 @@ const Standings = new GraphQLObjectType({
 		record: {
 			type: new GraphQLList(Standing),
 			resolve: args => teamsStandingsLoader.load(args.season).then((standings) => {
-                console.log(standings)
                 standings.forEach((standing) => {
-                    console.log(standing.standingsType)
                     standing.teamRecords.forEach((record) => {
                         if (standing.conference) {
                             record.conferenceName = standing.conference.name

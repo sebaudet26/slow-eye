@@ -22,7 +22,7 @@ class RosterTable extends React.PureComponent {
             {
               Header: '#',
               id: 'primaryNumber',
-              accessor: d => Number(d.info.primaryNumber),
+              accessor: d => Number(d.bio.jerseyNumber),
               className: 'text-left',
               maxWidth: 40,
               minWidth: 40,
@@ -30,13 +30,13 @@ class RosterTable extends React.PureComponent {
             {
               Header: 'Name',
               id: 'fullName',
-              accessor: d => `${d.info.fullName}+${d.id}`,
+              accessor: d => `${d.bio.firstName} ${d.bio.lastName}`,
               className: 'text-left',
               maxWidth: 200,
               minWidth: 150,
               Cell: row => (
-                <a href={`/player?id=${row.value.split('+')[1]}`}>
-                  {row.value.split('+')[0]}
+                <a href={`/player?id=${row.original.id}`}>
+                  {row.value}
                 </a>
               ),
             },
@@ -46,7 +46,7 @@ class RosterTable extends React.PureComponent {
               className: 'text-left',
               maxWidth: 75,
               minWidth: 50,
-              accessor: d => d.info.shootsCatches,
+              accessor: d => d.bio.shootsCatches,
             },
             {
               Header: 'Age',
@@ -54,7 +54,7 @@ class RosterTable extends React.PureComponent {
               className: 'text-left',
               maxWidth: 65,
               minWidth: 50,
-              accessor: d => d.info.currentAge,
+              accessor: d => d.bio.age,
             },
             {
               Header: 'Birthday',
@@ -62,7 +62,7 @@ class RosterTable extends React.PureComponent {
               className: 'text-left',
               maxWidth: 130,
               minWidth: 110,
-              accessor: d => d.info.birthDate,
+              accessor: d => d.bio.birthDate,
             },
             {
               Header: 'Height',
@@ -70,7 +70,7 @@ class RosterTable extends React.PureComponent {
               className: 'text-left',
               maxWidth: 85,
               minWidth: 55,
-              accessor: d => d.info.height,
+              accessor: d => `${d.bio.height.feet}' ${d.bio.height.inches}`,
             },
             {
               Header: 'Weight',
@@ -78,7 +78,7 @@ class RosterTable extends React.PureComponent {
               className: 'text-left',
               maxWidth: 85,
               minWidth: 50,
-              accessor: d => d.info.weight,
+              accessor: d => `${d.bio.weight.pounds} lbs`,
             },
             {
               Header: 'Birthplace',
@@ -86,7 +86,7 @@ class RosterTable extends React.PureComponent {
               className: 'text-left team-cell',
               maxWidth: 175,
               minWidth: 90,
-              accessor: d => `${[d.info.birthCity, d.info.birthStateProvince || ''].filter(Boolean).join(', ')} `,
+              accessor: d => `${d.bio.birthCity}${d.bio.birthState ? ', ' + d.bio.birthState : ''}`,
             },
             {
               Header: 'Country',
@@ -94,7 +94,7 @@ class RosterTable extends React.PureComponent {
               className: 'text-left team-cell',
               maxWidth: 85,
               minWidth: 50,
-              accessor: d => d.info.nationality,
+              accessor: d => d.bio.birthCountry,
               Cell: row => (
                 <img src={`/public/images/country/${row.value}.svg`} alt="" />
               ),
@@ -105,10 +105,10 @@ class RosterTable extends React.PureComponent {
               className: 'text-left team-cell',
               maxWidth: 185,
               minWidth: 150,
-              accessor: d => d.info.draftInfo,
-              Cell: row => (!row.value ? 'Undrafted' : (
+              accessor: d => d.draft,
+              Cell: row => (!row.value.overall ? 'Undrafted' : (
                 <div className="draft">
-                  {`${row.value.year} - ${row.value.team.abbreviation} - #${row.value.pickOverall} Overall`}
+                  {`${row.value.year} - ${row.value.pickHistory.reverse()[0]} - ${row.value.overall} Overall`}
                 </div>
               )),
             },

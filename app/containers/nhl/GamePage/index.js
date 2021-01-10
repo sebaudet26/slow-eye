@@ -119,7 +119,6 @@ const renderPenaltyInfo = penalty => (
 );
 
 const renderGoalEvents = (goals = [], period) => {
-  console.log(period, filter(propEq('periodNumber', period), goals))
   return (
   <div className="card" key={Math.random()}>
     <div className="card-header">
@@ -180,7 +179,6 @@ class GamePage extends React.Component {
             if (loading) return (<LoadingIndicator />);
             if (error) return (<EmptyState isError />);
             const game = data.nhl.game;
-            console.log('game', game)
 
             const { 
               awayTeam = {}, 
@@ -193,8 +191,6 @@ class GamePage extends React.Component {
               hasShootout,
               shootoutWinner,
             } = game;
-
-            console.log('players', awayTeam.playerStats)
 
             return (
               <div className="game-page">

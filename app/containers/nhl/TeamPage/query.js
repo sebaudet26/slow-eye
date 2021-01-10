@@ -33,7 +33,8 @@ query($id: Int) {
             pounds
           }
           birthDate
-        	birthCity
+          birthCity
+          birthState
           birthCountry
         }
         position { 
@@ -49,6 +50,7 @@ query($id: Int) {
           pickHistory
           amateurTeam
           amateurLeague
+          overall
         }
         streak {
           isHot

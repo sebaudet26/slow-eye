@@ -2,13 +2,11 @@ import React from 'react';
 import PlayerBadges from '../PlayerBadges/PlayerBadges';
 import './style.scss';
 
-const isGoalie = player => player.info.primaryPosition.abbreviation === 'G';
-
 const PlayerCard = ({ player }) => (
   <div className="player-card">
     <div className="player-card-header">
       <div className="player-card-header-item">
-        <img className="headshot" src={`https://nhl.bamcontent.com/images/headshots/current/60x60/${player.id}@2x.png`} />
+        <img className="headshot" src={`https://cms.nhl.bamgrid.com/images/headshots/current/60x60/${player.id}@2x.png`} />
       </div>
       <div className="player-card-header-item">
         <a href={`/player?id=${player.id}`}>
@@ -18,7 +16,7 @@ const PlayerCard = ({ player }) => (
           <img src={`/public/images/country/${player.bio.birthCountry}.svg`} />
           {` ${player.bio.birthCountry}`}
         </div>
-        <div>{`${player.bio.age} y.o.`}</div>
+        {player.bio.age && <div>{`${player.bio.age} y.o.`}</div>}
       </div>
       <div className="player-card-header-item status">
         <PlayerBadges player={player} />

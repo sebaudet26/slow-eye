@@ -89,7 +89,7 @@ class TeamPage extends React.Component {
                           {renderTeamStat('Pts', team.pts)}
                         </div>
                         <div className="team-stats">
-                          {renderTeamStat('GF', Math.round(Number(team.gamesPlayed) * Number(team.goalsPerGame)))}
+                          {renderTeamStat('GF', Math.round(Number(team.gamesPlayed) * Number(team.goalsForPerGame)))}
                           {renderTeamStat('GA', Math.round(Number(team.gamesPlayed) * Number(team.goalsAgainstPerGame)))}
                           {renderTeamStat('PP%', team.powerPlayPercentage)}
                           {renderTeamStat('PK%', team.penaltyKillPercentage)}

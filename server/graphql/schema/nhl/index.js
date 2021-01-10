@@ -119,7 +119,7 @@ const NHLQuery = new GraphQLObjectType({
     },
 
     teams: {
-      type: new GraphQLList(TeamName),
+      type: new GraphQLList(Team),
       args: {
         season: { type: GraphQLString },
       },

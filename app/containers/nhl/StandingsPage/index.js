@@ -28,7 +28,6 @@ class StandingsPage extends React.Component {
                 if (error) return (<EmptyState isError />);
 
                 const standings = data.nhl.standings;
-                console.log('standings', standings)
                 if (standings && standings.record) {
                   return <StandingsTable standings={standings.record} />
                 } else {

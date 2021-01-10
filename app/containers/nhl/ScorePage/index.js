@@ -140,14 +140,12 @@ class ScorePage extends React.Component {
                   }) => {
                     if (loading) return (<LoadingIndicator />);
                     if (error) return (<EmptyState isError />);
-                    console.log('schedule', data.nhl.schedule)
                     const todaysGames = data.nhl.schedule.filter(game => game.dateString == this.state.currentDate);
                     if (todaysGames.length < 1) {
                       return (
                         <EmptyState />
                       );
                     }
-                    console.log('todaysGames', todaysGames)
                     return todaysGames.map(game => (
                       <ScoreCard key={game.id} game={game} />
                     ));

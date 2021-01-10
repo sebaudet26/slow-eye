@@ -85,7 +85,6 @@ class ApiRequest {
   }
 
   async fetch() {
-    console.log(this.url)
     if (process.env.USE_RECORDINGS) {
       return require(recordingsPath)[this.url]
     }
@@ -95,7 +94,6 @@ class ApiRequest {
     const data = await response.json()
     this.data = data
     if (process.env.RUN_IN_RECORDING_MODE) {
-      console.log('recorded', this.url)
       recordedResponses[this.url] = this.data
     }
     await this.saveToCache()
@@ -104,10 +102,7 @@ class ApiRequest {
 }
 
 process.on('SIGINT', () => {
-  console.log('SIGINT')
   if (process.env.RUN_IN_RECORDING_MODE) {
-    console.log('saved recording')
-    console.log(Object.keys(recordedResponses))
     fs.writeFileSync(recordingsPath, JSON.stringify(recordedResponses, null, 2))
   }
   process.abort()

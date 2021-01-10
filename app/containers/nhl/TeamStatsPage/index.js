@@ -27,8 +27,7 @@ class TeamStatsPage extends React.Component {
               {({ loading, error, data }) => {
                 if (loading) return (<LoadingIndicator />);
                 if (error) return (<EmptyState isError />);
-                const teamsStats = data.nhl.team;
-                console.log(teamsStats)
+                const teamsStats = data.nhl.teams;
 
                 if (teamsStats) {
                   return <TeamsTable teams={teamsStats} />;

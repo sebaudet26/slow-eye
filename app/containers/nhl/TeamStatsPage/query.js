@@ -3,7 +3,7 @@ import { gql } from 'apollo-boost';
 const getTeamsQuery = gql`
 query($season: String) {
   nhl {
-    team(season: $season) {
+    teams(season: $season) {
       id
       name
       abbreviation

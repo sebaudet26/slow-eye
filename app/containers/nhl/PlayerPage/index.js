@@ -62,7 +62,7 @@ export default class PlayerPage extends React.Component {
                           <img src={`/public/images/country/${bio.birthCountry}.svg`} />
                         </div>
                         <div className="icon-wrapper player-img-team">
-                          <img src={`/public/images/teams/${teamName.replace(' ', '-').toLowerCase()}.png`} className="" />
+                          <img src={`/public/images/teams/${teamName.split(' ').reverse()[0].toLowerCase()}.png`} className="" />
                         </div>
                       </div>
                       <div className="player-info">
