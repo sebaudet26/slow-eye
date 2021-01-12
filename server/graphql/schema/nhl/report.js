@@ -53,7 +53,6 @@ const Stat = new GraphQLObjectType({
 
     savePercentage: { type: GraphQLFloat, resolve: resolveProp('savePct') },
     goalsAgainstAverage: { type: GraphQLFloat, resolve: resolveProp('goalsAgainstAverage') },
-    rookie: { type: GraphQLBoolean, resolve: resolveProp('rookie') },
 
     blockedShots: { type: GraphQLInt, resolve: resolveProp('blockedShots') },
     faceoffs: { type: GraphQLInt, resolve: resolveProp('faceoffs') },

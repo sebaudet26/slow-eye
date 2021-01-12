@@ -141,10 +141,6 @@ class PlayersTable extends React.PureComponent {
                 id: 'nationality',
                 value: natSelected,
               },
-              {
-                id: 'experience',
-                value: XPSelected,
-              },
             ]}
             data={players}
             resizable={false}
@@ -222,7 +218,7 @@ class PlayersTable extends React.PureComponent {
                 className: 'text-left team-cell hidden',
                 maxWidth: 85,
                 minWidth: 50,
-                accessor: prop('nationality'),
+                accessor: prop('playerNationality'),
               },
               {
                 Header: 'XP',

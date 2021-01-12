@@ -23,7 +23,7 @@ class PlayerStatsPage extends React.PureComponent {
 
               const players = data.nhl.leaders.players;
               const teams = data.nhl.teams;
-
+              
               return (
                 <PlayersTable
                   players={players}

@@ -11,7 +11,6 @@ query($season: String) {
         playerPositionCode
         playerShootsCatches
         playerTeamsPlayedFor
-        rookie
         blockedShots
         faceoffs
         faceoffsLost
