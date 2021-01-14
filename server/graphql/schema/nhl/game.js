@@ -118,10 +118,10 @@ const GameTeam = new GraphQLObjectType({
     	resolve: (doc) => Object.values(doc.players || {}),
     },
     // TODO: hardcoded current season
-    wins: { type: GraphQLInt, resolve: doc => teamStatsLoader.load(`20192020:${doc.team.id}`).then(resolvePath(['stats', 'wins'])) },
-    losses: { type: GraphQLInt, resolve: doc => teamStatsLoader.load(`20192020:${doc.team.id}`).then(resolvePath(['stats', 'losses'])) },
-    ot: { type: GraphQLInt, resolve: doc => teamStatsLoader.load(`20192020:${doc.team.id}`).then(resolvePath(['stats', 'ot'])) },
-    pts: { type: GraphQLInt, resolve: doc => teamStatsLoader.load(`20192020:${doc.team.id}`).then(resolvePath(['stats', 'pts'])) },
+    wins: { type: GraphQLInt, resolve: doc => teamStatsLoader.load(`20202021:${doc.team.id}`).then(resolvePath(['stats', 'wins'])) },
+    losses: { type: GraphQLInt, resolve: doc => teamStatsLoader.load(`20202021:${doc.team.id}`).then(resolvePath(['stats', 'losses'])) },
+    ot: { type: GraphQLInt, resolve: doc => teamStatsLoader.load(`20202021:${doc.team.id}`).then(resolvePath(['stats', 'ot'])) },
+    pts: { type: GraphQLInt, resolve: doc => teamStatsLoader.load(`20202021:${doc.team.id}`).then(resolvePath(['stats', 'pts'])) },
 	},
 })
 

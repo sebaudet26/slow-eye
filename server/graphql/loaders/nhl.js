@@ -38,7 +38,6 @@ const {
 } = require('../helpers/nhl/streaks')
 
 // Definitions
-const CURRENT_SEASON = '20192020'
 const CURRENT_YEAR = '2020'
 
 const professionalLeagueIds = [133];
@@ -206,7 +205,7 @@ const playersFetcher = async (seasons) => {
 
 	const data = await Promise.all(seasons.map((season) => {
     const seasonStart = season == 'all' ? '19171918' : season
-    const seasonEnd = season == 'all' ? CURRENT_SEASON : season
+    const seasonEnd = season == 'all' ? '20202021' : season
 
     const buildPlayerRequest = startAt => new ApiRequest({
       league: 'NHL',
@@ -231,7 +230,7 @@ const playersFetcher = async (seasons) => {
 }
 
 const reportFetcher = async (seasons) => {
-  const cached_value = await cache.instance.get('report:' + seasons.join(','))
+	const cached_value = await cache.instance.get('report:' + seasons.join(','))
   if (cached_value) {
     return JSON.parse(cached_value)
   }  
@@ -293,7 +292,6 @@ const batchTeamInfoFetcher = async (teamIds) => {
 const batchTeamStatsFetcher = async (ids) => {
 	const data = await Promise.all(ids.map((id) => {
 		let [season, teamId] = id.split(':')
-		season = season == 'undefined' ? CURRENT_SEASON : season
 		return new ApiRequest({
 			league: 'NHL',
 			apiType: 'STATS_API',
@@ -312,7 +310,6 @@ const batchTeamStatsFetcher = async (ids) => {
 const batchTeamRosterFetcher = async (ids) => {
 	const data = await Promise.all(ids.map((id) => {
 		let [season, teamId] = id.split(':')
-		season = season == 'undefined' ? CURRENT_SEASON : season
 		return new ApiRequest({
 			league: 'NHL',
 			apiType: 'STATS_API',
@@ -481,7 +478,7 @@ const calculateTeamsStreaks = async () => {
   const teams = await new ApiRequest({
 		league: 'NHL',
 		apiType: 'STATS_API',
-		resource: `/teams?season=${CURRENT_SEASON}`,
+		resource: `/teams?season=20202021`,
 	})
 	.fetch()
 	.then((data) => Promise.resolve(propOr([], 'teams')(data)))
@@ -535,7 +532,7 @@ const calculatePlayerStreaks = async () => {
 	if (cached_value) {
 		return JSON.parse(cached_value)
 	}
-	const response = await playersLoader.load(CURRENT_SEASON)
+	const response = await playersLoader.load('20202021')
 
   // get game logs for all players
   const playersLogs = await fetchByBatchOf(10)([], response);

@@ -85,6 +85,7 @@ class ApiRequest {
   }
 
   async fetch() {
+    console.log(this.url)
     if (process.env.USE_RECORDINGS) {
       return require(recordingsPath)[this.url]
     }

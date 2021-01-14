@@ -25,7 +25,7 @@ const optionsQuery = gql`
         id
         name
       }
-      teams (season:"20182019") {
+      teams {
         id
         name
         abbreviation

@@ -23,7 +23,7 @@ class TeamStatsPage extends React.Component {
             </div>
           </div>
           <div className="container">
-            <Query query={getTeamsQuery} variables={{ season: "20192020" }}>
+            <Query query={getTeamsQuery} variables={{ }}>
               {({ loading, error, data }) => {
                 if (loading) return (<LoadingIndicator />);
                 if (error) return (<EmptyState isError />);

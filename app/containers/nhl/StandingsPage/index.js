@@ -22,7 +22,7 @@ class StandingsPage extends React.Component {
           </div>
           <div className="container">
             <Helmet titlePrefix="NHL Standings" contentPrefix="View NHL Standings." />
-            <Query query={getStandingsQuery} variables={{ season: "20192020" }} >
+            <Query query={getStandingsQuery} variables={{ }} >
               {({ loading, error, data }) => {
                 if (loading) return (<LoadingIndicator />);
                 if (error) return (<EmptyState isError />);

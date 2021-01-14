@@ -14,7 +14,7 @@ export const sumNumbers = (data, pathToNumber) => pipe(
 
 export const isPosGoalie = pos => pos === 'G';
 
-export const isActiveThisYear = latestSeason => latestSeason.season === '20182019';
+export const isActiveThisYear = latestSeason => latestSeason.season === '20192020';
 
 export const sumStatsByPath = ({
   active, stats, pathToNumber,

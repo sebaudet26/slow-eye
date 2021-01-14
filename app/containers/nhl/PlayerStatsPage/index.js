@@ -16,7 +16,7 @@ class PlayerStatsPage extends React.PureComponent {
         <Header selectedLeague="NHL" />
         <div className="playerStats-page">
           <Helmet titlePrefix="Player Stats" contentPrefix="View NHL Players Stats." />
-          <Query query={getPlayersQuery} variables={{ season: "20192020" }}>
+          <Query query={getPlayersQuery} variables={{ }}>
             {({ loading, error, data }) => {
               if (loading) return (<LoadingIndicator />);
               if (error) return (<EmptyState isError />);

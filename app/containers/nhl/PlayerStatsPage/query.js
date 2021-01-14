@@ -1,9 +1,9 @@
 import { gql } from 'apollo-boost';
 
 const getPlayersQuery = gql`
-query($season: String) {
+query {
   nhl {
-    leaders (season: $season) {
+    leaders {
       players {
         playerNationality
         playerBirthDate
@@ -63,7 +63,7 @@ query($season: String) {
       }
     }
 
-    teams (season: "20192020") {
+    teams {
       id
       abbreviation
       name
