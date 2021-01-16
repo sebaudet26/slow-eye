@@ -6,7 +6,7 @@ import Helmet from '../../../components/Helmet';
 import Footer from '../../../components/Footer';
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import EmptyState from '../../../components/EmptyState';
-import StandingsTable from '../../../components/Table/StandingsTable';
+import Standings from '../../../components/Table/Standings';
 import './style.scss';
 
 class StandingsPage extends React.Component {
@@ -29,7 +29,7 @@ class StandingsPage extends React.Component {
 
                 const standings = data.nhl.standings;
                 if (standings && standings.record) {
-                  return <StandingsTable standings={standings.record} />
+                  return <Standings standings={standings.record} season={standings.season}/>
                 } else {
                   return <EmptyState />
                 }

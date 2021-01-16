@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import {
-  isEmpty, pathOr, pipe, pick, join, values, prop,
+  isEmpty, groupWith, join, sortBy, pathOr, pipe, pick, prop, values,
 } from 'ramda';
 import withFixedColumns from 'react-table-hoc-fixed-columns';
 import 'react-table/react-table.css';
@@ -10,7 +10,7 @@ import './styles.scss';
 
 const ReactTableFixedColumns = withFixedColumns(ReactTable);
 // TODO: team logo and team link
-const StandingsTable = ({ records, tableHeader, isWildCardTable }) => (
+const StandingsTable = ({ season, records, tableHeader, isWildCardTable }) => (
   <ReactTableFixedColumns
     showPagination={false}
     sortable={false}
@@ -37,7 +37,7 @@ const StandingsTable = ({ records, tableHeader, isWildCardTable }) => (
         Cell: row => (
           <a href={`./team?id=${row.value}`}>
             <svg key={Math.random()} className="team-cell-logo">
-              <use xlinkHref={`/public/images/teams/season/20182019.svg#team-${row.value}-20182019-light`} />
+              <use xlinkHref={`/public/images/teams/season/${season}.svg#team-${row.value}-${season}-light`} />
             </svg>
             <span className="hidden-mobile">{row.original.teamName}</span>
           </a>
@@ -151,49 +151,65 @@ StandingsTable.propTypes = {
   isWildCardTable: PropTypes.bool.isRequired,
 };
 
-const Standings = ({ standings }) => (
-  !isEmpty(standings) ? (
-    <div>
-      <h3 className="no-margin-top">Eastern Conference</h3>
+const Standings = ({ season, standings }) => {
+  console.log(standings)
+  if (!standings) {
+    return null
+  }
+  if (season == '20202021') {
+    return groupWith((a, b) => a.divisionName == b.divisionName)(standings).map(division => (
       <StandingsTable 
-        records={standings.filter(team => team.divisionName == "Atlantic" && (team.isDivisionLeader && team.divisionRank < 4))} 
-        tableHeader={'Atlantic'}
+        season={season}
+        records={sortBy(prop('divisionRank'), division)} 
+        tableHeader={division[0].divisionName}
         isWildCardTable={false} 
-      />      
-      <StandingsTable 
-        records={standings.filter(team => team.divisionName == "Metropolitan" && (team.isDivisionLeader && team.divisionRank < 4))} 
-        tableHeader={'Metropolitan'}
-        isWildCardTable={false} 
-      />
-      <StandingsTable 
-        records={standings.filter(team => team.conferencName == "Eastern" && (team.isWildCard || team.divisionRank > 3)).sort((a, b) => a.conferenceRank - b.conferenceRank)} 
-        tableHeader={'Wild Card'}
-        isWildCardTable 
-      />
+      />    
+    ))
+  } else {
+    return (
+      <div>
+        <h3 className="no-margin-top">Eastern Conference</h3>
+        <StandingsTable 
+          records={standings.filter(team => team.divisionName == "Atlantic" && (team.isDivisionLeader && team.divisionRank < 4))} 
+          tableHeader={'Atlantic'}
+          isWildCardTable={false} 
+        />      
+        <StandingsTable 
+          records={standings.filter(team => team.divisionName == "Metropolitan" && (team.isDivisionLeader && team.divisionRank < 4))} 
+          tableHeader={'Metropolitan'}
+          isWildCardTable={false} 
+        />
+        <StandingsTable 
+          records={standings.filter(team => team.conferencName == "Eastern" && (team.isWildCard || team.divisionRank > 3)).sort((a, b) => a.conferenceRank - b.conferenceRank)} 
+          tableHeader={'Wild Card'}
+          isWildCardTable 
+        />
 
-      <h3>Western Conference</h3>
-      <StandingsTable 
-        records={standings.filter(team => team.divisionName == "Central" && (team.isDivisionLeader && team.divisionRank < 4))} 
-        tableHeader={'Central'}
-        isWildCardTable={false} 
-      />      
-      <StandingsTable 
-        records={standings.filter(team => team.divisionName == "Pacific" && (team.isDivisionLeader && team.divisionRank < 4))} 
-        tableHeader={'Pacific'}
-        isWildCardTable={false} 
-      />
-      <StandingsTable 
-        records={standings.filter(team => team.conferencName == "Western" && (team.isWildCard || team.divisionRank > 3)).sort((a, b) => a.conferenceRank - b.conferenceRank)} 
-        tableHeader={'Wild Card'}
-        isWildCardTable 
-      />
-    </div>
-  ) : null
-);
+        <h3>Western Conference</h3>
+        <StandingsTable 
+          records={standings.filter(team => team.divisionName == "Central" && (team.isDivisionLeader && team.divisionRank < 4))} 
+          tableHeader={'Central'}
+          isWildCardTable={false} 
+        />      
+        <StandingsTable 
+          records={standings.filter(team => team.divisionName == "Pacific" && (team.isDivisionLeader && team.divisionRank < 4))} 
+          tableHeader={'Pacific'}
+          isWildCardTable={false} 
+        />
+        <StandingsTable 
+          records={standings.filter(team => team.conferencName == "Western" && (team.isWildCard || team.divisionRank > 3)).sort((a, b) => a.conferenceRank - b.conferenceRank)} 
+          tableHeader={'Wild Card'}
+          isWildCardTable 
+        />
+      </div>
+    );
+  }
+};
 
 
 Standings.propTypes = {
   standings: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  season: PropTypes.string.isRequired,
 };
 
 export default Standings;

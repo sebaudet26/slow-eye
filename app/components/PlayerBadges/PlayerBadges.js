@@ -42,6 +42,7 @@ const PlayerBadges = ({ player }) => {
   const {
     status,
     streak,
+    position,
   } = player
 
   const {
@@ -68,7 +69,10 @@ const PlayerBadges = ({ player }) => {
       { isHot && (
         <div
           className="icon-wrapper"
-          data-tip={getIsHotText({ hotColdPoints, hotColdGames })}
+          data-tip={getIsHotText({ 
+            hotColdPoints, 
+            hotColdGames 
+          })}
         >
           <img src={HotIcon} />
           <ReactTooltip />
@@ -77,7 +81,12 @@ const PlayerBadges = ({ player }) => {
       { isCold && (
         <div
           className="icon-wrapper"
-          data-tip={getIsColdText({ hotColdPoints, hotColdGames, hotColdPlusMinus, position })}
+          data-tip={getIsColdText({ 
+            hotColdPoints, 
+            hotColdGames, 
+            hotColdPlusMinus, 
+            position: position.code 
+          })}
         >
           <img src={ColdIcon} />
           <ReactTooltip />
