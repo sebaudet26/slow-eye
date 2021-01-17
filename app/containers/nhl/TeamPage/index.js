@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  isEmpty, sortBy, pipe, filter, map, prop, reverse,
+  descend, reverse, path, pipe, sortWith,
 } from 'ramda';
 import {
   Tab, Tabs, TabList, TabPanel,
@@ -36,15 +36,11 @@ const renderTeamStat = (label, stat) => (
 
 class TeamPage extends React.Component {
   renderChartCol(roster) {
-    const sortedRoster = pipe(
-      sortBy(prop('pointsInLatestSeason')),
-      reverse,
-    )(roster);
-    return sortedRoster.map(player => (
+    return roster.map(player => (
       <PlayerCard key={player.id} player={player} />
     ));
   }
-
+  
   render() {
     return (
       <div>
@@ -53,10 +49,15 @@ class TeamPage extends React.Component {
           {({ loading, error, data }) => {
             if (loading) return (<LoadingIndicator />);
             if (error) return (<EmptyState isError />);
-
+            
             const team = data.nhl.team;
-            const roster = team.roster;
-
+            const sortingFunction = sortWith([
+              descend(path(['streak', 'hotColdGames'])),
+              descend(path(['streak', 'pointsPerThousandSeconds'])),
+              descend(path(['streak', 'hotColdPlusMinus'])),
+            ])
+            const roster = sortingFunction(team.roster)
+            console.log(roster)
             return (
               <div className="team-page">
                 <Helmet titlePrefix={team.name} contentPrefix={`${team.name} roster and stats.`}/>

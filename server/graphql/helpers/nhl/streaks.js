@@ -1,30 +1,15 @@
 const {
-  contains,
-  descend,
   filter,
-  find,
-  flatten,
   head,
   last,
   map,
-  mergeAll,
-  mergeLeft,
-  omit,
+  mean,
   path,
-  pathEq,
-  pathOr,
-  pick,
   pipe,
   prop,
-  propEq,
-  propOr,
   reverse,
   sum,
-  sortBy,
-  sortWith,
-  tail,
   take,
-  takeLast,
 } = require('ramda');
 
 const emptyRecord = { wins: 0, losses: 0, ot: 0 }
@@ -139,7 +124,8 @@ const timeOnIceToSeconds = timeOneIceString => (
   Number(timeOneIceString.split(':')[0]) * 60 + Number(timeOneIceString.split(':')[1])
 );
 
-const hotColdGames = 10;
+const hotColdGames = gameLogs => gameLogs.length < 10 ? gameLogs.length : 10;
+
 const pointsPerThousandSecondsToBeCold = {
   C: 0.25,
   LW: 0.25,
@@ -152,42 +138,53 @@ const pointsPerThousandSecondsToBeHot = {
   RW: 0.9,
   D: 0.5,
 };
-const plusMinusColdThreshold = -5;
+const plusMinusColdThreshold = Math.ceil(hotColdGames / 2);
 const veteranGames = 500;
 
-const getPointsInLastGames = pipe(
-  take(hotColdGames),
+const getPointsInLastGames = (gameLogs) => pipe(
+  take(hotColdGames(gameLogs)),
   map(path(['stat', 'points'])),
   sum,
-);
+)(gameLogs);
 
-const getSecondsPlayedInLastGames = pipe(
-  take(hotColdGames),
+const getSecondsPlayedInLastGames = (gameLogs) => pipe(
+  take(hotColdGames(gameLogs)),
   map(path(['stat', 'timeOnIce'])),
   map(timeOnIceToSeconds),
   sum,
-);
+)(gameLogs);
 
-const cumulativePlusMinusInLastGames = pipe(
-  take(hotColdGames),
+const cumulativePlusMinusInLastGames = (gameLogs) => pipe(
+  take(hotColdGames(gameLogs)),
   map(path(['stat', 'plusMinus'])),
   sum,
-);
+)(gameLogs);
 
 const hotColdPlusMinus = gameLogs => cumulativePlusMinusInLastGames(gameLogs);
 
 const hotColdPoints = gameLogs => getPointsInLastGames(gameLogs);
 
+const pointsPerThousandSeconds = gameLogs => getPointsInLastGames(gameLogs) / getSecondsPlayedInLastGames(gameLogs) * 1000
+
 const isHot = (gameLogs, pos) => {
-  const secondInLastGames = getSecondsPlayedInLastGames(gameLogs);
-  return (getPointsInLastGames(gameLogs) / secondInLastGames * 1000) >= pointsPerThousandSecondsToBeHot[pos];
+  if (pos == 'G') {
+    return pipe(
+      take(hotColdGames(gameLogs)),
+      map(path(['stat', 'savePercentage'])),
+      mean,
+      m => m > 0.92,
+    )(gameLogs)
+  }
+  return pointsPerThousandSeconds(gameLogs) >= pointsPerThousandSecondsToBeHot[pos];
 };
 
 const isCold = (gameLogs, pos) => {
-  const secondInLastGames = getSecondsPlayedInLastGames(gameLogs);
+  if (gameLogs.length < 5) {
+    return false
+  }
   return (
-    (getPointsInLastGames(gameLogs) / secondInLastGames * 1000) <= pointsPerThousandSecondsToBeCold[pos]
-    && (pos === 'D' ? cumulativePlusMinusInLastGames(gameLogs) < plusMinusColdThreshold : true)
+    pointsPerThousandSeconds(gameLogs) <= pointsPerThousandSecondsToBeCold[pos]
+    && (pos === 'D' ? cumulativePlusMinusInLastGames(gameLogs) < -plusMinusColdThreshold : true)
   );
 };
 
@@ -195,8 +192,10 @@ module.exports = {
   isHot,
   isCold,
   hotColdPoints,
+  pointsPerThousandSeconds,
   hotColdGames,
   hotColdPlusMinus,
+  getSecondsPlayedInLastGames,
 
   calculateTeamPointsStreak,
   calculatePlayerPointsStreak,

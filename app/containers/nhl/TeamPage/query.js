@@ -53,13 +53,11 @@ query($id: Int) {
           overall
         }
         streak {
-          isHot
-          isCold
-          hotColdPoints
         	isHot
           isCold
           hotColdGames
           hotColdPoints
+          pointsPerThousandSeconds
           hotColdPlusMinus
         }
         status {

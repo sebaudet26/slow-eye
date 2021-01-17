@@ -32,6 +32,7 @@ const {
   isHot,
   isCold,
   hotColdPoints,
+  pointsPerThousandSeconds,
   hotColdGames,
   hotColdPlusMinus,
 } = require('../../helpers/nhl/streaks')
@@ -207,10 +208,16 @@ const PlayerStreak = new GraphQLObjectType({
       type: GraphQLInt,
       resolve: p => playerSeasonGameLogsLoader.load(p.id)
         .then(hotColdPoints)
+    },    
+    pointsPerThousandSeconds: {
+      type: GraphQLFloat,
+      resolve: p => playerSeasonGameLogsLoader.load(p.id)
+        .then(pointsPerThousandSeconds)
     },
     hotColdGames: {
       type: GraphQLInt,
-      resolve: () => hotColdGames,
+      resolve: p => playerSeasonGameLogsLoader.load(p.id)
+        .then(hotColdGames),
     },
     hotColdPlusMinus: {
       type: GraphQLInt,
