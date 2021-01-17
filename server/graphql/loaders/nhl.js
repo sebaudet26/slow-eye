@@ -245,9 +245,8 @@ const reportFetcher = async (seasons) => {
   	const buildGoalieRequest = startAt => new ApiRequest({
   		league: 'NHL',
   		apiType: 'BASIC',
-  		resource: `/en/goalie/summary?isAggregate=false&isGame=false&sort=%5B%7B%22property%22:%22wins%22,%22direction%22:%22DESC%22%7D&start=${startAt}&limit=100&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=${season}%20and%20seasonId%3E=${season}`,
+  		resource: `/en/goalie/summary??isAggregate=false&isGame=false&sort=%5B%7B%22property%22:%22wins%22,%22direction%22:%22DESC%22%7D,%7B%22property%22:%22savePct%22,%22direction%22:%22DESC%22%7D%5D&start=0&limit=100&factCayenneExp=gamesPlayed%3E=1&cayenneExp=gameTypeId=2%20and%20seasonId%3C=${season}%20and%20seasonId%3E=${season}`
   	})
-
     return Promise.all([
       recursiveFetch({ buildRequest: buildSkaterRequest }),
       recursiveFetch({ buildRequest: buildGoalieRequest }),

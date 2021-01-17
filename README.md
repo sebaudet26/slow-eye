@@ -5,11 +5,12 @@ https://github.com/dword4/nhlapi
 
 Next:
 ~Fix country filter on players stats page~
-Players stats page -> fix goalie stats
-Add missing years team logos 
-Sort team page players by their last 10 games pts
+~Players stats page -> fix goalie stats~
+~Add missing years team logos~
+~Sort team page players by their last 10 games pts~
 Monitor caching effectiveness and display data on an endpoint
-Use logger module instead of console log
+Season selector -> standings, team stats, players stats
+Smart cache-warming 
 
 TODO:
 

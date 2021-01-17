@@ -97,7 +97,7 @@ const Report = new GraphQLObjectType({
 	fields: {
 		players: {
 			type: new GraphQLList(Stat),
-			resolve: args => playersReportLoader.load(`${args.season}`),
+			resolve: args => playersReportLoader.load(args.season || '20202021'),
 		}
 	},
 })

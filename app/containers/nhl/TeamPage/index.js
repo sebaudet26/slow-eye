@@ -57,7 +57,7 @@ class TeamPage extends React.Component {
               descend(path(['streak', 'hotColdPlusMinus'])),
             ])
             const roster = sortingFunction(team.roster)
-            console.log(roster)
+
             return (
               <div className="team-page">
                 <Helmet titlePrefix={team.name} contentPrefix={`${team.name} roster and stats.`}/>
